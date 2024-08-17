@@ -1,34 +1,39 @@
+using System;
 using Framework;
 using Tool.Mono;
 using UnityEngine;
 
 namespace GameSystem.BattleSystem.Scripts
 {
-    public class Enemy : AbsUnit, ICanGetSystem
+    public abstract class Enemy : AbsUnit, ICanGetSystem
     {
-        public override void Enter()
+        public override void Enter(ETurnBased eTurnBased)
         {
-            Debug.Log("敌人回合开始");
-            
-            ActionKit.GetInstance().DelayTime(1f,Action);
+            Debug.Log($"{gameObject.name}回合开始");
+            OnEnter();
+            base.Enter(eTurnBased);
         }
+
+        protected abstract void OnEnter();
 
         public override void Action()
         {
-            Debug.Log("敌人开始行动");
-            ActionKit.GetInstance().DelayTime(1f, () =>
-            {
-                Debug.Log("敌人行动完毕");
-                this.GetSystem<IBattleSystemModule>().MoreEnemyTurn();
-            });
-            
-            //敌人回合结束取决于它本身
+            Debug.Log($"{gameObject.name}行动");
+            OnAction();
+            base.Action();
         }
+
+        protected abstract void OnAction();
+
 
         public override void Exit()
         {
-            Debug.Log("敌人回合结束");
+            Debug.Log($"{gameObject.name}回合结束");
+            OnExit();
+            base.Exit();
         }
+
+        protected abstract void OnExit();
 
         public IMgr Ins => Global.GetInstance();
     }

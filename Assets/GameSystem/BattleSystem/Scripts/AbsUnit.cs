@@ -1,3 +1,5 @@
+using System;
+using GlobalData;
 using Tool.Mono;
 using UnityEngine;
 
@@ -7,30 +9,20 @@ namespace GameSystem.BattleSystem.Scripts
     {
         public int id;
         public string unitName; //单位名称
-        public float maxHp;     //最大血量
-        public float nowHp;     //当前血量
-        public float atk;       //攻击
-        public float armor;     //护盾
-        private IBattleSystemModule _battleSystem;
-
-        /// <summary>
-        /// 内部使用延迟切换状态
-        /// </summary>
-        /// <param name="self"></param>
-        /// <param name="time"></param>
-        /// <param name="eTurnBased"></param>
-        protected void DelaySwitchState(AbsUnit self, float time, ETurnBased eTurnBased)
-        {
-            ActionKit.GetInstance().DelayTime(time, () => { _battleSystem.SwitchState(self, eTurnBased); });
-        }
-
+        public float maxHp; //最大血量
+        public float nowHp; //当前血量
+        public float atk; //攻击
+        public float armor; //护盾
+        private IBattleSystemModule _battleSystemModule;
+        protected ETurnBased ETurnBased;
+        
         /// <summary>
         /// 初始化数据
         /// </summary>
         /// <param name="iBattleSystemModule"></param>
         public void InitSystem(IBattleSystemModule iBattleSystemModule)
         {
-            this._battleSystem = iBattleSystemModule;
+            this._battleSystemModule = iBattleSystemModule;
             nowHp = maxHp;
         }
 
@@ -40,19 +32,35 @@ namespace GameSystem.BattleSystem.Scripts
             return nowHp <= 0;
         }
 
-        //进入回合
-        public virtual void Enter()
+        //回合开始
+        public virtual void Enter(ETurnBased eTurnBased)
         {
+            ETurnBased = eTurnBased;
+            //玩家的行动自己操控，除非是自动战斗
+            if (ETurnBased is ETurnBased.PlayerTurn or ETurnBased.Start) return;
+            ActionKit.GetInstance().DelayTime(GameManager.SwitchTurnTime, Action);
         }
 
         //单位行动
         public virtual void Action()
         {
+            ActionKit.GetInstance().DelayTime(GameManager.ActInternalTime,Exit);
         }
 
-        //退出回合
+        //回合结算
         public virtual void Exit()
         {
+            switch (ETurnBased)
+            {
+                case ETurnBased.EnemyTurn:
+                    _battleSystemModule.MoreEnemyTurn();
+                    break;
+                case ETurnBased.PlayerTurn:
+                    _battleSystemModule.SwitchEnemyTurn();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

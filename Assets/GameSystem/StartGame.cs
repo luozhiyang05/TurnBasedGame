@@ -1,4 +1,8 @@
+using System.Collections.Generic;
 using Framework;
+using GameSystem.BattleSystem;
+using GameSystem.BattleSystem.Scripts;
+using Tool.ResourceMgr;
 using Tool.UI;
 using UnityEngine;
 
@@ -8,12 +12,17 @@ namespace GameSystem
     {
         private void Start()
         {
-            
+            this.GetSystem<IBattleSystemModule>()
+                .StartGame(ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Player").GetComponent<Player>(),
+                    new List<AbsUnit>()
+                    {
+                        ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Enemy_1").GetComponent<Enemy>(),
+                        ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Enemy_2").GetComponent<Enemy>(),
+                    });
         }
 
         private void Update()
         {
-   
         }
 
         public IMgr Ins => Global.GetInstance();
