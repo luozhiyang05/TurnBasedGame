@@ -46,6 +46,7 @@ namespace Editor
             {
                 Directory.CreateDirectory(systemPath); //创建系统根目录
                 Directory.CreateDirectory(systemPath + @"\Main");
+                Directory.CreateDirectory(systemPath + @"\Scripts");
                 Directory.CreateDirectory(systemPath + @"\Resources");
             }
             catch (Exception e)
@@ -67,12 +68,12 @@ namespace Editor
             }
 
             //生成Model
-            const string templateModelPath = "Assets/Editor/Template/TemplateOneSystem/Main/TemplateOneSystemModel.cs";
+            const string templateModelPath = "Assets/Editor/Template/TemplateOneSystem/Main/TemplateOneSystemViewModel.cs";
             try
             {
                 var modelContent = File.ReadAllText(templateModelPath);
                 var newModelContent = modelContent.Replace("TemplateOneSystem", _moduleName);
-                File.WriteAllText(systemPath + "Main/" + _moduleName + "Model.cs", newModelContent);
+                File.WriteAllText(systemPath + "Main/" + _moduleName + "ViewModel.cs", newModelContent);
             }
             catch (Exception e)
             {
@@ -80,12 +81,12 @@ namespace Editor
             }
 
             //生成Ctrl
-            const string templateCtrlPath = "Assets/Editor/Template/TemplateOneSystem/Main/TemplateOneSystemCtrl.cs";
+            const string templateCtrlPath = "Assets/Editor/Template/TemplateOneSystem/Main/TemplateOneSystemViewCtrl.cs";
             try
             {
                 var ctrlContent = File.ReadAllText(templateCtrlPath);
                 var newCtrlContent = ctrlContent.Replace("TemplateOneSystem", _moduleName);
-                File.WriteAllText(systemPath + "Main/" + _moduleName + "Ctrl.cs", newCtrlContent);
+                File.WriteAllText(systemPath + "Main/" + _moduleName + "ViewCtrl.cs", newCtrlContent);
             }
             catch (Exception e)
             {

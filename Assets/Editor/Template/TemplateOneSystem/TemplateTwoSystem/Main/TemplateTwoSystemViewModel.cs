@@ -2,7 +2,7 @@ using GameSystem.MVCTemplate;
 
 namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 {
-    public class TemplateTwoSystemModel : BaseModel
+    public class TemplateTwoSystemViewModel : BaseModel
     {
         protected override void OnInit()
         {

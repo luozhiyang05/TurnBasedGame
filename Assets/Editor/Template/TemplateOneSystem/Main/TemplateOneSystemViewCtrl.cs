@@ -2,13 +2,12 @@ using GameSystem.MVCTemplate;
 using Tool.UI;
 using UnityEngine;
 
-namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
+namespace GameSystem.TemplateOneSystem.Main
 {
-    public class TemplateTwoSystemCtrl : BaseCtrl
+    public class TemplateOneSystemViewCtrl : BaseCtrl
     {
-        public TemplateTwoSystemCtrl() : base(new TemplateTwoSystemModel(), EuiLayer.Mid)
+        public TemplateOneSystemViewCtrl() : base(new TemplateOneSystemViewModel(), EuiLayer.Mid)
         {
-            
         }
 
         /// <summary>
@@ -28,10 +27,11 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         /// </summary>
         protected override void OnCompleteLoad()
         {
-            Debug.Log("加载viewGo完成");
+            Debug.Log("加载view完成");
         }
 
-        public TemplateTwoSystemModel GetModel() => Model as TemplateTwoSystemModel;
-        public TemplateTwoSystemView GetView() => View as TemplateTwoSystemView;
+
+        public TemplateOneSystemViewModel GetModel() => Model as TemplateOneSystemViewModel;
+        public TemplateOneSystemView GetView() => View as TemplateOneSystemView;
     }
 }

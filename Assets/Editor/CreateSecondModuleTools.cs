@@ -74,13 +74,13 @@ namespace Editor
             }
 
             //生成Model
-            const string templateModelPath = "Assets/Editor/Template/TemplateOneSystem/TemplateTwoSystem/Main/TemplateTwoSystemModel.cs";
+            const string templateModelPath = "Assets/Editor/Template/TemplateOneSystem/TemplateTwoSystem/Main/TemplateTwoSystemViewModel.cs";
             try
             {
                 var modelContent = File.ReadAllText(templateModelPath);
                 var newViewContent = modelContent.Replace("TemplateTwoSystem", secondModuleName);
                 newViewContent = newViewContent.Replace("TemplateOneSystem", mainModuleName);
-                File.WriteAllText(secondModulePath + "Main/" + secondModuleName + "Model.cs", newViewContent);
+                File.WriteAllText(secondModulePath + "Main/" + secondModuleName + "ViewModel.cs", newViewContent);
             }
             catch (Exception e)
             {
@@ -88,13 +88,13 @@ namespace Editor
             }
 
             //生成Ctrl
-            const string templateCtrlPath = "Assets/Editor/Template/TemplateOneSystem/TemplateTwoSystem/Main/TemplateTwoSystemCtrl.cs";
+            const string templateCtrlPath = "Assets/Editor/Template/TemplateOneSystem/TemplateTwoSystem/Main/TemplateTwoSystemViewCtrl.cs";
             try
             {
                 var ctrlContent = File.ReadAllText(templateCtrlPath);
                 var newViewContent = ctrlContent.Replace("TemplateTwoSystem", secondModuleName);
                 newViewContent = newViewContent.Replace("TemplateOneSystem", mainModuleName);
-                File.WriteAllText(secondModulePath + "Main/" + secondModuleName + "Ctrl.cs", newViewContent);
+                File.WriteAllText(secondModulePath + "Main/" + secondModuleName + "ViewCtrl.cs", newViewContent);
             }
             catch (Exception e)
             {
