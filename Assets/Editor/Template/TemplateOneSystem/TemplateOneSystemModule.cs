@@ -3,12 +3,12 @@ using GameSystem.TemplateOneSystem.Main;
 
 namespace GameSystem.TemplateOneSystem
 {
-    public interface ITemplateOneSystem : IModule
+    public interface ITemplateOneSystemModule: IModule
     {
         public void ShowView();
     }
 
-    public class TemplateOneSystemModule : AbsModule, ITemplateOneSystem
+    public class TemplateOneSystemModule : AbsModule, ITemplateOneSystemModule
     {
         private TemplateOneSystemViewCtrl _viewCtrl;
 
