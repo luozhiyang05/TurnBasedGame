@@ -20,6 +20,8 @@ namespace Editor
             { "Sv_", "ScrollRect" }
         };
 
+        private static string _componentPath;
+
         [MenuItem("QUFramework/生成单个预制体的UI组件/使用说明")]
         public static void Tips()
         {
@@ -65,12 +67,15 @@ namespace Editor
                         createdGos.Add(go);
                         autoDefStr.Append($"\t\tpublic {componentName} {go.name};\n");
                         Debug.Log(uiBehaviour.name);
-                        var tempPath = FindComponentPath(go.name, targetGo.transform, "");
-                        var resultCompPath = tempPath[(tempPath.IndexOf('/') + 1)..];
+                        // var tempPath = FindComponentPath(go.name, targetGo.transform, "");
+                        FindPath(targetGo.transform, go.name, "");
+                        Debug.Log(_componentPath);
+                        //var resultCompPath = tempPath[(tempPath.IndexOf('/') + 1)..];
                         autoAsgStr.Append(
-                            $"\t\t\t{go.name} = transform.Find(\"{resultCompPath}\").GetComponent<{componentName}>();\n");
+                            $"\t\t\t{go.name} = transform.Find(\"{_componentPath}\").GetComponent<{componentName}>();\n");
                     }
 
+                    //return;
                     autoAsgStr.Append("        }");
                     var resultContent = autoDefStr.Append(autoAsgStr.ToString());
                     //最终组合文本内容
@@ -94,15 +99,42 @@ namespace Editor
         private static string FindComponentPath(string targetName, Transform parent, string path)
         {
             path += parent.gameObject.name + "/";
+            Debug.Log(path);
             foreach (Transform value in parent)
             {
-                var goName = value.gameObject.name;
-                if (!goName.Equals(targetName)) return FindComponentPath(targetName, value, path);
-                path += value.name;
-                return path;
+                if (value.gameObject.name.Equals(targetName))
+                {
+                    path += targetName;
+                    return path;
+                }
+                else
+                {
+                    return FindComponentPath(targetName, value, path);
+                }
             }
 
             return path;
+        }
+
+        private static void FindPath(Transform parent, string targetName, string currentPath)
+        {
+            // 遍历当前物体的所有子物体
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                Transform child = parent.GetChild(i);
+                // 更新当前路径
+                string newPath = currentPath.Length > 0 ? $"{currentPath}/{child.name}" : child.name;
+                // 检查是否是目标物体
+                if (child.name == targetName)
+                {
+                    Debug.Log($"找到目标物体路径: {newPath}");
+                    _componentPath = newPath;
+                    return; // 找到后退出递归
+                }
+
+                // 递归调用
+                FindPath(child, targetName, newPath);
+            }
         }
     }
 }

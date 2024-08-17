@@ -21,7 +21,7 @@ namespace GameSystem.MVCTemplate
         protected BaseCtrl(BaseModel model, EuiLayer viewLayer)
         {
             var modelName = model.ToString(); //XxxSystemModel
-            viewName = modelName[(modelName.LastIndexOf('.') + 1)..].Replace("Model", "View");
+            viewName = modelName[(modelName.LastIndexOf('.') + 1)..].Replace("Model", "");
             this.viewLayer = viewLayer;
             View = UIManager.GetInstance().LoadViewGo(viewName, viewLayer);
             Model = model;
