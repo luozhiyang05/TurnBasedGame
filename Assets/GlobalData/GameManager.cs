@@ -4,5 +4,6 @@ namespace GlobalData
     {
         public const float SwitchTurnTime = 1.5f;
         public const float ActInternalTime = 1f;
+        public const float BulletScreenTime = 1f;
     }
 }

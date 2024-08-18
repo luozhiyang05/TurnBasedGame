@@ -28,13 +28,30 @@ namespace GameSystem.BattleSystem
         /// 开始回合制
         /// </summary>
         void StartGame(AbsUnit player, List<AbsUnit> enemies);
-
-        void SwitchPlayerTurn();
-
-        void SwitchEnemyTurn();
-
-        void PlayerAct();
         
+        /// <summary>
+        /// 玩家行动
+        /// </summary>
+        void PlayerAct();
+
+        /// <summary>
+        /// 弹幕时间
+        /// </summary>
+        /// <param name="callback"></param>
+        void BulletScreenTimeDelegate(Action callback,string screenInfo);
+
+        /// <summary>
+        /// 行动间隔时间
+        /// </summary>
+        /// <param name="callback"></param>
+        void ActInternalTimeDelegate(Action callback);
+
+        /// <summary>
+        /// 切换回合时间
+        /// </summary>
+        /// <param name="callback"></param>
+        void SwitchTurnTimeDelegate(Action callback);
+
 
         /// <summary>
         /// 施加效果
@@ -44,41 +61,40 @@ namespace GameSystem.BattleSystem
         /// <param name="affect"></param>
         void Affect(AbsUnit self, AbsUnit target, UnityAction<AbsUnit, AbsUnit> affect);
 
-        /// <summary>
-        /// 多敌人回合判断
-        /// </summary>
-        void MoreEnemyTurn();
+        void SwitchTurn();
+
         public void ShowView();
     }
 
     public class BattleSystemModule : AbsModule, IBattleSystemModule
     {
         private BattleSystemViewCtrl _viewCtrl;
-        
+
+
         public void ShowView()
         {
             _viewCtrl ??= new BattleSystemViewCtrl();
             _viewCtrl.OnShowView();
         }
-          
+
         private AbsUnit _player;
         private List<AbsUnit> _enemies;
         private int _nowEnemyIndex;
         private ETurnBased _nowTurnBased = ETurnBased.Start; //当前状态枚举
         private AbsUnit currentUnit;
+
         protected override void OnInit()
         {
             _enemies = new List<AbsUnit>();
             _nowEnemyIndex = 0;
         }
-        
- 
+
 
         public void StartGame(AbsUnit player, List<AbsUnit> enemies)
         {
             //打开view
             ShowView();
-            
+
             //获取玩家和敌人IUnit单位
             _player = player;
             _player.InitSystem(this);
@@ -91,26 +107,74 @@ namespace GameSystem.BattleSystem
 
             //设置当前回合为玩家回合
             SwitchPlayerTurn();
-            
         }
 
-        public void SwitchPlayerTurn()
+        public void SwitchTurn()
         {
-            
-            ActionKit.GetInstance().DelayTime(GameManager.SwitchTurnTime, () =>
+            switch (_nowTurnBased)
             {
-                _player.Enter(ETurnBased.PlayerTurn);
-            });
-           
+                case ETurnBased.PlayerTurn:
+                    SwitchEnemyTurn();
+                    break;
+                case ETurnBased.EnemyTurn:
+                    JudgeIsHaveMoreEnemies();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
-        public void SwitchEnemyTurn()
+        private void SwitchPlayerTurn()
         {
-            ActionKit.GetInstance().DelayTime(GameManager.SwitchTurnTime, () =>
+            //弹幕时间
+            BulletScreenTimeDelegate(() =>
+            {
+                _nowTurnBased = ETurnBased.PlayerTurn;
+                _player.StartTurnSettle();
+            },"玩家回合开始");
+        }
+
+        private void SwitchEnemyTurn()
+        {
+            //弹幕时间
+            BulletScreenTimeDelegate(() =>
+            {
+                _nowTurnBased = ETurnBased.EnemyTurn;
+                _enemies[_nowEnemyIndex++].StartTurnSettle();
+            },"敌人回合开始");
+        }
+
+        private void JudgeIsHaveMoreEnemies()
+        {
+            //所有敌人行动完毕
+            if (_nowEnemyIndex == _enemies.Count)
             {
                 _nowEnemyIndex = 0;
-                _enemies[_nowEnemyIndex].Enter(ETurnBased.EnemyTurn);
-            });
+                SwitchPlayerTurn();
+            }
+            else
+            {
+                SwitchEnemyTurn();
+            }
+        }
+
+
+        public void BulletScreenTimeDelegate(Action callback,string screenInfo)
+        {
+            Debug.Log($"（弹幕：{screenInfo}）..........");
+            ActionKit.GetInstance().DelayTime(GameManager.BulletScreenTime, callback);
+        }
+
+        public void ActInternalTimeDelegate(Action callback)
+        {
+            Debug.Log("(行动间隔)........");
+            ActionKit.GetInstance().DelayTime(GameManager.ActInternalTime, callback);
+        }
+
+        public void SwitchTurnTimeDelegate(Action callback)
+        {
+            Debug.Log("(切换回合)........");
+            ActionKit.GetInstance().DelayTime(GameManager.SwitchTurnTime, callback);
         }
 
         public void PlayerAct()
@@ -118,28 +182,9 @@ namespace GameSystem.BattleSystem
             _player.Action();
         }
 
-
         public void Affect(AbsUnit self, AbsUnit target, UnityAction<AbsUnit, AbsUnit> affect)
         {
             affect?.Invoke(self, target);
         }
-
-        
-        public void MoreEnemyTurn()
-        {
-            //所有敌人行动完毕
-            if (_nowEnemyIndex == _enemies.Count - 1)
-            {
-                SwitchPlayerTurn();
-                return;
-            }
-            
-            //下一个敌人开始行动
-            ActionKit.GetInstance().DelayTime(GameManager.SwitchTurnTime, () =>
-            {
-                _enemies[++_nowEnemyIndex].Enter(ETurnBased.EnemyTurn);
-            });
-        }
-
     }
 }

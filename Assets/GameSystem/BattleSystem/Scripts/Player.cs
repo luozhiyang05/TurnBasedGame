@@ -7,36 +7,44 @@ namespace GameSystem.BattleSystem.Scripts
 {
     public abstract class Player : AbsUnit, ICanGetSystem
     {
-        public override void Enter(ETurnBased eTurnBased)
+        
+        /// <summary>
+        /// 回合开始时结算逻辑
+        /// </summary>
+        protected abstract void OnStartTurnSettle();
+        public override void StartTurnSettle()
         {
-            Debug.Log("玩家回合开始");
-            ETurnBased = eTurnBased;
-            OnEnter();
-
             //结算回合开始前buff效果
             armor = 0;
+            
+            OnStartTurnSettle();
         }
 
-        protected abstract void OnEnter();
-
+        
+        /// <summary>
+        /// 行动逻辑
+        /// </summary>
+        protected abstract void OnAction();
         public override void Action()
         {
-            Debug.Log("玩家行动");
-            base.Action();
             OnAction();
-            //玩家回合结束取决于玩家选取
+            
+            AfterAction();
         }
 
-        protected abstract void OnAction();
-
-        public override void Exit()
+        
+        /// <summary>
+        /// 结算回合逻辑
+        /// </summary>
+        protected abstract void SettleTurn();
+        protected override void Exit()
         {
-            Debug.Log("玩家回合结束");
-            base.Exit();
-            OnExit();
+            SettleTurn();
+            
+            SwitchTurn();
         }
 
-        protected abstract void OnExit();
+        
         
         public IMgr Ins => Global.GetInstance();
     }

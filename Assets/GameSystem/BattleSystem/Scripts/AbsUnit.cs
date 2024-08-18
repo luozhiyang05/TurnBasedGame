@@ -13,16 +13,15 @@ namespace GameSystem.BattleSystem.Scripts
         public float nowHp; //当前血量
         public float atk; //攻击
         public float armor; //护盾
-        private IBattleSystemModule _battleSystemModule;
-        protected ETurnBased ETurnBased;
-        
+        protected IBattleSystemModule BattleSystemModule;
+
         /// <summary>
         /// 初始化数据
         /// </summary>
         /// <param name="iBattleSystemModule"></param>
         public void InitSystem(IBattleSystemModule iBattleSystemModule)
         {
-            this._battleSystemModule = iBattleSystemModule;
+            this.BattleSystemModule = iBattleSystemModule;
             nowHp = maxHp;
         }
 
@@ -32,35 +31,41 @@ namespace GameSystem.BattleSystem.Scripts
             return nowHp <= 0;
         }
 
-        //回合开始
-        public virtual void Enter(ETurnBased eTurnBased)
-        {
-            ETurnBased = eTurnBased;
-            //玩家的行动自己操控，除非是自动战斗
-            if (ETurnBased is ETurnBased.PlayerTurn or ETurnBased.Start) return;
-            ActionKit.GetInstance().DelayTime(GameManager.SwitchTurnTime, Action);
-        }
+        //回合开始结算
+        public abstract void StartTurnSettle();
 
-        //单位行动
-        public virtual void Action()
+        //回合开始结算结束
+        protected void AfterStartTurnSettle()
         {
-            ActionKit.GetInstance().DelayTime(GameManager.ActInternalTime,Exit);
+            //行动间隔
+            BattleSystemModule.ActInternalTimeDelegate(Action);
         }
+        
+        //行动
+        public abstract void Action();
 
-        //回合结算
-        public virtual void Exit()
+        //行动结束
+        protected void AfterAction()
         {
-            switch (ETurnBased)
+            //行动间隔
+            BattleSystemModule.ActInternalTimeDelegate(() =>
             {
-                case ETurnBased.EnemyTurn:
-                    _battleSystemModule.MoreEnemyTurn();
-                    break;
-                case ETurnBased.PlayerTurn:
-                    _battleSystemModule.SwitchEnemyTurn();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                //弹幕时间
+                BattleSystemModule.BulletScreenTimeDelegate(Exit,"回合结束");
+            });
+        }
+
+        //回合结束
+        protected abstract void Exit();
+        
+        //切换回合
+        protected void SwitchTurn()
+        {
+            //切换回合时间
+            BattleSystemModule.SwitchTurnTimeDelegate(() =>
+            {
+                BattleSystemModule.SwitchTurn();
+            });
         }
     }
 }

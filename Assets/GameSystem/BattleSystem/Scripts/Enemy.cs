@@ -7,33 +7,42 @@ namespace GameSystem.BattleSystem.Scripts
 {
     public abstract class Enemy : AbsUnit, ICanGetSystem
     {
-        public override void Enter(ETurnBased eTurnBased)
+        
+        /// <summary>
+        /// 回合开始时结算逻辑
+        /// </summary>
+        protected abstract void OnStartTurnSettle();
+        public override void StartTurnSettle()
         {
-            Debug.Log($"{gameObject.name}回合开始");
-            OnEnter();
-            base.Enter(eTurnBased);
+            OnStartTurnSettle();
+
+            AfterStartTurnSettle();
         }
-
-        protected abstract void OnEnter();
-
+        
+        /// <summary>
+        /// 行动逻辑
+        /// </summary>
+        protected abstract void OnAction();
         public override void Action()
         {
-            Debug.Log($"{gameObject.name}行动");
             OnAction();
-            base.Action();
+
+            AfterAction();
         }
 
-        protected abstract void OnAction();
-
-
-        public override void Exit()
+        
+        /// <summary>
+        /// 结算回合逻辑
+        /// </summary>
+        protected abstract void SettleTurn();
+        protected override void Exit()
         {
-            Debug.Log($"{gameObject.name}回合结束");
-            OnExit();
-            base.Exit();
+            SettleTurn();
+            
+            SwitchTurn();
         }
 
-        protected abstract void OnExit();
+
 
         public IMgr Ins => Global.GetInstance();
     }
