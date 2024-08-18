@@ -30,6 +30,19 @@ namespace GameSystem.BattleSystem
         void StartGame(AbsUnit player, List<AbsUnit> enemies);
         
         /// <summary>
+        /// 获取玩家Unit
+        /// </summary>
+        /// <returns></returns>
+        AbsUnit GetPlayerUnit();
+
+        /// <summary>
+        /// 获取敌人Unit
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        AbsUnit GetEnemyUnit(int index);
+        
+        /// <summary>
         /// 玩家行动
         /// </summary>
         void PlayerAct();
@@ -38,6 +51,7 @@ namespace GameSystem.BattleSystem
         /// 弹幕时间
         /// </summary>
         /// <param name="callback"></param>
+        /// <param name="screenInfo"></param>
         void BulletScreenTimeDelegate(Action callback,string screenInfo);
 
         /// <summary>
@@ -51,8 +65,7 @@ namespace GameSystem.BattleSystem
         /// </summary>
         /// <param name="callback"></param>
         void SwitchTurnTimeDelegate(Action callback);
-
-
+        
         /// <summary>
         /// 施加效果
         /// </summary>
@@ -62,8 +75,9 @@ namespace GameSystem.BattleSystem
         void Affect(AbsUnit self, AbsUnit target, UnityAction<AbsUnit, AbsUnit> affect);
 
         void SwitchTurn();
+        void ShowView();
 
-        public void ShowView();
+    
     }
 
     public class BattleSystemModule : AbsModule, IBattleSystemModule
@@ -75,6 +89,21 @@ namespace GameSystem.BattleSystem
         {
             _viewCtrl ??= new BattleSystemViewCtrl();
             _viewCtrl.OnShowView();
+        }
+
+        public AbsUnit GetPlayerUnit()
+        {
+            return _player;
+        }
+
+        public AbsUnit GetEnemyUnit(int index)
+        {
+            if (index>=0 && index<_enemies.Count)
+            {
+                return _enemies[index];
+            }
+
+            throw new Exception("敌人下标错误");
         }
 
         private AbsUnit _player;
