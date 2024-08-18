@@ -46,7 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   unitName: EnemyStore_1
-  maxHp: 0
-  nowHp: 0
-  atk: 0
+  maxHp: 10
+  nowHp: 10
   armor: 0

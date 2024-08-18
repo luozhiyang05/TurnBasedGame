@@ -1,5 +1,10 @@
 using Framework;
+using GameSystem.CardSystem;
+using GameSystem.CardSystem.Scripts;
+using GameSystem.CardSystem.Scripts.AtkCard;
+using GameSystem.CardSystem.Scripts.DefenceCard;
 using GameSystem.MVCTemplate;
+using Tool.ResourceMgr;
 using UnityEngine.UI;
 
 namespace GameSystem.BattleSystem.Main
@@ -26,18 +31,27 @@ namespace GameSystem.BattleSystem.Main
         {
         }
 
+        private IBattleSystemModule _battleSystemModule;
+        private ICardSystemModule _cardSystemModule;
+
         /// <summary>
         /// 初始化
         /// </summary>
         protected override void OnInit()
         {
+            _battleSystemModule = this.GetSystem<IBattleSystemModule>();
+            _cardSystemModule = this.GetSystem<ICardSystemModule>();
+            
             Btn_attack.onClick.AddListener(() =>
             {
-                this.GetSystem<IBattleSystemModule>().PlayerAct();
+                var card = _cardSystemModule.LoadPlayerCard<AttackCard>("普通攻击卡");
+                var enemyUnit = _battleSystemModule.GetEnemyUnit(0);
+                _cardSystemModule.UseAtkCard(card,enemyUnit);
             });
             Btn_defense.onClick.AddListener(() =>
             {
-                this.GetSystem<IBattleSystemModule>().PlayerAct();
+                var card = _cardSystemModule.LoadPlayerCard<DefenceCard>("普通防御卡");
+                _cardSystemModule.UseDefCard(card);
             });
         }
 
