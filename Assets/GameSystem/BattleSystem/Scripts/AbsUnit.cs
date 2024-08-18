@@ -9,11 +9,10 @@ namespace GameSystem.BattleSystem.Scripts
     {
         public int id;
         public string unitName; //单位名称
-        public float maxHp; //最大血量
-        public float nowHp; //当前血量
-        public float atk; //攻击
-        public float armor; //护盾
-        protected IBattleSystemModule BattleSystemModule;
+        public int maxHp; //最大血量
+        public int nowHp; //当前血量
+        public int armor; //护盾
+        private IBattleSystemModule _battleSystemModule;
 
         /// <summary>
         /// 初始化数据
@@ -21,7 +20,7 @@ namespace GameSystem.BattleSystem.Scripts
         /// <param name="iBattleSystemModule"></param>
         public void InitSystem(IBattleSystemModule iBattleSystemModule)
         {
-            this.BattleSystemModule = iBattleSystemModule;
+            this._battleSystemModule = iBattleSystemModule;
             nowHp = maxHp;
         }
 
@@ -38,7 +37,7 @@ namespace GameSystem.BattleSystem.Scripts
         protected void AfterStartTurnSettle()
         {
             //行动间隔
-            BattleSystemModule.ActInternalTimeDelegate(Action);
+            _battleSystemModule.ActInternalTimeDelegate(Action);
         }
         
         //行动
@@ -48,10 +47,10 @@ namespace GameSystem.BattleSystem.Scripts
         protected void AfterAction()
         {
             //行动间隔
-            BattleSystemModule.ActInternalTimeDelegate(() =>
+            _battleSystemModule.ActInternalTimeDelegate(() =>
             {
                 //弹幕时间
-                BattleSystemModule.BulletScreenTimeDelegate(ExitTurn,"回合结束");
+                _battleSystemModule.BulletScreenTimeDelegate(ExitTurn,"回合结束");
             });
         }
 
@@ -62,9 +61,9 @@ namespace GameSystem.BattleSystem.Scripts
         protected void SwitchTurn()
         {
             //切换回合时间
-            BattleSystemModule.SwitchTurnTimeDelegate(() =>
+            _battleSystemModule.SwitchTurnTimeDelegate(() =>
             {
-                BattleSystemModule.SwitchTurn();
+                _battleSystemModule.SwitchTurn();
             });
         }
     }
