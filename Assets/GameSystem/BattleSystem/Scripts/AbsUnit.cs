@@ -51,12 +51,12 @@ namespace GameSystem.BattleSystem.Scripts
             BattleSystemModule.ActInternalTimeDelegate(() =>
             {
                 //弹幕时间
-                BattleSystemModule.BulletScreenTimeDelegate(Exit,"回合结束");
+                BattleSystemModule.BulletScreenTimeDelegate(ExitTurn,"回合结束");
             });
         }
 
         //回合结束
-        protected abstract void Exit();
+        protected abstract void ExitTurn();
         
         //切换回合
         protected void SwitchTurn()

@@ -37,7 +37,7 @@ namespace GameSystem.BattleSystem.Scripts
         /// 结算回合逻辑
         /// </summary>
         protected abstract void SettleTurn();
-        protected override void Exit()
+        protected override void ExitTurn()
         {
             SettleTurn();
             
