@@ -1,4 +1,5 @@
 using Framework;
+using GameSystem.CardSystem.Scripts;
 using GlobalData;
 using Tool.Mono;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace GameSystem.BattleSystem.Scripts
 {
     public abstract class Player : AbsUnit, ICanGetSystem
     {
+        public bool canAction = false;
         
         /// <summary>
         /// 回合开始时结算逻辑
@@ -18,19 +20,35 @@ namespace GameSystem.BattleSystem.Scripts
             OnStartRoundSettle();
         }
 
-        
+
         /// <summary>
         /// 行动逻辑
         /// </summary>
-        protected abstract void OnAction();
+        protected abstract void OnAction(BaseCardSo card, AbsUnit target);
+
         public override void Action()
         {
-            OnAction();
-            
-            AfterAction();
+            Debug.Log("玩家开始出牌");
+            canAction = true;
         }
 
-        
+        /// <summary>
+        /// 玩家使用卡牌
+        /// </summary>
+        /// <param name="card"></param>
+        /// <param name="target"></param>
+        public void UseCard(BaseCardSo card, AbsUnit target)
+        {
+            if (!canAction) return;
+            
+            OnAction(card, target);
+
+            AfterAction();
+
+            canAction = false;
+        }
+
+
         /// <summary>
         /// 结算回合逻辑
         /// </summary>
@@ -42,8 +60,7 @@ namespace GameSystem.BattleSystem.Scripts
             SwitchRound();
         }
 
-        
-        
+
         public IMgr Ins => Global.GetInstance();
     }
 }
