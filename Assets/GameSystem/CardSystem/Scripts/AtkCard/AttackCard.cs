@@ -5,9 +5,9 @@ using UnityEngine;
 namespace GameSystem.CardSystem.Scripts.AtkCard
 {
     [CreateAssetMenu(menuName = "CardSystem/Atk", fileName = "AtkCard")]
-    public class AttackCard : AtkCardSo
+    public class AttackCard : BaseCardSo
     {
-        public override void OnAttackToCard(AbsUnit self, AbsUnit target)
+        public override void UseCard(AbsUnit self,AbsUnit target)
         {
             var reduceHp = target.armor - atk;
             if (reduceHp < 0)
