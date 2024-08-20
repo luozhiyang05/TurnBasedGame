@@ -1,3 +1,6 @@
+using Framework;
+using GameSystem.CardSystem;
+using GameSystem.CardSystem.Scripts;
 using UnityEngine;
 
 namespace GameSystem.BattleSystem.Scripts.Unit
@@ -9,10 +12,11 @@ namespace GameSystem.BattleSystem.Scripts.Unit
             Debug.Log("玩家回合开始时结算逻辑");
         }
 
-        protected override void OnAction()
+        protected override void OnAction(BaseCardSo card, AbsUnit target)
         {
-            Debug.Log("玩家具体攻击逻辑");
+            this.GetSystem<ICardSystemModule>().UnitUseCard(card,this,target);
         }
+        
 
         protected override void SettleRound()
         {

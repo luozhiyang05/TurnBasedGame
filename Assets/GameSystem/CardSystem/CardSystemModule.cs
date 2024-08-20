@@ -11,10 +11,8 @@ namespace GameSystem.CardSystem
 {
     public interface ICardSystemModule : IModule
     {
-        public void ShowView();
-        void UseAtkCard(AtkCardSo card, AbsUnit target);
-        void UseDefCard(DefCardSo card);
-
+        void ShowView();
+        void UnitUseCard(BaseCardSo card, AbsUnit self, AbsUnit target);
         T LoadPlayerCard<T>(string cardName) where T : BaseCardSo;
     }
 
@@ -35,16 +33,9 @@ namespace GameSystem.CardSystem
             _viewCtrl.OnShowView();
         }
 
-        public void UseAtkCard(AtkCardSo card, AbsUnit target)
+        public void UnitUseCard(BaseCardSo card, AbsUnit self, AbsUnit target)
         {
-            var playerUnit = this.GetSystem<IBattleSystemModule>().GetPlayerUnit();
-            card.OnAttackToCard(playerUnit, target);
-        }
-
-        public void UseDefCard(DefCardSo card)
-        {
-            var playerUnit = this.GetSystem<IBattleSystemModule>().GetPlayerUnit();
-            card.OnDefenceToSelf(playerUnit);
+            card.UseCard(self, target);
         }
 
         public T LoadPlayerCard<T>(string cardName) where T : BaseCardSo

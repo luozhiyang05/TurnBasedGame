@@ -1,10 +1,9 @@
 using Framework;
+using GameSystem.BattleSystem.Scripts;
 using GameSystem.CardSystem;
-using GameSystem.CardSystem.Scripts;
 using GameSystem.CardSystem.Scripts.AtkCard;
 using GameSystem.CardSystem.Scripts.DefenceCard;
 using GameSystem.MVCTemplate;
-using Tool.ResourceMgr;
 using UnityEngine.UI;
 
 namespace GameSystem.BattleSystem.Main
@@ -41,17 +40,19 @@ namespace GameSystem.BattleSystem.Main
         {
             _battleSystemModule = this.GetSystem<IBattleSystemModule>();
             _cardSystemModule = this.GetSystem<ICardSystemModule>();
-            
+
             Btn_attack.onClick.AddListener(() =>
             {
                 var card = _cardSystemModule.LoadPlayerCard<AttackCard>("普通攻击卡");
                 var enemyUnit = _battleSystemModule.GetEnemyUnit(0);
-                _cardSystemModule.UseAtkCard(card,enemyUnit);
+                var playerUnit = _battleSystemModule.GetPlayerUnit();
+                (playerUnit as Player)?.UseCard(card, enemyUnit);
             });
             Btn_defense.onClick.AddListener(() =>
             {
                 var card = _cardSystemModule.LoadPlayerCard<DefenceCard>("普通防御卡");
-                _cardSystemModule.UseDefCard(card);
+                var playerUnit = _battleSystemModule.GetPlayerUnit();
+                (playerUnit as Player)?.UseCard(card, playerUnit);
             });
         }
 
