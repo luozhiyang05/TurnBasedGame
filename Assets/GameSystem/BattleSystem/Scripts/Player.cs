@@ -11,13 +11,13 @@ namespace GameSystem.BattleSystem.Scripts
         /// <summary>
         /// 回合开始时结算逻辑
         /// </summary>
-        protected abstract void OnStartTurnSettle();
-        public override void StartTurnSettle()
+        protected abstract void OnStartRoundSettle();
+        public override void StartRoundSettle()
         {
             //结算回合开始前buff效果
             armor = 0;
             
-            OnStartTurnSettle();
+            OnStartRoundSettle();
         }
 
         
@@ -36,12 +36,12 @@ namespace GameSystem.BattleSystem.Scripts
         /// <summary>
         /// 结算回合逻辑
         /// </summary>
-        protected abstract void SettleTurn();
-        protected override void ExitTurn()
+        protected abstract void SettleRound();
+        protected override void ExitRound()
         {
-            SettleTurn();
+            SettleRound();
             
-            SwitchTurn();
+            SwitchRound();
         }
 
         

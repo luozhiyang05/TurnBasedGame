@@ -74,7 +74,7 @@ namespace GameSystem.BattleSystem
         /// <param name="affect"></param>
         void Affect(AbsUnit self, AbsUnit target, UnityAction<AbsUnit, AbsUnit> affect);
 
-        void SwitchTurn();
+        void SwitchRound();
         void ShowView();
 
     
@@ -138,7 +138,7 @@ namespace GameSystem.BattleSystem
             SwitchPlayerTurn();
         }
 
-        public void SwitchTurn()
+        public void SwitchRound()
         {
             switch (_nowTurnBased)
             {
@@ -159,7 +159,7 @@ namespace GameSystem.BattleSystem
             BulletScreenTimeDelegate(() =>
             {
                 _nowTurnBased = ETurnBased.PlayerTurn;
-                _player.StartTurnSettle();
+                _player.StartRoundSettle();
             },"玩家回合开始");
         }
 
@@ -169,7 +169,7 @@ namespace GameSystem.BattleSystem
             BulletScreenTimeDelegate(() =>
             {
                 _nowTurnBased = ETurnBased.EnemyTurn;
-                _enemies[_nowEnemyIndex++].StartTurnSettle();
+                _enemies[_nowEnemyIndex++].StartRoundSettle();
             },"敌人回合开始");
         }
 

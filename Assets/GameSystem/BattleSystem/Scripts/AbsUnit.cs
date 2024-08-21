@@ -31,10 +31,10 @@ namespace GameSystem.BattleSystem.Scripts
         }
 
         //回合开始结算
-        public abstract void StartTurnSettle();
+        public abstract void StartRoundSettle();
 
         //回合开始结算结束
-        protected void AfterStartTurnSettle()
+        protected void AfterStartRoundSettle()
         {
             //行动间隔
             _battleSystemModule.ActInternalTimeDelegate(Action);
@@ -50,20 +50,20 @@ namespace GameSystem.BattleSystem.Scripts
             _battleSystemModule.ActInternalTimeDelegate(() =>
             {
                 //弹幕时间
-                _battleSystemModule.BulletScreenTimeDelegate(ExitTurn,"回合结束");
+                _battleSystemModule.BulletScreenTimeDelegate(ExitRound,"回合结束");
             });
         }
 
         //回合结束
-        protected abstract void ExitTurn();
+        protected abstract void ExitRound();
         
         //切换回合
-        protected void SwitchTurn()
+        protected void SwitchRound()
         {
             //切换回合时间
             _battleSystemModule.SwitchTurnTimeDelegate(() =>
             {
-                _battleSystemModule.SwitchTurn();
+                _battleSystemModule.SwitchRound();
             });
         }
     }

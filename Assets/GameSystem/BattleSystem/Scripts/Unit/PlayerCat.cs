@@ -4,7 +4,7 @@ namespace GameSystem.BattleSystem.Scripts.Unit
 {
     public class PlayerCat : Player
     {
-        protected override void OnStartTurnSettle()
+        protected override void OnStartRoundSettle()
         {
             Debug.Log("玩家回合开始时结算逻辑");
         }
@@ -14,7 +14,7 @@ namespace GameSystem.BattleSystem.Scripts.Unit
             Debug.Log("玩家具体攻击逻辑");
         }
 
-        protected override void SettleTurn()
+        protected override void SettleRound()
         {
             Debug.Log("玩家回合结束结算逻辑");
         }

@@ -4,7 +4,7 @@ namespace GameSystem.BattleSystem.Scripts.Unit
 {
     public class EnemyStore : Enemy
     {
-        protected override void OnStartTurnSettle()
+        protected override void OnStartRoundSettle()
         {
             Debug.Log($"{gameObject.name}回合开始时结算逻辑");
         }
@@ -14,7 +14,7 @@ namespace GameSystem.BattleSystem.Scripts.Unit
             Debug.Log($"{gameObject.name}具体攻击逻辑");
         }
 
-        protected override void SettleTurn()
+        protected override void SettleRound()
         {
             Debug.Log($"{gameObject.name}回合结束结算逻辑");
         }
