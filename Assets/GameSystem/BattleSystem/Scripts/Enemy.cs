@@ -14,6 +14,8 @@ namespace GameSystem.BattleSystem.Scripts
         protected abstract void OnStartRoundSettle();
         public override void StartRoundSettle()
         {
+            base.StartRoundSettle();
+            
             OnStartRoundSettle();
 
             AfterStartRoundSettle();

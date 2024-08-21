@@ -14,9 +14,7 @@ namespace GameSystem.BattleSystem.Scripts
         protected abstract void OnStartRoundSettle();
         public override void StartRoundSettle()
         {
-            //结算回合开始前buff效果
-            armor = 0;
-            
+            base.StartRoundSettle();
             OnStartRoundSettle();
         }
 

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using GameSystem.BattleSystem.Scripts.Effect;
 using GlobalData;
 using Tool.Mono;
 using UnityEngine;
@@ -13,6 +15,7 @@ namespace GameSystem.BattleSystem.Scripts
         public int nowHp; //当前血量
         public int armor; //护盾
         private IBattleSystemModule _battleSystemModule;
+        public List<BaseEffect> Effects = new List<BaseEffect>();
 
         /// <summary>
         /// 初始化数据
@@ -29,9 +32,34 @@ namespace GameSystem.BattleSystem.Scripts
         {
             return nowHp <= 0;
         }
+        
+        //添加效果
+        public void AddEffect(BaseEffect addEff)
+        {
+            Effects.Add(addEff);
+        }
+        
+        //移除效果
+        public void RemoveAllEffect()
+        {
+            Effects.Clear();
+        }
 
         //回合开始结算
-        public abstract void StartRoundSettle();
+        public virtual void StartRoundSettle()
+        {
+            //对效果结算
+            for (int i = 0; i < Effects.Count; i++)
+            {
+                BaseEffect effect = Effects[i];
+                effect.StartRoundSettle();
+                //如果效果结束，则移除
+                if (effect.IsEnd())
+                {
+                    Effects.Remove(effect);
+                }
+            }
+        }
 
         //回合开始结算结束
         protected void AfterStartRoundSettle()
