@@ -70,13 +70,13 @@ namespace GameSystem.CardSystem
             for (int i = 0; i < 5; i++)
             {
                 var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "普通攻击卡");
-                _nowUseCards.AddFromTail(loadCard);
+                _nowUseCards.Add(loadCard);
             }
 
             for (int i = 0; i < 5; i++)
             {
                 var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "普通防御卡");
-                _nowUseCards.AddFromTail(loadCard);
+                _nowUseCards.Add(loadCard);
             }
         }
 
@@ -89,7 +89,7 @@ namespace GameSystem.CardSystem
                 while (_obsCards.Count > 0)
                 {
                     var card = _obsCards.GetFromHead();
-                    _nowUseCards.AddFromTail(card);
+                    _nowUseCards.Add(card);
                 }
             }
             
@@ -97,7 +97,7 @@ namespace GameSystem.CardSystem
             for (int i = 0; i < count; i++)
             {
                 var card = _nowUseCards.GetFromHead();
-                _nowHeadCards.AddFromTail(card);
+                _nowHeadCards.Add(card);
             }   
         }
 
@@ -108,7 +108,7 @@ namespace GameSystem.CardSystem
             card.UseCard(self, target);
             
             //将使用的卡牌丢入弃牌队列
-            _obsCards.AddFromTail(card);
+            _obsCards.Add(card);
         }
 
         public T GetCardFromUseCards<T>(string cardName) where T : BaseCardSo
