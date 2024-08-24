@@ -8,6 +8,7 @@ namespace GameSystem.CardSystem.Scripts
         public string cardName;
         public int atk;
         public int armor;
+        
 
         public abstract void UseCard(AbsUnit self,AbsUnit target);
     }

@@ -17,7 +17,9 @@ namespace GameSystem.BattleSystem.Scripts
         public override void StartRoundSettle()
         {
             base.StartRoundSettle();
+            
             OnStartRoundSettle();
+            
             canAction = true;
         }
 
@@ -54,6 +56,8 @@ namespace GameSystem.BattleSystem.Scripts
         protected abstract void SettleRound();
         protected override void ExitRound()
         {
+            base.ExitRound();
+            
             SettleRound();
             
             SwitchRound();

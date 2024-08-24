@@ -15,3 +15,6 @@ MonoBehaviour:
   cardName: "\u666E\u901A\u9632\u5FA1\u5361"
   atk: 0
   armor: 5
+  defenceEff:
+    effName: "\u53E0\u7532"
+    maxRoundCnt: 2

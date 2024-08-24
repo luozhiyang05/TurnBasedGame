@@ -1,34 +1,39 @@
+using System;
 using System.Collections.Generic;
 
 namespace GameSystem.BattleSystem.Scripts.Effect
 {
+    [Serializable]
     public abstract class BaseEffect
     {
         public string effName;
-        
         public int maxRoundCnt; //最大回合数
-        public int remainRoundCnt; //剩余回合数
+        protected int _remainRoundCnt; //剩余回合数
 
         protected AbsUnit self;
         protected List<AbsUnit> targetList;
-
-        public BaseEffect(int maxRoundCnt)
-        {
-            this.maxRoundCnt = maxRoundCnt;
-            remainRoundCnt = maxRoundCnt;
-        }
-
+        
         public void StartRoundSettle()
         {
-            if (remainRoundCnt - 1 >= 0)
+            if (_remainRoundCnt - 1 >= 0)
             {
-                remainRoundCnt--; //回合开始时，回合数-1
+                _remainRoundCnt--; //回合开始时，回合数-1
             }
             OnStartRoundSettle(); //执行回合开始效果
         }
 
+        /// <summary>
+        /// 回合开始时效果逻辑
+        /// </summary>
         public abstract void OnStartRoundSettle();
+        /// <summary>
+        /// 回合结束时效果逻辑
+        /// </summary>
         public abstract void OnEndRoundSettle();
+        /// <summary>
+        /// 效果结束时逻辑
+        /// </summary>
+        public abstract void ExitEffectSettle();
 
         public void EndRoundSettle()
         {
@@ -37,9 +42,10 @@ namespace GameSystem.BattleSystem.Scripts.Effect
 
         public bool IsEnd()
         {
-            if (remainRoundCnt == 0)
+            if (_remainRoundCnt == 0)
             {
-                return true; //剩余回合为0时，当前效果借宿
+                ExitEffectSettle();
+                return true; //剩余回合为0时，当前效果结束
             }
 
             return false;
