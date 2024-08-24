@@ -37,13 +37,14 @@ namespace Tool.Utilities.DataStruct
 
                 return _array[_headIdx+index];
             }
+            set => _array[_headIdx+index] = value;
         }
 
         /// <summary>
         /// 在尾部添加元素
         /// </summary>
         /// <param name="value"></param>
-        public void AddFromTail(T value)
+        public void Add(T value)
         {
             //如果尾指针达到数组长度，则判断当前数组中元素个数是否达到数组长度
             if (_tailIdx == _maxSize - 1)
@@ -130,7 +131,7 @@ namespace Tool.Utilities.DataStruct
             var newArray = new QArray<T>(Count);
             for (var i = 0; i < Count; i++)
             {
-                newArray.AddFromTail(newArray[i]);
+                newArray.Add(newArray[i]);
             }
 
             return newArray;
