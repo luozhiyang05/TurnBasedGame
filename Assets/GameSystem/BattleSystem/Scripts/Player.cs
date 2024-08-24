@@ -18,6 +18,7 @@ namespace GameSystem.BattleSystem.Scripts
         {
             base.StartRoundSettle();
             OnStartRoundSettle();
+            canAction = true;
         }
 
 
@@ -44,8 +45,6 @@ namespace GameSystem.BattleSystem.Scripts
             OnAction(card, target);
 
             AfterAction();
-
-            canAction = false;
         }
 
 
@@ -58,6 +57,8 @@ namespace GameSystem.BattleSystem.Scripts
             SettleRound();
             
             SwitchRound();
+            
+            canAction = false;
         }
 
 
