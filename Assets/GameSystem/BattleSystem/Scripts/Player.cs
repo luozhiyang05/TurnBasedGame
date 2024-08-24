@@ -45,9 +45,9 @@ namespace GameSystem.BattleSystem.Scripts
             if (!canAction) return;
             
             OnAction(card, target);
-
-            AfterAction();
         }
+
+        public void EndRound() => AfterAction();
 
 
         /// <summary>

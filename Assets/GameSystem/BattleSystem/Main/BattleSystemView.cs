@@ -11,17 +11,16 @@ namespace GameSystem.BattleSystem.Main
     public class BattleSystemView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
-
-        public Button Btn_attack;
-        public Button Btn_defense;
-
+		public Button Btn_attack;
+		public Button Btn_defense;
+		public Button Btn_exitRound;
         protected override void AutoInitUI()
         {
-            Btn_attack = transform.Find("Main/Btn_attack").GetComponent<Button>();
-            Btn_defense = transform.Find("Main/Btn_defense").GetComponent<Button>();
+			Btn_attack = transform.Find("Main/Btn_attack").GetComponent<Button>();
+			Btn_defense = transform.Find("Main/Btn_defense").GetComponent<Button>();
+			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<Button>();
         }
-
-        #endregion 自动生成UI组件区域结束！
+		#endregion 自动生成UI组件区域结束！
 
         /// <summary>
         /// 绑定model回调事件
@@ -53,6 +52,10 @@ namespace GameSystem.BattleSystem.Main
                 var card = _cardSystemModule.LoadPlayerCard<DefenceCard>("普通防御卡");
                 var playerUnit = _battleSystemModule.GetPlayerUnit();
                 (playerUnit as Player)?.UseCard(card, playerUnit);
+            });
+            Btn_exitRound.onClick.AddListener(() =>
+            {
+                (_battleSystemModule.GetPlayerUnit() as Player)?.EndRound();
             });
         }
 
