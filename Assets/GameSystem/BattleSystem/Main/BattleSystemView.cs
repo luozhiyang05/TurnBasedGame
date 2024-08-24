@@ -42,14 +42,14 @@ namespace GameSystem.BattleSystem.Main
 
             Btn_attack.onClick.AddListener(() =>
             {
-                var card = _cardSystemModule.LoadPlayerCard<AttackCard>("普通攻击卡");
+                var card = _cardSystemModule.GetCardFromUseCards<AttackCard>("普通攻击卡");
                 var enemyUnit = _battleSystemModule.GetEnemyUnit(0);
                 var playerUnit = _battleSystemModule.GetPlayerUnit();
                 (playerUnit as Player)?.UseCard(card, enemyUnit);
             });
             Btn_defense.onClick.AddListener(() =>
             {
-                var card = _cardSystemModule.LoadPlayerCard<DefenceCard>("普通防御卡");
+                var card = _cardSystemModule.GetCardFromUseCards<DefenceCard>("普通防御卡");
                 var playerUnit = _battleSystemModule.GetPlayerUnit();
                 (playerUnit as Player)?.UseCard(card, playerUnit);
             });
