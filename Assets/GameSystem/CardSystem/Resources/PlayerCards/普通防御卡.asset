@@ -17,4 +17,4 @@ MonoBehaviour:
   armor: 5
   defenceEff:
     effName: "\u53E0\u7532"
-    maxRoundCnt: 2
+    maxRoundCnt: 0

@@ -15,7 +15,7 @@ namespace GameSystem.BattleSystem.Scripts
         public int nowHp; //当前血量
         public int armor; //护盾
         private IBattleSystemModule _battleSystemModule;
-        public List<BaseEffect> Effects = new List<BaseEffect>();
+        private readonly Queue<BaseEffect> _effQueue = new Queue<BaseEffect>();
 
         /// <summary>
         /// 初始化数据
@@ -36,27 +36,27 @@ namespace GameSystem.BattleSystem.Scripts
         //添加效果
         public void AddEffect(BaseEffect addEff)
         {
-            Effects.Add(addEff);
+            _effQueue.Enqueue(addEff);
         }
         
         //移除效果
         public void RemoveAllEffect()
         {
-            Effects.Clear();
+            _effQueue.Clear();
         }
 
         //回合开始结算
         public virtual void StartRoundSettle()
         {
             //对效果结算
-            for (int i = 0; i < Effects.Count; i++)
+            int effCount = _effQueue.Count;
+            for (int i = 0; i < effCount; i++)
             {
-                BaseEffect effect = Effects[i];
-                effect.StartRoundSettle();
-                //如果效果结束，则移除
-                if (effect.IsEnd())
+                var eff = _effQueue.Dequeue();
+                eff.StartRoundSettle();
+                if (!eff.IsEnd())
                 {
-                    Effects.Remove(effect);
+                    _effQueue.Enqueue(eff);
                 }
             }
         }
@@ -86,14 +86,14 @@ namespace GameSystem.BattleSystem.Scripts
         protected virtual void ExitRound()
         {
             //对效果结算
-            for (int i = 0; i < Effects.Count; i++)
+            int effCount = _effQueue.Count;
+            for (int i = 0; i < effCount; i++)
             {
-                BaseEffect effect = Effects[i];
-                effect.EndRoundSettle();
-                //如果效果结束，则移除
-                if (effect.IsEnd())
+                var eff = _effQueue.Dequeue();
+                eff.EndRoundSettle();
+                if (!eff.IsEnd())
                 {
-                    Effects.Remove(effect);
+                    _effQueue.Enqueue(eff);
                 }
             }
         }

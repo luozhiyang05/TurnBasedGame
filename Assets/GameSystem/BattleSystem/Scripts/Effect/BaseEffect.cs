@@ -25,15 +25,15 @@ namespace GameSystem.BattleSystem.Scripts.Effect
         /// <summary>
         /// 回合开始时效果逻辑
         /// </summary>
-        public abstract void OnStartRoundSettle();
+        protected abstract void OnStartRoundSettle();
         /// <summary>
         /// 回合结束时效果逻辑
         /// </summary>
-        public abstract void OnEndRoundSettle();
+        protected abstract void OnEndRoundSettle();
         /// <summary>
         /// 效果结束时逻辑
         /// </summary>
-        public abstract void ExitEffectSettle();
+        protected abstract void OnExitEffectSettle();
 
         public void EndRoundSettle()
         {
@@ -44,7 +44,7 @@ namespace GameSystem.BattleSystem.Scripts.Effect
         {
             if (_remainRoundCnt == 0)
             {
-                ExitEffectSettle();
+                OnExitEffectSettle();
                 return true; //剩余回合为0时，当前效果结束
             }
 

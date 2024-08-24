@@ -17,17 +17,17 @@ namespace GameSystem.BattleSystem.Scripts.Effect
         }
 
 
-        public override void OnStartRoundSettle()
+        protected override void OnStartRoundSettle()
         {
            
         }
 
-        public override void OnEndRoundSettle()
+        protected override void OnEndRoundSettle()
         {
 
         }
 
-        public override void ExitEffectSettle()
+        protected override void OnExitEffectSettle()
         {
             if (self.armor-_addAmor<0)
             {
