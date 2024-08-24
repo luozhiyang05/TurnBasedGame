@@ -83,7 +83,20 @@ namespace GameSystem.BattleSystem.Scripts
         }
 
         //回合结束
-        protected abstract void ExitRound();
+        protected virtual void ExitRound()
+        {
+            //对效果结算
+            for (int i = 0; i < Effects.Count; i++)
+            {
+                BaseEffect effect = Effects[i];
+                effect.EndRoundSettle();
+                //如果效果结束，则移除
+                if (effect.IsEnd())
+                {
+                    Effects.Remove(effect);
+                }
+            }
+        }
         
         //切换回合
         protected void SwitchRound()
