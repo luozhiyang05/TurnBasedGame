@@ -8,26 +8,26 @@ namespace GameSystem.BattleSystem.Scripts
 {
     public abstract class Player : AbsUnit, ICanGetSystem
     {
+        public int maxActPoint;
+        public int nowActPoint;
+
         public bool canAction = false;
-        
+
         /// <summary>
         /// 回合开始时结算逻辑
         /// </summary>
         protected abstract void OnStartRoundSettle();
+
         public override void StartRoundSettle()
         {
+            nowActPoint = maxActPoint;
+
             base.StartRoundSettle();
-            
+
             OnStartRoundSettle();
-            
+
             canAction = true;
         }
-
-
-        /// <summary>
-        /// 行动逻辑
-        /// </summary>
-        protected abstract void OnAction(BaseCardSo card, AbsUnit target);
 
         public override void Action()
         {
@@ -42,10 +42,20 @@ namespace GameSystem.BattleSystem.Scripts
         /// <param name="target"></param>
         public void UseCard(BaseCardSo card, AbsUnit target)
         {
-            if (!canAction) return;
-            
-            OnAction(card, target);
+            if (canAction == false) return;
+
+            if (nowActPoint - card.depletePoint < 0)
+            {
+                return;
+            }
+
+            OnUseCard(card, target);
         }
+
+        /// <summary>
+        /// 行动逻辑
+        /// </summary>
+        protected abstract void OnUseCard(BaseCardSo card, AbsUnit target);
 
         public void EndRound() => AfterAction();
 
@@ -54,15 +64,26 @@ namespace GameSystem.BattleSystem.Scripts
         /// 结算回合逻辑
         /// </summary>
         protected abstract void SettleRound();
+
         protected override void ExitRound()
         {
             base.ExitRound();
-            
+
             SettleRound();
-            
+
             SwitchRound();
-            
+
             canAction = false;
+        }
+
+        /// <summary>
+        /// 修改行动点
+        /// </summary>
+        /// <param name="mPoint"></param>
+        /// <returns></returns>
+        public void ModifyActPoint(int mPoint)
+        {
+            nowActPoint += mPoint;
         }
 
 

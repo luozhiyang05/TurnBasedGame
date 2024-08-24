@@ -48,5 +48,7 @@ MonoBehaviour:
   unitName: 
   maxHp: 0
   nowHp: 0
-  atk: 0
   armor: 0
+  maxActPoint: 5
+  nowActPoint: 0
+  canAction: 0

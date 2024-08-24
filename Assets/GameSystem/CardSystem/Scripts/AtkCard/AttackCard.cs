@@ -7,7 +7,7 @@ namespace GameSystem.CardSystem.Scripts.AtkCard
     [CreateAssetMenu(menuName = "CardSystem/Atk", fileName = "AtkCard")]
     public class AttackCard : BaseCardSo
     {
-        public override void UseCard(AbsUnit self,AbsUnit target)
+        protected override void OnUseCard(AbsUnit self,AbsUnit target)
         {
             var reduceHp = target.armor - atk;
             if (reduceHp < 0)

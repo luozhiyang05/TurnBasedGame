@@ -10,7 +10,8 @@ namespace GameSystem.CardSystem.Scripts.DefenceCard
     public class DefenceCard : BaseCardSo
     {
         public DefenceEffect defenceEff;
-        public override void UseCard(AbsUnit self, AbsUnit target)
+
+        protected override void OnUseCard(AbsUnit self, AbsUnit target)
         {
             defenceEff.Init(self,target,armor);
             self.AddEffect(defenceEff);
