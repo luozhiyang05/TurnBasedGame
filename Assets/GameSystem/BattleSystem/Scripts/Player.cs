@@ -1,4 +1,5 @@
 using Framework;
+using GameSystem.CardSystem;
 using GameSystem.CardSystem.Scripts;
 using GlobalData;
 using Tool.Mono;
@@ -25,6 +26,8 @@ namespace GameSystem.BattleSystem.Scripts
             base.StartRoundSettle();
 
             OnStartRoundSettle();
+            
+            this.GetSystem<ICardSystemModule>().UpdateHeadCardInSr();
 
             canAction = true;
         }
@@ -70,6 +73,8 @@ namespace GameSystem.BattleSystem.Scripts
             base.ExitRound();
 
             SettleRound();
+            
+            this.GetSystem<ICardSystemModule>().UpdateHeadCardInEr();
 
             SwitchRound();
 

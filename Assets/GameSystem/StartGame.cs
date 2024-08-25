@@ -13,6 +13,7 @@ namespace GameSystem
     {
         private void Start()
         {
+            //打开战斗view
             this.GetSystem<IBattleSystemModule>()
                 .StartGame(ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Player").GetComponent<Player>(),
                     new List<AbsUnit>()
@@ -21,7 +22,8 @@ namespace GameSystem
                         ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Enemy_2").GetComponent<Enemy>(),
                     });
 
-            this.GetSystem<ICardSystemModule>().LoadUseCards();
+            //打开卡组vie
+            this.GetSystem<ICardSystemModule>().ShowView();
         }
 
         private void Update()
