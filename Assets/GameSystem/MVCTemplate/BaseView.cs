@@ -18,6 +18,7 @@ namespace GameSystem.MVCTemplate
         {
             CanvasGroup = GetComponent<CanvasGroup>();
             AutoInitUI();
+            OnInit();
         }
 
         protected override void AutoInitUI()
@@ -28,7 +29,6 @@ namespace GameSystem.MVCTemplate
         private void Start()
         {
             BindModelListener();
-            OnInit();
         }
 
         public void SetModel(BaseModel model)
