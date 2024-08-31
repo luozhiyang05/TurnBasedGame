@@ -21,7 +21,7 @@ namespace GameSystem.CardSystem.Main
         }
 		#endregion 自动生成UI组件区域结束！
 
-        /// <summary>
+        /// <summary>d
         /// 绑定model回调事件
         /// </summary>
         protected override void BindModelListener()
@@ -33,7 +33,7 @@ namespace GameSystem.CardSystem.Main
         private ICardSystemModule _cardSystemModule;
         private CardSystemViewModel _model;
         
-        private Button _cardBtn;
+        private GameObject _cardTemp;
         private GameObject _cardsContent;
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace GameSystem.CardSystem.Main
                 (_battleSystemModule.GetPlayerUnit() as Player)?.EndRound();
             });
 
-            _cardBtn = transform.Find("Main/UseCardsContent/BtnCardTemplate").GetComponent<Button>();
+            _cardTemp = transform.Find("Main/UseCardsContent/cardTemplate").gameObject;
             _cardsContent = transform.Find("Main/UseCardsContent").gameObject;
         }
 
@@ -113,19 +113,20 @@ namespace GameSystem.CardSystem.Main
                 }
                 
                 var index = i;
-                var btn = Instantiate(_cardBtn, _cardsContent.transform);
+                var btn = Instantiate(_cardTemp, _cardsContent.transform);
+                btn.gameObject.AddComponent<DragCard>();
                 btn.GetComponentInChildren<Text>().text = headArrayDataSource.cardName;
-                btn.onClick.AddListener(() =>
-                {
-                    //获取当前玩家
-                    var player = _battleSystemModule.GetPlayerUnit();
-                    //获取当前敌人
-                    var enemy = _battleSystemModule.GetEnemyUnit(0);
-                    //使用卡牌
-                    (player as Player)?.UseCard(_headArrayDataSources[index], enemy);
-                    //删除卡牌按钮
-                    Destroy(btn.gameObject);
-                });
+                // btn.onClick.AddListener(() =>
+                // {
+                //     //获取当前玩家
+                //     var player = _battleSystemModule.GetPlayerUnit();
+                //     //获取当前敌人
+                //     var enemy = _battleSystemModule.GetEnemyUnit(0);
+                //     //使用卡牌
+                //     (player as Player)?.UseCard(_headArrayDataSources[index], enemy);
+                //     //删除卡牌按钮
+                //     Destroy(btn.gameObject);
+                // });
                 btn.transform.SetParent(_cardsContent.transform);
                 btn.gameObject.SetActive(true);
                 _cards[i] = btn.gameObject;
