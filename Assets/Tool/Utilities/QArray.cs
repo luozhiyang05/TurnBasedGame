@@ -1,5 +1,6 @@
 using System;
-namespace Tool.Utilities.DataStruct
+
+namespace Tool.Utilities
 {
     public class QArray<T>
     {
