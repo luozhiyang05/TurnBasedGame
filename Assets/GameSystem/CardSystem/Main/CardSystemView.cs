@@ -3,7 +3,7 @@ using GameSystem.BattleSystem;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
-using Tool.Utilities.DataStruct;
+using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 

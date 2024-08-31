@@ -6,7 +6,6 @@ using GameSystem.BattleSystem.Scripts;
 using GameSystem.CardSystem.Main;
 using GameSystem.CardSystem.Scripts;
 using Tool.ResourceMgr;
-using Tool.Utilities.DataStruct;
 
 namespace GameSystem.CardSystem
 {

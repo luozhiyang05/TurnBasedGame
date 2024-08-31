@@ -2,7 +2,7 @@ using GameSystem.BattleSystem.Scripts;
 using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
 using Tool.ResourceMgr;
-using Tool.Utilities.DataStruct;
+using Tool.Utilities;
 using UnityEngine.Events;
 
 namespace GameSystem.CardSystem.Main
