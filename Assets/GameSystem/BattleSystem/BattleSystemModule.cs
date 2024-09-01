@@ -7,6 +7,8 @@ using GlobalData;
 using Tool.Mono;
 using UnityEngine;
 using UnityEngine.Events;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace GameSystem.BattleSystem
 {
@@ -83,6 +85,9 @@ namespace GameSystem.BattleSystem
     public class BattleSystemModule : AbsModule, IBattleSystemModule
     {
         private BattleSystemViewCtrl _viewCtrl;
+        private Transform _enemyPosTrans;
+        private List<Transform> _enemyPosTransList;
+        private Transform _playerPosTrans;
 
 
         public void ShowView()
@@ -115,7 +120,18 @@ namespace GameSystem.BattleSystem
         protected override void OnInit()
         {
             _enemies = new List<AbsUnit>();
+            _enemyPosTransList = new List<Transform>();
             _nowEnemyIndex = 0;
+
+            //寻找敌人生成位置
+            _enemyPosTrans = GameObject.Find("EnemyPos").transform;
+            foreach (Transform trans in _enemyPosTrans)
+            {
+                _enemyPosTransList.Add(trans);
+            }
+            
+            //寻找玩家生成位置
+            _playerPosTrans = GameObject.Find("PlayerPos").transform;
         }
 
 
@@ -133,6 +149,19 @@ namespace GameSystem.BattleSystem
                 enemies[i].id = i;
                 enemies[i].InitSystem(this);
             }
+
+            //设定敌人位置
+            var count = enemies.Count;
+            for (var i = 0; i < count; i++)
+            {
+                var rangeIndex = Random.Range(0, _enemyPosTransList.Count);
+                var enemyPosTrans = _enemyPosTransList[rangeIndex];
+                enemies[i].transform.position = enemyPosTrans.position;
+                _enemyPosTransList.Remove(enemyPosTrans);
+            }
+            
+            //设定玩家位置
+            _player.transform.position = _playerPosTrans.position;
 
             //设置当前回合为玩家回合
             SwitchPlayerTurn();
