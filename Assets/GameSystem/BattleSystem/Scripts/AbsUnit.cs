@@ -4,6 +4,7 @@ using GameSystem.BattleSystem.Scripts.Effect;
 using GlobalData;
 using Tool.Mono;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameSystem.BattleSystem.Scripts
 {
@@ -16,6 +17,13 @@ namespace GameSystem.BattleSystem.Scripts
         public int armor; //护盾
         private IBattleSystemModule _battleSystemModule;
         private readonly Queue<BaseEffect> _effQueue = new Queue<BaseEffect>();
+        private Image _imgHealth;
+
+        public virtual void Awake()
+        {
+            _imgHealth = transform.Find("infoCanvas/bgHealth/imgHealth").GetComponent<Image>();
+            _imgHealth.fillAmount = (float)nowHp / maxHp;
+        }
 
         /// <summary>
         /// 初始化数据
