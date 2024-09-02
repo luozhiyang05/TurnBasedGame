@@ -1,5 +1,6 @@
 using Framework;
 using Tool.UI;
+using UnityEngine;
 
 namespace GameSystem.MVCTemplate
 {
@@ -34,7 +35,7 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void Init();
 
-        protected void OnOpen()=>UIManager.GetInstance().OpenView(viewName, viewLayer);
+        protected void OnOpen()=>UIManager.GetInstance().OpenView(Model.ToString(), viewLayer);
 
         protected abstract BaseModel GetModel();
 
