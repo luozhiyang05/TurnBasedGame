@@ -6,15 +6,27 @@ namespace GameSystem.BattleSystem.Main
 {
     public class BattleSystemViewCtrl : BaseCtrl
     {
-        public BattleSystemViewCtrl() : base(new BattleSystemViewModel(), EuiLayer.Mid)
+        protected override void InitListener()
         {
         }
 
-        /// <summary>
-        /// 处理部分view的业务
-        /// </summary>
-        protected override void InitListener()
+        protected override void RemoveListener()
         {
+            
+        }
+
+        protected override void Init()
+        {
+        }
+
+        public override BaseModel GetModel()
+        {
+            return Model ??= new BattleSystemViewModel();
+        }
+
+        public override BaseView GetView()
+        {
+            return  UIManager.GetInstance().LoadViewGo("BattleSystemView", EuiLayer.Mid);
         }
 
         /// <summary>
@@ -22,16 +34,5 @@ namespace GameSystem.BattleSystem.Main
         /// </summary>
         public void OnShowView() => OnOpen();
 
-        /// <summary>
-        /// view展示完毕回调函数
-        /// </summary>
-        protected override void OnCompleteLoad()
-        {
-            Debug.Log("加载view完成");
-        }
-
-
-        public BattleSystemViewModel GetModel() => Model as BattleSystemViewModel;
-        public BattleSystemView GetView() => View as BattleSystemView;
     }
 }

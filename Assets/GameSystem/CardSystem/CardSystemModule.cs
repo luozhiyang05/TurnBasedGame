@@ -48,17 +48,17 @@ namespace GameSystem.CardSystem
             card.UseCard(self, target);
 
             //将使用的卡牌丢入弃牌队列
-            _viewCtrl.GetModel().DiscardCards(card);
+            (_viewCtrl.GetModel() as CardSystemViewModel)?.DiscardCards(card);
         }
 
         public void UpdateHeadCardInEr()
         {
-            _viewCtrl.GetModel().UpdateHeadCardInEr();
+            (_viewCtrl.GetModel() as CardSystemViewModel)?.UpdateHeadCardInEr();
         }
 
         public void UpdateHeadCardInSr()
         {
-            _viewCtrl.GetModel().UpdateHeadCardInSr();
+            (_viewCtrl.GetModel() as CardSystemViewModel)?.UpdateHeadCardInSr();
         }
     }
 }
