@@ -6,32 +6,37 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 {
     public class TemplateTwoSystemViewCtrl : BaseCtrl
     {
-        public TemplateTwoSystemViewCtrl() : base(new TemplateTwoSystemViewModel(), EuiLayer.Mid)
+        protected override void Init()
         {
-            
         }
 
         /// <summary>
-        /// 处理部分view的业务
+        /// 监听事件
         /// </summary>
         protected override void InitListener()
         {
         }
 
         /// <summary>
+        /// 移除事件
+        /// </summary>
+        protected override void RemoveListener()
+        {
+        }
+        
+        /// <summary>
         /// 展示主要view
         /// </summary>
         public void OnShowView() => OnOpen();
-
-        /// <summary>
-        /// view展示完毕回调函数
-        /// </summary>
-        protected override void OnCompleteLoad()
+        
+        protected override BaseModel GetModel()
         {
-            Debug.Log("加载viewGo完成");
+            return new TemplateTwoSystemViewModel();
         }
 
-        public TemplateTwoSystemViewModel GetModel() => Model as TemplateTwoSystemViewModel;
-        public TemplateTwoSystemView GetView() => View as TemplateTwoSystemView;
+        protected override BaseView GetView()
+        {
+            return UIManager.GetInstance().LoadViewGo("TemplateTwoSystemView",EuiLayer.Mid);
+        }
     }
 }

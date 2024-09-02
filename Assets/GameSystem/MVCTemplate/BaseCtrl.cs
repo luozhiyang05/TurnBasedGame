@@ -18,23 +18,33 @@ namespace GameSystem.MVCTemplate
         protected EuiLayer viewLayer;
         
 
-        protected BaseCtrl(BaseModel model, EuiLayer viewLayer)
+        protected BaseCtrl()
         {
-            var modelName = model.ToString(); //XxxSystemModel
-            viewName = modelName[(modelName.LastIndexOf('.') + 1)..].Replace("Model", "");
-            this.viewLayer = viewLayer;
-            View = UIManager.GetInstance().LoadViewGo(viewName, viewLayer);
-            Model = model;
+            Model = GetModel();
+            View = GetView();
             View.SetModel(Model);
+            View.SetClose(OnClose);
+            Init();
             InitListener();
-            OnCompleteLoad();
         }
 
         protected abstract void InitListener();
+        
+        protected abstract void RemoveListener();
+
+        protected abstract void Init();
 
         protected void OnOpen()=>UIManager.GetInstance().OpenView(viewName, viewLayer);
-        
-        protected abstract void OnCompleteLoad();
+
+        protected abstract BaseModel GetModel();
+
+        protected abstract BaseView GetView();
+
+        private void OnClose()
+        {
+            RemoveListener();
+            Model.Dispose();
+        }
 
         public IMgr Ins => Global.GetInstance();
     }

@@ -2,6 +2,7 @@ using System;
 using Framework;
 using Tool.UI;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace GameSystem.MVCTemplate
@@ -13,6 +14,7 @@ namespace GameSystem.MVCTemplate
         [NonSerialized] public EuiLayer EuiLayer;
         public bool isOpen;
         protected BaseModel Model;
+        private UnityAction _closeCallback;
 
         private void Awake()
         {
@@ -46,15 +48,19 @@ namespace GameSystem.MVCTemplate
         public override void OnShow()
         {
             isOpen = true;
-            Model.BindListener();
             gameObject.SetActive(true);
         }
 
         public override void OnHide()
         {
             isOpen = false;
-            Model.RemoveListener();
+            _closeCallback?.Invoke();
             UIManager.GetInstance().ClosePanel(EuiLayer);
+        }
+
+        public void SetClose(UnityAction callback)
+        {
+            _closeCallback = callback;
         }
 
         public IMgr Ins => Global.GetInstance();
