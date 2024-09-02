@@ -29,12 +29,12 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         /// </summary>
         public void OnShowView() => OnOpen();
         
-        protected override BaseModel GetModel()
+        public override BaseModel GetModel()
         {
-            return new TemplateTwoSystemViewModel();
+            return Model ??= new TemplateTwoSystemViewModel();
         }
 
-        protected override BaseView GetView()
+        public override BaseView GetView()
         {
             return UIManager.GetInstance().LoadViewGo("TemplateTwoSystemView",EuiLayer.Mid);
         }

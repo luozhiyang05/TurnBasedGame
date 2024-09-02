@@ -33,12 +33,12 @@ namespace GameSystem.TemplateOneSystem.Main
         /// </summary>
         public void OnShowView() => OnOpen();
         
-        protected override BaseModel GetModel()
+        public override BaseModel GetModel()
         {
-            return new TemplateOneSystemViewModel();
+            return Model ??= new TemplateOneSystemViewModel();
         }
 
-        protected override BaseView GetView()
+        public override BaseView GetView()
         {
             return UIManager.GetInstance().LoadViewGo("TemplateOneSystemView", EuiLayer.Mid);
         }
