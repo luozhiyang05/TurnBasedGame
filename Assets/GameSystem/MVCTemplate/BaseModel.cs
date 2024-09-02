@@ -9,9 +9,18 @@ namespace GameSystem.MVCTemplate
     public abstract class BaseModel : ICanGetSystem
     {
         private void Init() => OnInit();
-        protected BaseModel() => Init();
 
-
+        protected BaseModel()
+        {
+           Init();
+           BindListener();
+        }
+        
+        public virtual void Dispose()
+        {
+            RemoveListener();
+        }
+        
         protected abstract void OnInit();
 
         public abstract void BindListener();

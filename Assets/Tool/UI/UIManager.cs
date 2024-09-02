@@ -154,11 +154,12 @@ namespace Tool.UI
         /// <summary>
         /// 同步打开view
         /// </summary>
-        /// <param name="viewName"></param>
+        /// <param name="modelName"></param>
         /// <param name="eUILayer"></param>
         /// <exception cref="Exception"></exception>
-        public void OpenView(string viewName, EuiLayer eUILayer)
+        public void OpenView(string modelName, EuiLayer eUILayer)
         {
+            var viewName = modelName[(modelName.LastIndexOf('.') + 1)..].Replace("Model", "");
             //根据UI层次获取队列
             Stack<BaseView> uiStack = GetUIStack(eUILayer);
             string name = viewName;
