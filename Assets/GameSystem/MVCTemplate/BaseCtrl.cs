@@ -14,11 +14,6 @@ namespace GameSystem.MVCTemplate
     {
         protected BaseModel Model;
         protected BaseView View;
-        
-        protected string viewName;
-        protected EuiLayer viewLayer;
-        
-
         protected BaseCtrl()
         {
             Model = GetModel();
@@ -35,11 +30,11 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void Init();
 
-        protected void OnOpen()=>UIManager.GetInstance().OpenView(Model.ToString(), viewLayer);
+        protected void OnOpen()=>UIManager.GetInstance().OpenView(Model.ToString(), EuiLayer.Mid);
 
-        protected abstract BaseModel GetModel();
+        public abstract BaseModel GetModel();
 
-        protected abstract BaseView GetView();
+        public abstract BaseView GetView();
 
         private void OnClose()
         {
