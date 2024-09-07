@@ -67,7 +67,7 @@ namespace GameSystem.CardSystem.Main
             _model?.LoadUseCards();
         }
 
-        private QArray<BaseCardSo> _headArrayDataSources;
+        private QArray<BaseCardSo> _headCardQArray;
         private GameObject[] _cards;
 
         /// <summary>
@@ -76,8 +76,7 @@ namespace GameSystem.CardSystem.Main
         private void InitDataSources()
         {
             //获取玩家当前手牌
-            var data = _model.GetNowHeadCards();
-            _headArrayDataSources = data;
+            _headCardQArray =  _model.GetNowHeadCards();
         }
 
         /// <summary>
@@ -103,30 +102,20 @@ namespace GameSystem.CardSystem.Main
             DiscardCards();
             
             //根据手牌牌数生成按钮
-            _cards = new GameObject[_headArrayDataSources.Count];
-            for (int i = 0; i < _headArrayDataSources.Count; i++)
+            _cards = new GameObject[_headCardQArray.Count];
+            int i = 0;
+            for (; i < _headCardQArray.Count; i++)
             {
-                var headArrayDataSource = _headArrayDataSources[i];
-                if (headArrayDataSource == null)
+                var card = _headCardQArray[i];
+                if (card == null)
                 {
                     continue;
                 }
                 
-                var index = i;
                 var btn = Instantiate(_cardTemp, _cardsContent.transform);
-                btn.gameObject.AddComponent<DragCard>();
-                btn.GetComponentInChildren<Text>().text = headArrayDataSource.cardName;
-                // btn.onClick.AddListener(() =>
-                // {
-                //     //获取当前玩家
-                //     var player = _battleSystemModule.GetPlayerUnit();
-                //     //获取当前敌人
-                //     var enemy = _battleSystemModule.GetEnemyUnit(0);
-                //     //使用卡牌
-                //     (player as Player)?.UseCard(_headArrayDataSources[index], enemy);
-                //     //删除卡牌按钮
-                //     Destroy(btn.gameObject);
-                // });
+                var dc = btn.gameObject.AddComponent<DragCard>();
+                dc.BaseCardSo = card;
+                btn.GetComponentInChildren<Text>().text = card.cardName;
                 btn.transform.SetParent(_cardsContent.transform);
                 btn.gameObject.SetActive(true);
                 _cards[i] = btn.gameObject;
