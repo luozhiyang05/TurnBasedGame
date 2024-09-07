@@ -30,6 +30,11 @@ namespace GameSystem.CardSystem.Main
             return UIManager.GetInstance().LoadViewGo("CardSystemView", EuiLayer.System) as CardSystemView;
         }
 
+        public override void OnCompleteLoad()
+        {
+            
+        }
+
         /// <summary>
         /// 展示主要view
         /// </summary>

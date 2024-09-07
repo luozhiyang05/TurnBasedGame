@@ -29,6 +29,11 @@ namespace GameSystem.BattleSystem.Main
             return  UIManager.GetInstance().LoadViewGo("BattleSystemView", EuiLayer.Mid);
         }
 
+        public override void OnCompleteLoad()
+        {
+            
+        }
+
         /// <summary>
         /// 展示主要view
         /// </summary>
