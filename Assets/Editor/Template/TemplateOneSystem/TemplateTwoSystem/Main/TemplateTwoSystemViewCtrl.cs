@@ -38,5 +38,10 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         {
             return UIManager.GetInstance().LoadViewGo("TemplateTwoSystemView",EuiLayer.Mid);
         }
+
+        public override void OnCompleteLoad()
+        {
+            //一般做网络请求或给view层传递数据
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace GameSystem.MVCTemplate
         {
             Model = GetModel();
             View = GetView();
+            OnCompleteLoad();
             View.SetModel(Model);
             View.SetClose(OnClose);
             Init();
@@ -35,6 +36,8 @@ namespace GameSystem.MVCTemplate
         public abstract BaseModel GetModel();
 
         public abstract BaseView GetView();
+
+        public abstract void OnCompleteLoad();
 
         private void OnClose()
         {

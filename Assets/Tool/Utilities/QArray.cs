@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Tool.Utilities
 {
@@ -36,9 +37,9 @@ namespace Tool.Utilities
                     throw new Exception("索引越界");
                 }
 
-                return _array[_headIdx+index];
+                return _array[_headIdx + index];
             }
-            set => _array[_headIdx+index] = value;
+            set => _array[_headIdx + index] = value;
         }
 
         /// <summary>
@@ -66,6 +67,7 @@ namespace Tool.Utilities
                     {
                         _array[i - _headIdx] = _array[i];
                     }
+
                     _headIdx = 0;
                     _tailIdx = Count - 1;
                 }
@@ -85,6 +87,7 @@ namespace Tool.Utilities
             if (IsEmpty()) throw new Exception("数组为空");
 
             var value = _array[_tailIdx];
+            _array[_tailIdx] = default;
             _tailIdx--;
             Count--;
 
@@ -100,10 +103,53 @@ namespace Tool.Utilities
             if (IsEmpty()) throw new Exception("数组为空");
 
             var value = _array[_headIdx];
+            _array[_headIdx] = default;
             _headIdx++;
             Count--;
 
             return value;
+        }
+
+        /// <summary>
+        /// 根据下标移除元素
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public T Remove(int index)
+        {
+            if (IsEmpty()) throw new Exception("数组为空");
+
+            if (index < _headIdx || index > _tailIdx) throw new Exception("下标超界");
+
+            int tempIdx = _headIdx;
+            while (tempIdx != index)
+            {
+                tempIdx++;
+            }
+
+            T value = _array[tempIdx];
+            tempIdx++;
+            while (tempIdx <= _tailIdx)
+            {
+                _array[tempIdx - 1] = _array[tempIdx];
+                tempIdx++;
+            }
+
+            _array[_tailIdx] = default;
+            _tailIdx--;
+
+            Count--;
+
+            return value;
+        }
+
+        /// <summary>
+        /// 数组中是否存在该元素
+        /// </summary>
+        /// <returns></returns>
+        public bool ContainValue(T t)
+        {
+            return _array.Contains(t);
         }
 
         /// <summary>
@@ -126,7 +172,10 @@ namespace Tool.Utilities
             return _headIdx > _tailIdx;
         }
 
-        //克隆数组
+        /// <summary>
+        /// 克隆数组
+        /// </summary>
+        /// <returns></returns>
         public QArray<T> Clone()
         {
             var newArray = new QArray<T>(Count);
