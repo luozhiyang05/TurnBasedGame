@@ -31,7 +31,7 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void Init();
 
-        protected void OnOpen()=>UIManager.GetInstance().OpenView(Model.ToString(), EuiLayer.Mid);
+        protected void OnOpen()=>UIManager.GetInstance().OpenView(Model.ToString());
 
         public abstract BaseModel GetModel();
 

@@ -25,7 +25,7 @@ namespace GameSystem.MVCTemplate
 
         protected override void AutoInitUI()
         {
-            
+
         }
 
         private void Start()
@@ -42,7 +42,7 @@ namespace GameSystem.MVCTemplate
 
         protected override void OnInit()
         {
-            
+
         }
 
         public override void OnShow()
@@ -55,12 +55,24 @@ namespace GameSystem.MVCTemplate
         {
             isOpen = false;
             _closeCallback?.Invoke();
-            UIManager.GetInstance().ClosePanel(EuiLayer);
+            gameObject.SetActive(false);
+            if (UseMaskPanel)
+            {
+                UIManager.GetInstance().CloseMaskPanel();
+            }
         }
 
         public void SetClose(UnityAction callback)
         {
             _closeCallback = callback;
+        }
+
+        /// <summary>
+        /// 点击遮罩事件
+        /// </summary>
+        public override void OnClickMaskPanel()
+        {
+            OnHide();
         }
 
         public IMgr Ins => Global.GetInstance();

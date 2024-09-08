@@ -15,7 +15,6 @@ namespace GameSystem.MVCTemplate
         
         private void Open()
         {
-            UIManager.GetInstance().InitTips(this);
             gameObject.SetActive(true);
             
         }
