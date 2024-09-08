@@ -26,7 +26,7 @@ namespace GameSystem.BattleSystem.Main
 
         public override BaseView GetView()
         {
-            return  UIManager.GetInstance().LoadViewGo("BattleSystemView", EuiLayer.Mid);
+            return  UIManager.GetInstance().LoadUIPrefab("BattleSystemView", EuiLayer.GameUI);
         }
 
         public override void OnCompleteLoad()

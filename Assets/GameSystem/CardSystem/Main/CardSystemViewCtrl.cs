@@ -27,7 +27,7 @@ namespace GameSystem.CardSystem.Main
 
         public override BaseView GetView()
         {
-            return UIManager.GetInstance().LoadViewGo("CardSystemView", EuiLayer.System) as CardSystemView;
+            return UIManager.GetInstance().LoadUIPrefab("CardSystemView", EuiLayer.GameUI) as CardSystemView;
         }
 
         public override void OnCompleteLoad()
