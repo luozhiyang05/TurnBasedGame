@@ -49,6 +49,8 @@ namespace GameSystem.MVCTemplate
         {
             isOpen = true;
             gameObject.SetActive(true);
+
+            if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
         }
 
         public override void OnHide()

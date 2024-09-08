@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GameSystem.MVCTemplate;
 using Tool.Mono;
@@ -35,11 +36,13 @@ namespace Tool.UI
         private RectTransform _canvasRectTrans;
         private CanvasScaler _canvasScaler;
         private Transform _warnUI,_tipsUI, _gameUI, _menuUI;
-        private Dictionary<string, BaseView> _loadBasViews = new Dictionary<string, BaseView>();
+        private Dictionary<string, BaseView> _loadBaseViews = new Dictionary<string, BaseView>();
+        private Dictionary<string, BaseTips> _loadBaseTips = new Dictionary<string, BaseTips>();
 
         protected override void OnInit()
         {
-            _loadBasViews = new Dictionary<string, BaseView>();
+            _loadBaseViews = new Dictionary<string, BaseView>();
+            _loadBaseTips = new Dictionary<string, BaseTips>();
 
             #region 创建UICanvas和EventSystem
 
@@ -117,15 +120,15 @@ namespace Tool.UI
         /// 开启遮罩
         /// </summary>
         /// <param name="baseView"></param>
-        public void OpenMaskPanel(BaseView baseView)
+        public void OpenMaskPanel(BasePanel basePanel)
         {
             //归位遮罩
             _maskPanel.transform.SetParent(_canvasRectTrans);
             //移动遮罩到当前view的上方
-            var viewParent = baseView.transform.parent;
-            var viewIndex = baseView.transform.GetSiblingIndex();
-            _maskPanel.transform.SetParent(viewParent);
-            _maskPanel.transform.SetSiblingIndex(viewIndex);
+            var panelParent = basePanel.transform.parent;
+            var panelIndex = basePanel.transform.GetSiblingIndex();
+            _maskPanel.transform.SetParent(panelParent);
+            _maskPanel.transform.SetSiblingIndex(panelIndex);
             _maskPanel.SetActive(true);
         }
 
@@ -146,10 +149,10 @@ namespace Tool.UI
                     var uiLevelTrans = _canvasRectTrans.GetChild(i);
                     for (int j = uiLevelTrans.childCount - 1; j >= 0; j--)
                     {
-                        BaseView baseView = uiLevelTrans.GetChild(j).GetComponent<BaseView>();
-                        if (baseView != null && baseView.gameObject.activeInHierarchy && baseView.UseMaskPanel)
+                        BasePanel basePanel = uiLevelTrans.GetChild(j).GetComponent<BasePanel>();
+                        if (basePanel != null && basePanel.gameObject.activeInHierarchy && basePanel.UseMaskPanel)
                         {
-                            OpenMaskPanel(baseView);
+                            OpenMaskPanel(basePanel);
                             hasView = true;
                             hasFindUseMaskPanelView = true;
                             break;
@@ -192,10 +195,10 @@ namespace Tool.UI
                     if (_maskPanel.activeInHierarchy)
                     {
                         int index = _maskPanel.transform.GetSiblingIndex();
-                        BaseView baseView = _maskPanel.transform.parent.GetChild(index + 1).GetComponent<BaseView>();
-                        if (baseView.UseClickMaskPanel)
+                        BasePanel basePanel = _maskPanel.transform.parent.GetChild(index + 1).GetComponent<BasePanel>();
+                        if (basePanel.UseClickMaskPanel)
                         {
-                            baseView.OnClickMaskPanel();
+                            basePanel.OnClickMaskPanel();
                         }
                     }
                 }
@@ -216,9 +219,58 @@ namespace Tool.UI
             InitView(uiGo, euiLayer);
             uiGo.SetActive(false);
             BaseView baseView = uiGo.GetComponent<BaseView>();
-            _loadBasViews.TryAdd(path, baseView);
+            _loadBaseViews.TryAdd(path, baseView);
             callback?.Invoke(baseView);
             return baseView;
+        }
+
+        /// <summary>
+        /// 加载Tips 预制体
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public BaseTips LoadTips(string path,EuiLayer euiLayer,UnityAction<BaseTips> callback = null)
+        {
+            var uiGo = ResMgr.GetInstance().SyncLoad<GameObject>(path);
+            InitView(uiGo, euiLayer);
+            uiGo.SetActive(false);
+            BaseTips baseTips = uiGo.GetComponent<BaseTips>();
+            _loadBaseTips.TryAdd(path, baseTips);
+            callback?.Invoke(baseTips);
+            return baseTips;
+        }
+
+        /// <summary>
+        /// 是否已经加载过Tips
+        /// </summary>
+        /// <param name="tipsName"></param>
+        /// <returns></returns>
+        public bool HasLoadTips(string tipsName)
+        {
+            return _loadBaseTips.ContainsKey(tipsName);
+        }
+
+        /// <summary>
+        /// 释放Tips
+        /// </summary>
+        /// <param name="tipsName"></param>
+        public void UnloadTips(string tipsName)
+        {
+            BaseTips baseTips = GetTips(tipsName);
+            if (baseTips == null) throw new Exception("Tips已经释放");
+            baseTips.OnRelease();
+            _loadBaseTips.Remove(tipsName);
+        }
+
+        /// <summary>
+        /// 获取Tips
+        /// </summary>
+        /// <param name="tipsName"></param>
+        /// <returns></returns>
+        public BaseTips GetTips(string tipsName)
+        {
+            return _loadBaseTips[tipsName];
         }
 
         /// <summary>
@@ -228,7 +280,7 @@ namespace Tool.UI
         public void OpenView(string modelName)
         {
             var viewName = modelName[(modelName.LastIndexOf('.') + 1)..].Replace("Model", "");
-            if (_loadBasViews.TryGetValue(viewName, out var baseView))
+            if (_loadBaseViews.TryGetValue(viewName, out var baseView))
             {
                 if (baseView.isOpen)
                 {
@@ -236,9 +288,6 @@ namespace Tool.UI
                 }
 
                 baseView.OnShow();
-
-                //判断是否使用MaskPanel
-                if (baseView.UseMaskPanel) OpenMaskPanel(baseView);
             }
             else
             {

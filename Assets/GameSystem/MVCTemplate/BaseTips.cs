@@ -1,4 +1,5 @@
 using System;
+using Tool.Mono;
 using Tool.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,28 +8,60 @@ namespace GameSystem.MVCTemplate
 {
     public abstract class BaseTips : BasePanel
     {
-        private void Awake()
+        protected BaseModel _baseModel;
+        public static BaseTips New(string path)
+        {          
+            var uiMgr = UIManager.GetInstance();
+           
+            if (!uiMgr.HasLoadTips(path))
+            {
+                return uiMgr.LoadTips(path, EuiLayer.TipsUI);
+            }
+            return uiMgr.GetTips(path);
+        }
+
+        void Awake()
         {
             OnInit();
         }
-        protected abstract override void OnInit();
-        
-        private void Open()
+
+        void Update()
+        {
+        }
+
+        protected override void OnInit()
+        {
+        }
+
+        public virtual void Init(BaseModel baseModel)
+        {
+            _baseModel = baseModel;
+        }
+
+        public override void OnShow()
         {
             gameObject.SetActive(true);
-            
+            if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
         }
 
-        public virtual void OnOpen()
+        public override void OnHide()
         {
-            Open();
+            gameObject.SetActive(false);
+            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
         }
 
-
-        protected void CloseTips()
+        
+        public override void OnRelease()
         {
-            Destroy(gameObject);
+            _baseModel = null;
         }
-       
+
+        /// <summary>
+        /// 点击遮罩事件
+        /// </summary>
+        public override void OnClickMaskPanel()
+        {
+            OnHide();
+        }
     }
 }
