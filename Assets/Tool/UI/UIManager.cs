@@ -34,7 +34,7 @@ namespace Tool.UI
         private Canvas _canvas;
         private RectTransform _canvasRectTrans;
         private CanvasScaler _canvasScaler;
-        private Transform _tipsUI, _gameUI, _menuUI, _systemUI;
+        private Transform _warnUI,_tipsUI, _gameUI, _menuUI;
         private Dictionary<string, BaseView> _loadBasViews = new Dictionary<string, BaseView>();
 
         protected override void OnInit()
@@ -94,12 +94,7 @@ namespace Tool.UI
             #endregion
 
             #region 生成UI层
-
             //生成UI层
-            _systemUI = new GameObject("SstemtUI").transform;
-            _systemUI.SetParent(_canvasRectTrans);
-            _systemUI.localPosition = Vector3.zero;
-
             _menuUI = new GameObject("MenuUI").transform;
             _menuUI.SetParent(_canvasRectTrans);
             _menuUI.localPosition = Vector3.zero;
@@ -112,6 +107,9 @@ namespace Tool.UI
             _tipsUI.SetParent(_canvasRectTrans);
             _tipsUI.localPosition = Vector3.zero;
 
+            _warnUI = new GameObject("SstemtUI").transform;
+            _warnUI.SetParent(_canvasRectTrans);
+            _warnUI.localPosition = Vector3.zero;
             #endregion
         }
 
@@ -283,7 +281,7 @@ namespace Tool.UI
                 case EuiLayer.TipsUI: return _tipsUI;
                 case EuiLayer.GameUI: return _gameUI;
                 case EuiLayer.MenuUI: return _menuUI;
-                case EuiLayer.SystemUI: return _systemUI;
+                case EuiLayer.SystemUI: return _warnUI;
                 default: return null;
             }
         }
