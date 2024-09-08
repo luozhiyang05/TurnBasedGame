@@ -31,7 +31,11 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void Init();
 
-        protected void OnOpen()=>UIManager.GetInstance().OpenView(Model.ToString());
+        protected void OnOpen()
+        {
+            Model.BindListener();
+            UIManager.GetInstance().OpenView(Model.ToString());
+        }
 
         public abstract BaseModel GetModel();
 
@@ -42,7 +46,7 @@ namespace GameSystem.MVCTemplate
         private void OnClose()
         {
             RemoveListener();
-            Model.Dispose();
+            Model.RemoveListener();
         }
 
         public IMgr Ins => Global.GetInstance();

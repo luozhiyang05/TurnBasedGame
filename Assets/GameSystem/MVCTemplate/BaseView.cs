@@ -56,10 +56,8 @@ namespace GameSystem.MVCTemplate
             isOpen = false;
             _closeCallback?.Invoke();
             gameObject.SetActive(false);
-            if (UseMaskPanel)
-            {
-                UIManager.GetInstance().CloseMaskPanel();
-            }
+            
+            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
         }
 
         public void SetClose(UnityAction callback)
