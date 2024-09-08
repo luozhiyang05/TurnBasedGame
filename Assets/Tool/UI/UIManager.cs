@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GameSystem.MVCTemplate;
+using Tool.Mono;
 using Tool.ResourceMgr;
 using Tool.Single;
 using UnityEngine;
@@ -27,6 +28,9 @@ namespace Tool.UI
             set => _canvasScaler.referenceResolution = value;
         }
 
+        private GameObject _maskPanel;
+        private GraphicRaycaster _maskPanelRaycaster;
+        private PointerEventData _eventData;
         private Canvas _canvas;
         private RectTransform _canvasRectTrans;
         private CanvasScaler _canvasScaler;
@@ -48,7 +52,7 @@ namespace Tool.UI
 
             //创建事件系统
             var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
-            
+
             //销毁保护
             Object.DontDestroyOnLoad(canvasObj);
             //销毁保护
@@ -77,6 +81,18 @@ namespace Tool.UI
 
             #endregion
 
+            #region 生成MaskPanel
+            _maskPanel = ResMgr.GetInstance().SyncLoad<GameObject>("MaskPanel");
+            _maskPanel.transform.SetParent(_canvasRectTrans);
+            _maskPanel.SetActive(false);
+            #endregion
+
+            #region 初始化鼠标点击检测
+            _maskPanelRaycaster = _canvasRectTrans.GetComponent<GraphicRaycaster>();
+            _eventData = new PointerEventData(EventSystem.current);
+            PublicMonoKit.GetInstance().OnRegisterUpdate(IsClickOnMaskPanel);
+            #endregion
+
             #region 生成UI层
 
             //生成UI层
@@ -97,6 +113,97 @@ namespace Tool.UI
             _tipsUI.localPosition = Vector3.zero;
 
             #endregion
+        }
+
+        /// <summary>
+        /// 开启遮罩
+        /// </summary>
+        /// <param name="baseView"></param>
+        public void OpenMaskPanel(BaseView baseView)
+        {
+            //归位遮罩
+            _maskPanel.transform.SetParent(_canvasRectTrans);
+            //移动遮罩到当前view的上方
+            var viewParent = baseView.transform.parent;
+            var viewIndex = baseView.transform.GetSiblingIndex();
+            _maskPanel.transform.SetParent(viewParent);
+            _maskPanel.transform.SetSiblingIndex(viewIndex);
+            _maskPanel.SetActive(true);
+        }
+
+        /// <summary>
+        /// 关闭遮罩
+        /// </summary>
+        public void CloseMaskPanel()
+        {
+            //从该遮罩层起往上查找view，如果有view也开启了遮罩，则将该遮罩移动到该view上方
+            if (_maskPanel.activeInHierarchy)
+            {
+                bool hasView = false;
+                bool hasFindUseMaskPanelView = false;
+
+                //从UI层的最顶层开始找起，找到有开启maskPanel的view后，将maskPanel 移动到该view上方
+                for (int i = _canvasRectTrans.childCount - 1; i >= 0; i--)
+                {
+                    var uiLevelTrans = _canvasRectTrans.GetChild(i);
+                    for (int j = uiLevelTrans.childCount - 1; j >= 0; j--)
+                    {
+                        BaseView baseView = uiLevelTrans.GetChild(j).GetComponent<BaseView>();
+                        if (baseView != null && baseView.gameObject.activeInHierarchy && baseView.UseMaskPanel)
+                        {
+                            OpenMaskPanel(baseView);
+                            hasView = true;
+                            hasFindUseMaskPanelView = true;
+                            break;
+                        }
+                    }
+                    if (hasFindUseMaskPanelView)
+                    {
+                        break;
+                    }
+                }
+
+                if (!hasView)
+                {
+                    _maskPanel.SetActive(false);
+                    _maskPanel.transform.SetParent(_canvasRectTrans);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// 判断当前是否点击遮罩
+        /// </summary>
+        /// <returns></returns>
+        public void IsClickOnMaskPanel()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                //设置点击光标和点击位置
+                _eventData.position = Input.mousePosition;
+                _eventData.pressPosition = Input.mousePosition;
+                //发射射线，方向为vector2.one，默认检测该点有无可阻挡射线的UI
+                List<RaycastResult> raycastResults = new List<RaycastResult>();
+                _maskPanelRaycaster.Raycast(_eventData, raycastResults);
+                //判空检测
+                if (raycastResults.Count == 0) return;
+                if (raycastResults[0].gameObject == _maskPanel)
+                {
+                    //触发点击遮罩事件
+                    if (_maskPanel.activeInHierarchy)
+                    {
+                        int index = _maskPanel.transform.GetSiblingIndex();
+                        BaseView baseView = _maskPanel.transform.parent.GetChild(index + 1).GetComponent<BaseView>();
+                        if (baseView.UseClickMaskPanel)
+                        {
+                            baseView.OnClickMaskPanel();
+                        }
+                    }
+                }
+                //释放内存
+                raycastResults.Clear();
+            }
         }
 
         /// <summary>
@@ -125,7 +232,15 @@ namespace Tool.UI
             var viewName = modelName[(modelName.LastIndexOf('.') + 1)..].Replace("Model", "");
             if (_loadBasViews.TryGetValue(viewName, out var baseView))
             {
+                if (baseView.isOpen)
+                {
+                    return;
+                }
+
                 baseView.OnShow();
+
+                //判断是否使用MaskPanel
+                if (baseView.UseMaskPanel) OpenMaskPanel(baseView);
             }
             else
             {
