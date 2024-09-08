@@ -55,7 +55,7 @@ namespace GameSystem.MVCTemplate
         {
             isOpen = false;
             _closeCallback?.Invoke();
-            UIManager.GetInstance().ClosePanel(EuiLayer);
+            gameObject.SetActive(false);
         }
 
         public void SetClose(UnityAction callback)

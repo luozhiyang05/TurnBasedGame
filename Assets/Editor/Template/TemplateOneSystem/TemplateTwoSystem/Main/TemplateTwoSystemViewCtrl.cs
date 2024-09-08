@@ -1,6 +1,7 @@
 using GameSystem.MVCTemplate;
 using Tool.UI;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 {
@@ -36,7 +37,7 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 
         public override BaseView GetView()
         {
-            return UIManager.GetInstance().LoadViewGo("TemplateTwoSystemView",EuiLayer.Mid);
+           return UIManager.GetInstance().LoadUIPrefab("TemplateTwoSystemView", EuiLayer.GameUI);
         }
 
         public override void OnCompleteLoad()
