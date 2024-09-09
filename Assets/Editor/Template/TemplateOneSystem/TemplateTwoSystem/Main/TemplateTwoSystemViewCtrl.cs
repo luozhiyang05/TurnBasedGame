@@ -25,11 +25,6 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         {
         }
         
-        /// <summary>
-        /// 展示主要view
-        /// </summary>
-        public void OnShowView() => OnOpen();
-        
         public override BaseModel GetModel()
         {
             return Model ??= new TemplateTwoSystemViewModel();

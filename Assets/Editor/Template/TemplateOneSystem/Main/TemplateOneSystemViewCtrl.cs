@@ -26,13 +26,7 @@ namespace GameSystem.TemplateOneSystem.Main
         /// </summary>
         protected override void RemoveListener()
         {
-            
         }
-        
-        /// <summary>
-        /// 展示主要view
-        /// </summary>
-        public void OnShowView() => OnOpen();
         
         public override BaseModel GetModel()
         {

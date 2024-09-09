@@ -22,7 +22,6 @@ namespace GameSystem.MVCTemplate
             View.SetModel(Model);
             View.SetClose(OnClose);
             Init();
-            InitListener();
         }
 
         protected abstract void InitListener();
@@ -31,10 +30,12 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void Init();
 
-        protected void OnOpen()
+        public void ShowView()
         {
+            if (View.isOpen) return;
+            InitListener();
             Model.BindListener();
-            UIManager.GetInstance().OpenView(Model.ToString());
+            View.OnShow();
         }
 
         public abstract BaseModel GetModel();
@@ -47,6 +48,11 @@ namespace GameSystem.MVCTemplate
         {
             RemoveListener();
             Model.RemoveListener();
+        }
+
+        private void OnRelease()
+        {
+            
         }
 
         public IMgr Ins => Global.GetInstance();

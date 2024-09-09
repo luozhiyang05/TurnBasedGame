@@ -19,7 +19,7 @@ namespace GameSystem.TemplateOneSystem
         public void ShowView()
         {
             _viewCtrl ??= new TemplateOneSystemViewCtrl();
-            _viewCtrl.OnShowView();
+            _viewCtrl.ShowView();
         }
     }
 }
