@@ -1,24 +1,12 @@
-using System;
 using Tool.Mono;
 using Tool.UI;
-using UnityEngine;
-using UnityEngine.Events;
 
 namespace GameSystem.MVCTemplate
 {
     public abstract class BaseTips : BasePanel
     {
+        public string path;
         protected BaseModel _baseModel;
-        public static BaseTips New(string path)
-        {          
-            var uiMgr = UIManager.GetInstance();
-           
-            if (!uiMgr.HasLoadTips(path))
-            {
-                return uiMgr.LoadTips(path, EuiLayer.TipsUI);
-            }
-            return uiMgr.GetTips(path);
-        }
 
         void Awake()
         {
@@ -42,18 +30,27 @@ namespace GameSystem.MVCTemplate
         {
             gameObject.SetActive(true);
             if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
+
+            ActionKit.GetInstance().RemoveTimer(GetInstanceID() + nameof(UnLoad));
         }
 
         public override void OnHide()
         {
             gameObject.SetActive(false);
             if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
+
+            //10秒后销毁
+            ActionKit.GetInstance().DelayTime(5f, GetInstanceID() + nameof(UnLoad), UnLoad);
         }
 
-        
+        private void UnLoad()
+        {
+            UIManager.GetInstance().UnloadTips(path);
+        }
+
         public override void OnRelease()
         {
-            _baseModel = null;
+            _baseModel = null;   
         }
 
         /// <summary>

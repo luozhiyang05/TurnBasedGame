@@ -177,7 +177,7 @@ namespace Tool.UI
         /// 判断当前是否点击遮罩
         /// </summary>
         /// <returns></returns>
-        public void IsClickOnMaskPanel()
+        private void IsClickOnMaskPanel()
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -216,7 +216,7 @@ namespace Tool.UI
         public BaseView LoadUIPrefab(string path, EuiLayer euiLayer, UnityAction<BaseView> callback = null)
         {
             var uiGo = ResMgr.GetInstance().SyncLoad<GameObject>(path);
-            InitView(uiGo, euiLayer);
+            InitUI(uiGo, euiLayer);
             uiGo.SetActive(false);
             BaseView baseView = uiGo.GetComponent<BaseView>();
             _loadBaseViews.TryAdd(path, baseView);
@@ -225,82 +225,46 @@ namespace Tool.UI
         }
 
         /// <summary>
-        /// 加载Tips 预制体
+        /// 加载一个Tips
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="callback"></param>
         /// <returns></returns>
-        public BaseTips LoadTips(string path,EuiLayer euiLayer,UnityAction<BaseTips> callback = null)
+        public T LoadTips<T>(string path) where T : BaseTips
         {
-            var uiGo = ResMgr.GetInstance().SyncLoad<GameObject>(path);
-            InitView(uiGo, euiLayer);
-            uiGo.SetActive(false);
-            BaseTips baseTips = uiGo.GetComponent<BaseTips>();
-            _loadBaseTips.TryAdd(path, baseTips);
-            callback?.Invoke(baseTips);
-            return baseTips;
-        }
-
-        /// <summary>
-        /// 是否已经加载过Tips
-        /// </summary>
-        /// <param name="tipsName"></param>
-        /// <returns></returns>
-        public bool HasLoadTips(string tipsName)
-        {
-            return _loadBaseTips.ContainsKey(tipsName);
+            if (!_loadBaseTips.ContainsKey(path))
+            {
+                var uiGo = ResMgr.GetInstance().SyncLoad<GameObject>(path);
+                InitUI(uiGo, EuiLayer.TipsUI);
+                uiGo.SetActive(false);
+                T tips = uiGo.GetComponent<T>();
+                tips.path = path;
+                _loadBaseTips.TryAdd(path, tips);
+                return tips;
+            }
+            return _loadBaseTips[path] as T;
         }
 
         /// <summary>
         /// 释放Tips
         /// </summary>
         /// <param name="tipsName"></param>
-        public void UnloadTips(string tipsName)
+        public void UnloadTips(string path)
         {
-            BaseTips baseTips = GetTips(tipsName);
+            BaseTips baseTips = _loadBaseTips[path];
             if (baseTips == null) throw new Exception("Tips已经释放");
+            _loadBaseTips.Remove(path);
             baseTips.OnRelease();
-            _loadBaseTips.Remove(tipsName);
+            Object.Destroy(baseTips.gameObject);
+            Debug.LogWarning("<size=24><color=#9400D3>TipsModule===>释放："  + path +$"({baseTips.GetInstanceID()})"+ "</color></size>");
         }
 
-        /// <summary>
-        /// 获取Tips
-        /// </summary>
-        /// <param name="tipsName"></param>
-        /// <returns></returns>
-        public BaseTips GetTips(string tipsName)
-        {
-            return _loadBaseTips[tipsName];
-        }
-
-        /// <summary>
-        /// 打开视图
-        /// </summary>
-        /// <param name="viewName"></param>
-        public void OpenView(string modelName)
-        {
-            var viewName = modelName[(modelName.LastIndexOf('.') + 1)..].Replace("Model", "");
-            if (_loadBaseViews.TryGetValue(viewName, out var baseView))
-            {
-                if (baseView.isOpen)
-                {
-                    return;
-                }
-
-                baseView.OnShow();
-            }
-            else
-            {
-                Debug.LogError("没有找到对应的view");
-            }
-        }
-
+        
         /// <summary>
         /// 初始化view
         /// </summary>
         /// <param name="viewGo"></param>
         /// <param name="targetLayer"></param>
-        private void InitView(GameObject viewGo, EuiLayer targetLayer)
+        private void InitUI(GameObject viewGo, EuiLayer targetLayer)
         {
             //设置层级
             viewGo.transform.SetParent(GetFatherLayer(targetLayer));
