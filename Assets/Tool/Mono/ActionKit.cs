@@ -108,6 +108,12 @@ namespace Tool.Mono
             _timerUpdateList.Find(timer => timer.GetName() == timerName)?.DontPause();
 
         public void DelayTime(float delayTime, Action action) => AddTimer(action, delayTime, action.Method.Name);
+        public void DelayTime(float delayTime,string timerName, Action action) => AddTimer(action, delayTime, timerName);
+
+        public void RemoveTimer(string timerName)
+        {
+            _timerUpdateList.RemoveAll(timer => timer.GetName() == timerName);
+        }
 
         private void UpdateTimer()
         {
