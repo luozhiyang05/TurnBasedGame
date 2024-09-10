@@ -18,7 +18,6 @@ namespace GameSystem.MVCTemplate
         protected BaseCtrl()
         {
             Init();
-            Model = GetModel();
         }
 
         protected abstract void InitListener();
@@ -33,6 +32,7 @@ namespace GameSystem.MVCTemplate
             if (IsLoad && View && !View.gameObject.activeInHierarchy)
             {
                 InitListener();
+                Model = GetModel();
                 Model.BindListener();
                 View.OnShow();
                 OnShowComplate();
@@ -72,7 +72,6 @@ namespace GameSystem.MVCTemplate
 
         private void OnRelease()
         {
-            RemoveListener();
             Model = null;
             View = null;
             IsLoad = false;
