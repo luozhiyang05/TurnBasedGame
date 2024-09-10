@@ -1,3 +1,5 @@
+using System.Runtime.Versioning;
+using System.Threading;
 using System;
 using Framework;
 using Tool.UI;
@@ -12,9 +14,10 @@ namespace GameSystem.MVCTemplate
     {
         [NonSerialized] public CanvasGroup CanvasGroup;
         [NonSerialized] public EuiLayer EuiLayer;
-        public bool isOpen;
+        [NonReorderable] public bool isOpen;
         protected BaseModel Model;
         private UnityAction _closeCallback;
+        private UnityAction _releaseCallback;
 
         private void Awake()
         {
@@ -67,12 +70,24 @@ namespace GameSystem.MVCTemplate
             _closeCallback = callback;
         }
 
+        public void SetRelease(UnityAction callback)
+        {
+            _releaseCallback = callback;
+        }
+
         /// <summary>
         /// 点击遮罩事件
         /// </summary>
         public override void OnClickMaskPanel()
         {
             OnHide();
+        }
+
+        public override void OnRelease()
+        {
+            base.OnRelease();
+            Destroy(gameObject);
+            if (_releaseCallback != null) _releaseCallback.Invoke();
         }
 
         public IMgr Ins => Global.GetInstance();

@@ -213,15 +213,16 @@ namespace Tool.UI
         /// <param name="viewName"></param>
         /// <param name="euiLayer"></param>
         /// <returns></returns>
-        public BaseView LoadUIPrefab(string path, EuiLayer euiLayer, UnityAction<BaseView> callback = null)
+        public void LoadUIPrefab(string path, EuiLayer euiLayer, UnityAction<BaseView> callback = null)
         {
             var uiGo = ResMgr.GetInstance().SyncLoad<GameObject>(path);
-            InitUI(uiGo, euiLayer);
-            uiGo.SetActive(false);
-            BaseView baseView = uiGo.GetComponent<BaseView>();
-            _loadBaseViews.TryAdd(path, baseView);
-            callback?.Invoke(baseView);
-            return baseView;
+            ResMgr.GetInstance().AsyncLoad<GameObject>(path,(value)=>{
+                InitUI(uiGo, euiLayer);
+                uiGo.SetActive(false);
+                BaseView baseView = uiGo.GetComponent<BaseView>();
+                _loadBaseViews.TryAdd(path, baseView);
+                callback?.Invoke(baseView);
+            });         
         }
 
         /// <summary>

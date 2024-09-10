@@ -14,35 +14,55 @@ namespace GameSystem.MVCTemplate
     {
         protected BaseModel Model;
         protected BaseView View;
+        protected bool IsLoad;
         protected BaseCtrl()
         {
-            Model = GetModel();
-            View = GetView();
-            OnCompleteLoad();
-            View.SetModel(Model);
-            View.SetClose(OnClose);
             Init();
+            Model = GetModel();
         }
 
         protected abstract void InitListener();
-        
+
         protected abstract void RemoveListener();
 
         protected abstract void Init();
 
         public void ShowView()
         {
-            if (View.isOpen) return;
-            InitListener();
-            Model.BindListener();
-            View.OnShow();
+            //View未释放
+            if (IsLoad && View && !View.gameObject.activeInHierarchy)
+            {
+                InitListener();
+                Model.BindListener();
+                View.OnShow();
+                OnShowComplate();
+                return;
+            }
+
+            //view已经释放,需要重新加载预制体
+            if (!IsLoad && !View)
+            {
+                UIManager.GetInstance().LoadUIPrefab(GetPrefabPath(), EuiLayer.GameUI, (BaseView) =>
+                {
+                    IsLoad = true;
+                    
+                    View = BaseView;
+                    View.SetModel(Model);
+                    View.SetClose(OnClose);
+                    View.SetRelease(OnRelease);
+
+                    ShowView();
+                });
+            }
         }
 
         public abstract BaseModel GetModel();
 
         public abstract BaseView GetView();
 
-        public abstract void OnCompleteLoad();
+        public abstract string GetPrefabPath();
+
+        public abstract void OnShowComplate();
 
         private void OnClose()
         {
@@ -52,7 +72,10 @@ namespace GameSystem.MVCTemplate
 
         private void OnRelease()
         {
-            
+            RemoveListener();
+            Model = null;
+            View = null;
+            IsLoad = false;
         }
 
         public IMgr Ins => Global.GetInstance();

@@ -7,35 +7,19 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 {
     public class TemplateTwoSystemViewCtrl : BaseCtrl
     {
+        public override string GetPrefabPath() => "TemplateTwoSystemView";
+        public override BaseModel GetModel() => Model ??= new TemplateTwoSystemViewModel();
+        public override BaseView GetView() => View;
         protected override void Init()
         {
         }
-
-        /// <summary>
-        /// 监听事件
-        /// </summary>
         protected override void InitListener()
         {
         }
-
-        /// <summary>
-        /// 移除事件
-        /// </summary>
         protected override void RemoveListener()
         {
         }
-        
-        public override BaseModel GetModel()
-        {
-            return Model ??= new TemplateTwoSystemViewModel();
-        }
-
-        public override BaseView GetView()
-        {
-           return UIManager.GetInstance().LoadUIPrefab("TemplateTwoSystemView", EuiLayer.GameUI);
-        }
-
-        public override void OnCompleteLoad()
+        public override void OnShowComplate()
         {
             //一般做网络请求或给view层传递数据
         }
