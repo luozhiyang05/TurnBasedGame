@@ -213,7 +213,7 @@ namespace Tool.UI
         /// <param name="viewName"></param>
         /// <param name="euiLayer"></param>
         /// <returns></returns>
-        public void LoadUIPrefab(string path, EuiLayer euiLayer, UnityAction<BaseView> callback = null)
+        public void LoadViewPrefab(string path, EuiLayer euiLayer, UnityAction<BaseView> callback = null)
         {
             ResMgr.GetInstance().AsyncLoad<GameObject>(path,(uiGo)=>{
                 InitUI(uiGo, euiLayer);
@@ -222,6 +222,17 @@ namespace Tool.UI
                 _loadBaseViews.TryAdd(path, baseView);
                 callback?.Invoke(baseView);
             });         
+        }
+
+        /// <summary>
+        /// 释放view
+        /// </summary>
+        /// <param name="view"></param>
+        /// <typeparam name="T"></typeparam>
+        public void UnloadView<T>(T view) where T : BaseView
+        {
+            Object.Destroy(view.gameObject);
+            Debug.LogWarning("<size=15><color=#9400D3>TipsModule===>释放："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
         }
 
         /// <summary>
@@ -255,7 +266,7 @@ namespace Tool.UI
             _loadBaseTips.Remove(path);
             baseTips.OnRelease();
             Object.Destroy(baseTips.gameObject);
-            Debug.LogWarning("<size=24><color=#9400D3>TipsModule===>释放："  + path +$"({baseTips.GetInstanceID()})"+ "</color></size>");
+            Debug.LogWarning("<size=15><color=#9400D3>TipsModule===>释放："  + path +$"({baseTips.GetInstanceID()})"+ "</color></size>");
         }
 
         

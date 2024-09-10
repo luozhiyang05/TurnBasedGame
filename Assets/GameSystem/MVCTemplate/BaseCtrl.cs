@@ -42,7 +42,7 @@ namespace GameSystem.MVCTemplate
             //view已经释放,需要重新加载预制体
             if (!IsLoad && !View)
             {
-                UIManager.GetInstance().LoadUIPrefab(GetPrefabPath(), EuiLayer.GameUI, (BaseView) =>
+                UIManager.GetInstance().LoadViewPrefab(GetPrefabPath(), EuiLayer.GameUI, (BaseView) =>
                 {
                     IsLoad = true;
                     
@@ -72,9 +72,9 @@ namespace GameSystem.MVCTemplate
 
         private void OnRelease()
         {
-            Model = null;
-            View = null;
             IsLoad = false;
+            Model = null;
+            UIManager.GetInstance().UnloadView(View);
         }
 
         public IMgr Ins => Global.GetInstance();

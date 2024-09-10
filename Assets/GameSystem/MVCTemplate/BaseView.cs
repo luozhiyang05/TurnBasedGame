@@ -6,6 +6,7 @@ using Tool.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using Tool.Mono;
 
 namespace GameSystem.MVCTemplate
 {
@@ -53,6 +54,9 @@ namespace GameSystem.MVCTemplate
             isOpen = true;
             gameObject.SetActive(true);
 
+            //重置倒计时
+            ActionKit.GetInstance().RemoveTimer(GetInstanceID()+"OnRelease");
+
             if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
         }
 
@@ -61,6 +65,9 @@ namespace GameSystem.MVCTemplate
             isOpen = false;
             _closeCallback?.Invoke();
             gameObject.SetActive(false);
+
+            //回收倒计时
+            ActionKit.GetInstance().DelayTime(10f,GetInstanceID()+"OnRelease", OnRelease);
             
             if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
         }
@@ -85,9 +92,7 @@ namespace GameSystem.MVCTemplate
 
         public override void OnRelease()
         {
-            base.OnRelease();
-            Destroy(gameObject);
-            if (_releaseCallback != null) _releaseCallback.Invoke();
+            _releaseCallback?.Invoke();
         }
 
         public IMgr Ins => Global.GetInstance();

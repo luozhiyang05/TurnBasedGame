@@ -41,7 +41,7 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         #endregion
 
         /// <summary>
-        /// 初始化UI组件
+        /// 初始化,时机在Awake中
         /// </summary>
         protected override void OnInit()
         {
@@ -62,6 +62,11 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         public override void OnHide()
         {
             base.OnHide();
+        }
+
+        public override void OnRelease()
+        {
+            base.OnRelease();
         }
     }
 }
