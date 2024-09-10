@@ -36,12 +36,10 @@ namespace Tool.UI
         private RectTransform _canvasRectTrans;
         private CanvasScaler _canvasScaler;
         private Transform _warnUI,_tipsUI, _gameUI, _menuUI;
-        private Dictionary<string, BaseView> _loadBaseViews = new Dictionary<string, BaseView>();
         private Dictionary<string, BaseTips> _loadBaseTips = new Dictionary<string, BaseTips>();
 
         protected override void OnInit()
         {
-            _loadBaseViews = new Dictionary<string, BaseView>();
             _loadBaseTips = new Dictionary<string, BaseTips>();
 
             #region 创建UICanvas和EventSystem
@@ -219,7 +217,6 @@ namespace Tool.UI
                 InitUI(uiGo, euiLayer);
                 uiGo.SetActive(false);
                 BaseView baseView = uiGo.GetComponent<BaseView>();
-                _loadBaseViews.TryAdd(path, baseView);
                 callback?.Invoke(baseView);
             });         
         }
