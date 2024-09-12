@@ -2,19 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UIComponents;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Editor
 {
-    public class CreateUIComponentsTools : EditorWindow
+    public class BinderUIComponentsTools : EditorWindow
     {
         private static Dictionary<string, string> _uiRule = new Dictionary<string, string>()
         {
             { "Img_", "Image" },
             { "Txt_", "Text" },
-            { "Btn_", "Button" },
+            { "Btn_", "CButton" },
             { "Tog_", "Toggle" },
             { "Sld_", "Slider" },
             { "Sv_", "ScrollRect" }
@@ -137,4 +139,24 @@ namespace Editor
             }
         }
     }
+
+    [CustomEditor(typeof(CButton))]
+    public class CustomButtonEditor : UnityEditor.UI.ButtonEditor
+    {
+        public override void OnInspectorGUI()
+        {
+
+
+            // 获取当前的 CustomButton 实例
+            CButton button = (CButton)target;
+
+            button.Label = (Text)EditorGUILayout.ObjectField("Text Component", button.Label, typeof(Text), true);
+
+            // 调用基类的 OnInspectorGUI 以保留原有的 Button 参数
+            base.OnInspectorGUI();
+        }
+
+
+    }
+
 }
