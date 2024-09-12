@@ -10,13 +10,25 @@ namespace Editor
     {
         private static CreateMainModuleTools _panel;
         private static string _moduleName;
+        private static bool _isMvc = false;
 
         [MenuItem("QUFramework/生成主模块")]
+        public static void CreateNoMVCMainModule()
+        {
+            //返回当前屏幕上第一个 t 类型的 EditorWindow，utility参数为是否浮动窗口
+            _panel = GetWindowWithRect<CreateMainModuleTools>(new Rect(0, 0, 360, 90), false, "生成系统模块");
+            _panel.Show(); //默认打开
+            _isMvc = false;
+        }
+
+
+        [MenuItem("QUFramework/生成（MVC）主模块")]
         public static void CreateMainModule()
         {
             //返回当前屏幕上第一个 t 类型的 EditorWindow，utility参数为是否浮动窗口
             _panel = GetWindowWithRect<CreateMainModuleTools>(new Rect(0, 0, 360, 90), false, "生成系统模块");
             _panel.Show(); //默认打开
+            _isMvc = true;
         }
 
 
@@ -27,7 +39,17 @@ namespace Editor
             _moduleName = GUI.TextField(new Rect(80, 20, 200, 20), _moduleName);
             //确认按钮
             if (GUI.Button(new Rect(10, 50, 120, 30), "生成模块"))
-                CreateFile();
+            {
+                if (_isMvc)
+                {
+                    CreateFile();
+                }
+                else
+                {
+                    CreateNoMvcFile();
+                }
+            }
+
         }
 
 
@@ -99,6 +121,45 @@ namespace Editor
             {
                 var moduleContent = File.ReadAllText(templateModulePath);
                 var newSystemContent = moduleContent.Replace("TemplateOneSystem", _moduleName);
+                File.WriteAllText(systemPath + _moduleName + "Module.cs", newSystemContent);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("生成System失败：" + e);
+            }
+
+            AssetDatabase.Refresh();
+            _panel.Close();
+        }
+
+         private static void CreateNoMvcFile()
+        {
+            //D:\UnityProjects\QUFrameWork
+            string systemPath = Directory.GetCurrentDirectory() + @"\Assets\GameSystem\" + _moduleName + @"\";
+
+            //判断有无该目录，无则创建
+            if (Directory.Exists(systemPath))
+            {
+                throw new Exception($"该目录已存在{systemPath}");
+            }
+
+            try
+            {
+                Directory.CreateDirectory(systemPath); //创建系统根目录
+                Directory.CreateDirectory(systemPath + @"\Scripts");
+                Directory.CreateDirectory(systemPath + @"\Resources");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("生成目录失败：" + e);
+            }
+            
+            //创建系统cs
+            const string templateModulePath = "Assets/Editor/Template/TemplateNoMvcSystem/TemplateNoMvcSystem.cs";
+            try
+            {
+                var moduleContent = File.ReadAllText(templateModulePath);
+                var newSystemContent = moduleContent.Replace("TemplateNoMvcSystem", _moduleName);
                 File.WriteAllText(systemPath + _moduleName + "Module.cs", newSystemContent);
             }
             catch (Exception e)
