@@ -56,7 +56,7 @@ namespace GameSystem.MVCTemplate
 
             //重置倒计时
             ActionKit.GetInstance().RemoveTimer(GetInstanceID()+"OnRelease");
-
+            transform.SetAsLastSibling();
             if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
         }
 
