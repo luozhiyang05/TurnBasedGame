@@ -54,8 +54,6 @@ namespace GameSystem.MVCTemplate
             isOpen = true;
             gameObject.SetActive(true);
 
-            //重置倒计时
-            ActionKit.GetInstance().RemoveTimer(GetInstanceID()+"OnRelease");
             transform.SetAsLastSibling();
             if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
         }
@@ -65,9 +63,6 @@ namespace GameSystem.MVCTemplate
             isOpen = false;
             _closeCallback?.Invoke();
             gameObject.SetActive(false);
-
-            //回收倒计时
-            ActionKit.GetInstance().DelayTime(10f,GetInstanceID()+"OnRelease", OnRelease);
             
             if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
         }

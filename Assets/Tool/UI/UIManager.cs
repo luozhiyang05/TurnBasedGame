@@ -4,6 +4,7 @@ using GameSystem.MVCTemplate;
 using Tool.Mono;
 using Tool.ResourceMgr;
 using Tool.Single;
+using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -38,9 +39,25 @@ namespace Tool.UI
         private Transform _warnUI,_tipsUI, _gameUI, _menuUI;
         private Dictionary<string, BaseTips> _loadBaseTips = new Dictionary<string, BaseTips>();
 
+        private const float GC_CHECK = 10f; //GC检查间隔
+        private const float GC_TIME = 5f;  //GC回收间隔
+
+        private bool _lock = false; //GC锁
+
+        private QArray<PrefabVo> _idlePool = new QArray<PrefabVo>(10);
+
+        private QArray<PrefabVo> _pool = new QArray<PrefabVo>(10);
+        
+        private QArray<PrefabVo> _gcQueue = new QArray<PrefabVo>(10);
+
         protected override void OnInit()
         {
             _loadBaseTips = new Dictionary<string, BaseTips>();
+            
+            #region 预制体缓冲池
+            ActionKit.GetInstance().AddTimer(GC_Check,GC_CHECK,"GC_Check",true);
+            ActionKit.GetInstance().AddTimer(GC_Release,GC_TIME,"GC_Release",true);
+            #endregion
 
             #region 创建UICanvas和EventSystem
 
@@ -114,6 +131,93 @@ namespace Tool.UI
             #endregion
         }
 
+
+        #region 预制体池子
+        public void GetFromPool(string path, EuiLayer euiLayer, Action<BaseView> callback)
+        {
+            //GC锁，避免在尝试获取缓存池时，cache被GC检查
+            if (!_lock)
+            {
+                //如果idlePool有缓存，则直接获取，然后移入pool
+                _lock = true;
+                var cache = CheckPool(path);
+                _lock = false;
+                if (cache != null)
+                {
+                    _pool.Add(cache);
+                    callback?.Invoke(cache.GetBaseView());
+                    return;
+                }
+            }
+
+            //没有的话，则实例化预制体到pool
+            LoadViewPrefab(path, euiLayer, (baseView) =>
+            {
+                var prefabVp = new PrefabVo(path, baseView);
+                _pool.Add(prefabVp);
+                callback?.Invoke(baseView);
+            });
+        }
+
+        private PrefabVo CheckPool(string path)
+        {
+            for (var i = 0; i < _idlePool.Count; i++)
+            {
+                var cache = _idlePool[i];
+                if (cache.GetPath() == path)
+                {
+                    _idlePool.Remove(i);
+                    return cache;
+                }
+            }
+            return null;
+        }
+
+        public void EnterPool(BaseView baseView)
+        {
+            //将pool中的vo 移入idlePool
+            _pool.GetValue((value) =>
+            {
+                if (value.GetBaseView() == baseView)
+                {
+                    _idlePool.Add(value);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            });
+        }
+
+        private void GC_Check()
+        {
+            if (_lock)
+            {
+                return;
+            }
+            _lock = true;
+            while (_idlePool.Count != 0)
+            {
+                var vo = _idlePool.GetFromHead();
+                _gcQueue.Add(vo);
+            }
+            _lock = false;
+        }
+
+        private void GC_Release()
+        {
+            while (_gcQueue.Count != 0)
+            {
+                var vo = _gcQueue.GetFromHead();
+                vo.Release();
+            }
+        }
+
+
+        #endregion
+
+        #region UI管理
         /// <summary>
         /// 开启遮罩
         /// </summary>
@@ -229,7 +333,7 @@ namespace Tool.UI
         public void UnloadView<T>(T view) where T : BaseView
         {
             Object.Destroy(view.gameObject);
-            Debug.LogWarning("<size=15><color=#9400D3>TipsModule===>释放："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
+            Debug.LogWarning("<size=15><color=#9400D3>BaseView===>释放："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
         }
 
         /// <summary>
@@ -305,6 +409,37 @@ namespace Tool.UI
                 case EuiLayer.SystemUI: return _warnUI;
                 default: return null;
             }
+        }
+        #endregion
+    }
+
+    public class PrefabVo
+    {
+        private string _path;
+        private GameObject _go;
+        private BaseView _baseView;
+
+        public PrefabVo(string path,BaseView vo)
+        {
+            _path = path;
+            _baseView = vo;
+             _go = _baseView.gameObject;
+        }
+
+        public string GetPath()
+        {
+            return _path;
+        }
+
+        public BaseView GetBaseView()
+        {
+            return _baseView;
+        }
+
+        public void Release()
+        {
+            _baseView.OnRelease();
+            UIManager.GetInstance().UnloadView(_baseView);
         }
     }
 }
