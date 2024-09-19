@@ -11,16 +11,20 @@ namespace Framework
         where T : Singleton<T>
     {
         private Dictionary<Type, IModule> _moduleDic;
+        private Dictionary<Type, IModel> _modelDic;
         private Dictionary<Type, Delegate> _delegateDic;
 
         protected override void OnInit()
         {
             _moduleDic = new Dictionary<Type, IModule>();
+            _modelDic = new Dictionary<Type, IModel>();
             _delegateDic = new Dictionary<Type, Delegate>();
+            OnInitModel();
             OnInitModule();
         }
 
         protected abstract void OnInitModule();
+        protected abstract void OnInitModel();
 
         void IMgr.AddEvent<V>(Action<V> addEvent)
         {
@@ -49,10 +53,20 @@ namespace Framework
             _moduleDic[typeof(S)] = system;
             system.Init(this);
         }
+        protected void RegisterModel<M>(M model) where M : class, IModel
+        {
+            if (_modelDic.ContainsKey(typeof(M))) return;
+            _modelDic[typeof(M)] = model;
+            model.Init(this);
+        }
 
         S IMgr.GetSystem<S>() => _moduleDic.TryGetValue(typeof(S), out IModule system)
             ? system as S
             : throw new Exception("找不到" + typeof(S) + "该模块");
+
+        M IMgr.GetModel<M>() => _modelDic.TryGetValue(typeof(M), out IModel model)
+            ? model as M
+            : throw new Exception("找不到" + typeof(M) + "该数据模型");
 
         void IMgr.SendCmd<C>()
         {
@@ -230,9 +244,20 @@ namespace Framework
         protected abstract void OnInit();
     }
 
+    public abstract class AbsModel : IModel
+    {
+        void INeedInit.Init(IMgr iMgr)
+        {
+            OnInit();
+        }
+        protected abstract void OnInit();
+    }
+
 
     public static class ExpendFrameworkMethods
     {
+        public static M GetModel<M>(this ICanGetModel iCanGetModel) where M : class, IModel =>
+            iCanGetModel.Ins.GetModel<M>();
         public static void AddEvent<V>(this ICanAddEvent iCanAddEvent, Action<V> addEvent) =>
             iCanAddEvent.Ins.AddEvent(addEvent);
 
@@ -270,7 +295,11 @@ namespace Framework
             iCanGetSystem.Ins.GetSystem<S>();
     }
 
-    public interface IModule : INeedInit,ICanGetSystem
+    public interface IModule : INeedInit, ICanGetSystem
+    {
+    }
+
+    public interface IModel : INeedInit
     {
     }
 
@@ -308,7 +337,7 @@ namespace Framework
     }
 
 
-    public interface ICanGetSystem : ICanGetMgr
+    public interface ICanGetSystem : ICanGetMgr,ICanGetModel
     {
     }
 
@@ -337,12 +366,16 @@ namespace Framework
     {
     }
 
+    public interface ICanGetModel : ICanGetMgr
+    {
+    }
+
     public interface ICanGetMgr
     {
         public IMgr Ins { get; }
     }
 
-    public interface IController : ICanGetSystem, ICanSendCmd, ICanRemCmd, ICanSendQuery,
+    public interface IController : ICanGetSystem, ICanGetModel, ICanSendCmd, ICanRemCmd, ICanSendQuery,
         ICanAddEvent, ICanRemoveEvent, ICanSendEvent
     {
     }
@@ -360,6 +393,7 @@ namespace Framework
         public void RemoveEvent<V>(Action<V> remEvent);
         public void SendEvent<V>(V v);
         public S GetSystem<S>() where S : class, IModule;
+        public M GetModel<M>() where M : class, IModel;
         public void SendCmd<C>() where C : ICommand, new();
         public void UnDoCmd<C>() where C : ICommand, new();
         public void SendCmd<C>(C c) where C : ICommand;
