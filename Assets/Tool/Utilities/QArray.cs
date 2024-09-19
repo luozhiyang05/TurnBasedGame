@@ -199,5 +199,20 @@ namespace Tool.Utilities
             _headIdx = 0;
             _tailIdx = -1;
         }
+
+
+        public T GetValue(Func<T,bool> find)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                var value = _array[i];
+                var same = find(value);
+                if (same)
+                {
+                    return value;
+                }
+            }
+            return default;
+        }
     }
 }
