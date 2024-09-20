@@ -166,7 +166,7 @@ namespace Tool.UI
                 var cache = _idlePool[i];
                 if (cache.GetPath() == path)
                 {
-                    _idlePool.Remove(i);
+                    _idlePool.RemoveAt(i);
                     return cache;
                 }
             }
@@ -176,7 +176,7 @@ namespace Tool.UI
         public void EnterPool(BaseView baseView)
         {
             //将pool中的vo 移入idlePool
-            _pool.GetValue((value) =>
+            _pool.FindValue((value) =>
             {
                 if (value.GetBaseView() == baseView)
                 {

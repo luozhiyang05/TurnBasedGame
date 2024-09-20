@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tool.Utilities
@@ -11,6 +13,7 @@ namespace Tool.Utilities
         private int _tailIdx;
         public int Count;
 
+        #region 初始化数组
         /// <summary>
         /// 初始化数组
         /// </summary>
@@ -23,7 +26,9 @@ namespace Tool.Utilities
             _headIdx = 0;
             _tailIdx = -1;
         }
+        #endregion
 
+        #region 索引器
         /// <summary>
         /// 索引器
         /// </summary>
@@ -41,7 +46,9 @@ namespace Tool.Utilities
             }
             set => _array[_headIdx + index] = value;
         }
+        #endregion
 
+        #region 在尾部添加元素
         /// <summary>
         /// 在尾部添加元素
         /// </summary>
@@ -77,7 +84,9 @@ namespace Tool.Utilities
             _array[_tailIdx] = value;
             Count++;
         }
+        #endregion
 
+        #region 出栈
         /// <summary>
         /// 出栈
         /// </summary>
@@ -93,7 +102,9 @@ namespace Tool.Utilities
 
             return value;
         }
+        #endregion
 
+        #region 出队
         /// <summary>
         /// 出队
         /// </summary>
@@ -109,13 +120,10 @@ namespace Tool.Utilities
 
             return value;
         }
+        #endregion
 
-        /// <summary>
-        /// 根据下标移除元素
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public T Remove(int index)
+        #region 根据下标移除元素
+        public T RemoveAt(int index)
         {
             if (IsEmpty()) throw new Exception("数组为空");
 
@@ -142,40 +150,107 @@ namespace Tool.Utilities
 
             return value;
         }
+        #endregion
 
-        /// <summary>
-        /// 数组中是否存在该元素
-        /// </summary>
-        /// <returns></returns>
+        #region 移除某个特定元素
+        public T Remove(T value)
+        {
+            var idx = 0;
+            var hasFind = false;
+            for (var i = _headIdx; i <= _tailIdx; i++)
+            {
+                if (_array[i].Equals(value))
+                {
+                    idx = i;
+                    hasFind = true;
+                    break;
+                }
+            }
+            if (hasFind)
+            {
+                var temp = _array[idx];
+                RemoveAt(idx);
+                return temp;
+            }
+            throw new Exception("没有找到该元素:" + nameof(value));
+        }
+        #endregion
+
+        #region 根据条件移除元素
+        public T Remove(Func<T, bool> find)
+        {
+            var idx = 0;
+            var hasFind = false;
+            for (var i = _headIdx; i <= _tailIdx; i++)
+            {
+                if (find(_array[i]))
+                {
+                    idx = i;
+                    hasFind = true;
+                    break;
+                }
+            }
+            if (hasFind)
+            {
+                var temp = _array[idx];
+                RemoveAt(idx);
+                return temp;
+            }
+            throw new Exception("没有找到该条件的元素:");
+        }
+        #endregion
+        
+        #region 移除满足条件的所有元素
+        public QArray<T> RemoveAll(Func<T, bool> find)
+        {
+            //获取要移除的元素下标集合
+            var idxQArray = new QArray<int>(1);
+            for (var i = _headIdx; i <= _tailIdx; i++)
+            {
+                if (find(_array[i]))
+                {
+                    idxQArray.Add(i);
+                }
+            }
+            var remValuesQArray = new QArray<T>(idxQArray.Count);
+            //获取要移除的元素集合
+            foreach (int idx in idxQArray)
+            {
+                remValuesQArray.Add(_array[idx]);
+            }
+            //开始移除
+            foreach (T value in remValuesQArray)
+            {
+                Remove(value);
+            }
+            return remValuesQArray;
+        }
+        #endregion
+
+        #region 数组是否存在该元素
         public bool ContainValue(T t)
         {
             return _array.Contains(t);
         }
+        #endregion
 
-        /// <summary>
-        /// 获取数组头部元素
-        /// </summary>
-        /// <returns></returns>
+        #region 获取数组头部元素
         public T Peek()
         {
             if (IsEmpty()) throw new Exception("数组为空");
 
             return _array[_headIdx];
         }
+        #endregion
 
-        /// <summary>
-        /// 数组是否为空
-        /// </summary>
-        /// <returns></returns>
+        #region 数组是否为空
         public bool IsEmpty()
         {
             return _headIdx > _tailIdx;
         }
+        #endregion
 
-        /// <summary>
-        /// 克隆数组
-        /// </summary>
-        /// <returns></returns>
+        #region 克隆数组
         public QArray<T> Clone()
         {
             var newArray = new QArray<T>(Count);
@@ -186,10 +261,9 @@ namespace Tool.Utilities
 
             return newArray;
         }
+        #endregion
 
-        /// <summary>
-        /// 重置数组
-        /// </summary>
+        #region 重置数组
         public void Clear()
         {
             _array = null;
@@ -199,9 +273,10 @@ namespace Tool.Utilities
             _headIdx = 0;
             _tailIdx = -1;
         }
+        #endregion
 
-
-        public T GetValue(Func<T,bool> find)
+        #region 根据条件查询元素
+        public T FindValue(Func<T, bool> find)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -214,5 +289,16 @@ namespace Tool.Utilities
             }
             return default;
         }
+        #endregion
+
+        #region 返回枚举器
+        public IEnumerator GetEnumerator()
+        {
+            for (int i = _headIdx; i <= _tailIdx; i++)
+            {
+                yield return _array[i];
+            }
+        }
+        #endregion
     }
 }
