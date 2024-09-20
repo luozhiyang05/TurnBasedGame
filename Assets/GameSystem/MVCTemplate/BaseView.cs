@@ -1,9 +1,12 @@
+using System.Runtime.Versioning;
+using System.Threading;
 using System;
 using Framework;
 using Tool.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using Tool.Mono;
 
 namespace GameSystem.MVCTemplate
 {
@@ -12,9 +15,10 @@ namespace GameSystem.MVCTemplate
     {
         [NonSerialized] public CanvasGroup CanvasGroup;
         [NonSerialized] public EuiLayer EuiLayer;
-        public bool isOpen;
+        [NonReorderable] public bool isOpen;
         protected BaseModel Model;
         private UnityAction _closeCallback;
+        private UnityAction _releaseCallback;
 
         private void Awake()
         {
@@ -49,6 +53,9 @@ namespace GameSystem.MVCTemplate
         {
             isOpen = true;
             gameObject.SetActive(true);
+
+            transform.SetAsLastSibling();
+            if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
         }
 
         public override void OnHide()
@@ -56,15 +63,18 @@ namespace GameSystem.MVCTemplate
             isOpen = false;
             _closeCallback?.Invoke();
             gameObject.SetActive(false);
-            if (UseMaskPanel)
-            {
-                UIManager.GetInstance().CloseMaskPanel();
-            }
+            
+            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
         }
 
         public void SetClose(UnityAction callback)
         {
             _closeCallback = callback;
+        }
+
+        public void SetRelease(UnityAction callback)
+        {
+            _releaseCallback = callback;
         }
 
         /// <summary>
@@ -73,6 +83,11 @@ namespace GameSystem.MVCTemplate
         public override void OnClickMaskPanel()
         {
             OnHide();
+        }
+
+        public override void OnRelease()
+        {
+            _releaseCallback?.Invoke();
         }
 
         public IMgr Ins => Global.GetInstance();

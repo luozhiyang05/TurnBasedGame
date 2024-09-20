@@ -13,12 +13,6 @@ namespace GameSystem.MVCTemplate
         protected BaseModel()
         {
            Init();
-           BindListener();
-        }
-        
-        public virtual void Dispose()
-        {
-            RemoveListener();
         }
         
         protected abstract void OnInit();

@@ -51,7 +51,7 @@ namespace GameSystem.TemplateOneSystem.Main
         }
 
         /// <summary>
-        /// 初始化
+        /// 初始化,时机在Awake中
         /// </summary>
         protected override void OnInit()
         {
@@ -66,6 +66,11 @@ namespace GameSystem.TemplateOneSystem.Main
         public override void OnHide()
         {
             base.OnHide();
+        }
+
+        public override void OnRelease()
+        {
+            base.OnRelease();
         }
     }
 }

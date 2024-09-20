@@ -9,8 +9,9 @@ namespace GameSystem.MVCTemplate
 
         protected virtual void AutoInitUI(){}
         protected abstract void OnInit();
-        public virtual void OnShow(){}
-        public virtual void OnHide(){}
+        public abstract void OnShow();
+        public abstract void OnHide();
+        public virtual void OnRelease(){}
 
         public virtual bool MaskPanel()
         {

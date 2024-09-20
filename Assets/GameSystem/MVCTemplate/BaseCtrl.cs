@@ -14,35 +14,62 @@ namespace GameSystem.MVCTemplate
     {
         protected BaseModel Model;
         protected BaseView View;
+        protected bool IsLoad;
         protected BaseCtrl()
         {
-            Model = GetModel();
-            View = GetView();
-            OnCompleteLoad();
-            View.SetModel(Model);
-            View.SetClose(OnClose);
             Init();
-            InitListener();
         }
 
         protected abstract void InitListener();
-        
+
         protected abstract void RemoveListener();
 
         protected abstract void Init();
 
-        protected void OnOpen()=>UIManager.GetInstance().OpenView(Model.ToString());
+        public void ShowView()
+        {
+            UIManager.GetInstance().GetFromPool(GetPrefabPath(), EuiLayer.GameUI, (BaseView) =>
+            {
+                if (!IsLoad)
+                {
+                    Model = GetModel();
+                    View = BaseView;
+                    View.SetModel(Model);
+                    View.SetClose(OnClose);
+                    View.SetRelease(OnRelease);
+                }
+
+                InitListener();
+                Model.BindListener();
+                
+                View.OnShow();
+                OnShowComplate();
+                
+                IsLoad = true;
+            });
+        }
 
         public abstract BaseModel GetModel();
 
         public abstract BaseView GetView();
 
-        public abstract void OnCompleteLoad();
+        public abstract string GetPrefabPath();
+
+        public abstract void OnShowComplate();
 
         private void OnClose()
         {
             RemoveListener();
-            Model.Dispose();
+            Model.RemoveListener();
+
+            UIManager.GetInstance().EnterPool(View);
+        }
+
+        private void OnRelease()
+        {
+            IsLoad = false;
+            Model = null;
+            View = null;
         }
 
         public IMgr Ins => Global.GetInstance();
