@@ -93,7 +93,7 @@ namespace GameSystem.BattleSystem
         public void ShowView()
         {
             _viewCtrl ??= new BattleSystemViewCtrl();
-            _viewCtrl.OnShowView();
+            _viewCtrl.ShowView();
         }
 
         public AbsUnit GetPlayerUnit()

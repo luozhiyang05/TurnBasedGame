@@ -39,7 +39,7 @@ namespace GameSystem.CardSystem
         public void ShowView()
         {
             _viewCtrl ??= new CardSystemViewCtrl();
-            _viewCtrl.OnShowView();
+            _viewCtrl.ShowView();
         }
 
         public void UnitUseCard(BaseCardSo card, AbsUnit self, AbsUnit target)

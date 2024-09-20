@@ -20,24 +20,13 @@ namespace GameSystem.CardSystem.Main
         {
         }
 
-        public override BaseModel GetModel()
-        {
-            return Model ??= new CardSystemViewModel();
-        }
+        public override BaseModel GetModel()=>Model ??= new CardSystemViewModel();
 
-        public override BaseView GetView()
-        {
-            return UIManager.GetInstance().LoadUIPrefab("CardSystemView", EuiLayer.GameUI) as CardSystemView;
-        }
+        public override BaseView GetView()=>View;
 
-        public override void OnCompleteLoad()
+        public override string GetPrefabPath()=>"CardSystemView";
+        public override void OnShowComplate()
         {
-            
         }
-
-        /// <summary>
-        /// 展示主要view
-        /// </summary>
-        public void OnShowView() => OnOpen();
     }
 }

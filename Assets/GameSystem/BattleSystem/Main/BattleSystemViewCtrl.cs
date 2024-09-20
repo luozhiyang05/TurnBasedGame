@@ -19,25 +19,13 @@ namespace GameSystem.BattleSystem.Main
         {
         }
 
-        public override BaseModel GetModel()
+        public override BaseModel GetModel() => Model ??= new BattleSystemViewModel();
+        public override BaseView GetView() => View;
+
+        public override string GetPrefabPath()=>"BattleSystemView";
+
+        public override void OnShowComplate()
         {
-            return Model ??= new BattleSystemViewModel();
         }
-
-        public override BaseView GetView()
-        {
-            return  UIManager.GetInstance().LoadUIPrefab("BattleSystemView", EuiLayer.GameUI);
-        }
-
-        public override void OnCompleteLoad()
-        {
-            
-        }
-
-        /// <summary>
-        /// 展示主要view
-        /// </summary>
-        public void OnShowView() => OnOpen();
-
     }
 }
