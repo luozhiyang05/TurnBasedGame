@@ -19,12 +19,10 @@ namespace Framework
             _moduleDic = new Dictionary<Type, IModule>();
             _modelDic = new Dictionary<Type, IModel>();
             _delegateDic = new Dictionary<Type, Delegate>();
-            OnInitModel();
             OnInitModule();
         }
 
         protected abstract void OnInitModule();
-        protected abstract void OnInitModel();
 
         void IMgr.AddEvent<V>(Action<V> addEvent)
         {

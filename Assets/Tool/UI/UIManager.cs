@@ -140,7 +140,7 @@ namespace Tool.UI
             {
                 //如果idlePool有缓存，则直接获取，然后移入pool
                 _lock = true;
-                var cache = CheckPool(path);
+                var cache = CheckIdlePool(path);
                 _lock = false;
                 if (cache != null)
                 {
@@ -159,7 +159,7 @@ namespace Tool.UI
             });
         }
 
-        private PrefabVo CheckPool(string path)
+        private PrefabVo CheckIdlePool(string path)
         {
             for (var i = 0; i < _idlePool.Count; i++)
             {

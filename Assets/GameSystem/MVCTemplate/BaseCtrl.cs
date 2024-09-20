@@ -28,32 +28,25 @@ namespace GameSystem.MVCTemplate
 
         public void ShowView()
         {
-            //View未释放
-            if (IsLoad && View && !View.gameObject.activeInHierarchy)
+            UIManager.GetInstance().GetFromPool(GetPrefabPath(), EuiLayer.GameUI, (BaseView) =>
             {
-                InitListener();
-                Model = GetModel();
-                Model.BindListener();
-                View.OnShow();
-                OnShowComplate();
-                return;
-            }
-
-            //view已经释放,需要重新加载预制体
-            if (!IsLoad && !View)
-            {
-                UIManager.GetInstance().GetFromPool(GetPrefabPath(), EuiLayer.GameUI, (BaseView) =>
+                if (!IsLoad)
                 {
-                    IsLoad = true;
-                    
+                    Model = GetModel();
                     View = BaseView;
                     View.SetModel(Model);
                     View.SetClose(OnClose);
                     View.SetRelease(OnRelease);
+                }
 
-                    ShowView();
-                });
-            }
+                InitListener();
+                Model.BindListener();
+                
+                View.OnShow();
+                OnShowComplate();
+                
+                IsLoad = true;
+            });
         }
 
         public abstract BaseModel GetModel();
@@ -76,7 +69,7 @@ namespace GameSystem.MVCTemplate
         {
             IsLoad = false;
             Model = null;
-            //UIManager.GetInstance().UnloadView(View);
+            View = null;
         }
 
         public IMgr Ins => Global.GetInstance();
