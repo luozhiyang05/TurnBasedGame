@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Tool.ResourceMgr;
-using Tool.Utilities;
-using Tool.Utilities.Events;
+using Tool.Utilities.Bindery;
 using UnityEngine;
 using JsonUtility = Tool.Utilities.Save.JsonUtility;
 using Object = UnityEngine.Object;
