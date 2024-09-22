@@ -5,14 +5,15 @@ using Tool.UI;
 
 namespace Tips
 {
-    public static class TipsModule 
+    public static class TipsModule
     {
-        private static UIManager uiMgr =>UIManager.GetInstance();
+        private static UIManager uiMgr => UIManager.GetInstance();
         public static void ReComfirmTips()
         {
-            BaseTips baseTips = uiMgr.LoadTips<BaseTips>(nameof(ReConfirmTips));
-            baseTips.Init(null);
-            baseTips.OnShow();
+            uiMgr.GetFromPool("ReConfirmTips", EuiLayer.GameUI, (tips) =>
+            {
+                (tips as ReConfirmTips).Open();
+            });
         }
     }
 }

@@ -24,20 +24,14 @@ namespace Tips
         }
         #endregion
 
+        protected override void Init()
+        {
+            
+        }
 
         public override void OnShow()
         {
-            base.OnShow();
-        }
-
-        public override void OnHide()
-        {
-            base.OnHide();
-        }
-
-        public override void OnRelease()
-        {
-            base.OnRelease();
+            
         }
     }
 }

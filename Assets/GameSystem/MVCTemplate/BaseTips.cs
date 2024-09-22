@@ -3,50 +3,35 @@ using Tool.UI;
 
 namespace GameSystem.MVCTemplate
 {
-    public abstract class BaseTips : BasePanel
+    public abstract class BaseTips : BaseView
     {
-        public string path;
         protected BaseModel _baseModel;
 
-        void Awake()
+        void OnEnable()
         {
-            OnInit();
+            Init();
         }
-
-        void Update()
+        void Start()
         {
+            OnShow();
         }
-
-        protected override void OnInit()
-        {
-        }
-
-        public virtual void Init(BaseModel baseModel)
+        protected abstract void Init();
+        public abstract override void OnShow();
+        public virtual void Open(BaseModel baseModel = null)
         {
             _baseModel = baseModel;
-        }
-
-        public override void OnShow()
-        {
             gameObject.SetActive(true);
             if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
-
-            ActionKit.GetInstance().RemoveTimer(GetInstanceID() + nameof(UnLoad));
         }
-
         public override void OnHide()
         {
             gameObject.SetActive(false);
+            UIManager.GetInstance().EnterPool(this);
             if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
-
-            //10秒后销毁
-            ActionKit.GetInstance().DelayTime(5f, GetInstanceID() + nameof(UnLoad), UnLoad);
         }
 
-        private void UnLoad()
-        {
-            UIManager.GetInstance().UnloadTips(path);
-        }
+        protected override void BindModelListener(){}
+        protected override void OnInit(){}
 
         public override void OnRelease()
         {

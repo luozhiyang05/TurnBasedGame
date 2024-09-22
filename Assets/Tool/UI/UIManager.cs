@@ -330,30 +330,34 @@ namespace Tool.UI
         /// </summary>
         /// <param name="view"></param>
         /// <typeparam name="T"></typeparam>
-        public void UnloadView<T>(T view) where T : BaseView
+        public void UnloadPanel<T>(T view) where T : BaseView
         {
             Object.Destroy(view.gameObject);
-            Debug.LogWarning("<size=15><color=#9400D3>BaseView===>释放："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
+            Debug.LogWarning("<size=15><color=#9400D3>回收："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
         }
 
         /// <summary>
         /// 加载一个Tips
         /// </summary>
         /// <param name="path"></param>
-        /// <returns></returns>
-        public T LoadTips<T>(string path) where T : BaseTips
+        /// /// <returns></returns>
+        public void LoadTips<T>(string path,Action<T> callback) where T : BaseTips
         {
             if (!_loadBaseTips.ContainsKey(path))
             {
-                var uiGo = ResMgr.GetInstance().SyncLoad<GameObject>(path);
-                InitUI(uiGo, EuiLayer.TipsUI);
-                uiGo.SetActive(false);
-                T tips = uiGo.GetComponent<T>();
-                tips.path = path;
-                _loadBaseTips.TryAdd(path, tips);
-                return tips;
+                ResMgr.GetInstance().AsyncLoad<GameObject>(path, (tipGo) =>
+                {
+                    tipGo.SetActive(false);
+                    InitUI(tipGo, EuiLayer.TipsUI);
+                    T tips = tipGo.GetComponent<T>();
+                    _loadBaseTips.TryAdd(path, tips);
+                    callback.Invoke(tips);
+                });
             }
-            return _loadBaseTips[path] as T;
+            else
+            {
+                callback.Invoke(_loadBaseTips[path] as T);
+            }
         }
 
         /// <summary>
@@ -439,7 +443,7 @@ namespace Tool.UI
         public void Release()
         {
             _baseView.OnRelease();
-            UIManager.GetInstance().UnloadView(_baseView);
+            UIManager.GetInstance().UnloadPanel(_baseView);
         }
     }
 }
