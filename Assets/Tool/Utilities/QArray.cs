@@ -177,7 +177,10 @@ namespace Tool.Utilities
         {
             if (IsEmpty()) throw new Exception("数组为空");
 
-            if (index < _headIdx || index > _tailIdx) throw new Exception("下标超界");
+            if (index + _headIdx > _tailIdx || index == -1)
+            {
+                throw new Exception("下标超界：index=" + index);
+            }
 
             int tempIdx = _headIdx;
             while (tempIdx != index)
