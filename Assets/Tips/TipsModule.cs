@@ -1,18 +1,18 @@
-using Framework;
-using GameSystem.MVCTemplate;
-using Tool.Single;
 using Tool.UI;
+using UnityEngine.Events;
 
 namespace Tips
 {
     public static class TipsModule
     {
         private static UIManager uiMgr => UIManager.GetInstance();
-        public static void ReComfirmTips()
+        public static void ReComfirmTips(string title, string content,UnityAction comfirm, UnityAction cancel)
         {
             uiMgr.GetFromPool("ReConfirmTips", EuiLayer.GameUI, (tips) =>
             {
-                (tips as ReConfirmTips).Open();
+                var reConfirmTips = tips as ReConfirmTips;
+                reConfirmTips.SetData(title, content, comfirm, cancel);
+                reConfirmTips.Open();
             });
         }
     }

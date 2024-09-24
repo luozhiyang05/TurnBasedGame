@@ -283,7 +283,12 @@ namespace Tool.UI
         {
             if (Input.GetMouseButtonDown(0))
             {
-                //设置点击光标和点击位置
+                ClickNowPanel();
+            }
+        }
+        public void ClickNowPanel()
+        {
+            //设置点击光标和点击位置
                 _eventData.position = Input.mousePosition;
                 _eventData.pressPosition = Input.mousePosition;
                 //发射射线，方向为vector2.one，默认检测该点有无可阻挡射线的UI
@@ -306,7 +311,6 @@ namespace Tool.UI
                 }
                 //释放内存
                 raycastResults.Clear();
-            }
         }
 
         /// <summary>
@@ -318,6 +322,7 @@ namespace Tool.UI
         public void LoadViewPrefab(string path, EuiLayer euiLayer, UnityAction<BaseView> callback = null)
         {
             ResMgr.GetInstance().AsyncLoad<GameObject>(path,(uiGo)=>{
+                if (uiGo == null) throw new Exception($"加载UI失败：{path}");
                 InitUI(uiGo, euiLayer);
                 uiGo.SetActive(false);
                 BaseView baseView = uiGo.GetComponent<BaseView>();
