@@ -54,12 +54,9 @@ namespace Tool.UI
         {
             _loadBaseTips = new Dictionary<string, BaseTips>();
             
-            #region 预制体缓冲池
+            #region UICanvas初始化
             ActionKit.GetInstance().AddTimer(GC_Check,GC_CHECK,"GC_Check",true);
             ActionKit.GetInstance().AddTimer(GC_Release,GC_TIME,"GC_Release",true);
-            #endregion
-
-            #region 创建UICanvas和EventSystem
 
             //创建画布
             var canvasObj = new GameObject("UICanvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster))
@@ -75,10 +72,6 @@ namespace Tool.UI
             Object.DontDestroyOnLoad(canvasObj);
             //销毁保护
             Object.DontDestroyOnLoad(eventSystem);
-
-            #endregion
-
-            #region 给画布赋值
 
             //获取UICanvas的组件
             _canvas = canvasObj.GetComponent<Canvas>();
@@ -97,21 +90,16 @@ namespace Tool.UI
             _canvasRectTrans.offsetMax = Vector2.zero;
             _canvasRectTrans.offsetMin = Vector2.zero;
 
-            #endregion
-
-            #region 生成MaskPanel
+            //生成遮罩
             _maskPanel = ResMgr.GetInstance().SyncLoad<GameObject>("MaskPanel");
             _maskPanel.transform.SetParent(_canvasRectTrans);
             _maskPanel.SetActive(false);
-            #endregion
-
-            #region 初始化鼠标点击检测
+            
+            //监听遮罩点击
             _maskPanelRaycaster = _canvasRectTrans.GetComponent<GraphicRaycaster>();
             _eventData = new PointerEventData(EventSystem.current);
             PublicMonoKit.GetInstance().OnRegisterUpdate(IsClickOnMaskPanel);
-            #endregion
 
-            #region 生成UI层
             //生成UI层
             _menuUI = new GameObject("MenuUI").transform;
             _menuUI.SetParent(_canvasRectTrans);
@@ -133,6 +121,12 @@ namespace Tool.UI
 
 
         #region 预制体池子
+        /// <summary>
+        /// 获取缓存池中的prefab
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="euiLayer"></param>
+        /// <param name="callback"></param>
         public void GetFromPool(string path, EuiLayer euiLayer, Action<BaseView> callback)
         {
             //GC锁，避免在尝试获取缓存池时，cache被GC检查
@@ -159,20 +153,24 @@ namespace Tool.UI
             });
         }
 
+        /// <summary>
+        /// 检查idlePool是否有缓存
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private PrefabVo CheckIdlePool(string path)
         {
-            for (var i = 0; i < _idlePool.Count; i++)
+            var cache = _idlePool.Remove((value) =>
             {
-                var cache = _idlePool[i];
-                if (cache.GetPath() == path)
-                {
-                    _idlePool.RemoveAt(i);
-                    return cache;
-                }
-            }
-            return null;
+                return value.GetPath() == path;
+            });
+            return cache;
         }
 
+        /// <summary>
+        /// 回收view
+        /// </summary>
+        /// <param name="baseView"></param>
         public void EnterPool(BaseView baseView)
         {
             //将pool中的vo 移入idlePool
@@ -190,21 +188,26 @@ namespace Tool.UI
             });
         }
 
+        /// <summary>
+        /// GC检查
+        /// </summary>
         private void GC_Check()
         {
-            if (_lock)
+            if (!_lock)
             {
-                return;
+                _lock = true;
+                while (_idlePool.Count != 0)
+                {
+                    var vo = _idlePool.GetFromHead();
+                    _gcQueue.Add(vo);
+                }
+                _lock = false;
             }
-            _lock = true;
-            while (_idlePool.Count != 0)
-            {
-                var vo = _idlePool.GetFromHead();
-                _gcQueue.Add(vo);
-            }
-            _lock = false;
         }
 
+        /// <summary>
+        /// 回收缓存
+        /// </summary>
         private void GC_Release()
         {
             while (_gcQueue.Count != 0)
@@ -213,8 +216,6 @@ namespace Tool.UI
                 vo.Release();
             }
         }
-
-
         #endregion
 
         #region UI管理
@@ -283,7 +284,7 @@ namespace Tool.UI
         {
             if (Input.GetMouseButtonDown(0))
             {
-                //设置点击光标和点击位置
+                 //设置点击光标和点击位置
                 _eventData.position = Input.mousePosition;
                 _eventData.pressPosition = Input.mousePosition;
                 //发射射线，方向为vector2.one，默认检测该点有无可阻挡射线的UI
@@ -318,6 +319,7 @@ namespace Tool.UI
         public void LoadViewPrefab(string path, EuiLayer euiLayer, UnityAction<BaseView> callback = null)
         {
             ResMgr.GetInstance().AsyncLoad<GameObject>(path,(uiGo)=>{
+                if (uiGo == null) throw new Exception($"加载UI失败：{path}");
                 InitUI(uiGo, euiLayer);
                 uiGo.SetActive(false);
                 BaseView baseView = uiGo.GetComponent<BaseView>();
@@ -333,43 +335,8 @@ namespace Tool.UI
         public void UnloadView<T>(T view) where T : BaseView
         {
             Object.Destroy(view.gameObject);
-            Debug.LogWarning("<size=15><color=#9400D3>BaseView===>释放："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
+            Debug.LogWarning("<size=15><color=#9400D3>回收："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
         }
-
-        /// <summary>
-        /// 加载一个Tips
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public T LoadTips<T>(string path) where T : BaseTips
-        {
-            if (!_loadBaseTips.ContainsKey(path))
-            {
-                var uiGo = ResMgr.GetInstance().SyncLoad<GameObject>(path);
-                InitUI(uiGo, EuiLayer.TipsUI);
-                uiGo.SetActive(false);
-                T tips = uiGo.GetComponent<T>();
-                tips.path = path;
-                _loadBaseTips.TryAdd(path, tips);
-                return tips;
-            }
-            return _loadBaseTips[path] as T;
-        }
-
-        /// <summary>
-        /// 释放Tips
-        /// </summary>
-        /// <param name="tipsName"></param>
-        public void UnloadTips(string path)
-        {
-            BaseTips baseTips = _loadBaseTips[path];
-            if (baseTips == null) throw new Exception("Tips已经释放");
-            _loadBaseTips.Remove(path);
-            baseTips.OnRelease();
-            Object.Destroy(baseTips.gameObject);
-            Debug.LogWarning("<size=15><color=#9400D3>TipsModule===>释放："  + path +$"({baseTips.GetInstanceID()})"+ "</color></size>");
-        }
-
         
         /// <summary>
         /// 初始化view

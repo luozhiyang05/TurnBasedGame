@@ -1,16 +1,19 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Tool.Utilities
 {
+
     public class QArray<T>
     {
         private T[] _array;
         private int _maxSize;
         private int _headIdx;
         private int _tailIdx;
+        private Action<T> _addEvent;
+        private Action<T> _removeEvent;
+        private Action<T> _modifyEvent;
         public int Count;
 
         #region 初始化数组
@@ -44,7 +47,53 @@ namespace Tool.Utilities
 
                 return _array[_headIdx + index];
             }
-            set => _array[_headIdx + index] = value;
+            set
+            {
+                var oldValue = _array[_headIdx + index];
+                if (!oldValue.Equals(value))
+                {
+                    _modifyEvent?.Invoke(value);
+                }
+                _array[_headIdx + index] = value;
+            }
+        }
+        #endregion
+
+        #region 事件监听
+        public void AddListenEvent(IListEventType type, Action<T> action)
+        {
+            switch (type)
+            {
+                case IListEventType.Add:
+                    _addEvent += action;
+                    break;
+                case IListEventType.Remove:
+                    _removeEvent += action;
+                    break;
+                case IListEventType.Modify:
+                    _modifyEvent += action;
+                    break;
+                default:
+                    throw new Exception("没有该类型监听事件");
+            }
+        }
+
+        public void RemoveListenEvent(IListEventType type, Action<T> action)
+        {
+            switch (type)
+            {
+                case IListEventType.Add:
+                    _addEvent -= action;
+                    break;
+                case IListEventType.Remove:
+                    _removeEvent -= action;
+                    break;
+                case IListEventType.Modify:
+                    _modifyEvent -= action;
+                    break;
+                default:
+                    throw new Exception("没有该类型监听事件");
+            }
         }
         #endregion
 
@@ -83,6 +132,7 @@ namespace Tool.Utilities
             _tailIdx++;
             _array[_tailIdx] = value;
             Count++;
+            _addEvent?.Invoke(value);
         }
         #endregion
 
@@ -99,7 +149,7 @@ namespace Tool.Utilities
             _array[_tailIdx] = default;
             _tailIdx--;
             Count--;
-
+            _removeEvent?.Invoke(value);
             return value;
         }
         #endregion
@@ -117,7 +167,7 @@ namespace Tool.Utilities
             _array[_headIdx] = default;
             _headIdx++;
             Count--;
-
+            _removeEvent?.Invoke(value);
             return value;
         }
         #endregion
@@ -127,13 +177,12 @@ namespace Tool.Utilities
         {
             if (IsEmpty()) throw new Exception("数组为空");
 
-            if (index < _headIdx || index > _tailIdx) throw new Exception("下标超界");
-
-            int tempIdx = _headIdx;
-            while (tempIdx != index)
+            if (index + _headIdx > _tailIdx || index == -1)
             {
-                tempIdx++;
+                throw new Exception("下标超界：index=" + index + " _headIdx=" + _headIdx + " _tailIdx=" + _tailIdx + "_count=" + Count);
             }
+
+            int tempIdx = index + _headIdx;
 
             T value = _array[tempIdx];
             tempIdx++;
@@ -147,7 +196,7 @@ namespace Tool.Utilities
             _tailIdx--;
 
             Count--;
-
+            _removeEvent?.Invoke(value);
             return value;
         }
         #endregion
@@ -169,7 +218,7 @@ namespace Tool.Utilities
             if (hasFind)
             {
                 var temp = _array[idx];
-                RemoveAt(idx);
+                RemoveAt(idx - _headIdx);
                 return temp;
             }
             throw new Exception("没有找到该元素:" + nameof(value));
@@ -193,13 +242,14 @@ namespace Tool.Utilities
             if (hasFind)
             {
                 var temp = _array[idx];
-                RemoveAt(idx);
+                RemoveAt(idx - _headIdx);
+                _removeEvent?.Invoke(temp);
                 return temp;
             }
-            throw new Exception("没有找到该条件的元素:");
+            return default;
         }
         #endregion
-        
+
         #region 移除满足条件的所有元素
         public QArray<T> RemoveAll(Func<T, bool> find)
         {

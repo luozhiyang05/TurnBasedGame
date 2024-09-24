@@ -140,23 +140,23 @@ namespace Editor
         }
     }
 
-    [CustomEditor(typeof(CButton))]
-    public class CustomButtonEditor : UnityEditor.UI.ButtonEditor
-    {
-        public override void OnInspectorGUI()
-        {
+    // [CustomEditor(typeof(CButton))]
+    // public class CustomButtonEditor : UnityEditor.UI.ButtonEditor
+    // {
+    //     public override void OnInspectorGUI()
+    //     {
 
 
-            // 获取当前的 CustomButton 实例
-            CButton button = (CButton)target;
+    //         // 获取当前的 CustomButton 实例
+    //         CButton button = (CButton)target;
 
-            button.Label = (Text)EditorGUILayout.ObjectField("Text Component", button.Label, typeof(Text), true);
+    //         button.Label = (Text)EditorGUILayout.ObjectField("Text Component", button.Label, typeof(Text), true);
 
-            // 调用基类的 OnInspectorGUI 以保留原有的 Button 参数
-            base.OnInspectorGUI();
-        }
+    //         // 调用基类的 OnInspectorGUI 以保留原有的 Button 参数
+    //         base.OnInspectorGUI();
+    //     }
 
 
-    }
+    // }
 
 }

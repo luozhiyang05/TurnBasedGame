@@ -9,9 +9,5 @@ namespace UIComponents
     public class CButton : Button
     {
         public Text Label;
-        protected override void Start()
-        {
-            Label.text = "das";
-        }
     }
 }
