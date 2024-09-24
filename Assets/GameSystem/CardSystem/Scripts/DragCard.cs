@@ -41,9 +41,10 @@ namespace GameSystem.CardSystem.Scripts
             }
 
             ResetPos(() =>{
+                transform.SetSiblingIndex(headCardIdx);
                 transform.parent.GetComponent<HorizontalLayoutGroup>().enabled = true;
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent as RectTransform);
-            });
+            },4000f);
         }
 
         public IMgr Ins => Global.GetInstance();

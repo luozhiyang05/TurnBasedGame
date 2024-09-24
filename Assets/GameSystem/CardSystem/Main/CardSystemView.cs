@@ -35,6 +35,7 @@ namespace GameSystem.CardSystem.Main
         
         private GameObject _cardTemp;
         private GameObject _cardsContent;
+        private HorizontalLayoutGroup _cardsLayout;
 
         /// <summary>
         /// 初始化
@@ -53,8 +54,9 @@ namespace GameSystem.CardSystem.Main
                 (_battleSystemModule.GetPlayerUnit() as Player)?.EndRound();
             });
 
-            _cardTemp = transform.Find("Main/UseCardsContent/cardTemplate").gameObject;
-            _cardsContent = transform.Find("Main/UseCardsContent").gameObject;
+            _cardTemp = transform.Find("Main/cardTemplate").gameObject;
+            _cardsContent = transform.Find("Main/headCardsContent").gameObject;
+            _cardsLayout = _cardsContent.GetComponent<HorizontalLayoutGroup>();
         }
 
 
@@ -98,7 +100,7 @@ namespace GameSystem.CardSystem.Main
         {
             //删除所有卡牌Go
             DestroyAllCardsGo();
-
+            _cardsLayout.enabled = true;
             //根据手牌牌数生成按钮
             for (int i = 0; i < _headCardQArray.Count; i++)
             {
@@ -113,6 +115,7 @@ namespace GameSystem.CardSystem.Main
                 cardGo.gameObject.SetActive(true);
                 _cardsGo.Add(cardGo);
             }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_cardsContent.transform as RectTransform);
         }
 
         /// <summary>
