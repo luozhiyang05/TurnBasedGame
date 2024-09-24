@@ -707,6 +707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpen: 0
+  main: {fileID: 6849666730956351535}
   txtTitle: {fileID: 9173938397578587672}
   txtContent: {fileID: 5799164282757632550}
   btnComfirm: {fileID: 4499336023251317931}

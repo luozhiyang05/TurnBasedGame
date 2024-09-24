@@ -179,14 +179,10 @@ namespace Tool.Utilities
 
             if (index + _headIdx > _tailIdx || index == -1)
             {
-                throw new Exception("下标超界：index=" + index);
+                throw new Exception("下标超界：index=" + index + " _headIdx=" + _headIdx + " _tailIdx=" + _tailIdx + "_count=" + Count);
             }
 
-            int tempIdx = _headIdx;
-            while (tempIdx != index)
-            {
-                tempIdx++;
-            }
+            int tempIdx = index + _headIdx;
 
             T value = _array[tempIdx];
             tempIdx++;
@@ -222,7 +218,7 @@ namespace Tool.Utilities
             if (hasFind)
             {
                 var temp = _array[idx];
-                RemoveAt(idx);
+                RemoveAt(idx - _headIdx);
                 return temp;
             }
             throw new Exception("没有找到该元素:" + nameof(value));
@@ -246,11 +242,11 @@ namespace Tool.Utilities
             if (hasFind)
             {
                 var temp = _array[idx];
-                RemoveAt(idx);
+                RemoveAt(idx - _headIdx);
                 _removeEvent?.Invoke(temp);
                 return temp;
             }
-            throw new Exception("没有找到该条件的元素:");
+            return default;
         }
         #endregion
 

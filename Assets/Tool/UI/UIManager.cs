@@ -161,16 +161,11 @@ namespace Tool.UI
 
         private PrefabVo CheckIdlePool(string path)
         {
-            for (var i = 0; i < _idlePool.Count; i++)
+            var cache = _idlePool.Remove((value) =>
             {
-                var cache = _idlePool[i];
-                if (cache.GetPath() == path)
-                {
-                    _idlePool.RemoveAt(i);
-                    return cache;
-                }
-            }
-            return null;
+                return value.GetPath() == path;
+            });
+            return cache;
         }
 
         public void EnterPool(BaseView baseView)
@@ -192,17 +187,16 @@ namespace Tool.UI
 
         private void GC_Check()
         {
-            if (_lock)
+            if (!_lock)
             {
-                return;
+                _lock = true;
+                while (_idlePool.Count != 0)
+                {
+                    var vo = _idlePool.GetFromHead();
+                    _gcQueue.Add(vo);
+                }
+                _lock = false;
             }
-            _lock = true;
-            while (_idlePool.Count != 0)
-            {
-                var vo = _idlePool.GetFromHead();
-                _gcQueue.Add(vo);
-            }
-            _lock = false;
         }
 
         private void GC_Release()
