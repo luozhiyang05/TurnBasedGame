@@ -29,13 +29,13 @@ namespace GameSystem.BattleSystem.Scripts.Effect
 
         protected override void OnExitEffectSettle()
         {
-            if (self.armor-_addAmor<0)
+            if (self.armor.Value-_addAmor<0)
             {
-                self.armor = 0;
+                self.armor.Value = 0;
             }
             else
             {
-                self.armor -= _addAmor;
+                self.armor.Value -= _addAmor;
             }
         }
     }

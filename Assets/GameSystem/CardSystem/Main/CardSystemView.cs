@@ -4,6 +4,7 @@ using GameSystem.BattleSystem.Scripts;
 using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
 using Tool.Utilities;
+using UIComponents;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,12 +13,14 @@ namespace GameSystem.CardSystem.Main
     public class CardSystemView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
-		public Button Btn_exitRound;
+		public CButton Btn_exitRound;
 		public Text Txt_exitRound;
+		public Text Txt_actCnt;
         protected override void AutoInitUI()
         {
-			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<Button>();
+			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
 			Txt_exitRound = transform.Find("Main/Btn_exitRound/Txt_exitRound").GetComponent<Text>();
+			Txt_actCnt = transform.Find("Main/Txt_actCnt").GetComponent<Text>();
         }
 		#endregion 自动生成UI组件区域结束！
 
@@ -117,16 +120,28 @@ namespace GameSystem.CardSystem.Main
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(_cardsContent.transform as RectTransform);
         }
+        
+        /// <summary>
+        /// 更新玩家行动点
+        /// </summary>
+        private void UpdateActCnt()
+        {
+            var player = _battleSystemModule.GetPlayerUnit() as Player;
+            Txt_actCnt.text = player.nowActPoint + "/" + player.maxActPoint;
+        }
 
         /// <summary>
         /// 回合开始时更新卡牌视图
         /// </summary>
         private void UpdateView()
         {
+            //获取手牌，更新视图
             GetHeadCards();
             CreateCardsGo();
+            //更新行动点
+            UpdateActCnt();
         }
-        
+
 
         public override void OnHide()
         {
