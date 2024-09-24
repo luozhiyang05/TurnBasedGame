@@ -14,6 +14,7 @@ namespace Tool.Utilities
         private CanvasGroup _canvasGroup;
         private bool _canDrag = true;
         private UnityAction _resetCallback;
+        private bool _isDestroy;
 
         private void Awake()
         {
@@ -79,15 +80,23 @@ namespace Tool.Utilities
             PublicMonoKit.GetInstance().GetPublicMono().OnRegisterUpdate(ResetAnimation);
         }
 
+        void OnDestroy()
+        {
+            _isDestroy = true;
+            PublicMonoKit.GetInstance().GetPublicMono().OnUnRegisterUpdate(ResetAnimation);
+        }
+
         private void ResetAnimation()
         {
-            _rectTrans.position =
-                Vector3.MoveTowards(_rectTrans.position, _oldPos, _moveSpeed * Time.deltaTime); //对比连个vector3的值
-            if (!(Vector3.Distance(_rectTrans.position, _oldPos) < 0.01f)) return;
-            _rectTrans.position = _oldPos;
-            _resetCallback?.Invoke();
-            _canDrag = true;
-            PublicMonoKit.GetInstance().GetPublicMono().OnUnRegisterUpdate(ResetAnimation);
+            if (!_isDestroy)
+            {
+                _rectTrans.position = Vector3.MoveTowards(_rectTrans.position, _oldPos, _moveSpeed * Time.deltaTime); //对比连个vector3的值
+                if (!(Vector3.Distance(_rectTrans.position, _oldPos) < 0.01f)) return;
+                _rectTrans.position = _oldPos;
+                _resetCallback?.Invoke();
+                _canDrag = true;
+                PublicMonoKit.GetInstance().GetPublicMono().OnUnRegisterUpdate(ResetAnimation);
+            }
         }
     }
 }

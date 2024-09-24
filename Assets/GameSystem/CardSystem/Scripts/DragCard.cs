@@ -1,6 +1,7 @@
 using Framework;
 using GameSystem.BattleSystem;
 using GameSystem.BattleSystem.Scripts;
+using GameSystem.CardSystem.Scripts.Cmd;
 using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,8 +9,9 @@ using UnityEngine.UI;
 
 namespace GameSystem.CardSystem.Scripts
 {
-    public class DragCard : DragCell,ICanGetSystem
+    public class DragCard : DragCell,ICanGetSystem,ICanSendCmd
     {
+        public int headCardIdx;
         public BaseCardSo BaseCardSo;
         
         protected override void OnStartDrag(PointerEventData eventData)
@@ -27,21 +29,31 @@ namespace GameSystem.CardSystem.Scripts
                 if (hit.collider != null)
                 {
                     GameObject currentObjectUnderCursor = hit.collider.gameObject;
-                    Debug.Log("Object under cursor: " + currentObjectUnderCursor.name);
-                    // 检测到单位后执行逻辑
-
-                    var absUnit = currentObjectUnderCursor.GetComponent<AbsUnit>();
-                    if (absUnit)
-                    {
-                        var playerUnit = this.GetSystem<IBattleSystemModule>().GetPlayerUnit();
-                        (playerUnit as Player)?.UseCard(BaseCardSo,absUnit);
-                    }
+                    //使用卡牌的命令
+                    this.SendCmd<UseCardCmd,CardData>(new CardData()
+                    { 
+                        user = this.GetSystem<IBattleSystemModule>().GetPlayerUnit(),
+                        headCardIdx = headCardIdx,
+                        cardSo = BaseCardSo,
+                        target = currentObjectUnderCursor
+                    });
                 }
             }
 
-            ResetPos(() => transform.parent.GetComponent<HorizontalLayoutGroup>().enabled = true);
+            ResetPos(() =>{
+                transform.parent.GetComponent<HorizontalLayoutGroup>().enabled = true;
+                LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent as RectTransform);
+            });
         }
 
         public IMgr Ins => Global.GetInstance();
+    }
+
+    public struct CardData
+    {
+        public AbsUnit user;
+        public int headCardIdx;
+        public BaseCardSo cardSo;
+        public GameObject target;
     }
 }

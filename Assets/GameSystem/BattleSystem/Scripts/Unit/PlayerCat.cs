@@ -14,7 +14,7 @@ namespace GameSystem.BattleSystem.Scripts.Unit
 
         protected override void OnUseCard(BaseCardSo card, AbsUnit target)
         {
-            this.GetSystem<ICardSystemModule>().UnitUseCard(card,this,target);
+            //this.GetSystem<ICardSystemModule>().UnitUseCard(card,this,target);
         }
         
 

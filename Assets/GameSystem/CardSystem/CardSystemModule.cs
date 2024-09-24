@@ -12,9 +12,7 @@ namespace GameSystem.CardSystem
     public interface ICardSystemModule : IModule
     {
         void ShowView();
-
-        void UnitUseCard(BaseCardSo card, AbsUnit self, AbsUnit target);
-
+        
         /// <summary>
         /// 回合结束丢弃手牌
         /// </summary>
@@ -40,15 +38,6 @@ namespace GameSystem.CardSystem
         {
             _viewCtrl ??= new CardSystemViewCtrl();
             _viewCtrl.ShowView();
-        }
-
-        public void UnitUseCard(BaseCardSo card, AbsUnit self, AbsUnit target)
-        {
-            //使用卡牌逻辑
-            card.UseCard(self, target);
-
-            //将使用的卡牌丢入弃牌队列
-            (_viewCtrl.GetModel() as CardSystemViewModel)?.DiscardCards(card);
         }
 
         public void UpdateHeadCardInEr()

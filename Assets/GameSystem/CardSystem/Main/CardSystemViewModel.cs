@@ -1,8 +1,8 @@
-using GameSystem.BattleSystem.Scripts;
 using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
 using Tool.ResourceMgr;
 using Tool.Utilities;
+using Tool.Utilities.Events;
 using UnityEngine.Events;
 
 namespace GameSystem.CardSystem.Main
@@ -28,6 +28,17 @@ namespace GameSystem.CardSystem.Main
         /// </summary>
         public override void BindListener()
         {
+            //监听使用卡牌事件
+            EventsHandle.AddListenEvent<CardData>(EventsNameConst.SUCCESS_USE_CARD, (CardData) =>
+            {
+                //丢弃卡牌
+                DiscardCards(CardData.headCardIdx);
+                //更新视图
+                if (_updateViewCallback != null)
+                {
+                    _updateViewCallback.Invoke();
+                }
+            });
         }
 
         /// <summary>
@@ -35,6 +46,16 @@ namespace GameSystem.CardSystem.Main
         /// </summary>
         public override void RemoveListener()
         {
+            EventsHandle.RemoveOneEventByEventName<CardData>(EventsNameConst.SUCCESS_USE_CARD, (CardData) =>
+            {
+                //丢弃卡牌
+                DiscardCards(CardData.headCardIdx);
+                //更新视图
+                if (_updateViewCallback != null)
+                {
+                    _updateViewCallback.Invoke();
+                }
+            });
         }
 
         /// <summary>
@@ -71,7 +92,7 @@ namespace GameSystem.CardSystem.Main
         /// <param name="count"></param>
         public void GetCardsFormUseCards(int count)
         {
-            //如果当前出战卡组剩余卡牌不足获取，则将弃牌队列存入出战卡组中
+            //如果当前出战卡组剩余卡牌不足获取，则将弃牌堆中的卡牌洗入出战卡组中
             if (_nowUseCards.Count < count)
             {
                 //将弃牌队列中的卡牌加入出战卡组
@@ -102,11 +123,12 @@ namespace GameSystem.CardSystem.Main
         /// <summary>
         /// 丢弃卡牌到弃牌堆中
         /// </summary>
-        public void DiscardCards(BaseCardSo disCard = null)
+        public void DiscardCards(int headCardIdx = -1)
         {
-            if (disCard)
+            if (headCardIdx != -1)
             {
-                _obsCards.Add(disCard);
+                var cardSo = _nowHeadCards.RemoveAt(headCardIdx);
+                _obsCards.Add(cardSo);
                 _useCardCallback?.Invoke();
                 return;
             }

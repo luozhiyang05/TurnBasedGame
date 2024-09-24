@@ -67,58 +67,51 @@ namespace GameSystem.CardSystem.Main
             _model?.LoadUseCards();
         }
 
-        private QArray<BaseCardSo> _headCardQArray;
-        private GameObject[] _cards;
+        private QArray<BaseCardSo> _headCardQArray = new QArray<BaseCardSo>(5);
+        private QArray<GameObject> _cardsGo = new QArray<GameObject>(5);
 
         /// <summary>
-        /// 初始化数据源
+        /// 从出战卡牌中获取手牌
         /// </summary>
-        private void InitDataSources()
+        private void GetHeadCards()
         {
             //获取玩家当前手牌
             _headCardQArray =  _model.GetNowHeadCards();
         }
 
         /// <summary>
-        /// 回合结束，丢弃目前所有手牌
+        /// 回合结束，删除所有卡牌go
         /// </summary>
-        private void DiscardCards()
+        private void DestroyAllCardsGo()
         {
-            if (_cards != null)
+            foreach (GameObject cardGo in _cardsGo)
             {
-                foreach (var item in _cards)
-                {
-                    Destroy(item);
-                }
+                Destroy(cardGo);
             }
+            _cardsGo.Clear();
         }
         
         /// <summary>
-        /// 初始化视图
+        /// 根据玩家手牌数，生成卡牌go
         /// </summary>
-        private void InitView()
+        private void CreateCardsGo()
         {
-            //更新丢弃卡牌的视图
-            DiscardCards();
-            
+            //删除所有卡牌Go
+            DestroyAllCardsGo();
+
             //根据手牌牌数生成按钮
-            _cards = new GameObject[_headCardQArray.Count];
-            int i = 0;
-            for (; i < _headCardQArray.Count; i++)
+            for (int i = 0; i < _headCardQArray.Count; i++)
             {
                 var card = _headCardQArray[i];
-                if (card == null)
-                {
-                    continue;
-                }
-                
-                var btn = Instantiate(_cardTemp, _cardsContent.transform);
-                var dc = btn.gameObject.AddComponent<DragCard>();
+
+                var cardGo = Instantiate(_cardTemp, _cardsContent.transform);
+                var dc = cardGo.gameObject.AddComponent<DragCard>();
+                dc.headCardIdx = i;
                 dc.BaseCardSo = card;
-                btn.GetComponentInChildren<Text>().text = card.cardName;
-                btn.transform.SetParent(_cardsContent.transform);
-                btn.gameObject.SetActive(true);
-                _cards[i] = btn.gameObject;
+                cardGo.GetComponentInChildren<Text>().text = card.cardName;
+                cardGo.transform.SetParent(_cardsContent.transform);
+                cardGo.gameObject.SetActive(true);
+                _cardsGo.Add(cardGo);
             }
         }
 
@@ -127,11 +120,8 @@ namespace GameSystem.CardSystem.Main
         /// </summary>
         private void UpdateView()
         {
-            //初始化数据源
-            InitDataSources();
-            
-            //初始化视图
-            InitView();
+            GetHeadCards();
+            CreateCardsGo();
         }
         
 
