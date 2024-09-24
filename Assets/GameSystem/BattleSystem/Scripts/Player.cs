@@ -39,29 +39,9 @@ namespace GameSystem.BattleSystem.Scripts
         }
 
         /// <summary>
-        /// 玩家使用卡牌
+        /// 结束回合
         /// </summary>
-        /// <param name="card"></param>
-        /// <param name="target"></param>
-        public void UseCard(BaseCardSo card, AbsUnit target)
-        {
-            if (canAction == false) return;
-
-            if (nowActPoint - card.depletePoint < 0)
-            {
-                return;
-            }
-
-            OnUseCard(card, target);
-        }
-
-        /// <summary>
-        /// 行动逻辑
-        /// </summary>
-        protected abstract void OnUseCard(BaseCardSo card, AbsUnit target);
-
         public void EndRound() => AfterAction();
-
 
         /// <summary>
         /// 结算回合逻辑
