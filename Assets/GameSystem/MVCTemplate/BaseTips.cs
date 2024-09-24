@@ -1,5 +1,5 @@
 using System.Collections;
-using Tool.Mono;
+using Tool.AudioMgr;
 using Tool.ResourceMgr;
 using Tool.UI;
 using UnityEngine;
@@ -51,16 +51,27 @@ namespace GameSystem.MVCTemplate
         public abstract override void OnShow();
         public virtual void Open(BaseModel baseModel = null)
         {
+            if (useAudio)
+            {
+                PlayAudio(EAudioType.Effect);
+                PlayAudio(EAudioType.Bgm);
+            }
             _baseModel = baseModel;
             gameObject.SetActive(true);
             StartCoroutine(ShowAnimation());
+
         }
         public override void OnHide()
         {
+            if (useAudio)
+            {
+                PlayAudio(EAudioType.Effect, false);
+                CloseBgm();
+            }
             StartCoroutine(HideAnimation());
         }
 
-        protected override void BindModelListener() { }
+        protected override void BindModelListener(){}
         protected override void OnInit(){}
 
         public override void OnRelease()

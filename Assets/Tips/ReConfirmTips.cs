@@ -37,6 +37,7 @@ namespace Tips
         #endregion
         public void SetData(string title, string content,UnityAction comfirm, UnityAction cancel)
         {
+            SetAudio("Test","Test");
             _title = title;
             _content = content;
             _comfirm = comfirm;

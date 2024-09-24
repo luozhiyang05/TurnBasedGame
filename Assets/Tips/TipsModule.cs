@@ -8,7 +8,7 @@ namespace Tips
         private static UIManager uiMgr => UIManager.GetInstance();
         public static void ReComfirmTips(string title, string content,UnityAction comfirm, UnityAction cancel)
         {
-            uiMgr.GetFromPool("ReConfirmTips", EuiLayer.GameUI, (tips) =>
+            uiMgr.GetFromPool("ReConfirmTips", EuiLayer.TipsUI, (tips) =>
             {
                 var reConfirmTips = tips as ReConfirmTips;
                 reConfirmTips.SetData(title, content, comfirm, cancel);
