@@ -11,25 +11,19 @@ namespace Editor.UI
     public class CustomButtonEditor : UnityEditor.UI.ButtonEditor
     {
         private CButton _cbutton;
-        private SerializedProperty _text;
         protected override void OnEnable()
         {
             base.OnEnable();
             //target表示自定义类的实例化对象
             _cbutton = target as CButton;
-            //serializedObject属性封装了该类所有的序列化字段和一些方法
-            _text = serializedObject.FindProperty("Label");
         }
         public override void OnInspectorGUI()
         {
-            //让一个字段接受更多类型
+            //Text
             _cbutton.Label = (Text)EditorGUILayout.ObjectField("Text", _cbutton.Label, typeof(Text), true);
+            _cbutton.Label = _cbutton.transform.Find("text").GetComponent<Text>();
+            
             base.OnInspectorGUI();
-           
-            //更新序列化字段
-            serializedObject.Update();
-            //应用修改
-            serializedObject.ApplyModifiedProperties();
         }
     }
 }

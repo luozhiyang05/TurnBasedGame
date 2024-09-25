@@ -139,6 +139,7 @@ namespace Tool.UI
                 if (cache != null)
                 {
                     _pool.Add(cache);
+                    cache.GetBaseView().transform.SetAsLastSibling();
                     callback?.Invoke(cache.GetBaseView());
                     return;
                 }
