@@ -15,5 +15,15 @@ namespace Tips
                 reConfirmTips.Open();
             });
         }
+
+            public static void ComfirmTips(string title, string content,UnityAction comfirm)
+        {
+            uiMgr.GetFromPool("ReConfirmTips", EuiLayer.TipsUI, (tips) =>
+            {
+                var confirmTips = tips as ComfirmTips;
+                confirmTips.SetData(title, content, comfirm);
+                confirmTips.Open();
+            });
+        }
     }
 }
