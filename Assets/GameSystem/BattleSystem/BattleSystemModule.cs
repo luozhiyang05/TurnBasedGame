@@ -4,10 +4,11 @@ using Framework;
 using GameSystem.BattleSystem.Main;
 using GameSystem.BattleSystem.Scripts;
 using GlobalData;
+using Tips;
 using Tool.Mono;
+using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace GameSystem.BattleSystem
@@ -76,6 +77,11 @@ namespace GameSystem.BattleSystem
         /// <param name="affect"></param>
         void Affect(AbsUnit self, AbsUnit target, UnityAction<AbsUnit, AbsUnit> affect);
 
+        /// <summary>
+        /// 单位死亡
+        /// </summary>
+        /// <param name="unit"></param>
+        void UnitDie(AbsUnit unit);
         void SwitchRound();
         void ShowView();
 
@@ -85,9 +91,9 @@ namespace GameSystem.BattleSystem
     public class BattleSystemModule : AbsModule, IBattleSystemModule
     {
         private BattleSystemViewCtrl _viewCtrl;
-        private Transform _enemyPosTrans;
         private List<Transform> _enemyPosTransList;
         private Transform _playerPosTrans;
+        private QArray<AbsUnit> _enemyList;
 
 
         public void ShowView()
@@ -103,28 +109,38 @@ namespace GameSystem.BattleSystem
 
         public AbsUnit GetEnemyUnit(int index)
         {
-            if (index>=0 && index<_enemies.Count)
+            if (index>=0 && index<_enemyList.Count)
             {
-                return _enemies[index];
+                return _enemyList[index];
             }
 
             throw new Exception("敌人下标错误");
         }
 
         private AbsUnit _player;
-        private List<AbsUnit> _enemies;
         private int _nowEnemyIndex;
         private ETurnBased _nowTurnBased = ETurnBased.Start; //当前状态枚举
         private AbsUnit currentUnit;
 
         protected override void OnInit()
         {
-            _enemies = new List<AbsUnit>();
             _enemyPosTransList = new List<Transform>();
+            _enemyList = new QArray<AbsUnit>(1);
             _nowEnemyIndex = 0;
 
+            //绑定敌人列表死亡事件
+            _enemyList.AddListenEvent(IListEventType.Remove, absUnit =>
+            {
+                Debug.Log("死亡单位:" + absUnit.unitName + " id=" + absUnit.id);
+                if (_enemyList.Count == 0)
+                {
+                    Debug.Log("敌人全部死亡");
+                    TipsModule.ComfirmTips("提示", "恭喜你，你赢了", ()=>{});
+                }
+            });
+
             //寻找敌人生成位置
-            _enemyPosTrans = GameObject.Find("EnemyPos").transform;
+            var _enemyPosTrans = GameObject.Find("EnemyPos").transform;
             foreach (Transform trans in _enemyPosTrans)
             {
                 _enemyPosTransList.Add(trans);
@@ -143,11 +159,11 @@ namespace GameSystem.BattleSystem
             //获取玩家和敌人IUnit单位
             _player = player;
             _player.InitSystem(this);
-            _enemies = enemies;
             for (var i = 0; i < enemies.Count; i++)
             {
                 enemies[i].id = i;
                 enemies[i].InitSystem(this);
+                _enemyList.Add(enemies[i]);
             }
 
             //设定敌人位置
@@ -198,14 +214,14 @@ namespace GameSystem.BattleSystem
             BulletScreenTimeDelegate(() =>
             {
                 _nowTurnBased = ETurnBased.EnemyTurn;
-                _enemies[_nowEnemyIndex++].StartRoundSettle();
+                _enemyList[_nowEnemyIndex++].StartRoundSettle();
             },"敌人回合开始");
         }
 
         private void JudgeIsHaveMoreEnemies()
         {
             //所有敌人行动完毕
-            if (_nowEnemyIndex == _enemies.Count)
+            if (_nowEnemyIndex == _enemyList.Count)
             {
                 _nowEnemyIndex = 0;
                 SwitchPlayerTurn();
@@ -243,6 +259,18 @@ namespace GameSystem.BattleSystem
         public void Affect(AbsUnit self, AbsUnit target, UnityAction<AbsUnit, AbsUnit> affect)
         {
             affect?.Invoke(self, target);
+        }
+
+        public void UnitDie(AbsUnit unit)
+        {
+            if (unit is Enemy)
+            {
+                _enemyList.Remove(unit);
+            }
+            else
+            {
+                Debug.Log("玩家死亡");
+            }
         }
     }
 }

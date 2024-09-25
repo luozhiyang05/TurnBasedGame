@@ -14,8 +14,8 @@ namespace GameSystem.BattleSystem.Scripts
     {
         public int id;
         public string unitName; //单位名称
-        public ValueBindery<int> maxHp = new ValueBindery<int>(10); //最大血量
-        public ValueBindery<int> nowHp = new ValueBindery<int>(10); //当前血量
+        public ValueBindery<int> maxHp = new ValueBindery<int>(5); //最大血量
+        public ValueBindery<int> nowHp = new ValueBindery<int>(5); //当前血量
         public ValueBindery<int> armor = new ValueBindery<int>(); //护盾
         private IBattleSystemModule _battleSystemModule;
         private readonly QArray<BaseEffect> _effQueue = new QArray<BaseEffect>(1);
@@ -35,6 +35,11 @@ namespace GameSystem.BattleSystem.Scripts
             nowHp.OnRegister(value =>
             {
                 _imgHealth.fillAmount = (float)value / maxHp.Value;
+                if (IsDie())
+                {
+                    _battleSystemModule.UnitDie(this);
+                    Destroy(gameObject);
+                }
             });
             armor.OnRegister(value =>
             {
