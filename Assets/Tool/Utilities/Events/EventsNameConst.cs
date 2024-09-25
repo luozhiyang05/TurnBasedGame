@@ -3,7 +3,7 @@ namespace Tool.Utilities.Events
 {
     public enum EventsNameConst
     {
-        //事件名字
-        SUCCESS_USE_CARD
+        SUCCESS_USE_CARD,   //使用卡牌成功
+        ABSUNIT_DIE,        //单位死亡
     }
 }

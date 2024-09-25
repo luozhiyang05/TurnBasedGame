@@ -29,6 +29,10 @@ namespace Tool.Utilities
             _headIdx = 0;
             _tailIdx = -1;
         }
+
+        public QArray()
+        {
+        }
         #endregion
 
         #region 索引器

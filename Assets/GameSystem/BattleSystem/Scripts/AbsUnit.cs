@@ -5,6 +5,7 @@ using GlobalData;
 using Tool.Mono;
 using Tool.Utilities;
 using Tool.Utilities.Bindery;
+using Tool.Utilities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,7 +38,8 @@ namespace GameSystem.BattleSystem.Scripts
                 _imgHealth.fillAmount = (float)value / maxHp.Value;
                 if (IsDie())
                 {
-                    _battleSystemModule.UnitDie(this);
+                    //分发事件，单位死亡
+                    EventsHandle.EventTrigger(EventsNameConst.ABSUNIT_DIE, this);
                     Destroy(gameObject);
                 }
             });
