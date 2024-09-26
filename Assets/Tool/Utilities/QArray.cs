@@ -29,6 +29,15 @@ namespace Tool.Utilities
             _headIdx = 0;
             _tailIdx = -1;
         }
+
+        public QArray(params T[] values)
+        {
+            _array = values;
+            _maxSize = values.Length;
+            Count = values.Length;
+            _headIdx = 0;
+            _tailIdx = values.Length - 1;
+        }
         #endregion
 
         #region 索引器
@@ -168,6 +177,21 @@ namespace Tool.Utilities
             _headIdx++;
             Count--;
             _removeEvent?.Invoke(value);
+            return value;
+        }
+        #endregion
+
+        #region 随机获取一个元素
+        /// <summary>
+        /// 随机获取一个元素
+        /// </summary>
+        /// <returns></returns>
+        public T RemoveRange()
+        {
+            if (IsEmpty()) throw new Exception("数组为空");
+
+            var randomIdx = UnityEngine.Random.Range(_headIdx, _tailIdx + 1);
+            var value = RemoveAt(randomIdx);
             return value;
         }
         #endregion
