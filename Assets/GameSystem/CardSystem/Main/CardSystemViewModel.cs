@@ -98,7 +98,7 @@ namespace GameSystem.CardSystem.Main
                 //将弃牌队列中的卡牌加入出战卡组
                 while (_obsCards.Count > 0)
                 {
-                    var card = _obsCards.GetFromHead();
+                    var card = _obsCards.RemoveRange();
                     _nowUseCards.Add(card);
                 }
             }
@@ -145,7 +145,7 @@ namespace GameSystem.CardSystem.Main
         public void UpdateHeadCardInSr()
         {
             //获取新的卡牌
-            GetCardsFormUseCards(3);
+            GetCardsFormUseCards(5);
             
             //通知视图更新
             _updateViewCallback?.Invoke();
