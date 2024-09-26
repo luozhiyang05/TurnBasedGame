@@ -18,7 +18,7 @@ namespace Tips
 
             public static void ComfirmTips(string title, string content,UnityAction comfirm)
         {
-            uiMgr.GetFromPool("ReConfirmTips", EuiLayer.TipsUI, (tips) =>
+            uiMgr.GetFromPool("ComfirmTips", EuiLayer.TipsUI, (tips) =>
             {
                 var confirmTips = tips as ComfirmTips;
                 confirmTips.SetData(title, content, comfirm);

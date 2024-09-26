@@ -1,11 +1,18 @@
+using System.Collections.Generic;
+using GameSystem.BattleSystem.Scripts;
 using GameSystem.MVCTemplate;
 using Tool.UI;
+using Tool.Utilities;
 using UnityEngine;
 
 namespace GameSystem.BattleSystem.Main
 {
     public class BattleSystemViewCtrl : BaseCtrl
     {
+        public BattleSystemViewCtrl(AbsUnit player, QArray<AbsUnit> enemies) : base()
+        {
+            (GetModel() as BattleSystemViewModel).SetAbsUnit(player, enemies);
+        }
         protected override void InitListener()
         {
         }
