@@ -33,7 +33,7 @@ namespace Tool.Utilities
         public QArray(params T[] values)
         {
             _array = values;
-            _maxSize = values.Length;
+            _maxSize = values.Length == 0 ? 1 : values.Length;
             Count = values.Length;
             _headIdx = 0;
             _tailIdx = values.Length - 1;
