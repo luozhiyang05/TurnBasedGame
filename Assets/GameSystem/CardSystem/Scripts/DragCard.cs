@@ -9,18 +9,21 @@ using UnityEngine.UI;
 
 namespace GameSystem.CardSystem.Scripts
 {
-    public class DragCard : DragCell,ICanGetSystem,ICanSendCmd
+    public class DragCard : DragCell,ICanGetSystem,ICanSendCmd,IPointerEnterHandler,IPointerExitHandler
     {
         public int headCardIdx;
         public BaseCardSo BaseCardSo;
+        private int _idx;
         
         protected override void OnStartDrag(PointerEventData eventData)
         {
-            transform.parent.GetComponent<HorizontalLayoutGroup>().enabled = false;
+            this.GetSystem<ICardSystemModule>().DragCardAction(transform);
         }
 
         protected override void OnFinishDrag(PointerEventData eventData)
         {
+            SetCanBlockRaycasts(false);
+            
             if (Camera.main != null)
             {
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
@@ -37,14 +40,33 @@ namespace GameSystem.CardSystem.Scripts
                         cardSo = BaseCardSo,
                         target = currentObjectUnderCursor
                     });
+                    return;
                 }
             }
 
+            SetCanBlockRaycasts(true);
+            this.GetSystem<ICardSystemModule>().NoDragCardAction(transform);
+
             ResetPos(() =>{
-                transform.SetSiblingIndex(headCardIdx);
-                transform.parent.GetComponent<HorizontalLayoutGroup>().enabled = true;
+                //transform.SetSiblingIndex(headCardIdx);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent as RectTransform);
             },4000f);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            _idx = transform.GetSiblingIndex();
+            SetTop(true);
+
+            this.GetSystem<ICardSystemModule>().SelectCardAction(transform);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            SetTop(false);
+            transform.SetSiblingIndex(_idx);
+
+            this.GetSystem<ICardSystemModule>().NoSelectCardAction(transform);
         }
 
         public IMgr Ins => Global.GetInstance();

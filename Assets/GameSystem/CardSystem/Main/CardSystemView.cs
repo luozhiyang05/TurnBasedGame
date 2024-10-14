@@ -3,6 +3,7 @@ using GameSystem.BattleSystem;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
+using Tool.Mono;
 using Tool.Utilities;
 using UIComponents;
 using UnityEngine;
@@ -118,6 +119,9 @@ namespace GameSystem.CardSystem.Main
                 _cardsGo.Add(cardGo);
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(_cardsContent.transform as RectTransform);
+            ActionKit.GetInstance().DelayTime(0.05f,()=>{
+                _cardsLayout.enabled = false;
+            });
         }
         
         /// <summary>
