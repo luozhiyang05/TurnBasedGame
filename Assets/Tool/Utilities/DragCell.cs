@@ -35,9 +35,6 @@ namespace Tool.Utilities
             RectTransformUtility.ScreenPointToWorldPointInRectangle(_rectTrans, eventData.position,
                 eventData.enterEventCamera, out var pos);
             _offset = pos - _rectTrans.position;
-            SetTop(true);
-
-            _canvasGroup.blocksRaycasts = false;
         }
 
         protected abstract void OnStartDrag(PointerEventData eventData);
@@ -62,9 +59,6 @@ namespace Tool.Utilities
             if (!_canDrag) return;
 
             OnFinishDrag(eventData);
-
-            SetTop(false);
-            _canvasGroup.blocksRaycasts = true;
         }
 
         protected abstract void OnFinishDrag(PointerEventData eventData);
@@ -92,14 +86,12 @@ namespace Tool.Utilities
 
         protected void SetTop(bool isTop)
         {
-            if (isTop)
-            {
-                _rectTrans.SetParent(_parent.parent);
-            }
-            else
-            {
-                _rectTrans.SetParent(_parent);
-            }
+            _rectTrans.SetParent(isTop ? _parent.parent : _parent);
+        }
+
+        protected void SetCanBlockRaycasts(bool isBlock)
+        {
+            _canvasGroup.blocksRaycasts = isBlock;
         }
     }
 }
