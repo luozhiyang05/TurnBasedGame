@@ -72,11 +72,12 @@ namespace GameSystem.CardSystem
         public void SelectCardAction(Transform trans)
         {
             var bg = trans.Find("bg");
+            float oldY = bg.localPosition.y;
             float percent = 0f;
             ActionKit.GetInstance().CreateActQue("选择卡牌", () =>
             {
                 percent += Time.deltaTime / 0.1f;
-                bg.localPosition = new Vector3(bg.localPosition.x, Mathf.Lerp(0, 60, percent), bg.localPosition.z);
+                bg.localPosition = new Vector3(bg.localPosition.x, Mathf.Lerp(oldY, oldY + 60, percent), bg.localPosition.z);
                 bg.localScale = new Vector3(Mathf.Lerp(1, 1.1f, percent), Mathf.Lerp(1, 1.1f, percent), Mathf.Lerp(1, 1.1f, percent));
             }, 0.1f)
             .Execute();
@@ -85,12 +86,13 @@ namespace GameSystem.CardSystem
         public void NoSelectCardAction(Transform trans)
         {
             var bg = trans.Find("bg");
+            float oldY = bg.localPosition.y;
             float oldScale = bg.localScale.x;
             float percent = 0f;
             ActionKit.GetInstance().CreateActQue("取消卡牌", () =>
             {
                 percent += Time.deltaTime / 0.1f;
-                bg.localPosition = new Vector3(bg.localPosition.x, Mathf.Lerp(60, 0, percent), bg.localPosition.z);
+                bg.localPosition = new Vector3(bg.localPosition.x, Mathf.Lerp(oldY, oldY - 60, percent), bg.localPosition.z);
                 bg.localScale = new Vector3(Mathf.Lerp(oldScale, 1, percent), Mathf.Lerp(oldScale, 1, percent), Mathf.Lerp(oldScale, 1, percent));
 
             }, 0.1f)
