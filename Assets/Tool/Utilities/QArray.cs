@@ -35,6 +35,10 @@ namespace Tool.Utilities
             _array = values;
             _maxSize = values.Length == 0 ? 1 : values.Length;
             Count = values.Length;
+            if (values.Length == 0)
+            {
+                _array = new T[1];
+            }
             _headIdx = 0;
             _tailIdx = values.Length - 1;
         }
