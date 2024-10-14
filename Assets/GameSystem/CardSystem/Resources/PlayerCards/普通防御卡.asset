@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: "\u666E\u901A\u9632\u5FA1\u5361"
   m_EditorClassIdentifier: 
   cardName: "\u666E\u901A\u9632\u5FA1\u5361"
+  depletePoint: 1
   atk: 0
   armor: 5
+  cardDesc: "\u5BF9\u76EE\u6807\u6DFB\u52A05\u70B9\u62A4\u7532"
   defenceEff:
     effName: "\u53E0\u7532"
-    maxRoundCnt: 0
+    maxRoundCnt: 1

@@ -14,12 +14,10 @@ namespace GameSystem.CardSystem.Main
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
 		public CButton Btn_exitRound;
-		public Text Txt_exitRound;
 		public Text Txt_actCnt;
         protected override void AutoInitUI()
         {
 			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
-			Txt_exitRound = transform.Find("Main/Btn_exitRound/Txt_exitRound").GetComponent<Text>();
 			Txt_actCnt = transform.Find("Main/Txt_actCnt").GetComponent<Text>();
         }
 		#endregion 自动生成UI组件区域结束！
@@ -49,7 +47,7 @@ namespace GameSystem.CardSystem.Main
             _cardSystemModule = this.GetSystem<ICardSystemModule>();
             
             //文本
-            Txt_exitRound.text = "结束回合";
+            Btn_exitRound.Label.text = "结束回合";
             
             //按钮
             Btn_exitRound.onClick.AddListener(() =>
@@ -57,8 +55,8 @@ namespace GameSystem.CardSystem.Main
                 (_battleSystemModule.GetPlayerUnit() as Player)?.EndRound();
             });
 
-            _cardTemp = transform.Find("Main/cardTemplate").gameObject;
             _cardsContent = transform.Find("Main/headCardsContent").gameObject;
+            _cardTemp = _cardsContent.transform.GetChild(0).gameObject;
             _cardsLayout = _cardsContent.GetComponent<HorizontalLayoutGroup>();
         }
 
@@ -113,7 +111,8 @@ namespace GameSystem.CardSystem.Main
                 var dc = cardGo.gameObject.AddComponent<DragCard>();
                 dc.headCardIdx = i;
                 dc.BaseCardSo = card;
-                cardGo.GetComponentInChildren<Text>().text = card.cardName;
+                cardGo.transform.Find("bg/txt_name").GetComponent<Text>().text = card.cardName;
+                cardGo.transform.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
                 cardGo.transform.SetParent(_cardsContent.transform);
                 cardGo.gameObject.SetActive(true);
                 _cardsGo.Add(cardGo);

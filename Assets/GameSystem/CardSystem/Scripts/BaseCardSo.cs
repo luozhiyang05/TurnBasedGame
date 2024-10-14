@@ -11,6 +11,9 @@ namespace GameSystem.CardSystem.Scripts
         [Header("基础属性")]
         public int atk;
         public int armor;
+        [Header("卡片描述")]
+        [TextArea]
+        public string cardDesc;
 
         public void UseCard(AbsUnit self, AbsUnit target)
         {
