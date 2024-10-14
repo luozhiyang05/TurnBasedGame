@@ -9,8 +9,8 @@ namespace Tool.Utilities
     {
         private Vector2 _oldPos = Vector2.one;
         private Vector3 _offset = Vector3.one;
-        private RectTransform _rectTrans;
-        private Transform _parent;
+        protected RectTransform _rectTrans;
+        protected Transform _parent;
         private CanvasGroup _canvasGroup;
         private bool _canDrag = true;
         private UnityAction _resetCallback;
@@ -35,7 +35,7 @@ namespace Tool.Utilities
             RectTransformUtility.ScreenPointToWorldPointInRectangle(_rectTrans, eventData.position,
                 eventData.enterEventCamera, out var pos);
             _offset = pos - _rectTrans.position;
-            _rectTrans.SetParent(_parent.parent);
+            SetTop(true);
 
             _canvasGroup.blocksRaycasts = false;
         }
@@ -63,7 +63,7 @@ namespace Tool.Utilities
 
             OnFinishDrag(eventData);
 
-            _rectTrans.SetParent(_parent);
+            SetTop(false);
             _canvasGroup.blocksRaycasts = true;
         }
 
@@ -88,6 +88,18 @@ namespace Tool.Utilities
             _resetCallback?.Invoke();
             _canDrag = true;
             PublicMonoKit.GetInstance().GetPublicMono().OnUnRegisterUpdate(ResetAnimation);
+        }
+
+        protected void SetTop(bool isTop)
+        {
+            if (isTop)
+            {
+                _rectTrans.SetParent(_parent.parent);
+            }
+            else
+            {
+                _rectTrans.SetParent(_parent);
+            }
         }
     }
 }
