@@ -1,6 +1,9 @@
+using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System;
 using System.Collections.Generic;
 using Tool.Single;
+using Tool.Utilities;
 using UnityEngine;
 
 namespace Tool.Mono
@@ -77,11 +80,106 @@ namespace Tool.Mono
         }
     }
 
+    public class ActQueue
+    {
+        public class ActInfo
+        {
+            public Action Action;
+            public float durationTime;
+        }
+
+        private QArray<ActInfo> _actQueue = new QArray<ActInfo>(5);
+        private Action _killCallback;
+        private bool _killAuto = true;
+        private bool _isExecute = false;
+        private float _time = 0f;
+        private int _nowIdx = 0;
+        
+        public ActQueue(Action kill)
+        {
+            _killCallback = kill;
+        }
+
+        /// <summary>
+        /// 从队尾添加一个动作
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="durationTime"></param>
+        /// <returns></returns>
+        public ActQueue Append(Action action, float durationTime)
+        {
+            _actQueue.Add(new ActInfo
+            {
+                Action = action,
+                durationTime = durationTime
+            });
+            return this;
+        }
+        
+        /// <summary>
+        /// 执行队列
+        /// </summary>
+        public void Execute()
+        {
+            _isExecute = true;
+            PublicMonoKit.GetInstance().OnRegisterUpdate(Invoke);
+        }
+
+        /// <summary>
+        /// 设置是否自动销毁
+        /// </summary>
+        /// <param name="atuo"></param>
+        /// <returns></returns>
+        public ActQueue KillAuto(bool atuo)
+        {
+            _killAuto = atuo;
+            return this;
+        }
+        
+        /// <summary>
+        /// 销毁
+        /// </summary>
+        public void Kill() => _killCallback();
+
+        /// <summary>
+        /// 判断是否执行
+        /// </summary>
+        /// <returns></returns>
+        public bool IsExecute() => _isExecute;
+
+        private void Invoke()
+        {
+            if (_nowIdx == _actQueue.Count)
+            {
+                _time = 0;
+                _nowIdx = 0;
+                _isExecute = false;
+                PublicMonoKit.GetInstance().OnUnRegisterUpdate(Invoke);
+                if(_killAuto) _killCallback();
+                return;
+            }
+
+            _time += Time.deltaTime;
+            var peekActInfo = _actQueue[_nowIdx];
+            if (_time < peekActInfo.durationTime)
+            {
+                peekActInfo.Action?.Invoke();
+            }
+            else
+            {
+                _nowIdx++;
+                _time = 0;
+            }
+        }
+    }
+
     public class ActionKit : Singleton<ActionKit>
     {
         //计时器列表，用于在公共mono内更新计时器
         private readonly List<Timer> _timerUpdateList = new List<Timer>();
-        private readonly Queue<Timer> _timersPoolQueue = new Queue<Timer>();
+        private readonly Queue<Timer> _timersPoolQueue = new Queue<Timer>();    
+        
+        private readonly Dictionary<string,ActQueue> _actQueueDict = new Dictionary<string, ActQueue>();
 
         protected override void OnInit()
         {
@@ -130,5 +228,28 @@ namespace Tool.Mono
                 _timerUpdateList[i].Update();
             }
         }
+
+        public ActQueue CreateActQue(string queName,Action action,float durationTime)
+        {
+            var actQue = new ActQueue(()=>_actQueueDict.Remove(queName));
+            actQue.Append(action, durationTime);
+            _actQueueDict.Add(queName, actQue);
+            return actQue;
+        }
+
+        public void ExecuteActQue(string queName)
+        {
+            if (_actQueueDict.ContainsKey(queName))
+            {
+                var actQue = _actQueueDict[queName];
+                if (!actQue.IsExecute())
+                {
+                    actQue.Execute();
+                }
+            }
+            else
+                throw new Exception("没有找到对应的队列");
+        }
+
     }
 }
