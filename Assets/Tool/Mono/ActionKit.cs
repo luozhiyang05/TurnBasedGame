@@ -87,17 +87,23 @@ namespace Tool.Mono
             public Action Action;
             public float durationTime;
         }
-
-        private QArray<ActInfo> _actQueue = new QArray<ActInfo>(5);
+        private string _queName;
+        private QArray<ActInfo> _actQueue = new QArray<ActInfo>();
         private Action _killCallback;
         private bool _killAuto = true;
         private bool _isExecute = false;
         private float _time = 0f;
         private int _nowIdx = 0;
         
-        public ActQueue(Action kill)
+        public void Init(Action kill,string queName)
         {
-            _killCallback = kill;
+             _killCallback = kill;
+            _queName = queName;
+        }
+
+        public string GetQueName()
+        {
+            return _queName;
         }
 
         /// <summary>
@@ -178,8 +184,7 @@ namespace Tool.Mono
         //计时器列表，用于在公共mono内更新计时器
         private readonly List<Timer> _timerUpdateList = new List<Timer>();
         private readonly Queue<Timer> _timersPoolQueue = new Queue<Timer>();    
-        
-        private readonly Dictionary<string,ActQueue> _actQueueDict = new Dictionary<string, ActQueue>();
+        private readonly QArray<ActQueue> _actQueueList = new QArray<ActQueue>();
 
         protected override void OnInit()
         {
@@ -229,27 +234,13 @@ namespace Tool.Mono
             }
         }
 
-        public ActQueue CreateActQue(string queName,Action action,float durationTime)
+        public ActQueue CreateActQue(string queName, Action action, float durationTime)
         {
-            var actQue = new ActQueue(()=>_actQueueDict.Remove(queName));
+            var actQue = new ActQueue();
+            actQue.Init(() => _actQueueList.Remove(actQue), queName);
             actQue.Append(action, durationTime);
-            _actQueueDict.Add(queName, actQue);
+            _actQueueList.Add(actQue);
             return actQue;
         }
-
-        public void ExecuteActQue(string queName)
-        {
-            if (_actQueueDict.ContainsKey(queName))
-            {
-                var actQue = _actQueueDict[queName];
-                if (!actQue.IsExecute())
-                {
-                    actQue.Execute();
-                }
-            }
-            else
-                throw new Exception("没有找到对应的队列");
-        }
-
     }
 }
