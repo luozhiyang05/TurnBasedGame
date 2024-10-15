@@ -87,17 +87,21 @@ namespace Tool.Mono
             public Action Action;
             public float durationTime;
         }
-
-        private QArray<ActInfo> _actQueue = new QArray<ActInfo>(5);
-        private Action _killCallback;
+        private GameObject _self;
+        private QArray<ActInfo> _actQueue = new QArray<ActInfo>();
         private bool _killAuto = true;
         private bool _isExecute = false;
         private float _time = 0f;
         private int _nowIdx = 0;
         
-        public ActQueue(Action kill)
+        public void Init(GameObject self)
         {
-            _killCallback = kill;
+            _self = self;
+        }
+
+        public GameObject GetSelf()
+        {
+            return _self;
         }
 
         /// <summary>
@@ -139,7 +143,12 @@ namespace Tool.Mono
         /// <summary>
         /// 销毁
         /// </summary>
-        public void Kill() => _killCallback();
+        public void Kill()
+        {
+            PublicMonoKit.GetInstance().OnUnRegisterUpdate(Invoke);
+            _actQueue.Clear();
+            _actQueue = null;
+        }
 
         /// <summary>
         /// 判断是否执行
@@ -155,7 +164,7 @@ namespace Tool.Mono
                 _nowIdx = 0;
                 _isExecute = false;
                 PublicMonoKit.GetInstance().OnUnRegisterUpdate(Invoke);
-                if(_killAuto) _killCallback();
+                ActionKit.GetInstance().KillActQue(_self);
                 return;
             }
 
@@ -178,8 +187,7 @@ namespace Tool.Mono
         //计时器列表，用于在公共mono内更新计时器
         private readonly List<Timer> _timerUpdateList = new List<Timer>();
         private readonly Queue<Timer> _timersPoolQueue = new Queue<Timer>();    
-        
-        private readonly Dictionary<string,ActQueue> _actQueueDict = new Dictionary<string, ActQueue>();
+        private readonly QArray<ActQueue> _actQueueList = new QArray<ActQueue>();
 
         protected override void OnInit()
         {
@@ -229,27 +237,25 @@ namespace Tool.Mono
             }
         }
 
-        public ActQueue CreateActQue(string queName,Action action,float durationTime)
+        public ActQueue CreateActQue(GameObject self, Action action, float durationTime)
         {
-            var actQue = new ActQueue(()=>_actQueueDict.Remove(queName));
+            var actQue = new ActQueue();
+            actQue.Init(self);
             actQue.Append(action, durationTime);
-            _actQueueDict.Add(queName, actQue);
+            _actQueueList.Add(actQue);
             return actQue;
         }
 
-        public void ExecuteActQue(string queName)
+        public void KillActQue(GameObject self)
         {
-            if (_actQueueDict.ContainsKey(queName))
+            var remQue = _actQueueList.FindValue((value) => value.GetSelf() == self);
+            if (remQue != null)
             {
-                var actQue = _actQueueDict[queName];
-                if (!actQue.IsExecute())
-                {
-                    actQue.Execute();
-                }
+                remQue.Kill();
+                _actQueueList.Remove(remQue);
+                return;
             }
-            else
-                throw new Exception("没有找到对应的队列");
+            throw new Exception("没有找到对应的ActQueue");
         }
-
     }
 }
