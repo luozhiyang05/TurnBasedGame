@@ -73,7 +73,7 @@ namespace GameSystem.CardSystem
         {
             var bg = trans.Find("bg");
             float percent = 0f;
-            ActionKit.GetInstance().CreateActQue("选择卡牌", () =>
+            ActionKit.GetInstance().CreateActQue(trans.gameObject, () =>
             {
                 percent += Time.deltaTime / 0.1f;
                 bg.localPosition = new Vector3(bg.localPosition.x, Mathf.Lerp(0, 60, percent), bg.localPosition.z);
@@ -87,7 +87,7 @@ namespace GameSystem.CardSystem
             var bg = trans.Find("bg");
             float oldScale = bg.localScale.x;
             float percent = 0f;
-            ActionKit.GetInstance().CreateActQue("取消卡牌", () =>
+            ActionKit.GetInstance().CreateActQue(trans.gameObject, () =>
             {
                 percent += Time.deltaTime / 0.1f;
                 bg.localPosition = new Vector3(bg.localPosition.x, Mathf.Lerp(60, 0, percent), bg.localPosition.z);
@@ -101,7 +101,7 @@ namespace GameSystem.CardSystem
         {
             var canvasGroup = trans.Find("bg").GetComponent<CanvasGroup>();
             float percent = 0f;
-            ActionKit.GetInstance().CreateActQue("拖拽卡牌", () =>
+            ActionKit.GetInstance().CreateActQue(trans.gameObject, () =>
             {
                 percent += Time.deltaTime / 0.1f;
                 canvasGroup.alpha = Mathf.Lerp(1, 0.2f, percent);
@@ -113,7 +113,7 @@ namespace GameSystem.CardSystem
         {
             var canvasGroup = trans.Find("bg").GetComponent<CanvasGroup>();
             float percent = 0f;
-            ActionKit.GetInstance().CreateActQue("拖拽卡牌", () =>
+            ActionKit.GetInstance().CreateActQue(trans.gameObject, () =>
             {
                 percent += Time.deltaTime / 0.1f;
                 canvasGroup.alpha = Mathf.Lerp(0.2f, 1, percent);

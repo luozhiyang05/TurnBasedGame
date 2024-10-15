@@ -166,17 +166,5 @@ namespace GameSystem.CardSystem.Main
             //通知视图更新
             _updateViewCallback?.Invoke();
         }
-
-        public void SelectCardAction(Transform trans)
-        {   
-            var bg = trans.Find("bg");
-            float oldY = bg.localPosition.y;
-            float percent = 0f;
-            ActionKit.GetInstance().CreateActQue("选择卡牌",()=>{
-                percent += Time.deltaTime / 0.3f;
-                bg.localPosition = new Vector3(bg.localPosition.x,Mathf.Lerp(oldY,oldY+50,percent),bg.localPosition.z);
-            },0.3f)
-            .Execute();
-        }
     }
 }
