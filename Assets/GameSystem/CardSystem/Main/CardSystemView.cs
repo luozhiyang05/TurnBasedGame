@@ -118,9 +118,12 @@ namespace GameSystem.CardSystem.Main
                 cardGo.gameObject.SetActive(true);
                 _cardsGo.Add(cardGo);
             }
+            //强制渲染
             LayoutRebuilder.ForceRebuildLayoutImmediate(_cardsContent.transform as RectTransform);
             ActionKit.GetInstance().DelayTime(0.05f,()=>{
                 _cardsLayout.enabled = false;
+                //渲染玩家手牌位置和旋转
+                _cardSystemModule.RenderHandCardsPosAndRot(_cardsContent.transform);
             });
         }
         

@@ -149,7 +149,7 @@ namespace GameSystem.CardSystem.Main
         public void UpdateHeadCardInSr()
         {
             //获取新的卡牌
-            GetCardsFormUseCards(5);
+            GetCardsFormUseCards(9);
             
             //通知视图更新
             _updateViewCallback?.Invoke();

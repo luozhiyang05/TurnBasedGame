@@ -1,6 +1,10 @@
 using Framework;
 using GameSystem.CardSystem.Main;
+using GameSystem.CardSystem.Scripts;
 using Tool.Mono;
+using Tool.ResourceMgr;
+using Tool.UI;
+using Tool.Utilities;
 using UnityEngine;
 
 namespace GameSystem.CardSystem
@@ -18,6 +22,12 @@ namespace GameSystem.CardSystem
         /// 回合开始更新手牌
         /// </summary>
         void UpdateHeadCardInSr();
+
+        /// <summary>
+        /// 渲染玩家手牌位置和旋转
+        /// </summary>
+        /// <param name="cardsContent"></param>
+        void RenderHandCardsPosAndRot(Transform cardsContent);
 
         /// <summary>
         /// 选择卡牌时的动画
@@ -67,7 +77,24 @@ namespace GameSystem.CardSystem
         {
             (_viewCtrl.GetModel() as CardSystemViewModel)?.UpdateHeadCardInSr();
         }
-
+        
+        public void RenderHandCardsPosAndRot(Transform cardContent)
+        {
+            var uiAnimationSo = ResMgr.GetInstance().SyncLoad<UIAnimationSo>("UIAnimationSo");
+            var uiAnimationCurve = uiAnimationSo.handCardAnimCurve;
+            var cardCnt = cardContent.childCount - 1;
+            var angle = 60 / (cardCnt + 1);
+            float addAngle = 30;
+            float x = 1 / (float)(cardCnt - 1);
+            for (int i = 1; i <= cardCnt; i++)
+            {
+                var cardGo = cardContent.GetChild(i);
+                addAngle -= angle;
+                cardGo.transform.localEulerAngles = new Vector3(0,0,addAngle);
+                var addHeight = uiAnimationCurve.Evaluate((i - 1) * x) * 60;
+                cardGo.transform.position = new Vector2(cardGo.transform.position.x, cardGo.transform.position.y + addHeight);
+            }
+        }
         
         public void SelectCardAction(Transform trans)
         {
