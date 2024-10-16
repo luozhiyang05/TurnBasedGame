@@ -84,6 +84,11 @@ namespace Tool.Utilities
             PublicMonoKit.GetInstance().GetPublicMono().OnUnRegisterUpdate(ResetAnimation);
         }
 
+        public float GetDargDistance()
+        {
+            return Vector2.Distance(Input.mousePosition, _oldPos);
+        }
+
         protected void SetTop(bool isTop)
         {
             _rectTrans.SetParent(isTop ? _parent.parent : _parent);
