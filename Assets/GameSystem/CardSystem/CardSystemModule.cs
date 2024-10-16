@@ -2,10 +2,9 @@ using Framework;
 using GameSystem.CardSystem.Main;
 using GameSystem.CardSystem.Scripts;
 using Tool.Mono;
-using Tool.ResourceMgr;
-using Tool.UI;
 using Tool.Utilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameSystem.CardSystem
 {
@@ -27,7 +26,7 @@ namespace GameSystem.CardSystem
         /// 渲染玩家手牌位置和旋转
         /// </summary>
         /// <param name="cardsContent"></param>
-        void RenderHandCardsPosAndRot(Transform cardsContent);
+        void RenderHandCards(Transform cardContent,QArray<BaseCardSo> headCards);
 
         /// <summary>
         /// 选择卡牌时的动画
@@ -78,24 +77,58 @@ namespace GameSystem.CardSystem
             (_viewCtrl.GetModel() as CardSystemViewModel)?.UpdateHeadCardInSr();
         }
         
-        public void RenderHandCardsPosAndRot(Transform cardContent)
+        public void RenderHandCards(Transform cardContent,QArray<BaseCardSo> headCards)
         {
-            var uiAnimationSo = ResMgr.GetInstance().SyncLoad<UIAnimationSo>("UIAnimationSo");
-            var uiAnimationCurve = uiAnimationSo.handCardAnimCurve;
-            var cardCnt = cardContent.childCount - 1;
-            var angle = 60 / (cardCnt + 1);
-            float addAngle = 30;
-            float x = 1 / (float)(cardCnt - 1);
-            for (int i = 1; i <= cardCnt; i++)
+            int cardCnt = headCards.Count;
+            bool isSingleCnt = cardCnt % 2 != 0;
+            int offet = 150;
+            int startX;
+            if (isSingleCnt)
             {
-                var cardGo = cardContent.GetChild(i);
-                addAngle -= angle;
-                cardGo.transform.localEulerAngles = new Vector3(0,0,addAngle);
-                var addHeight = uiAnimationCurve.Evaluate((i - 1) * x) * 60;
-                cardGo.transform.position = new Vector2(cardGo.transform.position.x, cardGo.transform.position.y + addHeight);
+
+                 startX = -(cardCnt - 1) / 2 * offet;
+                for (int i = 1; i <= cardCnt; i++)
+                {
+                    var cardTrans = cardContent.GetChild(i).transform;
+                    cardTrans.localPosition = new Vector2(startX + offet * (i - 1), 0);
+                    RenderCard(cardTrans,  headCards[i - 1], i);
+                }
+            }
+            else
+            {
+                if (cardCnt == 2)
+                {
+                    cardContent.GetChild(1).transform.localPosition = new Vector2(-75, 0);
+                    cardContent.GetChild(2).transform.localPosition = new Vector2(75, 0);
+                    RenderCard(cardContent.GetChild(1).transform, headCards[0], 1);
+                    RenderCard(cardContent.GetChild(2).transform, headCards[1], 2);
+                    return;
+                }
+
+                startX = -75 - (cardCnt / 2 - 1) * offet;
+                for (int i = 1; i <= cardCnt; i++)
+                {
+                    var cardTrans = cardContent.GetChild(i).transform;
+                    cardTrans.localPosition = new Vector2(startX + offet * (i - 1), 0);
+                    RenderCard(cardTrans, headCards[i - 1], i);
+                }
+
+            }
+            void RenderCard(Transform cardTrans, BaseCardSo card, int index)
+            {
+                //渲染卡牌名字和描述
+                cardTrans.Find("bg/txt_name").GetComponent<Text>().text = card.cardName;
+                cardTrans.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
+                //对卡牌信息赋值
+                var dc = cardTrans.gameObject.AddComponent<DragCard>();
+                dc.headCardIdx = index - 1;
+                dc.BaseCardSo = card;
+                //激活
+                cardTrans.SetParent(cardContent);
+                cardTrans.gameObject.SetActive(true);
             }
         }
-        
+
         public void SelectCardAction(Transform trans)
         {
             var bg = trans.Find("bg");

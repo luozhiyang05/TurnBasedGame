@@ -102,29 +102,14 @@ namespace GameSystem.CardSystem.Main
         {
             //删除所有卡牌Go
             DestroyAllCardsGo();
-            _cardsLayout.enabled = true;
             //根据手牌牌数生成按钮
             for (int i = 0; i < _headCardQArray.Count; i++)
             {
-                var card = _headCardQArray[i];
-
                 var cardGo = Instantiate(_cardTemp, _cardsContent.transform);
-                var dc = cardGo.gameObject.AddComponent<DragCard>();
-                dc.headCardIdx = i;
-                dc.BaseCardSo = card;
-                cardGo.transform.Find("bg/txt_name").GetComponent<Text>().text = card.cardName;
-                cardGo.transform.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
-                cardGo.transform.SetParent(_cardsContent.transform);
-                cardGo.gameObject.SetActive(true);
                 _cardsGo.Add(cardGo);
+                cardGo.SetActive(true);
             }
-            //强制渲染
-            LayoutRebuilder.ForceRebuildLayoutImmediate(_cardsContent.transform as RectTransform);
-            ActionKit.GetInstance().DelayTime(0.05f,()=>{
-                _cardsLayout.enabled = false;
-                //渲染玩家手牌位置和旋转
-                _cardSystemModule.RenderHandCardsPosAndRot(_cardsContent.transform);
-            });
+            _cardSystemModule.RenderHandCards(_cardsContent.transform,_headCardQArray);
         }
         
         /// <summary>
