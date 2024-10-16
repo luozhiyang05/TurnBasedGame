@@ -30,16 +30,23 @@ namespace GameSystem.CardSystem.Scripts
 
                 if (hit.collider != null)
                 {
+                    //获取鼠标光标下的Unit
                     GameObject currentObjectUnderCursor = hit.collider.gameObject;
-                    //使用卡牌的命令
-                    this.SendCmd<UseCardCmd,CardData>(new CardData()
-                    { 
-                        user = this.GetSystem<IBattleSystemModule>().GetPlayerUnit(),
-                        headCardIdx = headCardIdx,
-                        cardSo = BaseCardSo,
-                        target = currentObjectUnderCursor
-                    });
-                    return;
+                    
+                    //判断当前行动带你是否足够使用卡牌
+                    var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
+                    if (player.nowActPoint >= BaseCardSo.depletePoint)
+                    {
+                        //使用卡牌的命令
+                        this.SendCmd<UseCardCmd, CardData>(new CardData()
+                        {
+                            user = player,
+                            headCardIdx = headCardIdx,
+                            cardSo = BaseCardSo,
+                            target = currentObjectUnderCursor
+                        });
+                        return;
+                    }
                 }
             }
 
