@@ -10,8 +10,14 @@ namespace GameSystem.TemplateOneSystem.Main
         public override string GetPrefabPath() => "TemplateOneSystemView";
         public override BaseModel GetModel() => Model ??= new TemplateOneSystemViewModel();
         public override BaseView GetView() => View;
-        protected override void Init()
+        public TemplateOneSystemViewCtrl() : base() { }
+        public TemplateOneSystemViewCtrl(params object[] args) : base(args)
         {
+
+        }
+        protected override void Init(params object[] args)
+        {
+
         }
         protected override void InitListener()
         {
