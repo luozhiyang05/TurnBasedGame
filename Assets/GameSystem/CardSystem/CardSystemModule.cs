@@ -147,7 +147,7 @@ namespace GameSystem.CardSystem
                 percent += Time.deltaTime / 0.1f;
                 bg.localPosition = new Vector3(bg.localPosition.x, Mathf.Lerp(0, 60, percent), bg.localPosition.z);
                 bg.localScale = new Vector3(Mathf.Lerp(1, 1.1f, percent), Mathf.Lerp(1, 1.1f, percent), Mathf.Lerp(1, 1.1f, percent));
-            }, 0.1f)
+            }, 0.12f)
             .Execute();
         }
 
@@ -162,7 +162,7 @@ namespace GameSystem.CardSystem
                 bg.localPosition = new Vector3(bg.localPosition.x, Mathf.Lerp(60, 0, percent), bg.localPosition.z);
                 bg.localScale = new Vector3(Mathf.Lerp(oldScale, 1, percent), Mathf.Lerp(oldScale, 1, percent), Mathf.Lerp(oldScale, 1, percent));
 
-            }, 0.1f)
+            }, 0.12f)
             .Execute();
         }
 
@@ -174,7 +174,7 @@ namespace GameSystem.CardSystem
             {
                 percent += Time.deltaTime / 0.1f;
                 canvasGroup.alpha = Mathf.Lerp(1, 0.2f, percent);
-            }, 0.1f)
+            }, 0.12f)
             .Execute();
         }
 
@@ -186,7 +186,7 @@ namespace GameSystem.CardSystem
             {
                 percent += Time.deltaTime / 0.1f;
                 canvasGroup.alpha = Mathf.Lerp(0.2f, 1, percent);
-            }, 0.1f)
+            }, 0.12f)
             .Execute();
         }
     }
