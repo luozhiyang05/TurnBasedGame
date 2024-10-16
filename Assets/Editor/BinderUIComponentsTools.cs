@@ -62,6 +62,7 @@ namespace Editor
                     {
                         var go = uiBehaviour.gameObject;
                         //对比配置，拼接语句
+                        if (go.name.Length < 4) continue;
                         var key = go.name[..4];
                         //不符合格式的，默认不需要自动生成
                         if (!_uiRule.TryGetValue(key, out var componentName)) continue;
