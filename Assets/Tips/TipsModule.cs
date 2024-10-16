@@ -6,7 +6,7 @@ namespace Tips
     public static class TipsModule
     {
         private static UIManager uiMgr => UIManager.GetInstance();
-        public static void ReComfirmTips(string title, string content,UnityAction comfirm, UnityAction cancel)
+        public static void ReComfirmTips(string title, string content, UnityAction comfirm, UnityAction cancel)
         {
             uiMgr.GetFromPool("ReConfirmTips", EuiLayer.TipsUI, (tips) =>
             {
@@ -16,13 +16,22 @@ namespace Tips
             });
         }
 
-            public static void ComfirmTips(string title, string content,UnityAction comfirm)
+        public static void ComfirmTips(string title, string content, UnityAction comfirm)
         {
             uiMgr.GetFromPool("ComfirmTips", EuiLayer.TipsUI, (tips) =>
             {
                 var confirmTips = tips as ComfirmTips;
                 confirmTips.SetData(title, content, comfirm);
                 confirmTips.Open();
+            });
+        }
+
+        public static void HistoryTips()
+        {
+            uiMgr.GetFromPool("HistoryTips", EuiLayer.TipsUI, (tips) =>
+            {
+                var historyTips = tips as HistoryTips;
+                historyTips.Open();
             });
         }
     }

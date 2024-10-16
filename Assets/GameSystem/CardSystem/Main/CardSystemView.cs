@@ -3,6 +3,7 @@ using GameSystem.BattleSystem;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
+using Tips;
 using Tool.Mono;
 using Tool.Utilities;
 using UIComponents;
@@ -14,16 +15,18 @@ namespace GameSystem.CardSystem.Main
     public class CardSystemView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
+		public Text Txt_actCnt;
 		public CButton Btn_exitRound;
 		public CButton Btn_obsCards;
+		public CButton Btn_history;
 		public CButton Btn_useCards;
-		public Text Txt_actCnt;
         protected override void AutoInitUI()
         {
+			Txt_actCnt = transform.Find("Main/Txt_actCnt").GetComponent<Text>();
 			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
 			Btn_obsCards = transform.Find("Main/Btn_obsCards").GetComponent<CButton>();
+			Btn_history = transform.Find("Main/Btn_history").GetComponent<CButton>();
 			Btn_useCards = transform.Find("Main/Btn_useCards").GetComponent<CButton>();
-			Txt_actCnt = transform.Find("Main/Txt_actCnt").GetComponent<Text>();
         }
 		#endregion 自动生成UI组件区域结束！
 
@@ -64,6 +67,10 @@ namespace GameSystem.CardSystem.Main
             Btn_useCards.onClick.AddListener(() =>
             {
                 _cardSystemModule.ShowObsCardsView(_model.GetUserCards(),true);
+            });
+            Btn_history.onClick.AddListener(() =>
+            {
+                TipsModule.HistoryTips();
             });
 
             _cardsContent = transform.Find("Main/headCardsContent").gameObject;
