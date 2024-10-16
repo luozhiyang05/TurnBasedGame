@@ -31,15 +31,18 @@ namespace GameSystem.CardSystem.ObsCard.Main
         protected override void RemoveListener()
         {
         }
-        public override void OnShowComplate()
+
+        public override void OnBeforeShow()
         {
-            //一般做网络请求或给view层传递数据
             ObsCardView obsCardView = View as ObsCardView;
-            obsCardView.SetDataSource(obsCards);
+            obsCardView.SetDataSource(obsCards.Clone());
             obsCards.Clear();
             obsCards = null;
         }
 
-      
+        public override void OnShowComplate()
+        {
+
+        }
     }
 }

@@ -1,4 +1,8 @@
 using GameSystem.MVCTemplate;
+using Tool.Utilities;
+using Tool.Utilities.Events;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace GameSystem.CardSystem.ObsCard.Main
 {
@@ -20,6 +24,8 @@ namespace GameSystem.CardSystem.ObsCard.Main
         /// </summary>
         public override void RemoveListener()
         {
+
         }
+        
     }
 }

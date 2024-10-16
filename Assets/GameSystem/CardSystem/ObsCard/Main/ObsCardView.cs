@@ -1,3 +1,4 @@
+using Framework;
 using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
 using Tool.Utilities;
@@ -44,11 +45,11 @@ namespace GameSystem.CardSystem.ObsCard.Main
         //     Debug.Log("点击了遮罩！");
         // }
         #endregion
-
+    
         private Transform _content;
         private GameObject _cardGo;
         private QArray<BaseCardSo> _obsCards;
-
+        private ObsCardViewModel _model;
         /// <summary>
         /// 初始化,时机在Awake中
         /// </summary>
@@ -63,11 +64,14 @@ namespace GameSystem.CardSystem.ObsCard.Main
         /// </summary>
         protected override void BindModelListener()
         {
+            
         }
 
         public override void OnShow()
         {
             base.OnShow();
+            _model = Model as ObsCardViewModel;
+            UpdateObsCardsView();
         }
 
         public override void OnHide()
@@ -83,6 +87,21 @@ namespace GameSystem.CardSystem.ObsCard.Main
         public void SetDataSource(QArray<BaseCardSo> obsCards)
         {
             _obsCards = obsCards;
+        }
+
+        private void UpdateObsCardsView()
+        {
+            for (int i = 0; i < _content.childCount; i++)
+            {
+                _content.GetChild(i).gameObject.SetActive(false);
+            }
+            var cardCellCnt = _content.childCount-1;
+            for (int i = 1; i <= _obsCards.Count; i++)
+            {
+                GameObject cardGo = i > cardCellCnt ? Instantiate(_cardGo,_content) : _content.GetChild(i).gameObject;
+                this.GetSystem<ICardSystemModule>().RenderCardInfo(cardGo.transform, _obsCards[i-1]);
+                cardGo.SetActive(true);
+            }
         }
     }
 }

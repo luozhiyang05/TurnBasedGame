@@ -29,7 +29,14 @@ namespace GameSystem.CardSystem
         /// 渲染玩家所有手牌
         /// </summary>
         /// <param name="cardsContent"></param>
-        void  RenderHandCards(QArray<GameObject> cardGos,QArray<BaseCardSo> headCards,Transform cardContent);
+        void RenderHandCards(QArray<GameObject> cardGos, QArray<BaseCardSo> headCards, Transform cardContent);
+
+        /// <summary>
+        /// 渲染卡牌信息
+        /// </summary>
+        /// <param name="cardCell"></param>
+        /// <param name="card"></param>
+        void RenderCardInfo(Transform cardCell,BaseCardSo card);
 
         /// <summary>
         /// 选择卡牌时的动画
@@ -72,7 +79,7 @@ namespace GameSystem.CardSystem
 
         public void ShowObsCardsView(QArray<BaseCardSo> obsCards)
         {
-            var ctrl = new ObsCardViewCtrl(new object[] { obsCards });
+            var ctrl = new ObsCardViewCtrl(new object[] { obsCards.Clone() });
             ctrl.ShowView();
         }
 
@@ -123,12 +130,12 @@ namespace GameSystem.CardSystem
                 }
 
             }
-            void RenderCard(Transform cardTrans, BaseCardSo card, int index)
+            void RenderCard(Transform cardCell, BaseCardSo card, int index)
             {
                 //对卡牌信息赋值
-                if (!cardTrans.gameObject.TryGetComponent<DragCard>(out DragCard dragCard))
+                if (!cardCell.gameObject.TryGetComponent<DragCard>(out DragCard dragCard))
                 {
-                    dragCard = cardTrans.gameObject.AddComponent<DragCard>();
+                    dragCard = cardCell.gameObject.AddComponent<DragCard>();
                     dragCard.headCardIdx = index - 1;
                     dragCard.BaseCardSo = card;
                 }
@@ -138,13 +145,19 @@ namespace GameSystem.CardSystem
                     dragCard.BaseCardSo = card;
                 }
 
-                //渲染卡牌名字和描述
-                cardTrans.Find("bg/txt_name").GetComponent<Text>().text = card.name;
-                cardTrans.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
+                //渲染卡牌名字和描述信息
+                RenderCardInfo(cardCell,card);
+
                 //激活
-                cardTrans.SetParent(cardContent);
-                cardTrans.gameObject.SetActive(true);
+                cardCell.SetParent(cardContent);
+                cardCell.gameObject.SetActive(true);
             }
+        }
+
+        public void RenderCardInfo(Transform cardCell,BaseCardSo card)
+        {
+            cardCell.Find("bg/txt_name").GetComponent<Text>().text = card.name;
+            cardCell.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
         }
 
         public void SelectCardAction(Transform trans)
