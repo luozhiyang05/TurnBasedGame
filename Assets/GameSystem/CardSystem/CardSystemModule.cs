@@ -23,10 +23,10 @@ namespace GameSystem.CardSystem
         void UpdateHeadCardInSr();
 
         /// <summary>
-        /// 渲染玩家手牌位置和旋转
+        /// 渲染玩家所有手牌
         /// </summary>
         /// <param name="cardsContent"></param>
-        void RenderHandCards(Transform cardContent,QArray<BaseCardSo> headCards);
+        void  RenderHandCards(QArray<GameObject> cardGos,QArray<BaseCardSo> headCards,Transform cardContent);
 
         /// <summary>
         /// 选择卡牌时的动画
@@ -77,7 +77,7 @@ namespace GameSystem.CardSystem
             (_viewCtrl.GetModel() as CardSystemViewModel)?.UpdateHeadCardInSr();
         }
         
-        public void RenderHandCards(Transform cardContent,QArray<BaseCardSo> headCards)
+        public void RenderHandCards(QArray<GameObject> cardGos,QArray<BaseCardSo> headCards,Transform cardContent)
         {
             int cardCnt = headCards.Count;
             bool isSingleCnt = cardCnt % 2 != 0;
@@ -89,7 +89,7 @@ namespace GameSystem.CardSystem
                  startX = -(cardCnt - 1) / 2 * offet;
                 for (int i = 1; i <= cardCnt; i++)
                 {
-                    var cardTrans = cardContent.GetChild(i).transform;
+                    var cardTrans = cardGos[i-1].transform;
                     cardTrans.localPosition = new Vector2(startX + offet * (i - 1), 0);
                     RenderCard(cardTrans,  headCards[i - 1], i);
                 }
@@ -98,17 +98,17 @@ namespace GameSystem.CardSystem
             {
                 if (cardCnt == 2)
                 {
-                    cardContent.GetChild(1).transform.localPosition = new Vector2(-75, 0);
-                    cardContent.GetChild(2).transform.localPosition = new Vector2(75, 0);
-                    RenderCard(cardContent.GetChild(1).transform, headCards[0], 1);
-                    RenderCard(cardContent.GetChild(2).transform, headCards[1], 2);
+                    cardGos[0].transform.localPosition = new Vector2(-75, 0);
+                    cardGos[1].transform.localPosition = new Vector2(75, 0);
+                    RenderCard(cardGos[0].transform, headCards[0], 1);
+                    RenderCard(cardGos[1].transform, headCards[1], 2);
                     return;
                 }
 
                 startX = -75 - (cardCnt / 2 - 1) * offet;
                 for (int i = 1; i <= cardCnt; i++)
                 {
-                    var cardTrans = cardContent.GetChild(i).transform;
+                    var cardTrans = cardGos[i-1].transform;
                     cardTrans.localPosition = new Vector2(startX + offet * (i - 1), 0);
                     RenderCard(cardTrans, headCards[i - 1], i);
                 }
@@ -116,13 +116,22 @@ namespace GameSystem.CardSystem
             }
             void RenderCard(Transform cardTrans, BaseCardSo card, int index)
             {
-                //渲染卡牌名字和描述
-                cardTrans.Find("bg/txt_name").GetComponent<Text>().text = card.cardName;
-                cardTrans.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
                 //对卡牌信息赋值
-                var dc = cardTrans.gameObject.AddComponent<DragCard>();
-                dc.headCardIdx = index - 1;
-                dc.BaseCardSo = card;
+                if (!cardTrans.gameObject.TryGetComponent<DragCard>(out DragCard dragCard))
+                {
+                    dragCard = cardTrans.gameObject.AddComponent<DragCard>();
+                    dragCard.headCardIdx = index - 1;
+                    dragCard.BaseCardSo = card;
+                }
+                else
+                {
+                    dragCard.headCardIdx = index - 1;
+                    dragCard.BaseCardSo = card;
+                }
+
+                //渲染卡牌名字和描述
+                cardTrans.Find("bg/txt_name").GetComponent<Text>().text = card.name;
+                cardTrans.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
                 //激活
                 cardTrans.SetParent(cardContent);
                 cardTrans.gameObject.SetActive(true);

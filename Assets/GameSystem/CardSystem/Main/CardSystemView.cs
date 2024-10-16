@@ -29,16 +29,14 @@ namespace GameSystem.CardSystem.Main
         protected override void BindModelListener()
         {
             _model.SetUpdateViewCallback(UpdateView);
+            _model.SetUseCardCallback(UpdateHeadCard);
         }
 
         private IBattleSystemModule _battleSystemModule;
         private ICardSystemModule _cardSystemModule;
         private CardSystemViewModel _model;
-        
         private GameObject _cardTemp;
         private GameObject _cardsContent;
-        private HorizontalLayoutGroup _cardsLayout;
-
         /// <summary>
         /// 初始化
         /// </summary>
@@ -58,9 +56,7 @@ namespace GameSystem.CardSystem.Main
 
             _cardsContent = transform.Find("Main/headCardsContent").gameObject;
             _cardTemp = _cardsContent.transform.GetChild(0).gameObject;
-            _cardsLayout = _cardsContent.GetComponent<HorizontalLayoutGroup>();
         }
-
 
         public override void OnShow()
         {
@@ -94,22 +90,28 @@ namespace GameSystem.CardSystem.Main
             }
             _cardsGo.Clear();
         }
-        
+
+        /// <summary>
+        /// 出牌后删除一张手牌go
+        /// </summary>
+        /// <param name="headCardIdx"></param>
+        private void DestroyOneCardGo(int headCardIdx)
+        {
+            var cardGo = _cardsGo.Remove(_cardsGo[headCardIdx]);
+            Destroy(cardGo);
+        }
+
         /// <summary>
         /// 根据玩家手牌数，生成卡牌go
         /// </summary>
         private void CreateCardsGo()
         {
-            //删除所有卡牌Go
-            DestroyAllCardsGo();
             //根据手牌牌数生成按钮
             for (int i = 0; i < _headCardQArray.Count; i++)
             {
                 var cardGo = Instantiate(_cardTemp, _cardsContent.transform);
                 _cardsGo.Add(cardGo);
-                cardGo.SetActive(true);
             }
-            _cardSystemModule.RenderHandCards(_cardsContent.transform,_headCardQArray);
         }
         
         /// <summary>
@@ -126,13 +128,24 @@ namespace GameSystem.CardSystem.Main
         /// </summary>
         private void UpdateView()
         {
-            //获取手牌，更新视图
             GetHeadCards();
+            DestroyAllCardsGo();
             CreateCardsGo();
-            //更新行动点
+            _cardSystemModule.RenderHandCards(_cardsGo, _headCardQArray, _cardsContent.transform);
             UpdateActCnt();
         }
-
+        
+        /// <summary>
+        /// 出牌后更新玩家手牌视图
+        /// </summary>
+        /// <param name="headCardIdx"></param>
+        private void UpdateHeadCard(int headCardIdx)
+        {
+            GetHeadCards();
+            DestroyOneCardGo(headCardIdx);
+            _cardSystemModule.RenderHandCards(_cardsGo,_headCardQArray,_cardsContent.transform);
+            UpdateActCnt();
+        }
 
         public override void OnHide()
         {

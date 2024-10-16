@@ -23,7 +23,6 @@ namespace GameSystem.CardSystem.Scripts
         protected override void OnFinishDrag(PointerEventData eventData)
         {
             SetCanBlockRaycasts(false);
-            
             if (Camera.main != null)
             {
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
@@ -48,7 +47,6 @@ namespace GameSystem.CardSystem.Scripts
             this.GetSystem<ICardSystemModule>().NoDragCardAction(transform);
 
             ResetPos(() =>{
-                //transform.SetSiblingIndex(headCardIdx);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent as RectTransform);
             },4000f);
         }

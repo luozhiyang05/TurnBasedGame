@@ -16,10 +16,10 @@ namespace GameSystem.CardSystem.Main
         private QArray<BaseCardSo> _nowUseCards;
         private QArray<BaseCardSo> _nowHeadCards;
         private QArray<BaseCardSo> _obsCards;
-        
+
         private UnityAction _updateViewCallback;
-        private UnityAction _useCardCallback;
-        
+        private UnityAction<int> _useCardCallback;
+
         protected override void OnInit()
         {
             _nowUseCards = new QArray<BaseCardSo>(10);
@@ -35,13 +35,12 @@ namespace GameSystem.CardSystem.Main
             //监听使用卡牌事件
             EventsHandle.AddListenEvent<CardData>(EventsNameConst.SUCCESS_USE_CARD, (CardData) =>
             {
+                Debug.Log("出牌的序号为：" + CardData.headCardIdx);
+                Debug.Log("出牌的名字为：" + CardData.cardSo.cardName);
                 //丢弃卡牌
                 DiscardCards(CardData.headCardIdx);
                 //更新视图
-                if (_updateViewCallback != null)
-                {
-                    _updateViewCallback.Invoke();
-                }
+                UseCard(CardData.headCardIdx);
             });
         }
 
@@ -55,22 +54,10 @@ namespace GameSystem.CardSystem.Main
                 //丢弃卡牌
                 DiscardCards(CardData.headCardIdx);
                 //更新视图
-                if (_updateViewCallback != null)
-                {
-                    _updateViewCallback.Invoke();
-                }
+                UseCard(CardData.headCardIdx);
             });
         }
 
-        /// <summary>
-        /// 回合结束时回调事件
-        /// </summary>
-        /// <param name="callback"></param>
-        public void SetUpdateViewCallback(UnityAction callback)
-        {
-            _updateViewCallback = callback;
-        }
-        
         /// <summary>
         /// 加载玩家出战卡牌
         /// </summary>
@@ -133,7 +120,6 @@ namespace GameSystem.CardSystem.Main
             {
                 var cardSo = _nowHeadCards.RemoveAt(headCardIdx);
                 _obsCards.Add(cardSo);
-                _useCardCallback?.Invoke();
                 return;
             }
             while (_nowHeadCards.Count > 0)
@@ -150,9 +136,9 @@ namespace GameSystem.CardSystem.Main
         {
             //获取新的卡牌
             GetCardsFormUseCards(9);
-            
+
             //通知视图更新
-            _updateViewCallback?.Invoke();
+            UpdateView();
         }
 
         /// <summary>
@@ -162,9 +148,31 @@ namespace GameSystem.CardSystem.Main
         {
             //丢弃旧的卡牌
             DiscardCards();
-            
+
             //通知视图更新
+            UpdateView();
+        }
+
+        #region 回调
+        public void SetUpdateViewCallback(UnityAction callback)
+        {
+            _updateViewCallback = callback;
+        }
+
+        private void UpdateView()
+        {
             _updateViewCallback?.Invoke();
         }
+
+        public void SetUseCardCallback(UnityAction<int> callback)
+        {
+            _useCardCallback = callback;
+        }
+
+        private void UseCard(int headCardIdx)
+        {
+            _useCardCallback?.Invoke(headCardIdx);
+        }
+        #endregion
     }
 }
