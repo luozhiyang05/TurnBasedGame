@@ -46,6 +46,7 @@ namespace GameSystem.MVCTemplate
                 InitListener();
                 Model.BindListener();
                 
+                OnBeforeShow();
                 View.OnShow();
                 OnShowComplate();
                 
@@ -58,6 +59,8 @@ namespace GameSystem.MVCTemplate
         public abstract BaseView GetView();
 
         public abstract string GetPrefabPath();
+        
+        public abstract void OnBeforeShow();
 
         public abstract void OnShowComplate();
 
