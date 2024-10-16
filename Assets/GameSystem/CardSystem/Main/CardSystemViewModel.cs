@@ -15,7 +15,7 @@ namespace GameSystem.CardSystem.Main
     {
         private QArray<BaseCardSo> _nowUseCards;
         private QArray<BaseCardSo> _nowHeadCards;
-        private QArray<BaseCardSo> _obsCards;
+        private QArray<BaseCardSo> _discardCards;
 
         private UnityAction _updateViewCallback;
         private UnityAction<int> _useCardCallback;
@@ -24,7 +24,7 @@ namespace GameSystem.CardSystem.Main
         {
             _nowUseCards = new QArray<BaseCardSo>(10);
             _nowHeadCards = new QArray<BaseCardSo>(10);
-            _obsCards = new QArray<BaseCardSo>(10);
+            _discardCards = new QArray<BaseCardSo>(10);
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace GameSystem.CardSystem.Main
             if (_nowUseCards.Count < count)
             {
                 //将弃牌队列中的卡牌加入出战卡组
-                while (_obsCards.Count > 0)
+                while (_discardCards.Count > 0)
                 {
-                    var card = _obsCards.RemoveRange();
+                    var card = _discardCards.RemoveRange();
                     _nowUseCards.Add(card);
                 }
             }
@@ -115,9 +115,18 @@ namespace GameSystem.CardSystem.Main
         /// 获取弃牌堆中的卡牌
         /// </summary>
         /// <returns></returns>
-        public QArray<BaseCardSo> GetObsCards()
+        public QArray<BaseCardSo> GetDiscardCards()
         {
-            return _obsCards;
+            return _discardCards;
+        }
+
+        /// <summary>
+        /// 获取玩家所有卡牌
+        /// </summary>
+        /// <returns></returns>
+        public QArray<BaseCardSo> GetUserCards()
+        {
+            return _nowUseCards;
         }
 
         /// <summary>
@@ -128,13 +137,13 @@ namespace GameSystem.CardSystem.Main
             if (headCardIdx != -1)
             {
                 var cardSo = _nowHeadCards.RemoveAt(headCardIdx);
-                _obsCards.Add(cardSo);
+                _discardCards.Add(cardSo);
                 return;
             }
             while (_nowHeadCards.Count > 0)
             {
                 var card = _nowHeadCards.GetFromHead();
-                _obsCards.Add(card);
+                _discardCards.Add(card);
             }
         }
 
@@ -144,7 +153,7 @@ namespace GameSystem.CardSystem.Main
         public void UpdateHeadCardInSr()
         {
             //获取新的卡牌
-            GetCardsFormUseCards(9);
+            GetCardsFormUseCards(3);
 
             //通知视图更新
             UpdateView();

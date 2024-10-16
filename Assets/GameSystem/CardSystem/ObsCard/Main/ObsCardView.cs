@@ -50,6 +50,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
         private GameObject _cardGo;
         private QArray<BaseCardSo> _obsCards;
         private ObsCardViewModel _model;
+        private bool _isUseCards;
         /// <summary>
         /// 初始化,时机在Awake中
         /// </summary>
@@ -71,6 +72,11 @@ namespace GameSystem.CardSystem.ObsCard.Main
         {
             base.OnShow();
             _model = Model as ObsCardViewModel;
+
+            //文本    
+            Txt_title.text = _isUseCards ? "牌库" : "弃牌堆";
+            
+            //视图更新
             UpdateObsCardsView();
         }
 
@@ -84,9 +90,10 @@ namespace GameSystem.CardSystem.ObsCard.Main
             base.OnRelease();
         }
 
-        public void SetDataSource(QArray<BaseCardSo> obsCards)
+        public void SetDataSource(QArray<BaseCardSo> obsCards,bool isUseCards)
         {
             _obsCards = obsCards;
+            _isUseCards = isUseCards;
         }
 
         private void UpdateObsCardsView()
@@ -99,7 +106,8 @@ namespace GameSystem.CardSystem.ObsCard.Main
             for (int i = 1; i <= _obsCards.Count; i++)
             {
                 GameObject cardGo = i > cardCellCnt ? Instantiate(_cardGo,_content) : _content.GetChild(i).gameObject;
-                this.GetSystem<ICardSystemModule>().RenderCardInfo(cardGo.transform, _obsCards[i-1]);
+                var card =  _obsCards[i-1];
+                this.GetSystem<ICardSystemModule>().RenderCardInfo(cardGo.transform,card);
                 cardGo.SetActive(true);
             }
         }

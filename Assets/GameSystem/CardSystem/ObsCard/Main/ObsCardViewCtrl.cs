@@ -19,10 +19,12 @@ namespace GameSystem.CardSystem.ObsCard.Main
         }
         
         private QArray<BaseCardSo> obsCards;
+        private bool isUseCards;
         
         protected override void Init(params object[] args)
         {
             obsCards = args[0] as QArray<BaseCardSo>;
+            isUseCards = (bool)args[1];
         }
 
         protected override void InitListener()
@@ -35,7 +37,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
         public override void OnBeforeShow()
         {
             ObsCardView obsCardView = View as ObsCardView;
-            obsCardView.SetDataSource(obsCards.Clone());
+            obsCardView.SetDataSource(obsCards.Clone(),isUseCards);
             obsCards.Clear();
             obsCards = null;
         }

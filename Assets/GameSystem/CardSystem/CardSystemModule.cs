@@ -12,8 +12,13 @@ namespace GameSystem.CardSystem
     public interface ICardSystemModule : IModule
     {
         void ShowView();
-
-        void ShowObsCardsView(QArray<BaseCardSo> obsCards);
+        
+        /// <summary>
+        /// 打开观察卡牌视图
+        /// </summary>
+        /// <param name="obsCards"></param>
+        /// <param name="isUseCards">true为牌库，false为弃牌堆</param>
+        void ShowObsCardsView(QArray<BaseCardSo> obsCards,bool isUseCards);
         
         /// <summary>
         /// 回合结束丢弃手牌
@@ -77,9 +82,9 @@ namespace GameSystem.CardSystem
             _viewCtrl.ShowView();
         }
 
-        public void ShowObsCardsView(QArray<BaseCardSo> obsCards)
+        public void ShowObsCardsView(QArray<BaseCardSo> obsCards,bool isUseCards)
         {
-            var ctrl = new ObsCardViewCtrl(new object[] { obsCards.Clone() });
+            var ctrl = new ObsCardViewCtrl(new object[] { obsCards.Clone(), isUseCards });
             ctrl.ShowView();
         }
 
