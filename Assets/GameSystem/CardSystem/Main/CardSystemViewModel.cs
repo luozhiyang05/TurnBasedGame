@@ -112,6 +112,15 @@ namespace GameSystem.CardSystem.Main
         }
 
         /// <summary>
+        /// 获取弃牌堆中的卡牌
+        /// </summary>
+        /// <returns></returns>
+        public QArray<BaseCardSo> GetObsCards()
+        {
+            return _obsCards;
+        }
+
+        /// <summary>
         /// 丢弃卡牌到弃牌堆中
         /// </summary>
         public void DiscardCards(int headCardIdx = -1)

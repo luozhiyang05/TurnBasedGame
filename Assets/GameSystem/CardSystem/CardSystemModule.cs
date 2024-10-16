@@ -1,5 +1,6 @@
 using Framework;
 using GameSystem.CardSystem.Main;
+using GameSystem.CardSystem.ObsCard.Main;
 using GameSystem.CardSystem.Scripts;
 using Tool.Mono;
 using Tool.Utilities;
@@ -11,6 +12,8 @@ namespace GameSystem.CardSystem
     public interface ICardSystemModule : IModule
     {
         void ShowView();
+
+        void ShowObsCardsView(QArray<BaseCardSo> obsCards);
         
         /// <summary>
         /// 回合结束丢弃手牌
@@ -65,6 +68,12 @@ namespace GameSystem.CardSystem
         {
             _viewCtrl ??= new CardSystemViewCtrl();
             _viewCtrl.ShowView();
+        }
+
+        public void ShowObsCardsView(QArray<BaseCardSo> obsCards)
+        {
+            var ctrl = new ObsCardViewCtrl(new object[] { obsCards });
+            ctrl.ShowView();
         }
 
         public void UpdateHeadCardInEr()

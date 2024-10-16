@@ -15,10 +15,12 @@ namespace GameSystem.CardSystem.Main
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
 		public CButton Btn_exitRound;
+		public CButton Btn_obsCards;
 		public Text Txt_actCnt;
         protected override void AutoInitUI()
         {
 			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
+			Btn_obsCards = transform.Find("Main/Btn_obsCards").GetComponent<CButton>();
 			Txt_actCnt = transform.Find("Main/Txt_actCnt").GetComponent<Text>();
         }
 		#endregion 自动生成UI组件区域结束！
@@ -52,6 +54,10 @@ namespace GameSystem.CardSystem.Main
             Btn_exitRound.onClick.AddListener(() =>
             {
                 (_battleSystemModule.GetPlayerUnit() as Player)?.EndRound();
+            });
+            Btn_obsCards.onClick.AddListener(() =>
+            {
+                _cardSystemModule.ShowObsCardsView(_model.GetObsCards());
             });
 
             _cardsContent = transform.Find("Main/headCardsContent").gameObject;
