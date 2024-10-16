@@ -25,9 +25,13 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         protected override void RemoveListener()
         {
         }
+        public override void OnBeforeShow()
+        {
+            //一般做给View层传递数据
+        }
         public override void OnShowComplate()
         {
-            //一般做网络请求或给view层传递数据
+            //一般做网络请求
         }
     }
 }
