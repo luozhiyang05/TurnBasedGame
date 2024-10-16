@@ -1,3 +1,4 @@
+using System;
 using Framework;
 using GameSystem.BattleSystem;
 using GameSystem.BattleSystem.Scripts;
@@ -32,7 +33,7 @@ namespace GameSystem.CardSystem.Scripts
                 {
                     //获取鼠标光标下的Unit
                     GameObject currentObjectUnderCursor = hit.collider.gameObject;
-                    
+
                     //判断当前行动带你是否足够使用卡牌
                     var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
                     if (player.nowActPoint >= BaseCardSo.depletePoint)
@@ -44,6 +45,23 @@ namespace GameSystem.CardSystem.Scripts
                             headCardIdx = headCardIdx,
                             cardSo = BaseCardSo,
                             target = currentObjectUnderCursor
+                        });
+                        return;
+                    }
+                }
+                else
+                {
+                    //当拖拽距离大于350且当前卡牌可以自动使用，则自动使用
+                    var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
+                    if (BaseCardSo.canAutoUse && GetDargDistance() > 350f)
+                    {
+                        //使用卡牌的命令
+                        this.SendCmd<UseCardCmd, CardData>(new CardData()
+                        {
+                            user = player,
+                            headCardIdx = headCardIdx,
+                            cardSo = BaseCardSo,
+                            target = player.gameObject  //自动使用的卡牌目标为自己
                         });
                         return;
                     }

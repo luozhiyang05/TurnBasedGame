@@ -8,6 +8,7 @@ namespace GameSystem.CardSystem.Scripts
         [Header("卡牌基础信息")]
         public string cardName;
         public int depletePoint;
+        public bool canAutoUse = false;
         [Header("基础属性")]
         public int atk;
         public int armor;
