@@ -11,8 +11,7 @@ namespace Tips
             uiMgr.GetFromPool("ReConfirmTips", EuiLayer.TipsUI, (tips) =>
             {
                 var reConfirmTips = tips as ReConfirmTips;
-                reConfirmTips.SetData(title, content, comfirm, cancel);
-                reConfirmTips.Open();
+                reConfirmTips.Open(title, content, comfirm, cancel);
             });
         }
 
@@ -21,8 +20,7 @@ namespace Tips
             uiMgr.GetFromPool("ComfirmTips", EuiLayer.TipsUI, (tips) =>
             {
                 var confirmTips = tips as ComfirmTips;
-                confirmTips.SetData(title, content, comfirm);
-                confirmTips.Open();
+                confirmTips.Open(title, content, comfirm);
             });
         }
 
