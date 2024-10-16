@@ -19,12 +19,16 @@ namespace GameSystem.MVCTemplate
         {
             Init();
         }
+        protected BaseCtrl(params object[] args)
+        {
+            Init(args);
+        }
 
         protected abstract void InitListener();
 
         protected abstract void RemoveListener();
 
-        protected abstract void Init();
+        protected abstract void Init(params object[] args);
 
         public void ShowView()
         {
