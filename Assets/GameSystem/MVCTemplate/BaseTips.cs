@@ -8,7 +8,6 @@ namespace GameSystem.MVCTemplate
 {
     public abstract class BaseTips : BaseView
     {
-        protected BaseModel _baseModel;
         public UIAnimationSo UIAnimationSo => ResMgr.GetInstance().SyncLoad<UIAnimationSo>("UIAnimationSo");
         public GameObject main;
 
@@ -37,29 +36,27 @@ namespace GameSystem.MVCTemplate
             gameObject.SetActive(false);
             UIManager.GetInstance().EnterPool(this);
             if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
+            OnRelease();
         }
 
         void OnEnable()
         {
             Init();
         }
-        void Start()
-        {
-            OnShow();
-        }
+   
         protected abstract void Init();
-        public abstract override void OnShow();
-        public virtual void Open(BaseModel baseModel = null)
+        protected abstract void OnOpen(params object[] args);
+        public abstract override void OnRelease();
+        public virtual void Open(params object[] args)
         {
             if (useAudio)
             {
                 PlayAudio(EAudioType.Effect);
                 PlayAudio(EAudioType.Bgm);
             }
-            _baseModel = baseModel;
+            OnOpen(args);
             gameObject.SetActive(true);
             StartCoroutine(ShowAnimation());
-
         }
         public override void OnHide()
         {
@@ -73,12 +70,8 @@ namespace GameSystem.MVCTemplate
 
         protected override void BindModelListener(){}
         protected override void OnInit(){}
-
-        public override void OnRelease()
-        {
-            _baseModel = null;   
-        }
-
+        public override void OnShow(){}
+       
         /// <summary>
         /// 点击遮罩事件
         /// </summary>
