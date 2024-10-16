@@ -42,6 +42,9 @@ namespace GameSystem.BattleSystem.Main
         {
         }
 
-       
+        public override void OnBeforeShow()
+        {
+            
+        }
     }
 }

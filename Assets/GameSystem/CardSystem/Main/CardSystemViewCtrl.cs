@@ -36,5 +36,10 @@ namespace GameSystem.CardSystem.Main
         public override void OnShowComplate()
         {
         }
+
+        public override void OnBeforeShow()
+        {
+            
+        }
     }
 }
