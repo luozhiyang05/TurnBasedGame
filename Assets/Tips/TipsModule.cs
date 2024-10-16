@@ -1,4 +1,6 @@
+using GameSystem.CardSystem.Scripts;
 using Tool.UI;
+using Tool.Utilities;
 using UnityEngine.Events;
 
 namespace Tips
@@ -24,12 +26,12 @@ namespace Tips
             });
         }
 
-        public static void HistoryTips()
+        public static void HistoryTips(QArray<UseCardHistory> useCardsHistory)
         {
             uiMgr.GetFromPool("HistoryTips", EuiLayer.TipsUI, (tips) =>
             {
                 var historyTips = tips as HistoryTips;
-                historyTips.Open();
+                historyTips.Open(useCardsHistory);
             });
         }
     }

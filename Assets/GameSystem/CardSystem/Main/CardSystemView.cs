@@ -70,7 +70,7 @@ namespace GameSystem.CardSystem.Main
             });
             Btn_history.onClick.AddListener(() =>
             {
-                TipsModule.HistoryTips();
+                TipsModule.HistoryTips(_model.GetHistory());
             });
 
             _cardsContent = transform.Find("Main/headCardsContent").gameObject;

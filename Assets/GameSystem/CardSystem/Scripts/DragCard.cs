@@ -84,4 +84,11 @@ namespace GameSystem.CardSystem.Scripts
         public BaseCardSo cardSo;
         public GameObject target;
     }
+
+    public struct UseCardHistory
+    {
+        public string cardName;
+        public string userName;
+        public string targetName;
+    }
 }

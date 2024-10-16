@@ -44,6 +44,12 @@ namespace GameSystem.CardSystem
         void RenderCardInfo(Transform cardCell,BaseCardSo card);
 
         /// <summary>
+        /// 渲染历史记录
+        /// </summary>
+        /// <param name="cardData"></param>
+        void RenderHistoryInfo(Transform historyCell,UseCardHistory history);
+
+        /// <summary>
         /// 选择卡牌时的动画
         /// </summary>
         void SelectCardAction(Transform trans);
@@ -163,6 +169,12 @@ namespace GameSystem.CardSystem
         {
             cardCell.Find("bg/txt_name").GetComponent<Text>().text = card.name;
             cardCell.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
+        }
+        
+        public void RenderHistoryInfo(Transform historyCell,UseCardHistory history)
+        {
+            var txtDesc = historyCell.Find("txt_desc").GetComponent<Text>();
+            txtDesc.text = $"{history.userName} 对 {history.targetName} 使用了{history.cardName} 卡牌";
         }
 
         public void SelectCardAction(Transform trans)

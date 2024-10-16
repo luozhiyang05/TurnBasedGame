@@ -1,8 +1,5 @@
-using System;
-using System.Transactions;
 using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
-using Tool.Mono;
 using Tool.ResourceMgr;
 using Tool.Utilities;
 using Tool.Utilities.Events;
@@ -11,11 +8,14 @@ using UnityEngine.Events;
 
 namespace GameSystem.CardSystem.Main
 {
+
+    
     public class CardSystemViewModel : BaseModel
     {
         private QArray<BaseCardSo> _nowUseCards;
         private QArray<BaseCardSo> _nowHeadCards;
         private QArray<BaseCardSo> _discardCards;
+        private QArray<UseCardHistory> _usedCardsHistory;
 
         private UnityAction _updateViewCallback;
         private UnityAction<int> _useCardCallback;
@@ -25,6 +25,7 @@ namespace GameSystem.CardSystem.Main
             _nowUseCards = new QArray<BaseCardSo>(10);
             _nowHeadCards = new QArray<BaseCardSo>(10);
             _discardCards = new QArray<BaseCardSo>(10);
+            _usedCardsHistory = new QArray<UseCardHistory>(10);
         }
 
         /// <summary>
@@ -37,6 +38,13 @@ namespace GameSystem.CardSystem.Main
             {
                 Debug.Log("出牌的序号为：" + CardData.headCardIdx);
                 Debug.Log("出牌的名字为：" + CardData.cardSo.cardName);
+                //记录历史
+                _usedCardsHistory.Add(new UseCardHistory
+                {
+                    cardName = CardData.cardSo.cardName,
+                    userName = CardData.user.name,
+                    targetName = CardData.target.name
+                });
                 //丢弃卡牌
                 DiscardCards(CardData.headCardIdx);
                 //更新视图
@@ -103,6 +111,48 @@ namespace GameSystem.CardSystem.Main
         }
 
         /// <summary>
+        /// 丢弃卡牌到弃牌堆中
+        /// </summary>
+        public void DiscardCards(int headCardIdx = -1)
+        {
+            if (headCardIdx != -1)
+            {
+                var cardSo = _nowHeadCards.RemoveAt(headCardIdx);
+                _discardCards.Add(cardSo);
+                return;
+            }
+            while (_nowHeadCards.Count > 0)
+            {
+                var card = _nowHeadCards.GetFromHead();
+                _discardCards.Add(card);
+            }
+        }
+
+        /// <summary>
+        /// 回合开始时，更新玩家手牌
+        /// </summary>
+        public void UpdateHeadCardInSr()
+        {
+            //获取新的卡牌
+            GetCardsFormUseCards(10);
+
+            //通知视图更新
+            UpdateView();
+        }
+
+        /// <summary>
+        /// 回合结束时，丢弃玩家手牌
+        /// </summary>
+        public void UpdateHeadCardInEr()
+        {
+            //丢弃旧的卡牌
+            DiscardCards();
+
+            //通知视图更新
+            UpdateView();
+        }
+
+              /// <summary>
         /// 获取目前玩家的手牌用于view展示
         /// </summary>
         /// <returns></returns>
@@ -130,45 +180,12 @@ namespace GameSystem.CardSystem.Main
         }
 
         /// <summary>
-        /// 丢弃卡牌到弃牌堆中
+        /// 获取使用卡牌的历史记录
         /// </summary>
-        public void DiscardCards(int headCardIdx = -1)
+        /// <returns></returns>
+        public QArray<UseCardHistory> GetHistory()
         {
-            if (headCardIdx != -1)
-            {
-                var cardSo = _nowHeadCards.RemoveAt(headCardIdx);
-                _discardCards.Add(cardSo);
-                return;
-            }
-            while (_nowHeadCards.Count > 0)
-            {
-                var card = _nowHeadCards.GetFromHead();
-                _discardCards.Add(card);
-            }
-        }
-
-        /// <summary>
-        /// 回合开始时，更新玩家手牌
-        /// </summary>
-        public void UpdateHeadCardInSr()
-        {
-            //获取新的卡牌
-            GetCardsFormUseCards(3);
-
-            //通知视图更新
-            UpdateView();
-        }
-
-        /// <summary>
-        /// 回合结束时，丢弃玩家手牌
-        /// </summary>
-        public void UpdateHeadCardInEr()
-        {
-            //丢弃旧的卡牌
-            DiscardCards();
-
-            //通知视图更新
-            UpdateView();
+            return _usedCardsHistory;
         }
 
         #region 回调
