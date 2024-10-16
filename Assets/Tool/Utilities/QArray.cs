@@ -334,7 +334,7 @@ namespace Tool.Utilities
             var newArray = new QArray<T>(Count);
             for (var i = 0; i < Count; i++)
             {
-                newArray.Add(_array[i]);
+                newArray.Add(this[i]);
             }
 
             return newArray;
