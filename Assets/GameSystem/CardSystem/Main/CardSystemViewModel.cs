@@ -83,6 +83,12 @@ namespace GameSystem.CardSystem.Main
                 var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "普通防御卡");
                 _nowUseCards.Add(loadCard);
             }
+
+              for (int i = 0; i < 5; i++)
+            {
+                var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "攻击防御卡");
+                _nowUseCards.Add(loadCard);
+            }
         }
 
         /// <summary>
