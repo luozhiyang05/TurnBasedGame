@@ -1,19 +1,23 @@
+using Framework;
 using GameSystem.BattleSystem.Scripts;
 using UnityEngine;
 
 namespace GameSystem.CardSystem.Scripts
 {
-    public abstract class BaseCardSo : ScriptableObject
+    public abstract class BaseCardSo : ScriptableObject,ICanSendCmd
     {
         [Header("卡牌基础信息")]
         public string cardName;
         public int depletePoint;
+        public bool canAutoUse = false;
         [Header("基础属性")]
         public int atk;
         public int armor;
         [Header("卡片描述")]
         [TextArea]
         public string cardDesc;
+
+        public IMgr Ins => Global.GetInstance();
 
         public void UseCard(AbsUnit self, AbsUnit target)
         {

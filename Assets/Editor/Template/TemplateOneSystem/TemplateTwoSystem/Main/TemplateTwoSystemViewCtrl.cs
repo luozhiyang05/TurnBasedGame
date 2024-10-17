@@ -10,8 +10,14 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         public override string GetPrefabPath() => "TemplateTwoSystemView";
         public override BaseModel GetModel() => Model ??= new TemplateTwoSystemViewModel();
         public override BaseView GetView() => View;
-        protected override void Init()
+        public TemplateTwoSystemViewCtrl() : base() { }
+        public TemplateTwoSystemViewCtrl(params object[] args) : base(args)
         {
+
+        }
+        protected override void Init(params object[] args)
+        {
+
         }
         protected override void InitListener()
         {
@@ -19,9 +25,13 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         protected override void RemoveListener()
         {
         }
+        public override void OnBeforeShow()
+        {
+            //一般做给View层传递数据
+        }
         public override void OnShowComplate()
         {
-            //一般做网络请求或给view层传递数据
+            //一般做网络请求
         }
     }
 }

@@ -16,8 +16,16 @@ namespace GameSystem.CardSystem.Main
             
         }
 
-        protected override void Init()
+        public CardSystemViewCtrl() : base()
         {
+        }
+        public CardSystemViewCtrl(params object[] args) : base(args)
+        {
+        }
+
+        protected override void Init(params object[] args)
+        {
+            
         }
 
         public override BaseModel GetModel()=>Model ??= new CardSystemViewModel();
@@ -27,6 +35,11 @@ namespace GameSystem.CardSystem.Main
         public override string GetPrefabPath()=>"CardSystemView";
         public override void OnShowComplate()
         {
+        }
+
+        public override void OnBeforeShow()
+        {
+            
         }
     }
 }

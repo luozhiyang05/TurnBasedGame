@@ -19,11 +19,18 @@ namespace GameSystem.BattleSystem.Main
 
         protected override void RemoveListener()
         {
-            
+
+        }
+        public BattleSystemViewCtrl() : base()
+        {
+        }
+        public BattleSystemViewCtrl(params object[] args) : base(args)
+        {
         }
 
-        protected override void Init()
+        protected override void Init(params object[] args)
         {
+           
         }
 
         public override BaseModel GetModel() => Model ??= new BattleSystemViewModel();
@@ -33,6 +40,11 @@ namespace GameSystem.BattleSystem.Main
 
         public override void OnShowComplate()
         {
+        }
+
+        public override void OnBeforeShow()
+        {
+            
         }
     }
 }

@@ -3,6 +3,7 @@ using GameSystem.BattleSystem;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
+using Tips;
 using Tool.Mono;
 using Tool.Utilities;
 using UIComponents;
@@ -14,12 +15,18 @@ namespace GameSystem.CardSystem.Main
     public class CardSystemView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
-		public CButton Btn_exitRound;
 		public Text Txt_actCnt;
+		public CButton Btn_exitRound;
+		public CButton Btn_obsCards;
+		public CButton Btn_history;
+		public CButton Btn_useCards;
         protected override void AutoInitUI()
         {
-			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
 			Txt_actCnt = transform.Find("Main/Txt_actCnt").GetComponent<Text>();
+			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
+			Btn_obsCards = transform.Find("Main/Btn_obsCards").GetComponent<CButton>();
+			Btn_history = transform.Find("Main/Btn_history").GetComponent<CButton>();
+			Btn_useCards = transform.Find("Main/Btn_useCards").GetComponent<CButton>();
         }
 		#endregion 自动生成UI组件区域结束！
 
@@ -29,16 +36,14 @@ namespace GameSystem.CardSystem.Main
         protected override void BindModelListener()
         {
             _model.SetUpdateViewCallback(UpdateView);
+            _model.SetUseCardCallback(UpdateHeadCard);
         }
 
         private IBattleSystemModule _battleSystemModule;
         private ICardSystemModule _cardSystemModule;
         private CardSystemViewModel _model;
-        
         private GameObject _cardTemp;
         private GameObject _cardsContent;
-        private HorizontalLayoutGroup _cardsLayout;
-
         /// <summary>
         /// 初始化
         /// </summary>
@@ -55,12 +60,22 @@ namespace GameSystem.CardSystem.Main
             {
                 (_battleSystemModule.GetPlayerUnit() as Player)?.EndRound();
             });
+            Btn_obsCards.onClick.AddListener(() =>
+            {
+                _cardSystemModule.ShowObsCardsView(_model.GetDiscardCards(),false);
+            });
+            Btn_useCards.onClick.AddListener(() =>
+            {
+                _cardSystemModule.ShowObsCardsView(_model.GetUserCards(),true);
+            });
+            Btn_history.onClick.AddListener(() =>
+            {
+                TipsModule.HistoryTips(_model.GetHistory());
+            });
 
             _cardsContent = transform.Find("Main/headCardsContent").gameObject;
             _cardTemp = _cardsContent.transform.GetChild(0).gameObject;
-            _cardsLayout = _cardsContent.GetComponent<HorizontalLayoutGroup>();
         }
-
 
         public override void OnShow()
         {
@@ -94,34 +109,28 @@ namespace GameSystem.CardSystem.Main
             }
             _cardsGo.Clear();
         }
-        
+
+        /// <summary>
+        /// 出牌后删除一张手牌go
+        /// </summary>
+        /// <param name="headCardIdx"></param>
+        private void DestroyOneCardGo(int headCardIdx)
+        {
+            var cardGo = _cardsGo.Remove(_cardsGo[headCardIdx]);
+            Destroy(cardGo);
+        }
+
         /// <summary>
         /// 根据玩家手牌数，生成卡牌go
         /// </summary>
         private void CreateCardsGo()
         {
-            //删除所有卡牌Go
-            DestroyAllCardsGo();
-            _cardsLayout.enabled = true;
             //根据手牌牌数生成按钮
             for (int i = 0; i < _headCardQArray.Count; i++)
             {
-                var card = _headCardQArray[i];
-
                 var cardGo = Instantiate(_cardTemp, _cardsContent.transform);
-                var dc = cardGo.gameObject.AddComponent<DragCard>();
-                dc.headCardIdx = i;
-                dc.BaseCardSo = card;
-                cardGo.transform.Find("bg/txt_name").GetComponent<Text>().text = card.cardName;
-                cardGo.transform.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
-                cardGo.transform.SetParent(_cardsContent.transform);
-                cardGo.gameObject.SetActive(true);
                 _cardsGo.Add(cardGo);
             }
-            LayoutRebuilder.ForceRebuildLayoutImmediate(_cardsContent.transform as RectTransform);
-            ActionKit.GetInstance().DelayTime(0.05f,()=>{
-                _cardsLayout.enabled = false;
-            });
         }
         
         /// <summary>
@@ -138,13 +147,24 @@ namespace GameSystem.CardSystem.Main
         /// </summary>
         private void UpdateView()
         {
-            //获取手牌，更新视图
             GetHeadCards();
+            DestroyAllCardsGo();
             CreateCardsGo();
-            //更新行动点
+            _cardSystemModule.RenderHandCards(_cardsGo, _headCardQArray, _cardsContent.transform);
             UpdateActCnt();
         }
-
+        
+        /// <summary>
+        /// 出牌后更新玩家手牌视图
+        /// </summary>
+        /// <param name="headCardIdx"></param>
+        private void UpdateHeadCard(int headCardIdx)
+        {
+            GetHeadCards();
+            DestroyOneCardGo(headCardIdx);
+            _cardSystemModule.RenderHandCards(_cardsGo,_headCardQArray,_cardsContent.transform);
+            UpdateActCnt();
+        }
 
         public override void OnHide()
         {

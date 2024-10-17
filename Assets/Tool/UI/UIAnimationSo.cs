@@ -9,5 +9,7 @@ namespace Tool.UI
         
         [Header("动画曲线")]
         public AnimationCurve tipsAnimCurve;
+        [Header("手牌曲线")]
+        public AnimationCurve handCardAnimCurve;
    }
 }

@@ -87,23 +87,21 @@ namespace Tool.Mono
             public Action Action;
             public float durationTime;
         }
-        private string _queName;
+        private GameObject _self;
         private QArray<ActInfo> _actQueue = new QArray<ActInfo>();
-        private Action _killCallback;
         private bool _killAuto = true;
         private bool _isExecute = false;
         private float _time = 0f;
         private int _nowIdx = 0;
         
-        public void Init(Action kill,string queName)
+        public void Init(GameObject self)
         {
-             _killCallback = kill;
-            _queName = queName;
+            _self = self;
         }
 
-        public string GetQueName()
+        public GameObject GetSelf()
         {
-            return _queName;
+            return _self;
         }
 
         /// <summary>
@@ -145,7 +143,12 @@ namespace Tool.Mono
         /// <summary>
         /// 销毁
         /// </summary>
-        public void Kill() => _killCallback();
+        public void Kill()
+        {
+            PublicMonoKit.GetInstance().OnUnRegisterUpdate(Invoke);
+            _actQueue.Clear();
+            _actQueue = null;
+        }
 
         /// <summary>
         /// 判断是否执行
@@ -161,7 +164,7 @@ namespace Tool.Mono
                 _nowIdx = 0;
                 _isExecute = false;
                 PublicMonoKit.GetInstance().OnUnRegisterUpdate(Invoke);
-                if(_killAuto) _killCallback();
+                ActionKit.GetInstance().KillActQue(_self);
                 return;
             }
 
@@ -234,13 +237,25 @@ namespace Tool.Mono
             }
         }
 
-        public ActQueue CreateActQue(string queName, Action action, float durationTime)
+        public ActQueue CreateActQue(GameObject self, Action action, float durationTime)
         {
             var actQue = new ActQueue();
-            actQue.Init(() => _actQueueList.Remove(actQue), queName);
+            actQue.Init(self);
             actQue.Append(action, durationTime);
             _actQueueList.Add(actQue);
             return actQue;
+        }
+
+        public void KillActQue(GameObject self)
+        {
+            var remQue = _actQueueList.FindValue((value) => value.GetSelf() == self);
+            if (remQue != null)
+            {
+                remQue.Kill();
+                _actQueueList.Remove(remQue);
+                return;
+            }
+            throw new Exception("没有找到对应的ActQueue");
         }
     }
 }
