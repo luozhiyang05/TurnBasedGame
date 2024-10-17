@@ -1,9 +1,10 @@
+using Framework;
 using GameSystem.BattleSystem.Scripts;
 using UnityEngine;
 
 namespace GameSystem.CardSystem.Scripts
 {
-    public abstract class BaseCardSo : ScriptableObject
+    public abstract class BaseCardSo : ScriptableObject,ICanSendCmd
     {
         [Header("卡牌基础信息")]
         public string cardName;
@@ -15,6 +16,8 @@ namespace GameSystem.CardSystem.Scripts
         [Header("卡片描述")]
         [TextArea]
         public string cardDesc;
+
+        public IMgr Ins => Global.GetInstance();
 
         public void UseCard(AbsUnit self, AbsUnit target)
         {

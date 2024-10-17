@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Framework;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.BattleSystem.Scripts.Effect;
+using GameSystem.CardSystem.Scripts.Cmd;
 using UnityEngine;
 
 namespace GameSystem.CardSystem.Scripts.DefenceCard
@@ -13,11 +15,13 @@ namespace GameSystem.CardSystem.Scripts.DefenceCard
 
         protected override void OnUseCard(AbsUnit self, AbsUnit target)
         {
-            defenceEff.Init(self,target,armor);
-            self.AddEffect(defenceEff);
-            
-            target.armor.Value += armor;
-            Debug.LogWarning($"{self.gameObject.name}对{target.gameObject.name}增加{armor}点护甲");
+            this.SendCmd<DefCmd, DefData>(new DefData
+            {
+                self = self,
+                target = target,
+                defenceEffect = defenceEff,
+                armor = armor
+            });
         }
     }
 }
