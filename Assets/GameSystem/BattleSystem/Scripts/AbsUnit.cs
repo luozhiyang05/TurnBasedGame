@@ -20,22 +20,22 @@ namespace GameSystem.BattleSystem.Scripts
         public ValueBindery<int> armor = new ValueBindery<int>(); //护盾
         private IBattleSystemModule _battleSystemModule;
         private readonly QArray<BaseEffect> _effQueue = new QArray<BaseEffect>(1);
-        private Image _imgHealth;
+        private Slider _hpBar;
         private Text _txtArmor;
 
         public virtual void Awake()
         {
-            _imgHealth = transform.Find("UnitCanvas/healthBar/img_Health").GetComponent<Image>();
-            _txtArmor = transform.Find("UnitCanvas/img_armor/txt_cnt").GetComponent<Text>();
+            _hpBar = transform.Find("body/hp_bar").GetComponent<Slider>();
+            _txtArmor = transform.Find("body/armor/txt_armor").GetComponent<Text>();
 
             nowHp.Value = maxHp.Value;
-            _imgHealth.fillAmount = (float)nowHp.Value / maxHp.Value;
+            _hpBar.value = (float)nowHp.Value / maxHp.Value;
             _txtArmor.text = armor.Value.ToString();
 
             //绑定事件
             nowHp.OnRegister(value =>
             {
-                _imgHealth.fillAmount = (float)value / maxHp.Value;
+                _hpBar.value = (float)value / maxHp.Value;
                 if (IsDie())
                 {
                     //分发事件，单位死亡
