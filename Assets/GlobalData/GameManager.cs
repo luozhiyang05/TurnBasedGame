@@ -6,4 +6,10 @@ namespace GlobalData
         public const float ActInternalTime = 1f;
         public const float BulletScreenTime = 1f;
     }
+
+    public enum EnemyType
+    {
+        ENEMY_1,
+        ENEMY_2
+    }
 }

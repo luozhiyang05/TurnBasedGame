@@ -28,15 +28,35 @@ namespace GameSystem.CardSystem.Scripts
             if (Camera.main != null)
             {
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
-                RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+                //RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
 
                 PointerEventData pointerEvent = new(EventSystem.current);
                 pointerEvent.position = Input.mousePosition;
                 List<RaycastResult> raycastResults = new List<RaycastResult>();
-                EventSystem.current.RaycastAll(pointerEvent,raycastResults);
-                if (raycastResults.Count>0)
+                EventSystem.current.RaycastAll(pointerEvent, raycastResults);
+                if (raycastResults.Count > 0)
                 {
                     Debug.Log(raycastResults[0].gameObject.name);
+                    if (raycastResults[0].gameObject.name.Equals("img_body"))
+                    {
+                        //获取鼠标光标下的Unit
+                        GameObject currentObjectUnderCursor = raycastResults[0].gameObject;
+
+                        //判断当前行动带你是否足够使用卡牌
+                        var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
+                        if (player.nowActPoint >= BaseCardSo.depletePoint)
+                        {
+                            //使用卡牌的命令
+                            this.SendCmd<UseCardCmd, CardData>(new CardData()
+                            {
+                                user = player,
+                                headCardIdx = headCardIdx,
+                                cardSo = BaseCardSo,
+                                target = currentObjectUnderCursor.transform.parent.gameObject
+                            });
+                            return;
+                        }
+                    }
                 }
 
                 // if (hit.collider != null)
@@ -54,7 +74,7 @@ namespace GameSystem.CardSystem.Scripts
                 //             user = player,
                 //             headCardIdx = headCardIdx,
                 //             cardSo = BaseCardSo,
-                //             target = currentObjectUnderCursor
+                //             target = currentObjectUnderCursor.transform.parent.gameObject
                 //         });
                 //         return;
                 //     }

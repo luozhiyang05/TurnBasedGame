@@ -25,8 +25,8 @@ namespace GameSystem.BattleSystem.Scripts
 
         public virtual void Awake()
         {
-            _hpBar = transform.Find("body/hp_bar").GetComponent<Slider>();
-            _txtArmor = transform.Find("body/armor/txt_armor").GetComponent<Text>();
+            _hpBar = transform.Find("hp_bar").GetComponent<Slider>();
+            _txtArmor = transform.Find("armor/txt_armor").GetComponent<Text>();
 
             nowHp.Value = maxHp.Value;
             _hpBar.value = (float)nowHp.Value / maxHp.Value;

@@ -1,4 +1,5 @@
 using System;
+using Assets.GameSystem.BattleSystem.Scripts;
 using Framework;
 using GameSystem.BattleSystem.Main;
 using GameSystem.BattleSystem.Scripts;
@@ -22,19 +23,19 @@ namespace GameSystem.BattleSystem
     }
 
     public interface IBattleSystemModule : IModule
-    {    
+    {
         /// <summary>
         /// 获取玩家单位
         /// </summary>
         /// <returns></returns>
         AbsUnit GetPlayerUnit();
-        
+
         /// <summary>
         /// 弹幕时间
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="screenInfo"></param>
-        void BulletScreenTimeDelegate(Action callback,string screenInfo);
+        void BulletScreenTimeDelegate(Action callback, string screenInfo);
 
         /// <summary>
         /// 行动间隔时间
@@ -56,23 +57,26 @@ namespace GameSystem.BattleSystem
         /// <summary>
         /// 开始游戏
         /// </summary>
-        /// <param name="player"></param>
-        /// <param name="enemies"></param>
-        void ShowView(AbsUnit player, QArray<AbsUnit> enemies);
+        void ShowView(Level level);
+
+        /// <summary>
+        /// 切换至玩家回合
+        /// </summary>
+        void SwitchPlayerTurn();
     }
 
     public class BattleSystemModule : AbsModule, IBattleSystemModule
     {
         private BattleSystemViewCtrl _viewCtrl;
 
-        public void ShowView(AbsUnit player, QArray<AbsUnit> enemies)
+        public void ShowView(Level level)
         {
-            //设置当前回合为玩家回合
-            SwitchPlayerTurn();
-
             //打开试图
-            _viewCtrl ??= new BattleSystemViewCtrl(player, enemies);
+            _viewCtrl ??= new BattleSystemViewCtrl(level);
             _viewCtrl.ShowView();
+
+            //设置当前回合为玩家回合
+            // SwitchPlayerTurn();
         }
 
         private ETurnBased _nowTurnBased = ETurnBased.Start; //当前状态枚举
@@ -97,14 +101,14 @@ namespace GameSystem.BattleSystem
             }
         }
 
-        private void SwitchPlayerTurn()
+        public void SwitchPlayerTurn()
         {
             //弹幕时间
             BulletScreenTimeDelegate(() =>
             {
                 _nowTurnBased = ETurnBased.PlayerTurn;
                 (_viewCtrl.GetModel() as BattleSystemViewModel).PlayerStartRoundSettle();
-            },"玩家回合开始");
+            }, "玩家回合开始");
         }
 
         private void SwitchEnemyTurn()
@@ -114,7 +118,7 @@ namespace GameSystem.BattleSystem
             {
                 _nowTurnBased = ETurnBased.EnemyTurn;
                 (_viewCtrl.GetModel() as BattleSystemViewModel).EnemyStartRoundSettle();
-            },"敌人回合开始");
+            }, "敌人回合开始");
         }
 
         private void JudgeIsHaveMoreEnemies()
@@ -131,7 +135,7 @@ namespace GameSystem.BattleSystem
         }
 
 
-        public void BulletScreenTimeDelegate(Action callback,string screenInfo)
+        public void BulletScreenTimeDelegate(Action callback, string screenInfo)
         {
             Debug.Log($"（弹幕：{screenInfo}）..........");
             ActionKit.GetInstance().DelayTime(GameManager.BulletScreenTime, callback);
@@ -151,7 +155,8 @@ namespace GameSystem.BattleSystem
 
         public AbsUnit GetPlayerUnit()
         {
-           return (_viewCtrl.GetModel() as BattleSystemViewModel).GetPlayerUnit();
+            return (_viewCtrl.GetModel() as BattleSystemViewModel).GetPlayerUnit();
         }
+
     }
 }

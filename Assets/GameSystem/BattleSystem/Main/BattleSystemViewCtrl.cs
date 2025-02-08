@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Assets.GameSystem.BattleSystem.Scripts;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.MVCTemplate;
 using Tool.UI;
@@ -9,10 +10,6 @@ namespace GameSystem.BattleSystem.Main
 {
     public class BattleSystemViewCtrl : BaseCtrl
     {
-        public BattleSystemViewCtrl(AbsUnit player, QArray<AbsUnit> enemies) : base()
-        {
-            (GetModel() as BattleSystemViewModel).SetAbsUnit(player, enemies);
-        }
         protected override void InitListener()
         {
         }
@@ -30,7 +27,7 @@ namespace GameSystem.BattleSystem.Main
 
         protected override void Init(params object[] args)
         {
-           
+           (GetModel() as BattleSystemViewModel).SetLevel(args[0] as Level);
         }
 
         public override BaseModel GetModel() => Model ??= new BattleSystemViewModel();
