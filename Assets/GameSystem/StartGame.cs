@@ -5,6 +5,7 @@ using GameSystem.BattleSystem;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.BattleSystem.Scripts.Unit;
 using GameSystem.CardSystem;
+using GameSystem.MenuSystem;
 using Tool.ResourceMgr;
 using Tool.UI;
 using Tool.Utilities;
@@ -16,19 +17,20 @@ namespace GameSystem
     {
         private void Start()
         {
-            // var enemys = new QArray<AbsUnit>(2);
-            // enemys.Add(ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Enemy_1").GetComponent<Enemy>());
-            // // enemys.Add(ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Enemy_2").GetComponent<Enemy>());
-            // var player = ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Player").GetComponent<Player>();
+            // // var enemys = new QArray<AbsUnit>(2);
+            // // enemys.Add(ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Enemy_1").GetComponent<Enemy>());
+            // // // enemys.Add(ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Enemy_2").GetComponent<Enemy>());
+            // // var player = ResMgr.GetInstance().SyncLoad<GameObject>("Unit/Player").GetComponent<Player>();
 
-            var levelsSo = ResMgr.GetInstance().SyncLoad<LevelsSo>("Waves/关卡设置");
-            var level_1 = levelsSo.GetLevelData(1);
+            // var levelsSo = ResMgr.GetInstance().SyncLoad<LevelsSo>("Waves/关卡设置");
+            // var level_1 = levelsSo.GetLevelData(1);
 
-            //打开战斗view
-            this.GetSystem<IBattleSystemModule>().ShowView(level_1);
+            // //打开战斗view
+            // this.GetSystem<IBattleSystemModule>().ShowView(level_1);
 
-            //打开卡组vie
-            this.GetSystem<ICardSystemModule>().ShowView();
+            // //打开卡组vie
+            // this.GetSystem<ICardSystemModule>().ShowView();
+            this.GetSystem<IMenuSystemModule>().ShowView();
         }
 
         private void Update()
