@@ -338,7 +338,29 @@ namespace Tool.UI
             Object.Destroy(view.gameObject);
             Debug.LogWarning("<size=15><color=#9400D3>回收："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
         }
-        
+
+        /// <summary>
+        /// 关闭某个Layer曾所有View
+        /// </summary>
+        /// <param name="euiLayer"></param>
+        public void CloseAllViewByLayer(EuiLayer euiLayer)
+        {
+            var viewQArray = new QArray<BaseView>();
+            var layerTrans = GetFatherLayer(euiLayer);
+            for (int i = layerTrans.childCount-1; i >=0; i--)   //从最顶层View开始关闭
+            {
+                var child = layerTrans.GetChild(i);
+                if (child.TryGetComponent<BaseView>(out BaseView baseView))
+                {
+                    viewQArray.Add(baseView);
+                }
+            }
+            for (int i = 0; i < viewQArray.Count; i++)
+            {
+                viewQArray[i].OnHide();
+            }
+        }
+
         /// <summary>
         /// 初始化view
         /// </summary>
