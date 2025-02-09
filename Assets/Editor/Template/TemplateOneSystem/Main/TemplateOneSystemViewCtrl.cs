@@ -1,9 +1,6 @@
 using GameSystem.MVCTemplate;
-using Tool.UI;
-using UnityEngine;
-using UnityEngine.Events;
 
-namespace GameSystem.TemplateOneSystem.Main
+namespace Assets.GameSystem.TemplateOneSystem.Main
 {
     public class TemplateOneSystemViewCtrl : BaseCtrl
     {
