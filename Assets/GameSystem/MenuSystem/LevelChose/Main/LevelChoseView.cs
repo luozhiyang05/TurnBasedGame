@@ -1,5 +1,6 @@
 using Framework;
 using GameSystem.MVCTemplate;
+using Tool.UI;
 using UIComponents;
 using UnityEngine;
 using UnityEngine.UI;
@@ -116,6 +117,8 @@ namespace GameSystem.MenuSystem.LevelChose.Main
                 //开始游戏
                 var menuSystemModule = this.GetSystem<IMenuSystemModule>();
                 Debug.Log($"选择了id为{menuSystemModule.GetCharacterId()}的角色和id为{menuSystemModule.GetLevelId()}的关卡");
+                // 关闭Menu曾所有View
+                UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.MenuUI);
             }
         }
         private void Close()
