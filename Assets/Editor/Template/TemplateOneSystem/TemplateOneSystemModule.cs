@@ -1,7 +1,7 @@
+using Assets.GameSystem.TemplateOneSystem.Main;
 using Framework;
-using GameSystem.TemplateOneSystem.Main;
 
-namespace GameSystem.TemplateOneSystem
+namespace Assets.GameSystem.TemplateOneSystem
 {
     public interface ITemplateOneSystemModule: IModule
     {

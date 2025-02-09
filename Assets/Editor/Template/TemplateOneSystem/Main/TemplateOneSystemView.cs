@@ -1,10 +1,6 @@
-using System.ComponentModel;
-using System;
-using Framework;
 using GameSystem.MVCTemplate;
-using UnityEngine.UI;
 
-namespace GameSystem.TemplateOneSystem.Main
+namespace Assets.GameSystem.TemplateOneSystem.Main
 {
     public class TemplateOneSystemView : BaseView
     {

@@ -30,9 +30,9 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void Init(params object[] args);
 
-        public void ShowView()
+        public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI)
         {
-            UIManager.GetInstance().GetFromPool(GetPrefabPath(), EuiLayer.GameUI, (BaseView) =>
+            UIManager.GetInstance().GetFromPool(GetPrefabPath(), euiLayer, (BaseView) =>
             {
                 if (!IsLoad)
                 {
