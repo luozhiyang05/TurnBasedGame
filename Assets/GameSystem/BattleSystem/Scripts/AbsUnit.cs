@@ -82,7 +82,10 @@ namespace GameSystem.BattleSystem.Scripts
         #endregion
 
         #region 回合逻辑
-        //回合开始结算
+        /// <summary>
+        /// 回合开始时，结算单位身上的效果
+        /// 具体单位大类重写，可添加额外的 回合开始时 的逻辑
+        /// </summary>
         public virtual void StartRoundSettle()
         {
             //对效果结算
@@ -98,28 +101,42 @@ namespace GameSystem.BattleSystem.Scripts
             }
         }
 
-        //回合开始结算结束
+        /// <summary>
+        /// 回合开始时的逻辑结算结束，间隔时间后 单位行动
+        /// </summary>
         protected void AfterStartRoundSettle()
         {
             //行动间隔
-            _battleSystemModule.ActInternalTimeDelegate(Action);
+            _battleSystemModule.ActInternalTimeDelegate(() =>
+            {
+                //弹幕时间
+                _battleSystemModule.BulletScreenTimeDelegate(Action, "开始行动");
+            });
         }
 
-        //行动
+        /// <summary>
+        /// 抽象 单位行动 方法
+        /// 需要子类重写
+        /// </summary>
         public abstract void Action();
 
-        //行动结束
+        /// <summary>
+        /// 单位行动 结束，间隔后退出回合
+        /// </summary>
         protected void AfterAction()
         {
             //行动间隔
             _battleSystemModule.ActInternalTimeDelegate(() =>
             {
                 //弹幕时间
-                _battleSystemModule.BulletScreenTimeDelegate(ExitRound, "回合结束");
+                _battleSystemModule.BulletScreenTimeDelegate(ExitRound, "行动结束");
             });
         }
 
-        //回合结束
+        /// <summary>
+        /// 退出回合时，结算单位身上的效果
+        /// 具体单位类可以重写，可添加额外 退出回合时 逻辑
+        /// </summary>
         protected virtual void ExitRound()
         {
             //对效果结算
@@ -135,7 +152,9 @@ namespace GameSystem.BattleSystem.Scripts
             }
         }
 
-        //切换回合
+        /// <summary>
+        /// 该单位完全行动后，切换回合
+        /// </summary>
         protected void SwitchRound()
         {
             //切换回合时间

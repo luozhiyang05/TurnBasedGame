@@ -71,38 +71,6 @@ namespace GameSystem.BattleSystem.Main
         public void SetLevel(Level level)
         {
             _level = level;
-
-            // _enemyList = new QArray<AbsUnit>(level.GetWavasCount());
-            // for (int i = 0; i < _enemyList.Count; i++)
-            // {
-            //     enemies[i].id = i;
-            //     enemies[i].InitSystem(this.GetSystem<IBattleSystemModule>());
-            //     _enemyList.Add(enemies[i]);
-            // }
-
-            // //初始化玩家和敌人
-            // _player = player;
-            // _enemyList = new QArray<AbsUnit>(enemies.Count);
-            // _player.InitSystem(this.GetSystem<IBattleSystemModule>());
-            // for (var i = 0; i < enemies.Count; i++)
-            // {
-            //     enemies[i].id = i;
-            //     enemies[i].InitSystem(this.GetSystem<IBattleSystemModule>());
-            //     _enemyList.Add(enemies[i]);
-            // }
-
-            //  //设定敌人位置
-            // var count = enemies.Count;
-            // for (var i = 0; i < count; i++)
-            // {
-            //     var rangeIndex = Random.Range(0, _enemyPosTransList.Count);
-            //     var enemyPosTrans = _enemyPosTransList[rangeIndex];
-            //     enemies[i].transform.position = enemyPosTrans.position;
-            //     _enemyPosTransList.Remove(enemyPosTrans);
-            // }
-
-            // //设定玩家位置
-            // _player.transform.position = _playerPosTrans.position;
         }
 
         public Level GetLevel()

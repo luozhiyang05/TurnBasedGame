@@ -21,13 +21,13 @@ namespace GameSystem.BattleSystem.Scripts
 
         public override void StartRoundSettle()
         {
-            nowActPoint = maxActPoint;
+            nowActPoint = maxActPoint;  //恢复行动点
 
-            base.StartRoundSettle();
+            base.StartRoundSettle();    //结算单位身上的效果
 
-            OnStartRoundSettle();
+            OnStartRoundSettle();       //具体重写的 回合开始时 逻辑
             
-            this.GetSystem<ICardSystemModule>().UpdateHeadCardInSr();
+            this.GetSystem<ICardSystemModule>().UpdateHeadCardInSr();       //获取手牌
 
             canAction = true;
         }
@@ -39,7 +39,7 @@ namespace GameSystem.BattleSystem.Scripts
         }
 
         /// <summary>
-        /// 结束回合
+        /// 手动结束回合
         /// </summary>
         public void EndRound() => AfterAction();
 
@@ -50,13 +50,13 @@ namespace GameSystem.BattleSystem.Scripts
 
         protected override void ExitRound()
         {
-            base.ExitRound();
+            base.ExitRound();   //结算单位身上的效果
 
-            SettleRound();
+            SettleRound();      //具体重写的 结算回合 逻辑
             
-            this.GetSystem<ICardSystemModule>().UpdateHeadCardInEr();
+            this.GetSystem<ICardSystemModule>().UpdateHeadCardInEr();   //丢弃手牌
 
-            SwitchRound();
+            SwitchRound();      //回合切换
 
             canAction = false;
         }

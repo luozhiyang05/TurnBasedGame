@@ -14,11 +14,11 @@ namespace GameSystem.BattleSystem.Scripts
         protected abstract void OnStartRoundSettle();
         public override void StartRoundSettle()
         {
-            base.StartRoundSettle();
+            base.StartRoundSettle();    //结算单位身上的效果
             
-            OnStartRoundSettle();
+            OnStartRoundSettle();       //具体重写的 回合开始时 逻辑
 
-            AfterStartRoundSettle();
+            AfterStartRoundSettle();    //弹幕时间，结束后进入 行动逻辑
         }
         
         /// <summary>
@@ -27,9 +27,9 @@ namespace GameSystem.BattleSystem.Scripts
         protected abstract void OnAction();
         public override void Action()
         {
-            OnAction();
+            OnAction();     //具体重写的 单位行动 逻辑
 
-            AfterAction();
+            AfterAction();  //弹幕时间，结束后进入 结算回合 逻辑
         }
 
         
@@ -39,9 +39,11 @@ namespace GameSystem.BattleSystem.Scripts
         protected abstract void SettleRound();
         protected override void ExitRound()
         {
-            SettleRound();
+            base.ExitRound();   //结算单位身上的效果
+
+            SettleRound();      //具体重写的 结算回合 逻辑
             
-            SwitchRound();
+            SwitchRound();      //回合切换
         }
 
 
