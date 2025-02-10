@@ -54,10 +54,10 @@ namespace GameSystem.BattleSystem.Main
             BattleSystemViewModel model = Model as BattleSystemViewModel;
             WavasData wava = model.GetNowWava();
             Transform enemiesTrans = transform.Find("Main/absUnit/enemies");
-            for (int i = 0; i < wava.enemyTypes.Count; i++)
+            for (int i = 0; i < wava.enemies.Count; i++)
             {
                 var enemy = enemiesTrans.GetChild(i);
-                AddAbsUnit(enemy, wava.enemyTypes[i]);
+                AddAbsUnit(enemy, wava.enemies[i].enemyType);
                 enemy.gameObject.SetActive(true);
             }
 

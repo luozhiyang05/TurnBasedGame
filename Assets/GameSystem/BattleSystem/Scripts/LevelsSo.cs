@@ -41,7 +41,18 @@ namespace Assets.GameSystem.BattleSystem.Scripts
     [Serializable]
     public class WavasData
     {
-        public List<EnemyType> enemyTypes;
+        public string wavaName;
+        public List<EnemyData> enemies;
+    }
+
+    [Serializable]
+    public class EnemyData
+    {
+        public EnemyType enemyType;
+        public string name=>enemyType.ToString();
+        public int maxHp;
+        public int maxArmor;
+        public int atk;
     }
 
 }
