@@ -1,14 +1,5 @@
-using System.Collections.Generic;
-using Assets.GameSystem.BattleSystem.Scripts;
 using Framework;
-using GameSystem.BattleSystem;
-using GameSystem.BattleSystem.Scripts;
-using GameSystem.BattleSystem.Scripts.Unit;
-using GameSystem.CardSystem;
 using GameSystem.MenuSystem;
-using Tool.ResourceMgr;
-using Tool.UI;
-using Tool.Utilities;
 using UnityEngine;
 
 namespace GameSystem

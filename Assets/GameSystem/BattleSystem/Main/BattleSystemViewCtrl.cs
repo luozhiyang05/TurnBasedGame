@@ -1,10 +1,5 @@
-using System.Collections.Generic;
-using Assets.GameSystem.BattleSystem.Scripts;
-using GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using GameSystem.MVCTemplate;
-using Tool.UI;
-using Tool.Utilities;
-using UnityEngine;
 
 namespace GameSystem.BattleSystem.Main
 {
@@ -41,7 +36,7 @@ namespace GameSystem.BattleSystem.Main
 
         public override void OnBeforeShow()
         {
-            
+
         }
     }
 }

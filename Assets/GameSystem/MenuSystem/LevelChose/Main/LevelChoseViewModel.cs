@@ -1,4 +1,6 @@
+using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using GameSystem.MVCTemplate;
+using Tool.ResourceMgr;
 using UnityEngine;
 
 namespace GameSystem.MenuSystem.LevelChose.Main
@@ -6,9 +8,11 @@ namespace GameSystem.MenuSystem.LevelChose.Main
     public class LevelChoseViewModel : BaseModel
     {
         private int _nowChooseLevelId;
+        private LevelsSo _levelsSo;
         protected override void OnInit()
         {
             _nowChooseLevelId = -1;
+            _levelsSo = ResMgr.GetInstance().SyncLoad<LevelsSo>("关卡设置");
         }
 
         /// <summary>
@@ -31,6 +35,10 @@ namespace GameSystem.MenuSystem.LevelChose.Main
         public int GetChooseLevelId()
         {
             return _nowChooseLevelId;
+        }
+        public Level GetLevelById(int id)
+        {
+            return _levelsSo.GetLevelById(id);
         }
     }
 }

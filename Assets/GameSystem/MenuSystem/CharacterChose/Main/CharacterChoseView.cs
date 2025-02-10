@@ -83,6 +83,8 @@ namespace GameSystem.MenuSystem.CharacterChose.Main
         public override void OnShow()
         {
             base.OnShow();
+            // 初始化角色信息
+            InitCharactersInfo();
         }
 
         public override void OnHide()
@@ -93,6 +95,20 @@ namespace GameSystem.MenuSystem.CharacterChose.Main
         public override void OnRelease()
         {
             base.OnRelease();
+        }
+
+        /// <summary>
+        /// 初始化角色信息
+        /// </summary>
+        public void InitCharactersInfo()
+        {
+            var model = Model as CharacterChoseViewModel;
+            for (int i = 0; i < _charactes.childCount; i++)
+            {
+                var characterData = model.GetCharacterDataById(i + 1);
+                var txtName = _charactes.GetChild(i).Find("txt_name").GetComponent<Text>();
+                txtName.text = characterData.chaName;
+            }
         }
 
         #region 事件

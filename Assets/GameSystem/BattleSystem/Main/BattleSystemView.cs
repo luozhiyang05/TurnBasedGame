@@ -1,4 +1,4 @@
-using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.BattleSystem.Scripts.Unit;

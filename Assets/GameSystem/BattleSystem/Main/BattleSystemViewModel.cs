@@ -1,12 +1,7 @@
-using System.Collections.Generic;
-using Assets.GameSystem.BattleSystem.Scripts;
-using Framework;
+using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.MVCTemplate;
-using Tips;
 using Tool.Utilities;
-using Tool.Utilities.Events;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameSystem.BattleSystem.Main

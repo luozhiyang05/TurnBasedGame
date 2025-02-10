@@ -1,13 +1,6 @@
-using System.ComponentModel;
-using System;
 using Framework;
 using GameSystem.MVCTemplate;
-using UnityEngine.UI;
 using UIComponents;
-using Tool.ResourceMgr;
-using Assets.GameSystem.BattleSystem.Scripts;
-using GameSystem.BattleSystem;
-using GameSystem.CardSystem;
 
 namespace GameSystem.MenuSystem.Main
 {

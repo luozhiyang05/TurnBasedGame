@@ -82,6 +82,8 @@ namespace GameSystem.MenuSystem.LevelChose.Main
         public override void OnShow()
         {
             base.OnShow();
+            // 初始化关卡信息
+            InitLevelInfo();
         }
 
         public override void OnHide()
@@ -92,6 +94,20 @@ namespace GameSystem.MenuSystem.LevelChose.Main
         public override void OnRelease()
         {
             base.OnRelease();
+        }
+
+        /// <summary>
+        /// 初始化关卡信息
+        /// </summary>
+        public void InitLevelInfo()
+        {
+            var model = Model as LevelChoseViewModel;
+            for (int i = 0; i < _levels.childCount; i++)
+            {
+                var level = model.GetLevelById(i + 1);
+                var txtName = _levels.GetChild(i).Find("txt_name").GetComponent<Text>();
+                txtName.text = level.levelName;
+            }
         }
 
         #region 事件

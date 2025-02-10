@@ -18,5 +18,13 @@ namespace Assets.GameSystem.MenuSystem.CharacterChose.Scripts
     public class CharactersDataSo : ScriptableObject
     {
         public List<CharacterData> characterDatas;
+        public CharacterData GetCharacterDataById(int id)
+        {
+            if (id<=0 || id>characterDatas.Count)
+            {
+                throw new Exception($"角色获取id{id}下标错误");
+            }
+            return characterDatas[id-1];
+        }
     }
 }

@@ -25,3 +25,9 @@ MonoBehaviour:
     maxActPoint: 5
     maxHeadCardCnt: 5
     skillCardId: 1002
+  - id: 3
+    chaName: "\u9E2D\u9E2D"
+    maxHp: 5
+    maxActPoint: 5
+    maxHeadCardCnt: 5
+    skillCardId: 1003

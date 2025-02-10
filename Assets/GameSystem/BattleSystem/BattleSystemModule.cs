@@ -1,5 +1,5 @@
 using System;
-using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
 using GameSystem.BattleSystem.Main;
 using GameSystem.BattleSystem.Scripts;

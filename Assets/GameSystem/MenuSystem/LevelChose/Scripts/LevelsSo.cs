@@ -2,27 +2,27 @@ using System;
 using System.Collections.Generic;
 using GlobalData;
 using UnityEngine;
-namespace Assets.GameSystem.BattleSystem.Scripts
+namespace Assets.GameSystem.MenuSystem.LevelChose.Scripts
 {
 
     [CreateAssetMenu(fileName = "LevelsSo", menuName = "LevelsSo", order = 0)]
     public class LevelsSo : ScriptableObject
     {
         public List<Level> levels;
-        public Level GetLevelData(int level)
+        public Level GetLevelById(int id)
         {
-            if (level<=0 || level>levels.Count)
+            if (id <= 0 || id > levels.Count)
             {
                 throw new Exception("关卡读取下标错误");
             }
-            return levels[level-1];
+            return levels[id - 1];
         }
     }
 
     [Serializable]
     public class Level
     {
-        public string name;
+        public string levelName;
         public List<WavasData> wavasDatas;
         public WavasData GetWavaData(int wava)
         {
