@@ -13,7 +13,35 @@ MonoBehaviour:
   m_Name: "\u5173\u5361\u8BBE\u7F6E"
   m_EditorClassIdentifier: 
   levels:
-  - levelName: "\u5173\u53611"
+  - id: 1
+    levelName: "\u5173\u53611"
+    wavasDatas:
+    - wavaName: "\u6CE2\u6B211"
+      enemies:
+      - enemyType: 0
+        maxHp: 5
+        maxArmor: 0
+        atk: 1
+      - enemyType: 1
+        maxHp: 5
+        maxArmor: 1
+        atk: 1
+      - enemyType: 1
+        maxHp: 5
+        maxArmor: 1
+        atk: 1
+    - wavaName: "\u6CE2\u6B212"
+      enemies:
+      - enemyType: 0
+        maxHp: 5
+        maxArmor: 0
+        atk: 1
+      - enemyType: 1
+        maxHp: 5
+        maxArmor: 1
+        atk: 1
+  - id: 2
+    levelName: "\u5173\u53612"
     wavasDatas:
     - wavaName: "\u6CE2\u6B211"
       enemies:
@@ -35,29 +63,8 @@ MonoBehaviour:
         maxHp: 5
         maxArmor: 1
         atk: 1
-  - levelName: "\u5173\u53612"
-    wavasDatas:
-    - wavaName: "\u6CE2\u6B211"
-      enemies:
-      - enemyType: 0
-        maxHp: 5
-        maxArmor: 0
-        atk: 1
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
-    - wavaName: "\u6CE2\u6B212"
-      enemies:
-      - enemyType: 0
-        maxHp: 5
-        maxArmor: 0
-        atk: 1
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
-  - levelName: "\u5173\u53613"
+  - id: 3
+    levelName: "\u5173\u53613"
     wavasDatas:
     - wavaName: "\u6CE2\u6B211"
       enemies:

@@ -2,11 +2,13 @@ namespace Assets.GameSystem.MenuSystem.CharacterChose.Scripts
 {
     using System;
     using System.Collections.Generic;
+    using GlobalData;
     using UnityEngine;
     [Serializable]
     public class CharacterData
     {
         public int id;
+        public CharacterType characterType;
         public string chaName;
         public int maxHp;
         public int maxActPoint;

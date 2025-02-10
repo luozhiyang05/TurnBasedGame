@@ -36,7 +36,11 @@ namespace GameSystem.MenuSystem.LevelChose.Main
         {
             return _nowChooseLevelId;
         }
-        public Level GetLevelById(int id)
+        public LevelData GetChooseLevel()
+        {
+            return GetLevelById(_nowChooseLevelId);
+        }
+        public LevelData GetLevelById(int id)
         {
             return _levelsSo.GetLevelById(id);
         }

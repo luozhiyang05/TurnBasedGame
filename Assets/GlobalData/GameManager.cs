@@ -7,6 +7,13 @@ namespace GlobalData
         public const float BulletScreenTime = 1f;
     }
 
+    public enum CharacterType
+    {
+        CAT,
+        DOG,
+        DUCK
+    }
+
     public enum EnemyType
     {
         ENEMY_1,

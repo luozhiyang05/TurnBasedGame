@@ -1,7 +1,10 @@
+using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using GameSystem.BattleSystem.Scripts;
 using GameSystem.MVCTemplate;
+using Tips;
 using Tool.Utilities;
+using Tool.Utilities.Events;
 using UnityEngine;
 
 namespace GameSystem.BattleSystem.Main
@@ -10,7 +13,9 @@ namespace GameSystem.BattleSystem.Main
     {
         private QArray<AbsUnit> _enemyList = new QArray<AbsUnit>(10);
         private AbsUnit _player;
-        private Level _level;
+
+        private CharacterData _characterData;
+        private LevelData _levelData;
         private int _nowEnemyIndex; //当前敌人下标
         private int _nowWaveIndex;  //当前波次下标
         protected override void OnInit()
@@ -24,22 +29,22 @@ namespace GameSystem.BattleSystem.Main
         /// </summary>
         public override void BindListener()
         {
-            // //绑定敌人列表死亡事件
-            // _enemyList.AddListenEvent(IListEventType.Remove, absUnit =>
-            // {
-            //     Debug.Log("死亡单位:" + absUnit.unitName + " id=" + absUnit.id);
-            //     if (_enemyList.Count == 0)
-            //     {
-            //         Debug.Log("敌人全部死亡");
-            //         TipsModule.ComfirmTips("提示", "恭喜你，你赢了", () => { });
-            //     }
-            // });
+            //绑定敌人列表死亡事件
+            _enemyList.AddListenEvent(IListEventType.Remove, absUnit =>
+            {
+                Debug.Log("死亡单位:" + absUnit.unitName + " id=" + absUnit.id);
+                if (_enemyList.Count == 0)
+                {
+                    Debug.Log("敌人全部死亡");
+                    TipsModule.ComfirmTips("提示", "恭喜你，你赢了", () => { });
+                }
+            });
 
-            // //绑定单位死亡事件
-            // EventsHandle.AddListenEvent<AbsUnit>(EventsNameConst.ABSUNIT_DIE, absUnit =>
-            // {
-            //     UnitDie(absUnit);
-            // });
+            //绑定单位死亡事件
+            EventsHandle.AddListenEvent<AbsUnit>(EventsNameConst.ABSUNIT_DIE, absUnit =>
+            {
+                UnitDie(absUnit);
+            });
         }
 
         /// <summary>
@@ -47,35 +52,36 @@ namespace GameSystem.BattleSystem.Main
         /// </summary>
         public override void RemoveListener()
         {
-            // _enemyList.RemoveListenEvent(IListEventType.Remove, absUnit =>
-            // {
-            //     Debug.Log("死亡单位:" + absUnit.unitName + " id=" + absUnit.id);
-            //     if (_enemyList.Count == 0)
-            //     {
-            //         Debug.Log("敌人全部死亡");
-            //         TipsModule.ComfirmTips("提示", "恭喜你，你赢了", () => { });
-            //     }
-            // });
+            _enemyList.RemoveListenEvent(IListEventType.Remove, absUnit =>
+            {
+                Debug.Log("死亡单位:" + absUnit.unitName + " id=" + absUnit.id);
+                if (_enemyList.Count == 0)
+                {
+                    Debug.Log("敌人全部死亡");
+                    TipsModule.ComfirmTips("提示", "恭喜你，你赢了", () => { });
+                }
+            });
 
-            // EventsHandle.RemoveOneEventByEventName<AbsUnit>(EventsNameConst.ABSUNIT_DIE, absUnit =>
-            // {
-            //     UnitDie(absUnit);
-            // });
+            EventsHandle.RemoveOneEventByEventName<AbsUnit>(EventsNameConst.ABSUNIT_DIE, absUnit =>
+            {
+                UnitDie(absUnit);
+            });
         }
 
-        public void SetLevel(Level level)
+        public void SetBattleData(CharacterData characterData,LevelData levelData)
         {
-            _level = level;
+            _characterData = characterData;
+            _levelData = levelData;
         }
 
-        public Level GetLevel()
+        public CharacterData GetCharacterData()
         {
-            return _level;
+            return _characterData;
         }
 
         public WavasData GetNowWava()
         {
-            return GetLevel().GetWavaData(_nowWaveIndex);
+            return _levelData.GetWavaData(_nowWaveIndex);
         }
 
         public void SetEnemyAbsUnit(AbsUnit absUnit)
@@ -106,7 +112,7 @@ namespace GameSystem.BattleSystem.Main
         }
 
         public int GetEnemyCount()=> _enemyList.Count;
-        
+
         public AbsUnit GetPlayerUnit()=> _player;
 
         public void UnitDie(AbsUnit unit)

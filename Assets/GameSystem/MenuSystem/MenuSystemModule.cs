@@ -1,3 +1,5 @@
+using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
+using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
 using GameSystem.MenuSystem.CharacterChose.Main;
 using GameSystem.MenuSystem.LevelChose.Main;
@@ -10,8 +12,8 @@ namespace GameSystem.MenuSystem
         public void ShowView();
         public void ShowCharacterChoseView();
         public void ShowLevelChoseView();
-        public int GetCharacterId();
-        public int GetLevelId();
+        public CharacterData GetNowChoseCharacterData();
+        public LevelData GetNowChoseLevelData();
     }
 
     public class MenuSystemModule : AbsModule, IMenuSystemModule
@@ -39,13 +41,13 @@ namespace GameSystem.MenuSystem
             _levelChoseViewCtrl ??= new LevelChoseViewCtrl();
             _levelChoseViewCtrl.ShowView(Tool.UI.EuiLayer.MenuUI);
         }
-        public int GetCharacterId()
+        public CharacterData GetNowChoseCharacterData()
         {
-            return (_characterCHoseViewCtrl.GetModel() as CharacterChoseViewModel).GetChoseCharacterId();
+            return (_characterCHoseViewCtrl.GetModel() as CharacterChoseViewModel).GetChoseCharacter();
         }
-        public int GetLevelId()
+        public LevelData GetNowChoseLevelData()
         {
-            return (_levelChoseViewCtrl.GetModel() as LevelChoseViewModel).GetChooseLevelId();
+            return (_levelChoseViewCtrl.GetModel() as LevelChoseViewModel).GetChooseLevel();
         }
 
     }

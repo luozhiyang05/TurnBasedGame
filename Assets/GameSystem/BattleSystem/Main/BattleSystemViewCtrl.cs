@@ -1,3 +1,4 @@
+using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using GameSystem.MVCTemplate;
 
@@ -22,7 +23,7 @@ namespace GameSystem.BattleSystem.Main
 
         protected override void Init(params object[] args)
         {
-           (GetModel() as BattleSystemViewModel).SetLevel(args[0] as Level);
+           (GetModel() as BattleSystemViewModel).SetBattleData(args[0] as CharacterData,args[1] as LevelData);
         }
 
         public override BaseModel GetModel() => Model ??= new BattleSystemViewModel();

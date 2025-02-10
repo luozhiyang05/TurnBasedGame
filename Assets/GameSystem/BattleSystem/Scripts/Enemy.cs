@@ -1,13 +1,16 @@
 using System;
+using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
 using Tool.Mono;
+using Tool.Utilities.Bindery;
 using UnityEngine;
 
 namespace GameSystem.BattleSystem.Scripts
 {
     public abstract class Enemy : AbsUnit, ICanGetSystem
     {
-        
+        public ValueBindery<int> atk = new ValueBindery<int>();
+
         /// <summary>
         /// 回合开始时结算逻辑
         /// </summary>
@@ -15,12 +18,12 @@ namespace GameSystem.BattleSystem.Scripts
         public override void StartRoundSettle()
         {
             base.StartRoundSettle();    //结算单位身上的效果
-            
+
             OnStartRoundSettle();       //具体重写的 回合开始时 逻辑
 
             AfterStartRoundSettle();    //弹幕时间，结束后进入 行动逻辑
         }
-        
+
         /// <summary>
         /// 行动逻辑
         /// </summary>
@@ -32,7 +35,7 @@ namespace GameSystem.BattleSystem.Scripts
             AfterAction();  //弹幕时间，结束后进入 结算回合 逻辑
         }
 
-        
+
         /// <summary>
         /// 结算回合逻辑
         /// </summary>
@@ -42,11 +45,23 @@ namespace GameSystem.BattleSystem.Scripts
             base.ExitRound();   //结算单位身上的效果
 
             SettleRound();      //具体重写的 结算回合 逻辑
-            
+
             SwitchRound();      //回合切换
         }
 
+        /// <summary>
+        /// 初始化敌人数据
+        /// </summary>
+        public void InitData(int id,EnemyData enemyData)
+        {
+            base.id = id;
 
+            unitName = enemyData.name;
+            maxHp.Value = enemyData.maxHp;
+            nowHp.Value = maxHp.Value;
+            armor.Value = enemyData.maxArmor;
+            atk.Value = enemyData.atk;
+        }
 
         public IMgr Ins => Global.GetInstance();
     }

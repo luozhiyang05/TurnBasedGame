@@ -1,4 +1,6 @@
 using Framework;
+using GameSystem.BattleSystem;
+using GameSystem.CardSystem;
 using GameSystem.MVCTemplate;
 using Tool.UI;
 using UIComponents;
@@ -130,11 +132,18 @@ namespace GameSystem.MenuSystem.LevelChose.Main
             var nowCharacterId = (Model as LevelChoseViewModel).GetChooseLevelId();
             if (nowCharacterId != -1)
             {
-                //开始游戏
-                var menuSystemModule = this.GetSystem<IMenuSystemModule>();
-                Debug.Log($"选择了id为{menuSystemModule.GetCharacterId()}的角色和id为{menuSystemModule.GetLevelId()}的关卡");
                 // 关闭Menu曾所有View
                 UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.MenuUI);
+                //开始游戏
+                var menuSystemModule = this.GetSystem<IMenuSystemModule>();
+                Debug.Log($"选择了id为{menuSystemModule.GetNowChoseCharacterData().id}的角色和id为{menuSystemModule.GetNowChoseLevelData().id}的关卡");
+                
+                var nowCharacterData = menuSystemModule.GetNowChoseCharacterData();
+                var nowLevelData = menuSystemModule.GetNowChoseLevelData();
+                //打开战斗view
+                this.GetSystem<IBattleSystemModule>().ShowView(nowCharacterData,nowLevelData);
+                //打开卡组vie
+                this.GetSystem<ICardSystemModule>().ShowView();
             }
         }
         private void Close()

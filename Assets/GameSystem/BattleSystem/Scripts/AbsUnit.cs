@@ -20,15 +20,16 @@ namespace GameSystem.BattleSystem.Scripts
         public ValueBindery<int> armor = new ValueBindery<int>(); //护盾
         private IBattleSystemModule _battleSystemModule;
         private readonly QArray<BaseEffect> _effQueue = new QArray<BaseEffect>(1);
-        private Slider _hpBar;
-        private Text _txtArmor;
+        protected Slider _hpBar;
+        protected Text _txtArmor;
 
         public virtual void Awake()
         {
+            // 获取组件
             _hpBar = transform.Find("hp_bar").GetComponent<Slider>();
             _txtArmor = transform.Find("armor/txt_armor").GetComponent<Text>();
 
-            nowHp.Value = maxHp.Value;
+            // 显示数据
             _hpBar.value = (float)nowHp.Value / maxHp.Value;
             _txtArmor.text = armor.Value.ToString();
 
@@ -36,6 +37,8 @@ namespace GameSystem.BattleSystem.Scripts
             nowHp.OnRegister(value =>
             {
                 _hpBar.value = (float)value / maxHp.Value;
+                //面板刷新
+                DisplayInfo();
                 if (IsDie())
                 {
                     //分发事件，单位死亡
@@ -46,7 +49,12 @@ namespace GameSystem.BattleSystem.Scripts
             armor.OnRegister(value =>
             {
                 _txtArmor.text = value.ToString();
+                //面板刷新
+                DisplayInfo();
             });
+
+            //面板展示
+            DisplayInfo();
         }
 
         /// <summary>
@@ -163,6 +171,20 @@ namespace GameSystem.BattleSystem.Scripts
                 _battleSystemModule.SwitchRound();
             });
         }
+
+        #endregion
+
+        #region  inspector面板展示
+        [Header("面板展示")]
+        [SerializeField] private int _maxHp;
+        [SerializeField] private int _nowHp;
+        [SerializeField] private int _armor;
+         private void DisplayInfo()
+         {
+            _maxHp = maxHp.Value;
+            _nowHp = nowHp.Value;
+            _armor = armor.Value;
+         }
         #endregion
     }
 }

@@ -1,3 +1,4 @@
+using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Framework;
 using GameSystem.CardSystem;
 using GameSystem.CardSystem.Scripts;
@@ -11,6 +12,7 @@ namespace GameSystem.BattleSystem.Scripts
     {
         public int maxActPoint;
         public int nowActPoint;
+        public int skillCardId;
 
         public bool canAction = false;
 
@@ -69,6 +71,19 @@ namespace GameSystem.BattleSystem.Scripts
         public void ModifyActPoint(int mPoint)
         {
             nowActPoint += mPoint;
+        }
+
+          /// <summary>
+        /// 初始化玩家数据
+        /// </summary>
+        public void InitData(CharacterData characterData)
+        {
+            unitName = characterData.chaName;
+            maxHp.Value = characterData.maxHp;
+            nowHp.Value = characterData.maxHp;
+            maxActPoint = characterData.maxActPoint;
+            nowActPoint = characterData.maxActPoint;
+            skillCardId = characterData.skillCardId;
         }
 
 

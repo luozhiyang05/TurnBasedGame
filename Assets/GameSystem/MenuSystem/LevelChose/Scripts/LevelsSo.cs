@@ -8,8 +8,8 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Scripts
     [CreateAssetMenu(fileName = "LevelsSo", menuName = "LevelsSo", order = 0)]
     public class LevelsSo : ScriptableObject
     {
-        public List<Level> levels;
-        public Level GetLevelById(int id)
+        public List<LevelData> levels;
+        public LevelData GetLevelById(int id)
         {
             if (id <= 0 || id > levels.Count)
             {
@@ -20,8 +20,9 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Scripts
     }
 
     [Serializable]
-    public class Level
+    public class LevelData
     {
+        public int id;
         public string levelName;
         public List<WavasData> wavasDatas;
         public WavasData GetWavaData(int wava)

@@ -1,4 +1,5 @@
 using System;
+using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
 using GameSystem.BattleSystem.Main;
@@ -57,7 +58,7 @@ namespace GameSystem.BattleSystem
         /// <summary>
         /// 开始游戏
         /// </summary>
-        void ShowView(Level level);
+        void ShowView(CharacterData characterData, LevelData levelData);
 
         /// <summary>
         /// 切换至玩家回合
@@ -69,14 +70,11 @@ namespace GameSystem.BattleSystem
     {
         private BattleSystemViewCtrl _viewCtrl;
 
-        public void ShowView(Level level)
+        public void ShowView(CharacterData characterData, LevelData levelData)
         {
             //打开试图
-            _viewCtrl ??= new BattleSystemViewCtrl(level);
+            _viewCtrl ??= new BattleSystemViewCtrl(characterData,levelData);
             _viewCtrl.ShowView();
-
-            //设置当前回合为玩家回合
-            // SwitchPlayerTurn();
         }
 
         private ETurnBased _nowTurnBased = ETurnBased.Start; //当前状态枚举
