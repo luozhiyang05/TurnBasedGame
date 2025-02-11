@@ -47,6 +47,8 @@ namespace GameSystem.MVCTemplate
                     }
 
                     InitListener();
+                    
+                    Model.Init();
                     Model.BindListener();
 
                     OnBeforeShow(args);

@@ -4,7 +4,7 @@ namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 {
     public class TemplateTwoSystemViewModel : BaseModel
     {
-        protected override void OnInit()
+        public override void Init()
         {
         }
 
