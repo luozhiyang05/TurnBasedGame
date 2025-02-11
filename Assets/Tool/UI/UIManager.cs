@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using GameSystem.MVCTemplate;
 using Tool.Mono;
 using Tool.ResourceMgr;
@@ -9,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 namespace Tool.UI
@@ -319,13 +321,13 @@ namespace Tool.UI
         /// <returns></returns>
         public void LoadViewPrefab(string path, EuiLayer euiLayer, UnityAction<BaseView> callback = null)
         {
-            ResMgr.GetInstance().AsyncLoad<GameObject>(path,(uiGo)=>{
+            ResMgr.GetInstance().AsyncLoad<GameObject>(path, (uiGo) =>
+            {
                 if (uiGo == null) throw new Exception($"加载UI失败：{path}");
                 InitUI(uiGo, euiLayer);
-                uiGo.SetActive(false);
                 BaseView baseView = uiGo.GetComponent<BaseView>();
-                callback?.Invoke(baseView);
-            });         
+                callback?.Invoke(baseView); // 存入预制体池子
+            });
         }
 
         /// <summary>

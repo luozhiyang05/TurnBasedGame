@@ -39,11 +39,7 @@ namespace GameSystem.MVCTemplate
             OnRelease();
         }
 
-        void OnEnable()
-        {
-            Init();
-        }
-   
+        protected override void OnInit() => Init();
         protected abstract void Init();
         protected abstract void OnOpen(params object[] args);
         public abstract override void OnRelease();
@@ -55,7 +51,6 @@ namespace GameSystem.MVCTemplate
                 PlayAudio(EAudioType.Bgm);
             }
             OnOpen(args);
-            gameObject.SetActive(true);
             StartCoroutine(ShowAnimation());
         }
         public override void OnHide()
@@ -69,7 +64,6 @@ namespace GameSystem.MVCTemplate
         }
 
         protected override void BindModelListener(){}
-        protected override void OnInit(){}
         public override void OnShow(){}
        
         /// <summary>

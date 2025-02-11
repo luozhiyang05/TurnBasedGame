@@ -1,6 +1,7 @@
 using GameSystem.CardSystem.Scripts;
 using Tool.UI;
 using Tool.Utilities;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Tips
