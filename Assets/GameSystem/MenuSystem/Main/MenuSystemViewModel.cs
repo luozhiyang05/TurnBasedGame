@@ -4,7 +4,7 @@ namespace GameSystem.MenuSystem.Main
 {
     public class MenuSystemViewModel : BaseModel
     {
-        protected override void OnInit()
+        public override void Init()
         {
         }
 

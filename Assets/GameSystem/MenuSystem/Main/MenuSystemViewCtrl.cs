@@ -25,11 +25,11 @@ namespace GameSystem.MenuSystem.Main
         protected override void RemoveListener()
         {
         }
-        public override void OnBeforeShow()
+        public override void OnBeforeShow(params object[] args)
         {
             //一般做给View层传递数据
         }
-        public override void OnShowComplate()
+        public override void OnShowComplate(params object[] args)
         {
             //一般做网络请求
         }
