@@ -25,27 +25,14 @@ namespace GameSystem.MVCTemplate
             OnInit();
         }
 
-        protected override void AutoInitUI()
-        {
-
-        }
-
-        private void Start()
-        {
-            BindModelListener();
-        }
-
-        public void SetModel(BaseModel model)
-        {
-            Model = model;
-        }
+        protected override void AutoInitUI() { }
+        protected override void OnInit() { }
+        private void Start() => BindModelListener();
+        private void OnEnable() => isOpen = true;
+        private void OnDisable() => isOpen = false;
+        public void SetModel(BaseModel model) => Model = model;
 
         protected abstract void BindModelListener();
-
-        protected override void OnInit()
-        {
-
-        }
 
         public override void OnShow()
         {
@@ -54,20 +41,21 @@ namespace GameSystem.MVCTemplate
                 PlayAudio(EAudioType.Effect);
                 PlayAudio(EAudioType.Bgm);
             }
-            isOpen = true;
-            gameObject.SetActive(true);
             transform.SetAsLastSibling();
             if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
         }
 
         public override void OnHide()
         {
+            if (isOpen==false)
+            {
+                return;
+            }
             if (useAudio)
             {
                 PlayAudio(EAudioType.Effect, false);
                 CloseBgm();
             }
-            isOpen = false;
             _closeCallback?.Invoke();
             gameObject.SetActive(false);
             if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
