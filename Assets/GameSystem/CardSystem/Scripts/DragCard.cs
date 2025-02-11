@@ -36,7 +36,6 @@ namespace GameSystem.CardSystem.Scripts
                 EventSystem.current.RaycastAll(pointerEvent, raycastResults);
                 if (raycastResults.Count > 0)
                 {
-                    Debug.Log(raycastResults[0].gameObject.name);
                     if (raycastResults[0].gameObject.name.Equals("img_body"))
                     {
                         //获取鼠标光标下的Unit
@@ -58,44 +57,23 @@ namespace GameSystem.CardSystem.Scripts
                         }
                     }
                 }
-
-                // if (hit.collider != null)
-                // {
-                //     //获取鼠标光标下的Unit
-                //     GameObject currentObjectUnderCursor = hit.collider.gameObject;
-
-                //     //判断当前行动带你是否足够使用卡牌
-                //     var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
-                //     if (player.nowActPoint >= BaseCardSo.depletePoint)
-                //     {
-                //         //使用卡牌的命令
-                //         this.SendCmd<UseCardCmd, CardData>(new CardData()
-                //         {
-                //             user = player,
-                //             headCardIdx = headCardIdx,
-                //             cardSo = BaseCardSo,
-                //             target = currentObjectUnderCursor.transform.parent.gameObject
-                //         });
-                //         return;
-                //     }
-                // }
-                // else
-                // {
-                //     //当拖拽距离大于350且当前卡牌可以自动使用，则自动使用
-                //     var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
-                //     if (BaseCardSo.canAutoUse && GetDargDistance() > 350f)
-                //     {
-                //         //使用卡牌的命令
-                //         this.SendCmd<UseCardCmd, CardData>(new CardData()
-                //         {
-                //             user = player,
-                //             headCardIdx = headCardIdx,
-                //             cardSo = BaseCardSo,
-                //             target = player.gameObject  //自动使用的卡牌目标为自己
-                //         });
-                //         return;
-                //     }
-                // }
+                else
+                {
+                    //当拖拽距离大于350且当前卡牌可以自动使用，则自动使用
+                    var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
+                    if (BaseCardSo.canAutoUse && GetDargDistance() > 350f)
+                    {
+                        //使用卡牌的命令
+                        this.SendCmd<UseCardCmd, CardData>(new CardData()
+                        {
+                            user = player,
+                            headCardIdx = headCardIdx,
+                            cardSo = BaseCardSo,
+                            target = player.gameObject  //自动使用的卡牌目标为自己
+                        });
+                        return;
+                    }
+                }
             }
 
             SetCanBlockRaycasts(true);

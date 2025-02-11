@@ -36,8 +36,7 @@ namespace GameSystem.CardSystem.Main
             //监听使用卡牌事件
             EventsHandle.AddListenEvent<CardData>(EventsNameConst.SUCCESS_USE_CARD, (CardData) =>
             {
-                Debug.Log("出牌的序号为：" + CardData.headCardIdx);
-                Debug.Log("出牌的名字为：" + CardData.cardSo.cardName);
+                Debug.Log("出牌的序号为：" + CardData.headCardIdx + ";" + "出牌的名字为：" + CardData.cardSo.cardName);
                 //记录历史
                 _usedCardsHistory.Add(new UseCardHistory
                 {

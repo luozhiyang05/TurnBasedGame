@@ -12,19 +12,19 @@ namespace GameSystem.CardSystem
     public interface ICardSystemModule : IModule
     {
         void ShowView();
-        
+
         /// <summary>
         /// 打开观察卡牌视图
         /// </summary>
         /// <param name="obsCards"></param>
         /// <param name="isUseCards">true为牌库，false为弃牌堆</param>
-        void ShowObsCardsView(QArray<BaseCardSo> obsCards,bool isUseCards);
-        
+        void ShowObsCardsView(QArray<BaseCardSo> obsCards, bool isUseCards);
+
         /// <summary>
         /// 回合结束丢弃手牌
         /// </summary>
         void UpdateHeadCardInEr();
-        
+
         /// <summary>
         /// 回合开始更新手牌
         /// </summary>
@@ -41,13 +41,13 @@ namespace GameSystem.CardSystem
         /// </summary>
         /// <param name="cardCell"></param>
         /// <param name="card"></param>
-        void RenderCardInfo(Transform cardCell,BaseCardSo card);
+        void RenderCardInfo(Transform cardCell, BaseCardSo card);
 
         /// <summary>
         /// 渲染历史记录
         /// </summary>
         /// <param name="cardData"></param>
-        void RenderHistoryInfo(Transform historyCell,UseCardHistory history);
+        void RenderHistoryInfo(Transform historyCell, UseCardHistory history);
 
         /// <summary>
         /// 选择卡牌时的动画
@@ -76,10 +76,10 @@ namespace GameSystem.CardSystem
     {
         private CardSystemViewCtrl _viewCtrl;
 
-        
+
         protected override void OnInit()
         {
-            
+
         }
 
         public void ShowView()
@@ -88,7 +88,7 @@ namespace GameSystem.CardSystem
             _viewCtrl.ShowView();
         }
 
-        public void ShowObsCardsView(QArray<BaseCardSo> obsCards,bool isUseCards)
+        public void ShowObsCardsView(QArray<BaseCardSo> obsCards, bool isUseCards)
         {
             var ctrl = new ObsCardViewCtrl(new object[] { obsCards.Clone(), isUseCards });
             ctrl.ShowView();
@@ -103,8 +103,8 @@ namespace GameSystem.CardSystem
         {
             (_viewCtrl.GetModel() as CardSystemViewModel)?.UpdateHeadCardInSr();
         }
-        
-        public void RenderHandCards(QArray<GameObject> cardGos,QArray<BaseCardSo> headCards,Transform cardContent)
+
+        public void RenderHandCards(QArray<GameObject> cardGos, QArray<BaseCardSo> headCards, Transform cardContent)
         {
             int cardCnt = headCards.Count;
             bool isSingleCnt = cardCnt % 2 != 0;
@@ -113,12 +113,12 @@ namespace GameSystem.CardSystem
             if (isSingleCnt)
             {
 
-                 startX = -(cardCnt - 1) / 2 * offet;
+                startX = -(cardCnt - 1) / 2 * offet;
                 for (int i = 1; i <= cardCnt; i++)
                 {
-                    var cardTrans = cardGos[i-1].transform;
+                    var cardTrans = cardGos[i - 1].transform;
                     cardTrans.localPosition = new Vector2(startX + offet * (i - 1), 0);
-                    RenderCard(cardTrans,  headCards[i - 1], i);
+                    RenderCard(cardTrans, headCards[i - 1], i);
                 }
             }
             else
@@ -135,7 +135,7 @@ namespace GameSystem.CardSystem
                 startX = -75 - (cardCnt / 2 - 1) * offet;
                 for (int i = 1; i <= cardCnt; i++)
                 {
-                    var cardTrans = cardGos[i-1].transform;
+                    var cardTrans = cardGos[i - 1].transform;
                     cardTrans.localPosition = new Vector2(startX + offet * (i - 1), 0);
                     RenderCard(cardTrans, headCards[i - 1], i);
                 }
@@ -157,7 +157,7 @@ namespace GameSystem.CardSystem
                 }
 
                 //渲染卡牌名字和描述信息
-                RenderCardInfo(cardCell,card);
+                RenderCardInfo(cardCell, card);
 
                 //激活
                 cardCell.SetParent(cardContent);
@@ -165,13 +165,13 @@ namespace GameSystem.CardSystem
             }
         }
 
-        public void RenderCardInfo(Transform cardCell,BaseCardSo card)
+        public void RenderCardInfo(Transform cardCell, BaseCardSo card)
         {
             cardCell.Find("bg/txt_name").GetComponent<Text>().text = card.name;
             cardCell.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
         }
-        
-        public void RenderHistoryInfo(Transform historyCell,UseCardHistory history)
+
+        public void RenderHistoryInfo(Transform historyCell, UseCardHistory history)
         {
             var txtDesc = historyCell.Find("txt_desc").GetComponent<Text>();
             txtDesc.text = $"{history.userName} 对 {history.targetName} 使用了{history.cardName} 卡牌";

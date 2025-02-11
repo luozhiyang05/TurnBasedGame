@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: "\u666E\u901A\u9632\u5FA1\u5361"
   depletePoint: 1
+  canAutoUse: 1
   atk: 0
   armor: 5
   cardDesc: "\u5BF9\u76EE\u6807\u6DFB\u52A05\u70B9\u62A4\u7532"

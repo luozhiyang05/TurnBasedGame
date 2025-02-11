@@ -235,8 +235,8 @@ namespace Tool.Utilities
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
             {
-                (eventBase as Event<T>)?.Trigger(value);
                 Debug.Log("派发：" + eventName + "事件");
+                (eventBase as Event<T>)?.Trigger(value);
             }
             else
             {
