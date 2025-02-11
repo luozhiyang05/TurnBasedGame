@@ -30,28 +30,34 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void Init(params object[] args);
 
-        public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI)
+        public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI,params object[] args)
         {
-            UIManager.GetInstance().GetFromPool(GetPrefabPath(), euiLayer, (BaseView) =>
+            // 没有加载或者已经加载但是没有激活，则去池子中处理
+            if (!IsLoad || (IsLoad && !View.isOpen))
             {
-                if (!IsLoad)
+                UIManager.GetInstance().GetFromPool(GetPrefabPath(), euiLayer, (BaseView) =>
                 {
-                    Model = GetModel();
-                    View = BaseView;
-                    View.SetModel(Model);
-                    View.SetClose(OnClose);
-                    View.SetRelease(OnRelease);
-                }
+                    if (!IsLoad)
+                    {
+                        Model = GetModel();
+                        View = BaseView;
+                        View.SetModel(Model);
+                        View.SetClose(OnClose);
+                        View.SetRelease(OnRelease);
+                    }
 
-                InitListener();
-                Model.BindListener();
-                
-                OnBeforeShow();
-                View.OnShow();
-                OnShowComplate();
-                
-                IsLoad = true;
-            });
+                    InitListener();
+                    Model.BindListener();
+
+                    OnBeforeShow(args);
+                    View.OnShow();
+                    OnShowComplate(args);
+
+                    IsLoad = true;
+                });
+            }
+
+
         }
 
         public abstract BaseModel GetModel();
@@ -59,10 +65,10 @@ namespace GameSystem.MVCTemplate
         public abstract BaseView GetView();
 
         public abstract string GetPrefabPath();
-        
-        public abstract void OnBeforeShow();
 
-        public abstract void OnShowComplate();
+        public abstract void OnBeforeShow(params object[] args);
+
+        public abstract void OnShowComplate(params object[] args);
 
         private void OnClose()
         {

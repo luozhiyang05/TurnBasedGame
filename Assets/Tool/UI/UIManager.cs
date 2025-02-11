@@ -142,6 +142,7 @@ namespace Tool.UI
                 {
                     _pool.Add(cache);
                     cache.GetBaseView().transform.SetAsLastSibling();
+                    cache.GetBaseView().gameObject.SetActive(true);
                     callback?.Invoke(cache.GetBaseView());
                     return;
                 }
