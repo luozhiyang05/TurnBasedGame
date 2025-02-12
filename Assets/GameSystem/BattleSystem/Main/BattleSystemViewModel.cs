@@ -1,8 +1,11 @@
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
+using Framework;
 using GameSystem.BattleSystem.Scripts;
+using GameSystem.MenuSystem;
 using GameSystem.MVCTemplate;
 using Tips;
+using Tool.UI;
 using Tool.Utilities;
 using Tool.Utilities.Events;
 using UnityEngine;
@@ -18,7 +21,7 @@ namespace GameSystem.BattleSystem.Main
         private LevelData _levelData;
         private int _nowEnemyIndex; //当前敌人下标
         private int _nowWaveIndex;  //当前波次下标
-        protected override void OnInit()
+        public override void Init()
         {
             _nowEnemyIndex = 0;
             _nowWaveIndex = 1;
@@ -30,21 +33,10 @@ namespace GameSystem.BattleSystem.Main
         public override void BindListener()
         {
             //绑定敌人列表死亡事件
-            _enemyList.AddListenEvent(IListEventType.Remove, absUnit =>
-            {
-                Debug.Log("死亡单位:" + absUnit.unitName + " id=" + absUnit.id);
-                if (_enemyList.Count == 0)
-                {
-                    Debug.Log("敌人全部死亡");
-                    TipsModule.ComfirmTips("提示", "恭喜你，你赢了", () => { });
-                }
-            });
+            _enemyList.AddListenEvent(IListEventType.Remove, RemoveUnit);
 
             //绑定单位死亡事件
-            EventsHandle.AddListenEvent<AbsUnit>(EventsNameConst.ABSUNIT_DIE, absUnit =>
-            {
-                UnitDie(absUnit);
-            });
+            EventsHandle.AddListenEvent<AbsUnit>(EventsNameConst.ABSUNIT_DIE, AbsUnitDie);
         }
 
         /// <summary>
@@ -52,20 +44,9 @@ namespace GameSystem.BattleSystem.Main
         /// </summary>
         public override void RemoveListener()
         {
-            _enemyList.RemoveListenEvent(IListEventType.Remove, absUnit =>
-            {
-                Debug.Log("死亡单位:" + absUnit.unitName + " id=" + absUnit.id);
-                if (_enemyList.Count == 0)
-                {
-                    Debug.Log("敌人全部死亡");
-                    TipsModule.ComfirmTips("提示", "恭喜你，你赢了", () => { });
-                }
-            });
+            _enemyList.RemoveListenEvent(IListEventType.Remove, RemoveUnit);
 
-            EventsHandle.RemoveOneEventByEventName<AbsUnit>(EventsNameConst.ABSUNIT_DIE, absUnit =>
-            {
-                UnitDie(absUnit);
-            });
+            EventsHandle.RemoveOneEventByEventName<AbsUnit>(EventsNameConst.ABSUNIT_DIE, AbsUnitDie);
         }
 
         public void SetBattleData(CharacterData characterData,LevelData levelData)
@@ -126,5 +107,26 @@ namespace GameSystem.BattleSystem.Main
                 Debug.Log("玩家死亡");
             }
         }
+
+        #region 单位死亡事件
+        private void RemoveUnit(AbsUnit absUnit)
+        {
+            Debug.Log("死亡单位:" + absUnit.unitName + " id=" + absUnit.id);
+            if (_enemyList.Count == 0)
+            {
+                Debug.Log("敌人全部死亡");
+                TipsModule.ComfirmTips("提示", "恭喜你，你赢了", () =>
+                {
+                    UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.GameUI);
+                    this.GetSystem<IMenuSystemModule>().ShowView();
+                });
+            }
+        }
+        private void AbsUnitDie(AbsUnit absUnit)
+        {
+            Debug.Log("单位死亡");
+            UnitDie(absUnit);
+        }
+        #endregion
     }
 }

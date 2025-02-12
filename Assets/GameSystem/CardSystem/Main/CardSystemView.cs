@@ -51,10 +51,13 @@ namespace GameSystem.CardSystem.Main
         {
             _battleSystemModule = this.GetSystem<IBattleSystemModule>();
             _cardSystemModule = this.GetSystem<ICardSystemModule>();
-            
+
+            _cardsContent = transform.Find("Main/headCardsContent").gameObject;
+            _cardTemp = _cardsContent.transform.GetChild(0).gameObject;
+
             //文本
             Btn_exitRound.Label.text = "结束回合";
-            
+
             //按钮
             Btn_exitRound.onClick.AddListener(() =>
             {
@@ -62,24 +65,22 @@ namespace GameSystem.CardSystem.Main
             });
             Btn_obsCards.onClick.AddListener(() =>
             {
-                _cardSystemModule.ShowObsCardsView(_model.GetDiscardCards(),false);
+                _cardSystemModule.ShowObsCardsView(_model.GetDiscardCards(), false);
             });
             Btn_useCards.onClick.AddListener(() =>
             {
-                _cardSystemModule.ShowObsCardsView(_model.GetUserCards(),true);
+                _cardSystemModule.ShowObsCardsView(_model.GetUserCards(), true);
             });
             Btn_history.onClick.AddListener(() =>
             {
                 TipsModule.HistoryTips(_model.GetHistory());
             });
-
-            _cardsContent = transform.Find("Main/headCardsContent").gameObject;
-            _cardTemp = _cardsContent.transform.GetChild(0).gameObject;
         }
 
         public override void OnShow()
         {
             base.OnShow();
+
             _model = Model as CardSystemViewModel;
 
             //加载玩家出战卡牌
@@ -162,6 +163,7 @@ namespace GameSystem.CardSystem.Main
         {
             GetHeadCards();
             DestroyOneCardGo(headCardIdx);
+            print(_cardsContent);
             _cardSystemModule.RenderHandCards(_cardsGo,_headCardQArray,_cardsContent.transform);
             UpdateActCnt();
         }
@@ -169,6 +171,14 @@ namespace GameSystem.CardSystem.Main
         public override void OnHide()
         {
             base.OnHide();
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                print(_cardsContent);
+            }
         }
     }
 }

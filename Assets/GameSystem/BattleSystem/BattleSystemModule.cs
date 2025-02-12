@@ -6,6 +6,7 @@ using GameSystem.BattleSystem.Main;
 using GameSystem.BattleSystem.Scripts;
 using GlobalData;
 using Tool.Mono;
+using Tool.UI;
 using Tool.Utilities;
 using UnityEngine;
 
@@ -73,8 +74,8 @@ namespace GameSystem.BattleSystem
         public void ShowView(CharacterData characterData, LevelData levelData)
         {
             //打开试图
-            _viewCtrl ??= new BattleSystemViewCtrl(characterData,levelData);
-            _viewCtrl.ShowView();
+            _viewCtrl ??= new BattleSystemViewCtrl();
+            _viewCtrl.ShowView(EuiLayer.GameUI,characterData,levelData);
         }
 
         private ETurnBased _nowTurnBased = ETurnBased.Start; //当前状态枚举

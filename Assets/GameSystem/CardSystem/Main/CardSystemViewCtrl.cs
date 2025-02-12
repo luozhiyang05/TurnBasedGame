@@ -33,11 +33,11 @@ namespace GameSystem.CardSystem.Main
         public override BaseView GetView()=>View;
 
         public override string GetPrefabPath()=>"CardSystemView";
-        public override void OnShowComplate()
+        public override void OnShowComplate(params object[] args)
         {
         }
 
-        public override void OnBeforeShow()
+        public override void OnBeforeShow(params object[] args)
         {
             
         }

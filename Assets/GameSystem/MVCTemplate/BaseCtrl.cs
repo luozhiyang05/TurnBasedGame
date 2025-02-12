@@ -82,6 +82,7 @@ namespace GameSystem.MVCTemplate
 
         private void OnRelease()
         {
+            // 这里Model引用滞空了，但是还没消除，要等待GC，所以在Model层的事件绑定注销要注意写清楚
             IsLoad = false;
             Model = null;
             View = null;

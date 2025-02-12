@@ -9,7 +9,7 @@ namespace GameSystem.MenuSystem.CharacterChose.Main
     {
         private int _nowCharacterId;
         private CharactersDataSo _charactersDataSo;
-        protected override void OnInit()
+        public override void Init()
         {
             _nowCharacterId = -1;
             _charactersDataSo = ResMgr.GetInstance().SyncLoad<CharactersDataSo>("角色列表");

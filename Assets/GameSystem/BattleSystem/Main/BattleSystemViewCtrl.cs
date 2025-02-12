@@ -23,21 +23,22 @@ namespace GameSystem.BattleSystem.Main
 
         protected override void Init(params object[] args)
         {
-           (GetModel() as BattleSystemViewModel).SetBattleData(args[0] as CharacterData,args[1] as LevelData);
+          
         }
 
         public override BaseModel GetModel() => Model ??= new BattleSystemViewModel();
         public override BaseView GetView() => View;
 
-        public override string GetPrefabPath()=>"BattleSystemView";
+        public override string GetPrefabPath() => "BattleSystemView";
 
-        public override void OnShowComplate()
+        public override void OnShowComplate(params object[] args)
         {
+
         }
 
-        public override void OnBeforeShow()
+        public override void OnBeforeShow(params object[] args)
         {
-
+            (GetModel() as BattleSystemViewModel).SetBattleData(args[0] as CharacterData, args[1] as LevelData);
         }
     }
 }

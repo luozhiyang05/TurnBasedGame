@@ -26,6 +26,10 @@ namespace GameSystem
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                this.GetSystem<IMenuSystemModule>().ShowView();
+            }
         }
 
         public IMgr Ins => Global.GetInstance();

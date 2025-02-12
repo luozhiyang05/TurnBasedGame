@@ -18,14 +18,6 @@ MonoBehaviour:
     wavasDatas:
     - wavaName: "\u6CE2\u6B211"
       enemies:
-      - enemyType: 0
-        maxHp: 5
-        maxArmor: 0
-        atk: 1
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
       - enemyType: 1
         maxHp: 5
         maxArmor: 1

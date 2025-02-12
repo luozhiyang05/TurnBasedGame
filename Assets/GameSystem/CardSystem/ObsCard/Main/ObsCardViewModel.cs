@@ -8,7 +8,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
 {
     public class ObsCardViewModel : BaseModel
     {
-        protected override void OnInit()
+        public override void Init()
         {
         }
 

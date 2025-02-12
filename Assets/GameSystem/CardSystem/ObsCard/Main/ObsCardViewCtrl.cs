@@ -34,7 +34,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
         {
         }
 
-        public override void OnBeforeShow()
+        public override void OnBeforeShow(params object[] args)
         {
             ObsCardView obsCardView = View as ObsCardView;
             obsCardView.SetDataSource(obsCards.Clone(),isUseCards);
@@ -42,7 +42,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
             obsCards = null;
         }
 
-        public override void OnShowComplate()
+        public override void OnShowComplate(params object[] args)
         {
 
         }

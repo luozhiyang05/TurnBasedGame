@@ -8,8 +8,6 @@ using UnityEngine.Events;
 
 namespace GameSystem.CardSystem.Main
 {
-
-    
     public class CardSystemViewModel : BaseModel
     {
         private QArray<BaseCardSo> _nowUseCards;
@@ -20,7 +18,7 @@ namespace GameSystem.CardSystem.Main
         private UnityAction _updateViewCallback;
         private UnityAction<int> _useCardCallback;
 
-        protected override void OnInit()
+        public override void Init()
         {
             _nowUseCards = new QArray<BaseCardSo>(10);
             _nowHeadCards = new QArray<BaseCardSo>(10);
@@ -34,21 +32,7 @@ namespace GameSystem.CardSystem.Main
         public override void BindListener()
         {
             //监听使用卡牌事件
-            EventsHandle.AddListenEvent<CardData>(EventsNameConst.SUCCESS_USE_CARD, (CardData) =>
-            {
-                Debug.Log("出牌的序号为：" + CardData.headCardIdx + ";" + "出牌的名字为：" + CardData.cardSo.cardName);
-                //记录历史
-                _usedCardsHistory.Add(new UseCardHistory
-                {
-                    cardName = CardData.cardSo.cardName,
-                    userName = CardData.user.name,
-                    targetName = CardData.target.name
-                });
-                //丢弃卡牌
-                DiscardCards(CardData.headCardIdx);
-                //更新视图
-                UseCard(CardData.headCardIdx);
-            });
+            EventsHandle.AddListenEvent<CardData>(EventsNameConst.SUCCESS_USE_CARD, UseCardDelegate);
         }
 
         /// <summary>
@@ -56,13 +40,7 @@ namespace GameSystem.CardSystem.Main
         /// </summary>
         public override void RemoveListener()
         {
-            EventsHandle.RemoveOneEventByEventName<CardData>(EventsNameConst.SUCCESS_USE_CARD, (CardData) =>
-            {
-                //丢弃卡牌
-                DiscardCards(CardData.headCardIdx);
-                //更新视图
-                UseCard(CardData.headCardIdx);
-            });
+            EventsHandle.RemoveOneEventByEventName<CardData>(EventsNameConst.SUCCESS_USE_CARD, UseCardDelegate);
         }
 
         /// <summary>
@@ -83,7 +61,7 @@ namespace GameSystem.CardSystem.Main
                 _nowUseCards.Add(loadCard);
             }
 
-              for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "攻击防御卡");
                 _nowUseCards.Add(loadCard);
@@ -157,7 +135,7 @@ namespace GameSystem.CardSystem.Main
             UpdateView();
         }
 
-              /// <summary>
+        /// <summary>
         /// 获取目前玩家的手牌用于view展示
         /// </summary>
         /// <returns></returns>
@@ -192,6 +170,24 @@ namespace GameSystem.CardSystem.Main
         {
             return _usedCardsHistory;
         }
+
+        #region 事件
+        private void UseCardDelegate(CardData CardData)
+        {
+            Debug.Log("出牌的序号为：" + CardData.headCardIdx + ";" + "出牌的名字为：" + CardData.cardSo.cardName);
+            //记录历史
+            _usedCardsHistory.Add(new UseCardHistory
+            {
+                cardName = CardData.cardSo.cardName,
+                userName = CardData.user.name,
+                targetName = CardData.target.name
+            });
+            //丢弃卡牌
+            DiscardCards(CardData.headCardIdx);
+            //更新视图
+            UseCard(CardData.headCardIdx);
+        }
+        #endregion
 
         #region 回调
         public void SetUpdateViewCallback(UnityAction callback)

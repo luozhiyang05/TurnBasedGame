@@ -9,7 +9,7 @@ namespace GameSystem.MenuSystem.LevelChose.Main
     {
         private int _nowChooseLevelId;
         private LevelsSo _levelsSo;
-        protected override void OnInit()
+        public override void Init()
         {
             _nowChooseLevelId = -1;
             _levelsSo = ResMgr.GetInstance().SyncLoad<LevelsSo>("关卡设置");

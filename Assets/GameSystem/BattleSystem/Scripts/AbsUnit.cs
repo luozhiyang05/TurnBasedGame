@@ -43,7 +43,8 @@ namespace GameSystem.BattleSystem.Scripts
                 {
                     //分发事件，单位死亡
                     EventsHandle.EventTrigger(EventsNameConst.ABSUNIT_DIE, this);
-                    Destroy(gameObject);
+                    Destroy(gameObject.GetComponent<AbsUnit>());
+                    gameObject.transform.parent.gameObject.SetActive(false);
                 }
             });
             armor.OnRegister(value =>
