@@ -3,7 +3,7 @@ using Tool.UI;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
+namespace Assets.GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 {
     public class TemplateTwoSystemViewCtrl : BaseCtrl
     {
