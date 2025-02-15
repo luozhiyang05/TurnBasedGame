@@ -1,7 +1,7 @@
 using GameSystem.MVCTemplate;
 using UnityEngine.UI;
 
-namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
+namespace Assets.GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 {
     public class TemplateTwoSystemView : BaseView
     {

@@ -1,5 +1,5 @@
 using Framework;
-namespace GameSystem.TemplateNoMvcSystem
+namespace Assets.GameSystem.TemplateNoMvcSystem
 {
     public interface ITemplateNoMvcSystemModule: IModule
     {

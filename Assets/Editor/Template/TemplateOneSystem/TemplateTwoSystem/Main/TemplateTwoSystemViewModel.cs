@@ -1,6 +1,6 @@
 using GameSystem.MVCTemplate;
 
-namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
+namespace Assets.GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 {
     public class TemplateTwoSystemViewModel : BaseModel
     {
