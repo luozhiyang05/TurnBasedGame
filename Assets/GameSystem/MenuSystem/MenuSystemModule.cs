@@ -1,11 +1,11 @@
+using Assets.GameSystem.MenuSystem.CharacterChose.Main;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
+using Assets.GameSystem.MenuSystem.LevelChose.Main;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
+using Assets.GameSystem.MenuSystem.Main;
 using Framework;
-using GameSystem.MenuSystem.CharacterChose.Main;
-using GameSystem.MenuSystem.LevelChose.Main;
-using GameSystem.MenuSystem.Main;
 
-namespace GameSystem.MenuSystem
+namespace Assets.GameSystem.MenuSystem
 {
     public interface IMenuSystemModule: IModule
     {

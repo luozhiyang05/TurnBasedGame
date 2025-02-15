@@ -1,12 +1,10 @@
-using System.Transactions;
 using Framework;
-using GameSystem.BattleSystem;
 using GameSystem.MVCTemplate;
 using UIComponents;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameSystem.MenuSystem.CharacterChose.Main
+namespace Assets.GameSystem.MenuSystem.CharacterChose.Main
 {
     public class CharacterChoseView : BaseView
     {

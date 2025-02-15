@@ -1,11 +1,10 @@
-using System.Collections.Generic;
+using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.BattleSystem.Scripts.Effect;
+using Assets.GameSystem.CardSystem.Scripts.Cmd;
 using Framework;
-using GameSystem.BattleSystem.Scripts;
-using GameSystem.BattleSystem.Scripts.Effect;
-using GameSystem.CardSystem.Scripts.Cmd;
 using UnityEngine;
 
-namespace GameSystem.CardSystem.Scripts.DefenceCard
+namespace Assets.GameSystem.CardSystem.Scripts.AtkCard
 {
     [CreateAssetMenu(menuName = "CardSystem/AtkDef", fileName = "AttackDefCard")]
 

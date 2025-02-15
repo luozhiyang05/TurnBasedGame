@@ -1,13 +1,13 @@
+using Assets.GameSystem.BattleSystem;
+using Assets.GameSystem.CardSystem;
 using Framework;
-using GameSystem.BattleSystem;
-using GameSystem.CardSystem;
 using GameSystem.MVCTemplate;
 using Tool.UI;
 using UIComponents;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameSystem.MenuSystem.LevelChose.Main
+namespace Assets.GameSystem.MenuSystem.LevelChose.Main
 {
     public class LevelChoseView : BaseView
     {

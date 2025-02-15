@@ -1,11 +1,8 @@
+using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.BattleSystem.Scripts.Effect;
 using Framework;
-using GameSystem.BattleSystem.Scripts;
-using GameSystem.BattleSystem.Scripts.Effect;
-using Tool.Utilities;
-using Tool.Utilities.Events;
 using UnityEngine;
-
-namespace GameSystem.CardSystem.Scripts.Cmd
+namespace Assets.GameSystem.CardSystem.Scripts.Cmd
 {
     public struct DefData
     {

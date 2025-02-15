@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using GameSystem.BattleSystem.Scripts.Effect;
+using Assets.GameSystem.BattleSystem;
+using Assets.GameSystem.BattleSystem.Scripts.Effect;
 using GlobalData;
 using Tool.Mono;
 using Tool.Utilities;
@@ -9,7 +10,7 @@ using Tool.Utilities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameSystem.BattleSystem.Scripts
+namespace Assets.GameSystem.BattleSystem.Scripts
 {
     public abstract class AbsUnit : MonoBehaviour
     {

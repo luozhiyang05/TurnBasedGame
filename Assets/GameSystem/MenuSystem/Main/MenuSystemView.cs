@@ -2,7 +2,7 @@ using Framework;
 using GameSystem.MVCTemplate;
 using UIComponents;
 
-namespace GameSystem.MenuSystem.Main
+namespace Assets.GameSystem.MenuSystem.Main
 {
     public class MenuSystemView : BaseView
     {

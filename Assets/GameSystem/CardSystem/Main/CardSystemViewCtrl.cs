@@ -1,9 +1,6 @@
-using GameSystem.BattleSystem.Main;
 using GameSystem.MVCTemplate;
-using Tool.UI;
-using UnityEngine;
 
-namespace GameSystem.CardSystem.Main
+namespace Assets.GameSystem.CardSystem.Main
 {
     public class CardSystemViewCtrl : BaseCtrl
     {
@@ -13,7 +10,7 @@ namespace GameSystem.CardSystem.Main
 
         protected override void RemoveListener()
         {
-            
+
         }
 
         public CardSystemViewCtrl() : base()
@@ -25,21 +22,21 @@ namespace GameSystem.CardSystem.Main
 
         protected override void Init(params object[] args)
         {
-            
+
         }
 
-        public override BaseModel GetModel()=>Model ??= new CardSystemViewModel();
+        public override BaseModel GetModel() => Model ??= new CardSystemViewModel();
 
-        public override BaseView GetView()=>View;
+        public override BaseView GetView() => View;
 
-        public override string GetPrefabPath()=>"CardSystemView";
+        public override string GetPrefabPath() => "CardSystemView";
         public override void OnShowComplate(params object[] args)
         {
         }
 
         public override void OnBeforeShow(params object[] args)
         {
-            
+
         }
     }
 }

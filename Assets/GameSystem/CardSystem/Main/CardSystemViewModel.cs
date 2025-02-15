@@ -1,4 +1,4 @@
-using GameSystem.CardSystem.Scripts;
+using Assets.GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
 using Tool.ResourceMgr;
 using Tool.Utilities;
@@ -6,14 +6,14 @@ using Tool.Utilities.Events;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GameSystem.CardSystem.Main
+namespace Assets.GameSystem.CardSystem.Main
 {
     public class CardSystemViewModel : BaseModel
     {
-        private QArray<BaseCardSo> _nowUseCards;
-        private QArray<BaseCardSo> _nowHeadCards;
-        private QArray<BaseCardSo> _discardCards;
-        private QArray<UseCardHistory> _usedCardsHistory;
+        private QArray<BaseCardSo> _nowUseCards;    // 出战卡牌
+        private QArray<BaseCardSo> _nowHeadCards;   // 手牌
+        private QArray<BaseCardSo> _discardCards;   // 弃牌堆
+        private QArray<UseCardHistory> _usedCardsHistory;   // 历史记录
 
         private UnityAction _updateViewCallback;
         private UnityAction<int> _useCardCallback;

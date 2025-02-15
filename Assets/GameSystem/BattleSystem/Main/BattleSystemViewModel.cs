@@ -1,8 +1,8 @@
+using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.MenuSystem;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
-using GameSystem.BattleSystem.Scripts;
-using GameSystem.MenuSystem;
 using GameSystem.MVCTemplate;
 using Tips;
 using Tool.UI;
@@ -10,7 +10,7 @@ using Tool.Utilities;
 using Tool.Utilities.Events;
 using UnityEngine;
 
-namespace GameSystem.BattleSystem.Main
+namespace Assets.GameSystem.BattleSystem.Main
 {
     public class BattleSystemViewModel : BaseModel
     {

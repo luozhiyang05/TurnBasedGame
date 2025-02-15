@@ -1,11 +1,8 @@
-using System;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
-using Tool.Mono;
 using Tool.Utilities.Bindery;
-using UnityEngine;
 
-namespace GameSystem.BattleSystem.Scripts
+namespace Assets.GameSystem.BattleSystem.Scripts
 {
     public abstract class Enemy : AbsUnit, ICanGetSystem
     {

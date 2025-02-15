@@ -1,13 +1,13 @@
+using Assets.GameSystem.CardSystem.Main;
+using Assets.GameSystem.CardSystem.ObsCard.Main;
+using Assets.GameSystem.CardSystem.Scripts;
 using Framework;
-using GameSystem.CardSystem.Main;
-using GameSystem.CardSystem.ObsCard.Main;
-using GameSystem.CardSystem.Scripts;
 using Tool.Mono;
 using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameSystem.CardSystem
+namespace Assets.GameSystem.CardSystem
 {
     public interface ICardSystemModule : IModule
     {
@@ -49,6 +49,7 @@ namespace GameSystem.CardSystem
         /// <param name="cardData"></param>
         void RenderHistoryInfo(Transform historyCell, UseCardHistory history);
 
+        #region 卡牌动画
         /// <summary>
         /// 选择卡牌时的动画
         /// </summary>
@@ -70,6 +71,7 @@ namespace GameSystem.CardSystem
         /// </summary>
         /// <param name="trans"></param>
         void NoDragCardAction(Transform trans);
+        #endregion
     }
 
     public class CardSystemModule : AbsModule, ICardSystemModule

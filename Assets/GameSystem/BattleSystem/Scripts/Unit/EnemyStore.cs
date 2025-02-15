@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameSystem.BattleSystem.Scripts.Unit
+namespace Assets.GameSystem.BattleSystem.Scripts.Unit
 {
     public class EnemyStore : Enemy
     {

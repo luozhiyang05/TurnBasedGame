@@ -1,9 +1,6 @@
 using GameSystem.MVCTemplate;
-using Tool.UI;
-using UnityEngine;
-using UnityEngine.Events;
 
-namespace GameSystem.MenuSystem.Main
+namespace Assets.GameSystem.MenuSystem.Main
 {
     public class MenuSystemViewCtrl : BaseCtrl
     {

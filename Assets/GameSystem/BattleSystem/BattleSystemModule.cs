@@ -1,16 +1,15 @@
 using System;
+using Assets.GameSystem.BattleSystem.Main;
+using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
-using GameSystem.BattleSystem.Main;
-using GameSystem.BattleSystem.Scripts;
 using GlobalData;
 using Tool.Mono;
 using Tool.UI;
-using Tool.Utilities;
 using UnityEngine;
 
-namespace GameSystem.BattleSystem
+namespace Assets.GameSystem.BattleSystem
 {
     /// <summary>
     /// 回合

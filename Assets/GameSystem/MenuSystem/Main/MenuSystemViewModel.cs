@@ -1,6 +1,6 @@
 using GameSystem.MVCTemplate;
 
-namespace GameSystem.MenuSystem.Main
+namespace Assets.GameSystem.MenuSystem.Main
 {
     public class MenuSystemViewModel : BaseModel
     {

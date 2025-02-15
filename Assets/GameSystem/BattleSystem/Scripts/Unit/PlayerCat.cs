@@ -1,9 +1,5 @@
-using Framework;
-using GameSystem.CardSystem;
-using GameSystem.CardSystem.Scripts;
 using UnityEngine;
-
-namespace GameSystem.BattleSystem.Scripts.Unit
+namespace Assets.GameSystem.BattleSystem.Scripts.Unit
 {
     public class PlayerCat : Player
     {

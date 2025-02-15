@@ -1,8 +1,8 @@
+using Assets.GameSystem.MenuSystem;
 using Framework;
-using GameSystem.MenuSystem;
 using UnityEngine;
 
-namespace GameSystem
+namespace Assets.GameSystem
 {
     public class StartGame : MonoBehaviour, ICanGetSystem
     {

@@ -1,10 +1,9 @@
-using System;
+using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.CardSystem.Scripts.Cmd;
 using Framework;
-using GameSystem.BattleSystem.Scripts;
-using GameSystem.CardSystem.Scripts.Cmd;
 using UnityEngine;
 
-namespace GameSystem.CardSystem.Scripts.AtkCard
+namespace Assets.GameSystem.CardSystem.Scripts.AtkCard
 {
     [CreateAssetMenu(menuName = "CardSystem/Atk", fileName = "AtkCard")]
     public class AttackCard : BaseCardSo

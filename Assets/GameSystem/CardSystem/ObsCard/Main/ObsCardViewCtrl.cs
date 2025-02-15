@@ -1,11 +1,8 @@
-using GameSystem.CardSystem.Scripts;
+using Assets.GameSystem.CardSystem.Scripts;
+using GameSystem.CardSystem.ObsCard.Main;
 using GameSystem.MVCTemplate;
-using Tool.UI;
 using Tool.Utilities;
-using UnityEngine;
-using UnityEngine.Events;
-
-namespace GameSystem.CardSystem.ObsCard.Main
+namespace Assets.GameSystem.CardSystem.ObsCard.Main
 {
     public class ObsCardViewCtrl : BaseCtrl
     {
@@ -15,12 +12,12 @@ namespace GameSystem.CardSystem.ObsCard.Main
         public ObsCardViewCtrl() : base() { }
         public ObsCardViewCtrl(params object[] args) : base(args)
         {
-            
+
         }
-        
+
         private QArray<BaseCardSo> obsCards;
         private bool isUseCards;
-        
+
         protected override void Init(params object[] args)
         {
             obsCards = args[0] as QArray<BaseCardSo>;
@@ -37,7 +34,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
         public override void OnBeforeShow(params object[] args)
         {
             ObsCardView obsCardView = View as ObsCardView;
-            obsCardView.SetDataSource(obsCards.Clone(),isUseCards);
+            obsCardView.SetDataSource(obsCards.Clone(), isUseCards);
             obsCards.Clear();
             obsCards = null;
         }

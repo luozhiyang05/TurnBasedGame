@@ -1,15 +1,14 @@
+using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.BattleSystem.Scripts.Unit;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
-using GameSystem.BattleSystem.Scripts;
-using GameSystem.BattleSystem.Scripts.Unit;
 using GameSystem.MVCTemplate;
 using GlobalData;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 
-namespace GameSystem.BattleSystem.Main
+namespace Assets.GameSystem.BattleSystem.Main
 {
     public class BattleSystemView : BaseView
     {

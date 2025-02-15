@@ -1,9 +1,8 @@
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using GameSystem.MVCTemplate;
 using Tool.ResourceMgr;
-using UnityEngine;
 
-namespace GameSystem.MenuSystem.LevelChose.Main
+namespace Assets.GameSystem.MenuSystem.LevelChose.Main
 {
     public class LevelChoseViewModel : BaseModel
     {

@@ -1,22 +1,20 @@
-using System;
 using System.Collections.Generic;
+using Assets.GameSystem.BattleSystem;
+using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.CardSystem.Scripts.Cmd;
 using Framework;
-using GameSystem.BattleSystem;
-using GameSystem.BattleSystem.Scripts;
-using GameSystem.CardSystem.Scripts.Cmd;
 using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
-namespace GameSystem.CardSystem.Scripts
+namespace Assets.GameSystem.CardSystem.Scripts
 {
-    public class DragCard : DragCell,ICanGetSystem,ICanSendCmd,IPointerEnterHandler,IPointerExitHandler
+    public class DragCard : DragCell, ICanGetSystem, ICanSendCmd, IPointerEnterHandler, IPointerExitHandler
     {
         public int headCardIdx;
         public BaseCardSo BaseCardSo;
         private int _idx;
-        
+
         protected override void OnStartDrag(PointerEventData eventData)
         {
             this.GetSystem<ICardSystemModule>().DragCardAction(transform);
@@ -79,9 +77,10 @@ namespace GameSystem.CardSystem.Scripts
             SetCanBlockRaycasts(true);
             this.GetSystem<ICardSystemModule>().NoDragCardAction(transform);
 
-            ResetPos(() =>{
+            ResetPos(() =>
+            {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent as RectTransform);
-            },4000f);
+            }, 4000f);
         }
 
         public void OnPointerEnter(PointerEventData eventData)

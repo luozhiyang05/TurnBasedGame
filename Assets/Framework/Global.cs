@@ -1,6 +1,6 @@
-using GameSystem.BattleSystem;
-using GameSystem.CardSystem;
-using GameSystem.MenuSystem;
+using Assets.GameSystem.BattleSystem;
+using Assets.GameSystem.CardSystem;
+using Assets.GameSystem.MenuSystem;
 namespace Framework
 {
     public class Global : FrameworkMgr<Global>

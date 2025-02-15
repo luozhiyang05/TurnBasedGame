@@ -2,7 +2,7 @@ using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using GameSystem.MVCTemplate;
 
-namespace GameSystem.BattleSystem.Main
+namespace Assets.GameSystem.BattleSystem.Main
 {
     public class BattleSystemViewCtrl : BaseCtrl
     {

@@ -1,9 +1,6 @@
 using GameSystem.MVCTemplate;
-using Tool.UI;
-using UnityEngine;
-using UnityEngine.Events;
 
-namespace GameSystem.MenuSystem.CharacterChose.Main
+namespace Assets.GameSystem.MenuSystem.CharacterChose.Main
 {
     public class CharacterChoseViewCtrl : BaseCtrl
     {

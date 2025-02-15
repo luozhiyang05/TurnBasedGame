@@ -1,12 +1,9 @@
+using Assets.GameSystem.CardSystem;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Framework;
-using GameSystem.CardSystem;
-using GameSystem.CardSystem.Scripts;
-using GlobalData;
-using Tool.Mono;
 using UnityEngine;
 
-namespace GameSystem.BattleSystem.Scripts
+namespace Assets.GameSystem.BattleSystem.Scripts
 {
     public abstract class Player : AbsUnit, ICanGetSystem
     {

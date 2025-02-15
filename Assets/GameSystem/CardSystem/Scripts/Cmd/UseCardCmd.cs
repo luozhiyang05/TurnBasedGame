@@ -1,16 +1,16 @@
+using Assets.GameSystem.BattleSystem.Scripts;
 using Framework;
-using GameSystem.BattleSystem.Scripts;
 using Tool.Utilities;
 using Tool.Utilities.Events;
 
-namespace GameSystem.CardSystem.Scripts.Cmd
+namespace Assets.GameSystem.CardSystem.Scripts.Cmd
 {
     public class UseCardCmd : AbsCommand<CardData>
     {
         public override void Do(CardData cardData)
         {
             base.Do(cardData);
-            
+
             //对目标使用卡牌
             var absUnit = cardData.target.GetComponent<AbsUnit>();
             cardData.cardSo.UseCard(cardData.user, absUnit);

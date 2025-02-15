@@ -1,9 +1,8 @@
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using GameSystem.MVCTemplate;
 using Tool.ResourceMgr;
-using UnityEngine;
 
-namespace GameSystem.MenuSystem.CharacterChose.Main
+namespace Assets.GameSystem.MenuSystem.CharacterChose.Main
 {
     public class CharacterChoseViewModel : BaseModel
     {

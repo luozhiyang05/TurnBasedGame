@@ -1,21 +1,22 @@
+using Assets.GameSystem.CardSystem.Scripts;
 using Framework;
-using GameSystem.CardSystem.Scripts;
+using GameSystem.CardSystem.ObsCard.Main;
 using GameSystem.MVCTemplate;
 using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameSystem.CardSystem.ObsCard.Main
+namespace Assets.GameSystem.CardSystem.ObsCard.Main
 {
     public class ObsCardView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
-		public Text Txt_title;
+        public Text Txt_title;
         protected override void AutoInitUI()
         {
-			Txt_title = transform.Find("Main/bg/Txt_title").GetComponent<Text>();
+            Txt_title = transform.Find("Main/bg/Txt_title").GetComponent<Text>();
         }
-		#endregion 自动生成UI组件区域结束！
+        #endregion 自动生成UI组件区域结束！
 
         #region 遮罩相关
         /// <summary>
@@ -45,7 +46,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
         //     Debug.Log("点击了遮罩！");
         // }
         #endregion
-    
+
         private Transform _content;
         private GameObject _cardGo;
         private QArray<BaseCardSo> _obsCards;
@@ -65,7 +66,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
         /// </summary>
         protected override void BindModelListener()
         {
-            
+
         }
 
         public override void OnShow()
@@ -75,7 +76,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
 
             //文本    
             Txt_title.text = _isUseCards ? "牌库" : "弃牌堆";
-            
+
             //视图更新
             UpdateObsCardsView();
         }
@@ -90,7 +91,7 @@ namespace GameSystem.CardSystem.ObsCard.Main
             base.OnRelease();
         }
 
-        public void SetDataSource(QArray<BaseCardSo> obsCards,bool isUseCards)
+        public void SetDataSource(QArray<BaseCardSo> obsCards, bool isUseCards)
         {
             _obsCards = obsCards;
             _isUseCards = isUseCards;
@@ -102,12 +103,12 @@ namespace GameSystem.CardSystem.ObsCard.Main
             {
                 _content.GetChild(i).gameObject.SetActive(false);
             }
-            var cardCellCnt = _content.childCount-1;
+            var cardCellCnt = _content.childCount - 1;
             for (int i = 1; i <= _obsCards.Count; i++)
             {
-                GameObject cardGo = i > cardCellCnt ? Instantiate(_cardGo,_content) : _content.GetChild(i).gameObject;
-                var card =  _obsCards[i-1];
-                this.GetSystem<ICardSystemModule>().RenderCardInfo(cardGo.transform,card);
+                GameObject cardGo = i > cardCellCnt ? Instantiate(_cardGo, _content) : _content.GetChild(i).gameObject;
+                var card = _obsCards[i - 1];
+                this.GetSystem<ICardSystemModule>().RenderCardInfo(cardGo.transform, card);
                 cardGo.SetActive(true);
             }
         }

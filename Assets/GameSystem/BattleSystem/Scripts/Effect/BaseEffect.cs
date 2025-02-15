@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GameSystem.BattleSystem.Scripts.Effect
+namespace Assets.GameSystem.BattleSystem.Scripts.Effect
 {
     [Serializable]
     public abstract class BaseEffect

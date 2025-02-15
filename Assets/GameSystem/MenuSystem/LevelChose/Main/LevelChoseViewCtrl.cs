@@ -1,9 +1,6 @@
 using GameSystem.MVCTemplate;
-using Tool.UI;
-using UnityEngine;
-using UnityEngine.Events;
 
-namespace GameSystem.MenuSystem.LevelChose.Main
+namespace Assets.GameSystem.MenuSystem.LevelChose.Main
 {
     public class LevelChoseViewCtrl : BaseCtrl
     {
