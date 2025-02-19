@@ -1,16 +1,15 @@
+using Assets.GameSystem.BattleSystem;
+using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.CardSystem.Scripts;
 using Framework;
-using GameSystem.BattleSystem;
-using GameSystem.BattleSystem.Scripts;
-using GameSystem.CardSystem.Scripts;
 using GameSystem.MVCTemplate;
 using Tips;
-using Tool.Mono;
 using Tool.Utilities;
 using UIComponents;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameSystem.CardSystem.Main
+namespace Assets.GameSystem.CardSystem.Main
 {
     public class CardSystemView : BaseView
     {
@@ -85,6 +84,9 @@ namespace GameSystem.CardSystem.Main
 
             //加载玩家出战卡牌
             _model?.LoadUseCards();
+
+            //删除可能残留的卡牌go
+            DestroyAllCardsGo();
         }
 
         private QArray<BaseCardSo> _headCardQArray = new QArray<BaseCardSo>(5);
@@ -154,7 +156,7 @@ namespace GameSystem.CardSystem.Main
             _cardSystemModule.RenderHandCards(_cardsGo, _headCardQArray, _cardsContent.transform);
             UpdateActCnt();
         }
-        
+
         /// <summary>
         /// 出牌后更新玩家手牌视图
         /// </summary>

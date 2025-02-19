@@ -1,13 +1,15 @@
+using Assets.GameSystem.BattleSystem.Scripts;
 using Framework;
-using GameSystem.BattleSystem.Scripts;
 using UnityEngine;
 
-namespace GameSystem.CardSystem.Scripts
+namespace Assets.GameSystem.CardSystem.Scripts
 {
-    public abstract class BaseCardSo : ScriptableObject,ICanSendCmd
+    public abstract class BaseCardSo : ScriptableObject, ICanSendCmd
     {
         [Header("卡牌基础信息")]
+        public int cardId;
         public string cardName;
+        public string petName;
         public int depletePoint;
         public bool canAutoUse = false;
         [Header("基础属性")]
@@ -26,9 +28,9 @@ namespace GameSystem.CardSystem.Scripts
             {
                 player.ModifyActPoint(-depletePoint);
             }
-            
+
             //使用卡牌
-            OnUseCard(self,target);
+            OnUseCard(self, target);
         }
 
         protected abstract void OnUseCard(AbsUnit self, AbsUnit target);
