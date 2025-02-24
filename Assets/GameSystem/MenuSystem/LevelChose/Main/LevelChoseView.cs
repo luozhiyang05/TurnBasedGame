@@ -137,13 +137,13 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Main
                 //开始游戏
                 var menuSystemModule = this.GetSystem<IMenuSystemModule>();
                 Debug.Log($"选择了id为{menuSystemModule.GetNowChoseCharacterData().id}的角色和id为{menuSystemModule.GetNowChoseLevelData().id}的关卡");
-                
+
                 var nowCharacterData = menuSystemModule.GetNowChoseCharacterData();
                 var nowLevelData = menuSystemModule.GetNowChoseLevelData();
                 //打开战斗view
                 this.GetSystem<IBattleSystemModule>().ShowView(nowCharacterData,nowLevelData);
                 //打开卡组vie
-                this.GetSystem<ICardSystemModule>().ShowView();
+                this.GetSystem<ICardSystemModule>().ShowView(nowCharacterData.cardGroupId);
             }
         }
         private void Close()

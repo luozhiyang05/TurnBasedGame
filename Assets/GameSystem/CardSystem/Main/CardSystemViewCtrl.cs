@@ -36,7 +36,7 @@ namespace Assets.GameSystem.CardSystem.Main
 
         public override void OnBeforeShow(params object[] args)
         {
-
+            (GetModel() as CardSystemViewModel).LoadUseCards((int)args[0]);
         }
     }
 }

@@ -82,9 +82,6 @@ namespace Assets.GameSystem.CardSystem.Main
 
             _model = Model as CardSystemViewModel;
 
-            //加载玩家出战卡牌
-            _model?.LoadUseCards();
-
             //删除可能残留的卡牌go
             DestroyAllCardsGo();
         }

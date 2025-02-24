@@ -14,7 +14,7 @@ namespace Assets.GameSystem.MenuSystem.CharacterChose.Scripts
         public int maxActPoint;
         public int maxHeadCardCnt;
         public int skillCardId;
-        public int cardDeckId;
+        public int cardGroupId;
     }
 
     [CreateAssetMenu(fileName = "角色列表", menuName = "CharactersDataSo", order = 0)]

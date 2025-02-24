@@ -3,6 +3,7 @@ using Assets.GameSystem.CardSystem.ObsCard.Main;
 using Assets.GameSystem.CardSystem.Scripts;
 using Framework;
 using Tool.Mono;
+using Tool.UI;
 using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ namespace Assets.GameSystem.CardSystem
 {
     public interface ICardSystemModule : IModule
     {
-        void ShowView();
+        void ShowView(int cardGroupId);
 
         /// <summary>
         /// 打开观察卡牌视图
@@ -84,10 +85,10 @@ namespace Assets.GameSystem.CardSystem
 
         }
 
-        public void ShowView()
+        public void ShowView(int cardGroupId)
         {
             _viewCtrl ??= new CardSystemViewCtrl();
-            _viewCtrl.ShowView();
+            _viewCtrl.ShowView(EuiLayer.GameUI, cardGroupId);
         }
 
         public void ShowObsCardsView(QArray<BaseCardSo> obsCards, bool isUseCards)

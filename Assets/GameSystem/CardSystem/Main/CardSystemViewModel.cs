@@ -46,26 +46,36 @@ namespace Assets.GameSystem.CardSystem.Main
         /// <summary>
         /// 加载玩家出战卡牌
         /// </summary>
-        public void LoadUseCards()
+        public void LoadUseCards(int cardGroupId)
         {
-            //根据ids加载卡牌
-            for (int i = 0; i < 5; i++)
+            //先加载卡卡牌库，再根据卡牌组id加载对应卡组
+            var cardLibrarySo = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库");
+            // 根据卡组id，获取卡组中的卡牌id
+            var cardGroup = cardLibrarySo.GetCardGroupById(cardGroupId);
+            var cardSoList = cardGroup.GetBaseCardSo();
+            for (int i = 0; i < cardSoList.Count; i++)
             {
-                var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "普通攻击卡");
-                _nowUseCards.Add(loadCard);
+                _nowUseCards.Add(cardSoList[i]);
             }
 
-            for (int i = 0; i < 5; i++)
-            {
-                var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "普通防御卡");
-                _nowUseCards.Add(loadCard);
-            }
+            // //根据ids加载卡牌
+            // for (int i = 0; i < 5; i++)
+            // {
+            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "普通攻击卡");
+            //     _nowUseCards.Add(loadCard);
+            // }
 
-            for (int i = 0; i < 5; i++)
-            {
-                var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "攻击防御卡");
-                _nowUseCards.Add(loadCard);
-            }
+            // for (int i = 0; i < 5; i++)
+            // {
+            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "普通防御卡");
+            //     _nowUseCards.Add(loadCard);
+            // }
+
+            // for (int i = 0; i < 5; i++)
+            // {
+            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "攻击防御卡");
+            //     _nowUseCards.Add(loadCard);
+            // }
         }
 
         /// <summary>

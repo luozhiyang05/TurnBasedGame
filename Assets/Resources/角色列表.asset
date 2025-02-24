@@ -14,20 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterDatas:
   - id: 1
+    characterType: 0
     chaName: "\u732B\u732B"
     maxHp: 5
     maxActPoint: 5
     maxHeadCardCnt: 5
     skillCardId: 1001
+    cardGroupId: 1
   - id: 2
+    characterType: 0
     chaName: "\u72D7\u72D7"
     maxHp: 5
     maxActPoint: 5
     maxHeadCardCnt: 5
     skillCardId: 1002
+    cardGroupId: 1
   - id: 3
+    characterType: 0
     chaName: "\u9E2D\u9E2D"
     maxHp: 5
     maxActPoint: 5
     maxHeadCardCnt: 5
     skillCardId: 1003
+    cardGroupId: 2
