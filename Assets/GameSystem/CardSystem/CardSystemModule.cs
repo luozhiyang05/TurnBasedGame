@@ -19,7 +19,7 @@ namespace Assets.GameSystem.CardSystem
         /// </summary>
         /// <param name="obsCards"></param>
         /// <param name="isUseCards">true为牌库，false为弃牌堆</param>
-        void ShowObsCardsView(QArray<BaseCardSo> obsCards, bool isUseCards);
+        void ShowObsCardsView(QArray<BaseCard> obsCards, bool isUseCards);
 
         /// <summary>
         /// 回合结束丢弃手牌
@@ -35,14 +35,14 @@ namespace Assets.GameSystem.CardSystem
         /// 渲染玩家所有手牌
         /// </summary>
         /// <param name="cardsContent"></param>
-        void RenderHandCards(QArray<GameObject> cardGos, QArray<BaseCardSo> headCards, Transform cardContent);
+        void RenderHandCards(QArray<GameObject> cardGos, QArray<BaseCard> headCards, Transform cardContent);
 
         /// <summary>
         /// 渲染卡牌信息
         /// </summary>
         /// <param name="cardCell"></param>
         /// <param name="card"></param>
-        void RenderCardInfo(Transform cardCell, BaseCardSo card);
+        void RenderCardInfo(Transform cardCell, BaseCard card);
 
         /// <summary>
         /// 渲染历史记录
@@ -91,7 +91,7 @@ namespace Assets.GameSystem.CardSystem
             _viewCtrl.ShowView(EuiLayer.GameUI, cardGroupId);
         }
 
-        public void ShowObsCardsView(QArray<BaseCardSo> obsCards, bool isUseCards)
+        public void ShowObsCardsView(QArray<BaseCard> obsCards, bool isUseCards)
         {
             var ctrl = new ObsCardViewCtrl(new object[] { obsCards.Clone(), isUseCards });
             ctrl.ShowView();
@@ -107,7 +107,7 @@ namespace Assets.GameSystem.CardSystem
             (_viewCtrl.GetModel() as CardSystemViewModel)?.UpdateHeadCardInSr();
         }
 
-        public void RenderHandCards(QArray<GameObject> cardGos, QArray<BaseCardSo> headCards, Transform cardContent)
+        public void RenderHandCards(QArray<GameObject> cardGos, QArray<BaseCard> headCards, Transform cardContent)
         {
             int cardCnt = headCards.Count;
             bool isSingleCnt = cardCnt % 2 != 0;
@@ -144,19 +144,19 @@ namespace Assets.GameSystem.CardSystem
                 }
 
             }
-            void RenderCard(Transform cardCell, BaseCardSo card, int index)
+            void RenderCard(Transform cardCell, BaseCard card, int index)
             {
                 //对卡牌信息赋值
                 if (!cardCell.gameObject.TryGetComponent<DragCard>(out DragCard dragCard))
                 {
                     dragCard = cardCell.gameObject.AddComponent<DragCard>();
                     dragCard.headCardIdx = index - 1;
-                    dragCard.BaseCardSo = card;
+                    dragCard.BaseCard = card;
                 }
                 else
                 {
                     dragCard.headCardIdx = index - 1;
-                    dragCard.BaseCardSo = card;
+                    dragCard.BaseCard = card;
                 }
 
                 //渲染卡牌名字和描述信息
@@ -168,9 +168,9 @@ namespace Assets.GameSystem.CardSystem
             }
         }
 
-        public void RenderCardInfo(Transform cardCell, BaseCardSo card)
+        public void RenderCardInfo(Transform cardCell, BaseCard card)
         {
-            cardCell.Find("bg/txt_name").GetComponent<Text>().text = card.name;
+            cardCell.Find("bg/txt_name").GetComponent<Text>().text = card.cardName;
             cardCell.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
         }
 

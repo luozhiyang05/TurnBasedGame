@@ -1,0 +1,4 @@
+﻿id,effName,maxRoundCnt
+Int,Int,Int
+1,叠甲,1
+2,削弱,1

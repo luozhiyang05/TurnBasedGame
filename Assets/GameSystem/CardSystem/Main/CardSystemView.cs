@@ -86,7 +86,7 @@ namespace Assets.GameSystem.CardSystem.Main
             DestroyAllCardsGo();
         }
 
-        private QArray<BaseCardSo> _headCardQArray = new QArray<BaseCardSo>(5);
+        private QArray<BaseCard> _headCardQArray = new QArray<BaseCard>(5);
         private QArray<GameObject> _cardsGo = new QArray<GameObject>(5);
 
         /// <summary>

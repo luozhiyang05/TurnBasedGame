@@ -6,6 +6,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Effect
     [Serializable]
     public abstract class BaseEffect
     {
+        public int id;
         public string effName;
         public int maxRoundCnt; //最大回合数
         protected int _remainRoundCnt; //剩余回合数

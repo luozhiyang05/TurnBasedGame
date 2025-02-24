@@ -16,7 +16,6 @@ MonoBehaviour:
   characterDatas:
   - id: 1
     characterType: 0
-    chaName: "\u732B\u732B"
     maxHp: 5
     maxActPoint: 5
     maxHeadCardCnt: 5
@@ -24,7 +23,6 @@ MonoBehaviour:
     cardGroupId: 1
   - id: 2
     characterType: 1
-    chaName: "\u72D7\u72D7"
     maxHp: 5
     maxActPoint: 5
     maxHeadCardCnt: 5
@@ -32,7 +30,6 @@ MonoBehaviour:
     cardGroupId: 2
   - id: 3
     characterType: 2
-    chaName: 
     maxHp: 5
     maxActPoint: 5
     maxHeadCardCnt: 5

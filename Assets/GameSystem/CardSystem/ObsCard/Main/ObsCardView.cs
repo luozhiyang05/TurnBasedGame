@@ -49,7 +49,7 @@ namespace Assets.GameSystem.CardSystem.ObsCard.Main
 
         private Transform _content;
         private GameObject _cardGo;
-        private QArray<BaseCardSo> _obsCards;
+        private QArray<BaseCard> _obsCards;
         private ObsCardViewModel _model;
         private bool _isUseCards;
         /// <summary>
@@ -91,7 +91,7 @@ namespace Assets.GameSystem.CardSystem.ObsCard.Main
             base.OnRelease();
         }
 
-        public void SetDataSource(QArray<BaseCardSo> obsCards, bool isUseCards)
+        public void SetDataSource(QArray<BaseCard> obsCards, bool isUseCards)
         {
             _obsCards = obsCards;
             _isUseCards = isUseCards;

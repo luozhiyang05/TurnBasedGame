@@ -1,13 +1,15 @@
+using System;
 using Assets.GameSystem.BattleSystem.Scripts;
 using Framework;
 using UnityEngine;
 
 namespace Assets.GameSystem.CardSystem.Scripts
 {
-    public abstract class BaseCardSo : ScriptableObject, ICanSendCmd
+    [Serializable]
+    public class BaseCard : ICanSendCmd
     {
         [Header("卡牌基础信息")]
-        public int cardId;
+        public int id;
         public string cardName;
         public string petName;
         public int depletePoint;
@@ -18,6 +20,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
         [Header("卡片描述")]
         [TextArea]
         public string cardDesc;
+        public int effectId;
 
         public IMgr Ins => Global.GetInstance();
 
@@ -33,6 +36,6 @@ namespace Assets.GameSystem.CardSystem.Scripts
             OnUseCard(self, target);
         }
 
-        protected abstract void OnUseCard(AbsUnit self, AbsUnit target);
+        protected virtual void OnUseCard(AbsUnit self, AbsUnit target){}
     }
 }

@@ -12,7 +12,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
     public class DragCard : DragCell, ICanGetSystem, ICanSendCmd, IPointerEnterHandler, IPointerExitHandler
     {
         public int headCardIdx;
-        public BaseCardSo BaseCardSo;
+        public BaseCard BaseCard;
         private int _idx;
 
         protected override void OnStartDrag(PointerEventData eventData)
@@ -41,14 +41,14 @@ namespace Assets.GameSystem.CardSystem.Scripts
 
                         //判断当前行动带你是否足够使用卡牌
                         var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
-                        if (player.nowActPoint >= BaseCardSo.depletePoint)
+                        if (player.nowActPoint >= BaseCard.depletePoint)
                         {
                             //使用卡牌的命令
                             this.SendCmd<UseCardCmd, CardData>(new CardData()
                             {
                                 user = player,
                                 headCardIdx = headCardIdx,
-                                cardSo = BaseCardSo,
+                                cardSo = BaseCard,
                                 target = currentObjectUnderCursor.transform.parent.gameObject
                             });
                             return;
@@ -59,14 +59,14 @@ namespace Assets.GameSystem.CardSystem.Scripts
                 {
                     //当拖拽距离大于350且当前卡牌可以自动使用，则自动使用
                     var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
-                    if (BaseCardSo.canAutoUse && GetDargDistance() > 350f)
+                    if (BaseCard.canAutoUse && GetDargDistance() > 350f)
                     {
                         //使用卡牌的命令
                         this.SendCmd<UseCardCmd, CardData>(new CardData()
                         {
                             user = player,
                             headCardIdx = headCardIdx,
-                            cardSo = BaseCardSo,
+                            cardSo = BaseCard,
                             target = player.gameObject  //自动使用的卡牌目标为自己
                         });
                         return;
@@ -106,7 +106,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
     {
         public AbsUnit user;
         public int headCardIdx;
-        public BaseCardSo cardSo;
+        public BaseCard cardSo;
         public GameObject target;
     }
 

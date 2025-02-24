@@ -10,9 +10,9 @@ namespace Assets.GameSystem.CardSystem.Main
 {
     public class CardSystemViewModel : BaseModel
     {
-        private QArray<BaseCardSo> _nowUseCards;    // 出战卡牌
-        private QArray<BaseCardSo> _nowHeadCards;   // 手牌
-        private QArray<BaseCardSo> _discardCards;   // 弃牌堆
+        private QArray<BaseCard> _nowUseCards;    // 出战卡牌
+        private QArray<BaseCard> _nowHeadCards;   // 手牌
+        private QArray<BaseCard> _discardCards;   // 弃牌堆
         private QArray<UseCardHistory> _usedCardsHistory;   // 历史记录
 
         private UnityAction _updateViewCallback;
@@ -20,9 +20,9 @@ namespace Assets.GameSystem.CardSystem.Main
 
         public override void Init()
         {
-            _nowUseCards = new QArray<BaseCardSo>(10);
-            _nowHeadCards = new QArray<BaseCardSo>(10);
-            _discardCards = new QArray<BaseCardSo>(10);
+            _nowUseCards = new QArray<BaseCard>(10);
+            _nowHeadCards = new QArray<BaseCard>(10);
+            _discardCards = new QArray<BaseCard>(10);
             _usedCardsHistory = new QArray<UseCardHistory>(10);
         }
 
@@ -48,32 +48,32 @@ namespace Assets.GameSystem.CardSystem.Main
         /// </summary>
         public void LoadUseCards(int cardGroupId)
         {
-            //先加载卡卡牌库，再根据卡牌组id加载对应卡组
-            var cardLibrarySo = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库");
-            // 根据卡组id，获取卡组中的卡牌id
-            var cardGroup = cardLibrarySo.GetCardGroupById(cardGroupId);
-            var cardSoList = cardGroup.GetBaseCardSo();
-            for (int i = 0; i < cardSoList.Count; i++)
-            {
-                _nowUseCards.Add(cardSoList[i]);
-            }
+            // //先加载卡卡牌库，再根据卡牌组id加载对应卡组
+            // var cardLibrarySo = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库");
+            // // 根据卡组id，获取卡组中的卡牌id
+            // var cardGroup = cardLibrarySo.GetCardGroupById(cardGroupId);
+            // var cardSoList = cardGroup.GetBaseCard();
+            // for (int i = 0; i < cardSoList.Count; i++)
+            // {
+            //     _nowUseCards.Add(cardSoList[i]);
+            // }
 
             // //根据ids加载卡牌
             // for (int i = 0; i < 5; i++)
             // {
-            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "普通攻击卡");
+            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCard>("PlayerCards/" + "普通攻击卡");
             //     _nowUseCards.Add(loadCard);
             // }
 
             // for (int i = 0; i < 5; i++)
             // {
-            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "普通防御卡");
+            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCard>("PlayerCards/" + "普通防御卡");
             //     _nowUseCards.Add(loadCard);
             // }
 
             // for (int i = 0; i < 5; i++)
             // {
-            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCardSo>("PlayerCards/" + "攻击防御卡");
+            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCard>("PlayerCards/" + "攻击防御卡");
             //     _nowUseCards.Add(loadCard);
             // }
         }
@@ -149,7 +149,7 @@ namespace Assets.GameSystem.CardSystem.Main
         /// 获取目前玩家的手牌用于view展示
         /// </summary>
         /// <returns></returns>
-        public QArray<BaseCardSo> GetNowHeadCards()
+        public QArray<BaseCard> GetNowHeadCards()
         {
             return _nowHeadCards;
         }
@@ -158,7 +158,7 @@ namespace Assets.GameSystem.CardSystem.Main
         /// 获取弃牌堆中的卡牌
         /// </summary>
         /// <returns></returns>
-        public QArray<BaseCardSo> GetDiscardCards()
+        public QArray<BaseCard> GetDiscardCards()
         {
             return _discardCards;
         }
@@ -167,7 +167,7 @@ namespace Assets.GameSystem.CardSystem.Main
         /// 获取玩家所有卡牌
         /// </summary>
         /// <returns></returns>
-        public QArray<BaseCardSo> GetUserCards()
+        public QArray<BaseCard> GetUserCards()
         {
             return _nowUseCards;
         }

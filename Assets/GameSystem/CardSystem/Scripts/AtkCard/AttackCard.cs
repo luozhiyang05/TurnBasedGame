@@ -1,12 +1,10 @@
 using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.CardSystem.Scripts.Cmd;
 using Framework;
-using UnityEngine;
 
 namespace Assets.GameSystem.CardSystem.Scripts.AtkCard
 {
-    [CreateAssetMenu(menuName = "CardSystem/Atk", fileName = "AtkCard")]
-    public class AttackCard : BaseCardSo
+    public class AttackCard : BaseCard
     {
         protected override void OnUseCard(AbsUnit self, AbsUnit target)
         {

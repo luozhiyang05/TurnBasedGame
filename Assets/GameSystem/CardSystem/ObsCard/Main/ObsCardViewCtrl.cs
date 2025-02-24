@@ -15,12 +15,12 @@ namespace Assets.GameSystem.CardSystem.ObsCard.Main
 
         }
 
-        private QArray<BaseCardSo> obsCards;
+        private QArray<BaseCard> obsCards;
         private bool isUseCards;
 
         protected override void Init(params object[] args)
         {
-            obsCards = args[0] as QArray<BaseCardSo>;
+            obsCards = args[0] as QArray<BaseCard>;
             isUseCards = (bool)args[1];
         }
 

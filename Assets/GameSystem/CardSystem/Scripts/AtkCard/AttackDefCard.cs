@@ -6,9 +6,7 @@ using UnityEngine;
 
 namespace Assets.GameSystem.CardSystem.Scripts.AtkCard
 {
-    [CreateAssetMenu(menuName = "CardSystem/AtkDef", fileName = "AttackDefCard")]
-
-    public class AttackDefCard : BaseCardSo
+    public class AttackDefCard : BaseCard
     {
         public DefenceEffect defenceEff;
 
