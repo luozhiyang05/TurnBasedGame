@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474d320ce19bbad448ad124886e62f59, type: 3}
   m_Name: "\u89D2\u8272\u5217\u8868"
   m_EditorClassIdentifier: 
+  readAsset: {fileID: 4900000, guid: 08d477a1cc97c6448b0d9fd72e55267b, type: 3}
   characterDatas:
   - id: 1
     characterType: 0
@@ -22,16 +23,16 @@ MonoBehaviour:
     skillCardId: 1001
     cardGroupId: 1
   - id: 2
-    characterType: 0
+    characterType: 1
     chaName: "\u72D7\u72D7"
     maxHp: 5
     maxActPoint: 5
     maxHeadCardCnt: 5
     skillCardId: 1002
-    cardGroupId: 1
+    cardGroupId: 2
   - id: 3
-    characterType: 0
-    chaName: "\u9E2D\u9E2D"
+    characterType: 2
+    chaName: 
     maxHp: 5
     maxActPoint: 5
     maxHeadCardCnt: 5

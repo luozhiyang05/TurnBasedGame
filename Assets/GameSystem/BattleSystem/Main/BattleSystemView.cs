@@ -108,7 +108,7 @@ namespace Assets.GameSystem.BattleSystem.Main
             AbsUnit absUnit = null;
             switch(characterData.characterType)
             {
-                case CharacterType.CAT:
+                case CharacterType.猫猫:
                      absUnit = playerBody.AddComponent<PlayerCat>();
                     break;
                 default: break;

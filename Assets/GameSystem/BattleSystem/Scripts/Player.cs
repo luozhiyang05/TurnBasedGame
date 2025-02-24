@@ -75,7 +75,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// </summary>
         public void InitData(CharacterData characterData)
         {
-            unitName = characterData.chaName;
+            unitName = characterData.characterType.ToString();
             maxHp.Value = characterData.maxHp;
             nowHp.Value = characterData.maxHp;
             maxActPoint = characterData.maxActPoint;

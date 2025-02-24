@@ -105,7 +105,7 @@ namespace Assets.GameSystem.MenuSystem.CharacterChose.Main
             {
                 var characterData = model.GetCharacterDataById(i + 1);
                 var txtName = _charactes.GetChild(i).Find("txt_name").GetComponent<Text>();
-                txtName.text = characterData.chaName;
+                txtName.text = characterData.characterType.ToString();
             }
         }
 
