@@ -12,6 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d71145b33ff1b94ea7e2d9aa54501f3, type: 3}
   m_Name: "\u5361\u724C\u5E93"
   m_EditorClassIdentifier: 
-  cardGroupSos:
-  - {fileID: 11400000, guid: 4d665c53d62615044b7f30882e26b3a5, type: 2}
-  - {fileID: 11400000, guid: 7a523b323690a71429f4ace3faf07c25, type: 2}
+  readAsset: {fileID: 4900000, guid: 13b98e9365e38d8418ba2524277554f8, type: 3}
+  baseCardDataPackings:
+  - id: 1
+    cardName: "\u666E\u901A\u653B\u51FB\u5361"
+    petName: 
+    depletePoint: 1
+    canAutoUse: 0
+    atk: 100
+    armor: 0
+    cardDesc: "\u79D2\u6740"
+    effectId: 0
+  - id: 2
+    cardName: "\u666E\u901A\u9632\u5FA1\u5361"
+    petName: 
+    depletePoint: 1
+    canAutoUse: 1
+    atk: 0
+    armor: 100
+    cardDesc: "\u62A4\u76FE"
+    effectId: 1
+  - id: 3
+    cardName: "\u653B\u51FB\u9632\u5FA1"
+    petName: 
+    depletePoint: 1
+    canAutoUse: 0
+    atk: 100
+    armor: 100
+    cardDesc: "\u62A4\u76FE\u79D2\u6740"
+    effectId: 1

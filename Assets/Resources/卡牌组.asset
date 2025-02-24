@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bf7c39ea8feb584dba185e8d7d2db39, type: 3}
   m_Name: "\u5361\u724C\u7EC4"
   m_EditorClassIdentifier: 
-  textAsset: {fileID: 0}
-  cardSos: []
+  textAsset: {fileID: 4900000, guid: 1018747c02834234fb89bdcc8670d323, type: 3}
+  cardGroups:
+  - id: 1
+    cardIds: "1-1-1-1-1-2-2-2-2-2\r"
+  - id: 2
+    cardIds: "1-1-1-1-1-3-3-3-3-3\r"

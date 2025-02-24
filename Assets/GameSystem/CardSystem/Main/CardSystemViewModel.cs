@@ -3,6 +3,7 @@ using GameSystem.MVCTemplate;
 using Tool.ResourceMgr;
 using Tool.Utilities;
 using Tool.Utilities.Events;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -48,11 +49,15 @@ namespace Assets.GameSystem.CardSystem.Main
         /// </summary>
         public void LoadUseCards(int cardGroupId)
         {
-            // //先加载卡卡牌库，再根据卡牌组id加载对应卡组
-            // var cardLibrarySo = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库");
-            // // 根据卡组id，获取卡组中的卡牌id
-            // var cardGroup = cardLibrarySo.GetCardGroupById(cardGroupId);
-            // var cardSoList = cardGroup.GetBaseCard();
+            var CardGroupsSo = ResMgr.GetInstance().SyncLoad<CardGroupsSo>("卡牌组");
+            var cardLibrarySo = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库");
+            // 根据卡组id，获取卡组中的卡牌id
+            var cardGroup = CardGroupsSo.GetCardsId(cardGroupId);
+            for (int i = 0; i < cardGroup.Count; i++)
+            {
+                Debug.Log("加载卡牌id：" + cardGroup[i]);
+                _nowUseCards.Add(cardLibrarySo.GetCardById(cardGroup[i]));
+            }
             // for (int i = 0; i < cardSoList.Count; i++)
             // {
             //     _nowUseCards.Add(cardSoList[i]);

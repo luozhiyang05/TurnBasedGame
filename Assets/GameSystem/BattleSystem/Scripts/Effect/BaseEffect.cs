@@ -13,7 +13,13 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Effect
 
         protected AbsUnit self;
         protected List<AbsUnit> targetList;
-        
+        public void SetUpData(int id,string effName,int maxActPoint)
+        {
+            this.id = id;
+            this.effName = effName;
+            this.maxRoundCnt = maxActPoint;
+        }
+
         public void StartRoundSettle()
         {
             if (_remainRoundCnt - 1 >= 0)

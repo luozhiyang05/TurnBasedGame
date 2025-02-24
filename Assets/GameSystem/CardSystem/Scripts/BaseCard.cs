@@ -1,12 +1,13 @@
 using System;
 using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.BattleSystem.Scripts.Effect;
 using Framework;
 using UnityEngine;
 
 namespace Assets.GameSystem.CardSystem.Scripts
 {
     [Serializable]
-    public class BaseCard : ICanSendCmd
+    public abstract class BaseCard : ICanSendCmd
     {
         [Header("卡牌基础信息")]
         public int id;
@@ -36,6 +37,6 @@ namespace Assets.GameSystem.CardSystem.Scripts
             OnUseCard(self, target);
         }
 
-        protected virtual void OnUseCard(AbsUnit self, AbsUnit target){}
+        protected abstract void OnUseCard(AbsUnit self, AbsUnit target);
     }
 }

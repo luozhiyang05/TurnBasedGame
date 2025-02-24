@@ -2,13 +2,13 @@ using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.BattleSystem.Scripts.Effect;
 using Assets.GameSystem.CardSystem.Scripts.Cmd;
 using Framework;
+using Tool.ResourceMgr;
 using UnityEngine;
 
 namespace Assets.GameSystem.CardSystem.Scripts.AtkCard
 {
     public class AttackDefCard : BaseCard
     {
-        public DefenceEffect defenceEff;
 
         protected override void OnUseCard(AbsUnit self, AbsUnit target)
         {
@@ -17,7 +17,7 @@ namespace Assets.GameSystem.CardSystem.Scripts.AtkCard
             {
                 self = self,
                 target = self,
-                defenceEffect = defenceEff,
+                defenceEffect = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库").GetEffectById(effectId) as DefenceEffect,
                 armor = armor
             });
 

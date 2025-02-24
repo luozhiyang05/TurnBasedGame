@@ -109,9 +109,11 @@ namespace Assets.GameSystem.BattleSystem.Main
             switch(characterData.characterType)
             {
                 case CharacterType.猫猫:
-                     absUnit = playerBody.AddComponent<PlayerCat>();
+                    absUnit = playerBody.AddComponent<PlayerCat>();
                     break;
-                default: break;
+                default:
+                    absUnit = playerBody.AddComponent<PlayerCat>();
+                    break;
             }
             absUnit.InitSystem(this.GetSystem<IBattleSystemModule>());
             (absUnit as Player).InitData(characterData);

@@ -1,4 +1,4 @@
 ﻿id,effName,maxRoundCnt
-Int,Int,Int
+Int,String,Int
 1,叠甲,1
 2,削弱,1

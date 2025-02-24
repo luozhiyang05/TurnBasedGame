@@ -17,16 +17,31 @@ namespace Assets.GameSystem.CardSystem.Scripts
     public class CardGroupsSo : ScriptableObject
     {
         public TextAsset textAsset;
-        public List<CardGroupData> cardSos;
+        public List<CardGroupData> cardGroups;
 
         private void OnValidate()
         {
             if (textAsset == null) return;
-            cardSos.Clear();
+            cardGroups.Clear();
             CsvKit.Read<CardGroupData>(textAsset, BindingFlags.Public | BindingFlags.Instance, value =>
             {
-                cardSos.Add(value);
+                cardGroups.Add(value);
             });
+        }
+
+        public List<int> GetCardsId(int cardGroupId)
+        {
+            var cardGroupData = cardGroups.Find(value=>value.id==cardGroupId);
+            if(cardGroupData!=null)
+            {
+                var ids = new List<int>();
+                foreach (var id in cardGroupData.cardIds.Split('-'))
+                {
+                    ids.Add(int.Parse(id));
+                }
+                return ids;
+            }
+            throw new Exception("卡牌组不存在");
         }
     }
 }
