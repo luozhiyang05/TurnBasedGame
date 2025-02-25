@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d71145b33ff1b94ea7e2d9aa54501f3, type: 3}
   m_Name: "\u5361\u724C\u5E93"
   m_EditorClassIdentifier: 
-  readAsset: {fileID: 4900000, guid: 13b98e9365e38d8418ba2524277554f8, type: 3}
+  cardAsset: {fileID: 4900000, guid: 13b98e9365e38d8418ba2524277554f8, type: 3}
+  effAsset: {fileID: 4900000, guid: 2aa3461f02d4ba5429a5112e3ebd1d67, type: 3}
   baseCardDataPackings:
   - id: 1
     cardName: "\u666E\u901A\u653B\u51FB\u5361"
@@ -41,3 +42,10 @@ MonoBehaviour:
     armor: 100
     cardDesc: "\u62A4\u76FE\u79D2\u6740"
     effectId: 1
+  baseEffectDataPackings:
+  - id: 1
+    effName: "\u53E0\u7532"
+    maxRoundCnt: 1
+  - id: 2
+    effName: "\u524A\u5F31"
+    maxRoundCnt: 1

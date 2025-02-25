@@ -53,7 +53,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         {
             base.id = id;
 
-            unitName = enemyData.name;
+            unitName = enemyData.enemyType.ToString();
             maxHp.Value = enemyData.maxHp;
             nowHp.Value = maxHp.Value;
             armor.Value = enemyData.maxArmor;

@@ -55,16 +55,6 @@ namespace Assets.GameSystem.BattleSystem.Main
             _levelData = levelData;
         }
 
-        public CharacterData GetCharacterData()
-        {
-            return _characterData;
-        }
-
-        public WavasData GetNowWava()
-        {
-            return _levelData.GetWavaData(_nowWaveIndex);
-        }
-
         public void SetEnemyAbsUnit(AbsUnit absUnit)
         {
             _enemyList.Add(absUnit);
@@ -92,9 +82,6 @@ namespace Assets.GameSystem.BattleSystem.Main
             return isEnemiesAfterAct;
         }
 
-        public int GetEnemyCount()=> _enemyList.Count;
-
-        public AbsUnit GetPlayerUnit()=> _player;
 
         public void UnitDie(AbsUnit unit)
         {
@@ -107,6 +94,14 @@ namespace Assets.GameSystem.BattleSystem.Main
                 Debug.Log("玩家死亡");
             }
         }
+
+        #region 数据获取
+        public int GetEnemyCount() => _enemyList.Count;
+        public WavasData GetNowWava() => _levelData.GetWavaData(_nowWaveIndex);
+
+        public AbsUnit GetPlayerUnit() => _player;
+        public CharacterData GetCharacterData() => _characterData;
+        #endregion
 
         #region 单位死亡事件
         private void RemoveUnit(AbsUnit absUnit)

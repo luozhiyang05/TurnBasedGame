@@ -106,9 +106,8 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Main
             var model = Model as LevelChoseViewModel;
             for (int i = 0; i < _levels.childCount; i++)
             {
-                var level = model.GetLevelById(i + 1);
                 var txtName = _levels.GetChild(i).Find("txt_name").GetComponent<Text>();
-                txtName.text = level.levelName;
+                txtName.text = model.GetLevelNameById(i + 1);
             }
         }
 

@@ -1,5 +1,6 @@
 using Framework;
 using GameSystem.MVCTemplate;
+using GlobalData;
 using UIComponents;
 
 namespace Assets.GameSystem.MenuSystem.Main
@@ -55,7 +56,7 @@ namespace Assets.GameSystem.MenuSystem.Main
         /// </summary>
         protected override void OnInit()
         {
-            Btn_startGame.Text = "开始游戏";
+            Btn_startGame.Text = GameManager.GetText("menu_1001");
             Btn_startGame.onClick.AddListener(OpenCharacterChoseView);
         }
 

@@ -86,10 +86,10 @@ namespace Assets.GameSystem.BattleSystem.Main
             var body = enemy.Find("body");
             switch (enemyData.enemyType)
             {
-                case EnemyType.ENEMY_1:
+                case EnemyType.史莱姆:
                     absUnit = body.AddComponent<EnemyStore>();
                     break;
-                case EnemyType.ENEMY_2:
+                case EnemyType.石头怪:
                     absUnit = body.AddComponent<EnemyStore>();
                     break;
                 default: break;

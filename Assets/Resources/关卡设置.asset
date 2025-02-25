@@ -22,6 +22,10 @@ MonoBehaviour:
         maxHp: 5
         maxArmor: 1
         atk: 1
+      - enemyType: 1
+        maxHp: 5
+        maxArmor: 1
+        atk: 1
     - wavaName: "\u6CE2\u6B212"
       enemies:
       - enemyType: 0

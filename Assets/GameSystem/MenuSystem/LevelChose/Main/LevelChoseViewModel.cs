@@ -37,11 +37,11 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Main
         }
         public LevelData GetChooseLevel()
         {
-            return GetLevelById(_nowChooseLevelId);
+            return _levelsSo.GetLevelDataById(_nowChooseLevelId);
         }
-        public LevelData GetLevelById(int id)
+        public string GetLevelNameById(int id)
         {
-            return _levelsSo.GetLevelById(id);
+            return _levelsSo.GetLevelNameById(id);
         }
     }
 }
