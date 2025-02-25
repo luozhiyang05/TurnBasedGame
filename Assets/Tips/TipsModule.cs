@@ -1,4 +1,5 @@
 using Assets.GameSystem.CardSystem.Scripts;
+using GlobalData;
 using Tool.UI;
 using Tool.Utilities;
 using UnityEngine.Events;
@@ -17,12 +18,12 @@ namespace Tips
             });
         }
 
-        public static void ComfirmTips(string title, string content, UnityAction comfirm)
+        public static void ComfirmTips(string titleKey, string contentKey, UnityAction comfirm)
         {
             uiMgr.GetFromPool("ComfirmTips", EuiLayer.TipsUI, (tips) =>
             {
                 var confirmTips = tips as ComfirmTips;
-                confirmTips.Open(title, content, comfirm);
+                confirmTips.Open(GameManager.GetText(titleKey), GameManager.GetText(contentKey), comfirm);
             });
         }
 

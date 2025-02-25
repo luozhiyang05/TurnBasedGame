@@ -4,11 +4,14 @@ using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
 using GameSystem.MVCTemplate;
+using GlobalData;
 using Tips;
+using Tool.Mono;
 using Tool.UI;
 using Tool.Utilities;
 using Tool.Utilities.Events;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.GameSystem.BattleSystem.Main
 {
@@ -21,6 +24,8 @@ namespace Assets.GameSystem.BattleSystem.Main
         private LevelData _levelData;
         private int _nowEnemyIndex; //当前敌人下标
         private int _nowWaveIndex;  //当前波次下标
+
+        private UnityAction setNextWavaEnemiesDataDelegate;
         public override void Init()
         {
             _nowEnemyIndex = 0;
@@ -109,12 +114,21 @@ namespace Assets.GameSystem.BattleSystem.Main
             Debug.Log("死亡单位:" + absUnit.unitName + " id=" + absUnit.id);
             if (_enemyList.Count == 0)
             {
-                Debug.Log("敌人全部死亡");
-                TipsModule.ComfirmTips("提示", "恭喜你，你赢了", () =>
+                //判断当前关卡是否已经完成所有波次的推进
+                if (_nowWaveIndex == _levelData.waveCnt)
                 {
-                    UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.GameUI);
-                    this.GetSystem<IMenuSystemModule>().ShowView();
-                });
+                    TipsModule.ComfirmTips("tips_1001", "win_1001", () =>
+                    {
+                        UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.GameUI);
+                        this.GetSystem<IMenuSystemModule>().ShowView();
+                    });
+                }
+                else
+                {
+                    _nowWaveIndex++;
+                    //开启下一个波次
+                    this.GetSystem<IBattleSystemModule>().BulletScreenTimeDelegate(SetNextWavaEnemiesData, GameManager.GetText("waveTip_1001"));
+                }
             }
         }
         private void AbsUnitDie(AbsUnit absUnit)
@@ -123,5 +137,17 @@ namespace Assets.GameSystem.BattleSystem.Main
             UnitDie(absUnit);
         }
         #endregion
+
+        #region 事件回调
+        public void SetNextWavaEnemiesDataAction(UnityAction unityAction)
+        {
+            setNextWavaEnemiesDataDelegate = unityAction;
+        }
+        private void SetNextWavaEnemiesData()
+        {
+            setNextWavaEnemiesDataDelegate?.Invoke();
+        }
+        #endregion
+
     }
 }

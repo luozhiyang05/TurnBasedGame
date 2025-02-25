@@ -23,6 +23,7 @@ namespace Assets.GameSystem.BattleSystem.Main
         /// </summary>
         protected override void BindModelListener()
         {
+            (Model as BattleSystemViewModel).SetNextWavaEnemiesDataAction(SetWaveEnemiesData);
         }
 
 
@@ -38,8 +39,15 @@ namespace Assets.GameSystem.BattleSystem.Main
         public override void OnShow()
         {
             base.OnShow();
-            //设置关卡敌人信息
-            SetLevelEnemies();
+
+            //设置当前波次的敌人信息
+            SetWaveEnemiesData();
+
+            //设置玩家信息
+            SetPlayerData();
+
+            //设置当前回合为玩家回合
+            this.GetSystem<IBattleSystemModule>().SwitchPlayerTurn();
         }
 
 
@@ -48,7 +56,25 @@ namespace Assets.GameSystem.BattleSystem.Main
             base.OnHide();
         }
 
-        public void SetLevelEnemies()
+
+        /// <summary>
+        /// 设置玩家信息
+        /// </summary>
+        public void SetPlayerData()
+        {
+            //初始化玩家信息，并且保存到模型层
+            BattleSystemViewModel model = Model as BattleSystemViewModel;
+            var player = transform.Find("Main/absUnit/player");
+            var playerBody = player.Find("body");
+            var characterData = model.GetCharacterData();
+            AddPlayerUnit(playerBody, characterData);
+            player.gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// 设置当前波次的敌人信息
+        /// </summary>
+        public void SetWaveEnemiesData()
         {
             //初始化敌人信息，并且保存到模型层
             BattleSystemViewModel model = Model as BattleSystemViewModel;
@@ -60,16 +86,6 @@ namespace Assets.GameSystem.BattleSystem.Main
                 AddEnemyUnit(enemy, i + 1, wava.enemies[i]);
                 enemy.gameObject.SetActive(true);
             }
-
-            //初始化玩家信息，并且保存到模型层
-            var player = transform.Find("Main/absUnit/player");
-            var playerBody = player.Find("body");
-            var characterData = model.GetCharacterData();
-            AddPlayerUnit(playerBody,characterData);
-            player.gameObject.SetActive(true);
-
-            //设置当前回合为玩家回合
-            this.GetSystem<IBattleSystemModule>().SwitchPlayerTurn();
         }
 
         /// <summary>

@@ -76,7 +76,7 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Scripts
             string[] enemyIdsSplit = enemyIds.Split('/')[wava-1].Split('-');
             for (int i = 0; i < enemyIdsSplit.Length; i++)
             {
-                wavaData.enemies.Add(enemiesSo.GetEnemyDataById(int.Parse(enemyIdsSplit[1])));
+                wavaData.enemies.Add(enemiesSo.GetEnemyDataById(int.Parse(enemyIdsSplit[i])));
             }
             return wavaData;
         }
