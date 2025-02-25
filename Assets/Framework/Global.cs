@@ -1,6 +1,8 @@
 using Assets.GameSystem.BattleSystem;
 using Assets.GameSystem.CardSystem;
 using Assets.GameSystem.MenuSystem;
+using Assets.GameSystem.SkillSystem;
+
 namespace Framework
 {
     public class Global : FrameworkMgr<Global>
@@ -10,6 +12,7 @@ namespace Framework
 			this.RegisterModule<IBattleSystemModule>(new BattleSystemModule());
 			this.RegisterModule<ICardSystemModule>(new CardSystemModule());
 			this.RegisterModule<IMenuSystemModule>(new MenuSystemModule());
+			this.RegisterModule<ISkillSystemModule>(new SkillSystemModule());
         }
     }
 }

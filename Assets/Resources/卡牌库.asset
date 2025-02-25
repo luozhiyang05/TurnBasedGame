@@ -14,7 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardAsset: {fileID: 4900000, guid: 13b98e9365e38d8418ba2524277554f8, type: 3}
   effAsset: {fileID: 4900000, guid: 2aa3461f02d4ba5429a5112e3ebd1d67, type: 3}
-  baseCardDataPackings: []
+  baseCardDataPackings:
+  - id: 1
+    cardName: card_name_1001
+    petName: 
+    depletePoint: 1
+    canAutoUse: 0
+    atk: 100
+    armor: 0
+    param1: 0
+    cardDesc: "\u79D2\u6740"
+    effectId: 0
+  - id: 2
+    cardName: "\u666E\u901A\u9632\u5FA1\u5361"
+    petName: 
+    depletePoint: 1
+    canAutoUse: 1
+    atk: 0
+    armor: 100
+    param1: 1
+    cardDesc: "\u62A4\u76FE"
+    effectId: 1
+  - id: 3
+    cardName: "\u653B\u51FB\u9632\u5FA1"
+    petName: 
+    depletePoint: 1
+    canAutoUse: 0
+    atk: 100
+    armor: 100
+    param1: 0
+    cardDesc: "\u62A4\u76FE\u79D2\u6740"
+    effectId: 1
   baseEffectDatas:
   - id: 1
     effName: "\u53E0\u7532"
