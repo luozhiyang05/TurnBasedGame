@@ -59,7 +59,5 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             armor.Value = enemyData.maxArmor;
             atk.Value = enemyData.atk;
         }
-
-        public IMgr Ins => Global.GetInstance();
     }
 }

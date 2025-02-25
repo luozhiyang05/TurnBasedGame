@@ -1,4 +1,5 @@
 using GameSystem.MVCTemplate;
+using GlobalData;
 using UIComponents;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -48,7 +49,7 @@ namespace Tips
             txtTitle.text = args[0] as string;
             txtContent.text = args[1] as string;
             //TODO:多语言
-            btnComfirm.Label.text = "确定";
+            btnComfirm.Label.text = GameManager.GetText("tips_1003");
         }
 
         public override void OnRelease()

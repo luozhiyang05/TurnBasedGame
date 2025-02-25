@@ -1,10 +1,15 @@
 using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.BattleSystem.Scripts.Unit;
+using Assets.GameSystem.BattleSystem.Scripts.Unit.EnemyUnit;
+using Assets.GameSystem.BattleSystem.Scripts.Unit.PlayerUnit;
+using Assets.GameSystem.MenuSystem;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
+using Tips;
+using Tool.UI;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -24,6 +29,8 @@ namespace Assets.GameSystem.BattleSystem.Main
         protected override void BindModelListener()
         {
             (Model as BattleSystemViewModel).SetNextWavaEnemiesDataAction(SetWaveEnemiesData);
+            (Model as BattleSystemViewModel).SetPassLevelAction(PassLevel);
+            (Model as BattleSystemViewModel).SetLoseLevelAction(LoseLevel);
         }
 
 
@@ -103,7 +110,7 @@ namespace Assets.GameSystem.BattleSystem.Main
             switch (enemyData.enemyType)
             {
                 case EnemyType.史莱姆:
-                    absUnit = body.AddComponent<EnemyStore>();
+                    absUnit = body.AddComponent<EnemySlime>();
                     break;
                 case EnemyType.石头怪:
                     absUnit = body.AddComponent<EnemyStore>();
@@ -118,11 +125,11 @@ namespace Assets.GameSystem.BattleSystem.Main
         /// <summary>
         /// 添加玩家角色脚本，并且初始化数据
         /// </summary>
-        private void AddPlayerUnit(Transform playerBody,CharacterData characterData)
+        private void AddPlayerUnit(Transform playerBody, CharacterData characterData)
         {
             BattleSystemViewModel model = Model as BattleSystemViewModel;
             AbsUnit absUnit = null;
-            switch(characterData.characterType)
+            switch (characterData.characterType)
             {
                 case CharacterType.猫猫:
                     absUnit = playerBody.AddComponent<PlayerCat>();
@@ -134,6 +141,32 @@ namespace Assets.GameSystem.BattleSystem.Main
             absUnit.InitSystem(this.GetSystem<IBattleSystemModule>());
             (absUnit as Player).InitData(characterData);
             model.SetPlayerAbsUnit(absUnit);
+        }
+
+        /// <summary>
+        /// 通关提示
+        /// </summary>
+        private void PassLevel()
+        {
+            //TODO：通关提示
+            TipsModule.ComfirmTips("tips_1001", "win_1001", () =>
+            {
+                UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.GameUI);
+                this.GetSystem<IMenuSystemModule>().ShowView();
+            });
+        }
+
+        /// <summary>
+        /// 失败提示
+        /// </summary>
+        private void LoseLevel()
+        {
+            //TODO：失败提示
+            TipsModule.ComfirmTips("tips_1002", "lose_1001", () =>
+            {
+                UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.GameUI);
+                this.GetSystem<IMenuSystemModule>().ShowView();
+            });
         }
     }
 }

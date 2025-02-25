@@ -25,7 +25,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             base.StartRoundSettle();    //结算单位身上的效果
 
             OnStartRoundSettle();       //具体重写的 回合开始时 逻辑
-            
+
             this.GetSystem<ICardSystemModule>().UpdateHeadCardInSr();       //获取手牌
 
             canAction = true;
@@ -52,7 +52,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             base.ExitRound();   //结算单位身上的效果
 
             SettleRound();      //具体重写的 结算回合 逻辑
-            
+
             this.GetSystem<ICardSystemModule>().UpdateHeadCardInEr();   //丢弃手牌
 
             SwitchRound();      //回合切换
@@ -70,7 +70,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             nowActPoint += mPoint;
         }
 
-          /// <summary>
+        /// <summary>
         /// 初始化玩家数据
         /// </summary>
         public void InitData(CharacterData characterData)
@@ -82,8 +82,5 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             nowActPoint = characterData.maxActPoint;
             skillCardId = characterData.skillCardId;
         }
-
-
-        public IMgr Ins => Global.GetInstance();
     }
 }

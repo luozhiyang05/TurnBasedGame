@@ -1,5 +1,5 @@
 using UnityEngine;
-namespace Assets.GameSystem.BattleSystem.Scripts.Unit
+namespace Assets.GameSystem.BattleSystem.Scripts.Unit.PlayerUnit
 {
     public class PlayerCat : Player
     {

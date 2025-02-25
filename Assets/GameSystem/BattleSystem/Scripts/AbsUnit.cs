@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Assets.GameSystem.BattleSystem;
 using Assets.GameSystem.BattleSystem.Scripts.Effect;
+using Framework;
 using GlobalData;
 using Tool.Mono;
 using Tool.Utilities;
@@ -12,14 +13,14 @@ using UnityEngine.UI;
 
 namespace Assets.GameSystem.BattleSystem.Scripts
 {
-    public abstract class AbsUnit : MonoBehaviour
+    public abstract class AbsUnit : MonoBehaviour,ICanSendCmd
     {
         public int id;
         public string unitName; //单位名称
         public ValueBindery<int> maxHp = new ValueBindery<int>(5); //最大血量
         public ValueBindery<int> nowHp = new ValueBindery<int>(5); //当前血量
         public ValueBindery<int> armor = new ValueBindery<int>(); //护盾
-        private IBattleSystemModule _battleSystemModule;
+        protected IBattleSystemModule _battleSystemModule;
         private readonly QArray<BaseEffect> _effQueue = new QArray<BaseEffect>(1);
         protected Slider _hpBar;
         protected Text _txtArmor;
@@ -116,12 +117,16 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// </summary>
         protected void AfterStartRoundSettle()
         {
-            //行动间隔
-            _battleSystemModule.ActInternalTimeDelegate(() =>
+            //玩家当前没有死亡，则继续行动
+            if (!_battleSystemModule.GetPlayerUnit().IsDie())
             {
-                //弹幕时间
-                _battleSystemModule.BulletScreenTimeDelegate(Action, "开始行动");
-            });
+                //行动间隔
+                _battleSystemModule.ActInternalTimeDelegate(() =>
+                {
+                    //弹幕时间
+                    _battleSystemModule.BulletScreenTimeDelegate(Action, "开始行动");
+                });
+            }
         }
 
         /// <summary>
@@ -135,12 +140,16 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// </summary>
         protected void AfterAction()
         {
-            //行动间隔
-            _battleSystemModule.ActInternalTimeDelegate(() =>
+            //玩家当前没有死亡，则继续行动
+            if (!_battleSystemModule.GetPlayerUnit().IsDie())
             {
-                //弹幕时间
-                _battleSystemModule.BulletScreenTimeDelegate(ExitRound, "行动结束");
-            });
+                //行动间隔
+                _battleSystemModule.ActInternalTimeDelegate(() =>
+                {
+                    //弹幕时间
+                    _battleSystemModule.BulletScreenTimeDelegate(ExitRound, "行动结束");
+                });
+            }
         }
 
         /// <summary>
@@ -181,7 +190,10 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         [SerializeField] private int _maxHp;
         [SerializeField] private int _nowHp;
         [SerializeField] private int _armor;
-         private void DisplayInfo()
+
+        public IMgr Ins => Global.GetInstance();
+
+        private void DisplayInfo()
          {
             _maxHp = maxHp.Value;
             _nowHp = nowHp.Value;

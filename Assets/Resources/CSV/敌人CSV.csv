@@ -1,4 +1,4 @@
 ﻿id,enemyType,maxHp,maxArmor,atk,skillId
 Int,Enum,Int,Int,Int,Int
-1,0,5,5,5,1001
-2,1,5,5,5,1002
+1,0,5,5,2,1001
+2,1,5,5,2,1002

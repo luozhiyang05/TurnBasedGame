@@ -1,13 +1,9 @@
 using Assets.GameSystem.BattleSystem.Scripts;
-using Assets.GameSystem.MenuSystem;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
-using Tips;
-using Tool.Mono;
-using Tool.UI;
 using Tool.Utilities;
 using Tool.Utilities.Events;
 using UnityEngine;
@@ -26,6 +22,8 @@ namespace Assets.GameSystem.BattleSystem.Main
         private int _nowWaveIndex;  //当前波次下标
 
         private UnityAction setNextWavaEnemiesDataDelegate;
+        private UnityAction passLevelDelegate;
+        private UnityAction loseLevelDelegate;
         public override void Init()
         {
             _nowEnemyIndex = 0;
@@ -87,19 +85,6 @@ namespace Assets.GameSystem.BattleSystem.Main
             return isEnemiesAfterAct;
         }
 
-
-        public void UnitDie(AbsUnit unit)
-        {
-            if (unit is Enemy)
-            {
-                _enemyList.Remove(unit);
-            }
-            else
-            {
-                Debug.Log("玩家死亡");
-            }
-        }
-
         #region 数据获取
         public int GetEnemyCount() => _enemyList.Count;
         public WavasData GetNowWava() => _levelData.GetWavaData(_nowWaveIndex);
@@ -117,11 +102,8 @@ namespace Assets.GameSystem.BattleSystem.Main
                 //判断当前关卡是否已经完成所有波次的推进
                 if (_nowWaveIndex == _levelData.waveCnt)
                 {
-                    TipsModule.ComfirmTips("tips_1001", "win_1001", () =>
-                    {
-                        UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.GameUI);
-                        this.GetSystem<IMenuSystemModule>().ShowView();
-                    });
+                    //TODO：通关提示
+                    PassLevel();
                 }
                 else
                 {
@@ -136,6 +118,20 @@ namespace Assets.GameSystem.BattleSystem.Main
             Debug.Log("单位死亡");
             UnitDie(absUnit);
         }
+
+        public void UnitDie(AbsUnit unit)
+        {
+            if (unit is Enemy)
+            {
+                _enemyList.Remove(unit);
+            }
+            else
+            {
+                //TODO：失败提示
+                LoseLevel();
+            }
+        }
+
         #endregion
 
         #region 事件回调
@@ -146,6 +142,22 @@ namespace Assets.GameSystem.BattleSystem.Main
         private void SetNextWavaEnemiesData()
         {
             setNextWavaEnemiesDataDelegate?.Invoke();
+        }
+        public void SetPassLevelAction(UnityAction unityAction)
+        {
+            passLevelDelegate = unityAction;
+        }
+        private void PassLevel()
+        {
+            passLevelDelegate?.Invoke();
+        }
+        public void SetLoseLevelAction(UnityAction unityAction)
+        {
+            loseLevelDelegate = unityAction;
+        }
+        private void LoseLevel()
+        {
+            loseLevelDelegate?.Invoke();
         }
         #endregion
 
