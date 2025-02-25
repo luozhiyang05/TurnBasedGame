@@ -8,16 +8,20 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Effect
     {
         public int id;
         public string effName;
+        public string effDesc;
         public int maxRoundCnt; //最大回合数
         protected int _remainRoundCnt; //剩余回合数
 
         protected AbsUnit self;
         protected List<AbsUnit> targetList;
-        public void SetUpData(int id,string effName,int maxActPoint)
+
+        public void InitBaseData(int id,string effName,string effDesc,AbsUnit self,List<AbsUnit> targetList)
         {
             this.id = id;
             this.effName = effName;
-            this.maxRoundCnt = maxActPoint;
+            this.effDesc = effDesc;
+            this.self = self;
+            this.targetList = targetList;
         }
 
         public void StartRoundSettle()

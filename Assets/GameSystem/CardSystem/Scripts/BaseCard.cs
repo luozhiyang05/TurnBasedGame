@@ -18,12 +18,28 @@ namespace Assets.GameSystem.CardSystem.Scripts
         [Header("基础属性")]
         public int atk;
         public int armor;
+        [Header("额外参数")]
+        public int param1;
         [Header("卡片描述")]
         [TextArea]
         public string cardDesc;
         public int effectId;
 
         public IMgr Ins => Global.GetInstance();
+
+        public void Init(BaseCardDataPacking baseCardDataPacking)
+        {
+            id = baseCardDataPacking.id;
+            cardName = baseCardDataPacking.cardName;
+            petName = baseCardDataPacking.petName;
+            depletePoint = baseCardDataPacking.depletePoint;
+            canAutoUse = baseCardDataPacking.canAutoUse;
+            atk = baseCardDataPacking.atk;
+            armor = baseCardDataPacking.armor;
+            param1 = baseCardDataPacking.param1;
+            cardDesc = baseCardDataPacking.cardDesc;
+            effectId = baseCardDataPacking.effectId;
+        }
 
         public void UseCard(AbsUnit self, AbsUnit target)
         {

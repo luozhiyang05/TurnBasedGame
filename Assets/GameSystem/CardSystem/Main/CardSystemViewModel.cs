@@ -58,29 +58,6 @@ namespace Assets.GameSystem.CardSystem.Main
                 Debug.Log("加载卡牌id：" + cardGroup[i]);
                 _nowUseCards.Add(cardLibrarySo.GetCardById(cardGroup[i]));
             }
-            // for (int i = 0; i < cardSoList.Count; i++)
-            // {
-            //     _nowUseCards.Add(cardSoList[i]);
-            // }
-
-            // //根据ids加载卡牌
-            // for (int i = 0; i < 5; i++)
-            // {
-            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCard>("PlayerCards/" + "普通攻击卡");
-            //     _nowUseCards.Add(loadCard);
-            // }
-
-            // for (int i = 0; i < 5; i++)
-            // {
-            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCard>("PlayerCards/" + "普通防御卡");
-            //     _nowUseCards.Add(loadCard);
-            // }
-
-            // for (int i = 0; i < 5; i++)
-            // {
-            //     var loadCard = ResMgr.GetInstance().SyncLoad<BaseCard>("PlayerCards/" + "攻击防御卡");
-            //     _nowUseCards.Add(loadCard);
-            // }
         }
 
         /// <summary>

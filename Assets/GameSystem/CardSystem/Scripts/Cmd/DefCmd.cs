@@ -9,6 +9,7 @@ namespace Assets.GameSystem.CardSystem.Scripts.Cmd
         public DefenceEffect defenceEffect;
         public AbsUnit self;
         public AbsUnit target;
+        public int maxRoundCnt;
         public int armor;
     }
     public class DefCmd : AbsCommand<DefData>
@@ -19,11 +20,14 @@ namespace Assets.GameSystem.CardSystem.Scripts.Cmd
             var self = defData.self;
             var target = defData.target;
             var armor = defData.armor;
+            var maxRoundCnt = defData.maxRoundCnt;
             var defenceEff = defData.defenceEffect;
-            
-            defenceEff.Init(self,target,armor);
+
+            // 在叠甲命令中进一步初始化叠甲效果数据
+            defenceEff.InitDefenceEffData(self, target, maxRoundCnt, armor);
             target.AddEffect(defenceEff);
-            
+
+            // 叠甲
             target.armor.Value += armor;
             Debug.LogWarning($"{self.gameObject.name}对{target.gameObject.name}增加{armor}点护甲");
         }

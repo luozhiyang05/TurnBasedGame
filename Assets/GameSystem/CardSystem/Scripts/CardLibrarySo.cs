@@ -22,34 +22,19 @@ namespace Assets.GameSystem.CardSystem.Scripts
         [Header("基础属性")]
         public int atk;
         public int armor;
+        [Header("额外参数")]
+        public int param1;
         [Header("卡片描述")]
         [TextArea]
         public string cardDesc;
         public int effectId;
-        public void SetUpData()
-        {
-            baseCard.id = id;
-            baseCard.cardName = cardName;
-            baseCard.petName = petName;
-            baseCard.depletePoint = depletePoint;
-            baseCard.canAutoUse = canAutoUse;
-            baseCard.atk = atk;
-            baseCard.armor = armor;
-            baseCard.cardDesc = cardDesc;
-            baseCard.effectId = effectId;
-        }
     }
-     [Serializable]
-    public class BaseEffectDataPacking{
+    [Serializable]
+    public class BaseEffectData
+    {
         public int id;
         public string effName;
-        public int maxRoundCnt; //最大回合数
-        public BaseEffect baseEffect;
-        public void SetUpData()
-        {
-            baseEffect.id = id;
-            baseEffect.maxRoundCnt = maxRoundCnt;
-        }
+        public string effDesc;
     }
 
     [CreateAssetMenu(fileName = "卡牌库", menuName = "CardLibrarySo", order = 0)]
@@ -58,16 +43,15 @@ namespace Assets.GameSystem.CardSystem.Scripts
         public TextAsset cardAsset;
         public TextAsset effAsset;
         public List<BaseCardDataPacking> baseCardDataPackings = new List<BaseCardDataPacking>();
-        public List<BaseEffectDataPacking> baseEffectDataPackings = new List<BaseEffectDataPacking>();
+        public List<BaseEffectData> baseEffectDatas = new List<BaseEffectData>();
         private void OnValidate()
         {
             if (effAsset != null)
             {
-                baseEffectDataPackings.Clear();
-                CsvKit.Read<BaseEffectDataPacking>(effAsset, BindingFlags.Public | BindingFlags.Instance, value =>
+                baseEffectDatas.Clear();
+                CsvKit.Read<BaseEffectData>(effAsset, BindingFlags.Public | BindingFlags.Instance, value =>
                {
-                   AddCardEffectById(value);
-                   baseEffectDataPackings.Add(value);
+                   baseEffectDatas.Add(value);
                });
             }
 
@@ -76,63 +60,61 @@ namespace Assets.GameSystem.CardSystem.Scripts
                 baseCardDataPackings.Clear();
                 CsvKit.Read<BaseCardDataPacking>(cardAsset, BindingFlags.Public | BindingFlags.Instance, value =>
                {
-                   AddCardCSharpById(value);
                    baseCardDataPackings.Add(value);
                });
             }
         }
-        public BaseCard GetCardById(int cardId)
+
+        /// <summary>
+        /// 根据卡牌Id获取对应卡牌实例
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public BaseCard GetCardById(int id)
         {
-            for (int i = 0; i < baseCardDataPackings.Count; i++)
-            {
-                if (baseCardDataPackings[i].id == cardId)
-                {
-                    return baseCardDataPackings[i].baseCard;
-                }
-            }
-            return null;
-        }
-        public BaseEffect GetEffectById(int effectId)
-        {
-            for (int i = 0; i < baseEffectDataPackings.Count; i++)
-            {
-                if (baseEffectDataPackings[i].id == effectId)
-                {
-                    return baseEffectDataPackings[i].baseEffect;
-                }
-            }
-            return null;
-        }
-        public void AddCardCSharpById(BaseCardDataPacking baseCardDataPacking)
-        {
+            var baseCardDataPacking = baseCardDataPackings.Find(value => value.id == id) ?? throw new Exception("找不到对应的卡牌");
             switch (baseCardDataPacking.id)
             {
                 case 1:
-                    baseCardDataPacking.baseCard = new AttackCard();
-                    break;
+                    var atkCard = new AttackCard();
+                    atkCard.Init(baseCardDataPacking);
+                    return atkCard;
                 case 2:
-                    baseCardDataPacking.baseCard = new DefenceCard();
-                    break;
+                    var defCard = new DefenceCard();
+                    defCard.Init(baseCardDataPacking);
+                    return defCard;
                 case 3:
-                    baseCardDataPacking.baseCard = new AttackDefCard();
-                    break;
+                    var atkDefCard = new AttackDefCard();
+                    atkDefCard.Init(baseCardDataPacking);
+                    return atkDefCard;
+                default:
+                    throw new Exception("找不到对应的卡牌");
             }
-            baseCardDataPacking.SetUpData();
         }
-
-        public void AddCardEffectById(BaseEffectDataPacking baseEffectDataPacking)
+        /// <summary>
+        /// 根据效果id获取效果实例（包含了id，效果名，效果描述的效果实例）
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public BaseEffect GetBaseEffectById(int id)
         {
-            switch (baseEffectDataPacking.id)
+            var baseEffectData = baseEffectDatas.Find(value => value.id == id);
+            if (baseEffectData == null)
             {
-                case 0: return;
-                case 1:
-                    baseEffectDataPacking.baseEffect = new DefenceEffect();
-                    break;
-                case 2:
-                    baseEffectDataPacking.baseEffect = new DefenceEffect();
-                    break;
+                throw new Exception("找不到对应的效果");
             }
-            baseEffectDataPacking.SetUpData();
+
+            switch (id)
+            {
+                case 1:
+                    var baseEffect = new DefenceEffect();
+                    baseEffect.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, null, null);
+                    return baseEffect;
+                default:
+                    throw new Exception("找不到对应的效果");
+            }
         }
     }
 }

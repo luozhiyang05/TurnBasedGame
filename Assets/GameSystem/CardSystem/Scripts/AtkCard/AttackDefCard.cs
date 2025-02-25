@@ -17,7 +17,7 @@ namespace Assets.GameSystem.CardSystem.Scripts.AtkCard
             {
                 self = self,
                 target = self,
-                defenceEffect = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库").GetEffectById(effectId) as DefenceEffect,
+                // defenceEffect = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库").GetEffectById(effectId) as DefenceEffect,
                 armor = armor
             });
 

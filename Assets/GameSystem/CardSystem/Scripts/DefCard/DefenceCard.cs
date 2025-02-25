@@ -16,7 +16,8 @@ namespace Assets.GameSystem.CardSystem.Scripts.DefCard
             {
                 self = self,
                 target = target,
-                defenceEffect = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库").GetEffectById(effectId) as DefenceEffect,
+                maxRoundCnt = param1,
+                defenceEffect = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库").GetBaseEffectById(effectId) as DefenceEffect,
                 armor = armor
             });
         }

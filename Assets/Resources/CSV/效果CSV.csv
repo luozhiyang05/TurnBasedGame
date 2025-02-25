@@ -1,4 +1,4 @@
-﻿id,effName,maxRoundCnt
-Int,String,Int
-1,叠甲,1
-2,削弱,1
+﻿id,effName,effDesc
+Int,String,String
+1,叠甲,叠甲描述
+2,削弱,削弱描述
