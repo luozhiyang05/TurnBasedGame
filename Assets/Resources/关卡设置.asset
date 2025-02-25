@@ -12,73 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d77f46d5091d5bc43808b5a45a71742c, type: 3}
   m_Name: "\u5173\u5361\u8BBE\u7F6E"
   m_EditorClassIdentifier: 
+  textAsset: {fileID: 4900000, guid: 5bf96a39178b8e843a49f77e9be915b6, type: 3}
   levels:
   - id: 1
-    levelName: "\u5173\u53611"
-    wavasDatas:
-    - wavaName: "\u6CE2\u6B211"
-      enemies:
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
-    - wavaName: "\u6CE2\u6B212"
-      enemies:
-      - enemyType: 0
-        maxHp: 5
-        maxArmor: 0
-        atk: 1
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
+    levelName: levelName_1001
+    waveCnt: 2
+    enemyIds: "1-2/1-2\r"
   - id: 2
-    levelName: "\u5173\u53612"
-    wavasDatas:
-    - wavaName: "\u6CE2\u6B211"
-      enemies:
-      - enemyType: 0
-        maxHp: 5
-        maxArmor: 0
-        atk: 1
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
-    - wavaName: "\u6CE2\u6B212"
-      enemies:
-      - enemyType: 0
-        maxHp: 5
-        maxArmor: 0
-        atk: 1
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
+    levelName: levelName_1002
+    waveCnt: 2
+    enemyIds: "1-2/1-2\r"
   - id: 3
-    levelName: "\u5173\u53613"
-    wavasDatas:
-    - wavaName: "\u6CE2\u6B211"
-      enemies:
-      - enemyType: 0
-        maxHp: 5
-        maxArmor: 0
-        atk: 1
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
-    - wavaName: "\u6CE2\u6B212"
-      enemies:
-      - enemyType: 0
-        maxHp: 5
-        maxArmor: 0
-        atk: 1
-      - enemyType: 1
-        maxHp: 5
-        maxArmor: 1
-        atk: 1
+    levelName: levelName_1003
+    waveCnt: 2
+    enemyIds: "1-2/1-2\r"

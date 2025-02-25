@@ -12,5 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ceee358878489d49a75737f81d8cda2, type: 3}
   m_Name: "\u654C\u4EBA\u5E93"
   m_EditorClassIdentifier: 
-  textAsset: {fileID: 0}
-  enemies: []
+  textAsset: {fileID: 4900000, guid: 0739272c9aada7541ac5b9a3b255f680, type: 3}
+  enemies:
+  - id: 1
+    enemyType: 0
+    maxHp: 5
+    maxArmor: 5
+    atk: 5
+    skillId: 1001
+  - id: 2
+    enemyType: 1
+    maxHp: 5
+    maxArmor: 5
+    atk: 5
+    skillId: 1002
