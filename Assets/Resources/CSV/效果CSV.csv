@@ -1,4 +1,5 @@
-﻿id,effName,effDesc
-Int,String,String
-1,叠甲,叠甲描述
-2,削弱,削弱描述
+﻿id,effName,effDesc,isDieEff
+Int,String,String,Bool
+1,叠甲,叠甲描述,0
+2,削弱,削弱描述,0
+3,复活,死亡后立马复活,1

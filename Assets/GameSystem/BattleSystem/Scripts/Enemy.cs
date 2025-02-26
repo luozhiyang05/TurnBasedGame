@@ -1,10 +1,13 @@
 using Framework;
+using Tool.Utilities;
 using Tool.Utilities.Bindery;
+using Unity.VisualScripting;
 
 namespace Assets.GameSystem.BattleSystem.Scripts
 {
     public abstract class Enemy : AbsUnit, ICanGetSystem
     {
+        public QArray<int> usedSkillIds = new QArray<int>();
         public EnemyData enemyData;
         public ValueBindery<int> actCnt = new ValueBindery<int>();
         public ValueBindery<int> atk = new ValueBindery<int>();
@@ -30,9 +33,10 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         {
             actCnt.Value++;
 
-            if (_skillSystemModule.CheckIsHadSkill(enemyData.skillId, actCnt.Value))    // 技能和行动二选一
+            if (_skillSystemModule.CheckIsHadSkill(usedSkillIds, enemyData.skillId, actCnt.Value))    // 技能和行动二选一
             {
                 _skillSystemModule.UseSkill(enemyData.skillId, this);
+                usedSkillIds.Add(enemyData.skillId);
                 actCnt.Value = 0;
             }
             else

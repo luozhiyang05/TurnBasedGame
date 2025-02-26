@@ -9,19 +9,19 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Effect
         public int id;
         public string effName;
         public string effDesc;
+        public bool isDieEff;
         public int maxRoundCnt; //最大回合数
         protected int _remainRoundCnt; //剩余回合数
 
         protected AbsUnit self;
         protected List<AbsUnit> targetList;
 
-        public void InitBaseData(int id,string effName,string effDesc,AbsUnit self,List<AbsUnit> targetList)
+        public void InitBaseData(int id, string effName, string effDesc, bool isDieEff)
         {
             this.id = id;
             this.effName = effName;
             this.effDesc = effDesc;
-            this.self = self;
-            this.targetList = targetList;
+            this.isDieEff = isDieEff;
         }
 
         public void StartRoundSettle()
@@ -45,6 +45,15 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Effect
         /// 效果结束时逻辑
         /// </summary>
         protected abstract void OnExitEffectSettle();
+        /// <summary>
+        /// 死亡时效果逻辑
+        /// </summary>
+        protected abstract void OnDieEffectSettle();
+
+        public void DieEffectSettle()
+        {
+            OnDieEffectSettle(); // 死亡效果逻辑
+        }
 
         public void EndRoundSettle()
         {

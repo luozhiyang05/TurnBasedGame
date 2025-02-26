@@ -30,7 +30,7 @@ namespace GlobalData
 
     public enum EnemyType
     {
-        史莱姆,
-        石头怪
+        enemy_slime,
+        enemy_store
     }
 }

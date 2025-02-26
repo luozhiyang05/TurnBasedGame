@@ -14,7 +14,7 @@ using UnityEngine.UI;
 
 namespace Assets.GameSystem.BattleSystem.Scripts
 {
-    public abstract class AbsUnit : MonoBehaviour,ICanSendCmd,ICanGetSystem
+    public abstract class AbsUnit : MonoBehaviour, ICanSendCmd, ICanGetSystem
     {
         public int id;
         public string unitName; //单位名称
@@ -47,6 +47,22 @@ namespace Assets.GameSystem.BattleSystem.Scripts
                 _hpBar.value = (float)value / maxHp.Value;
                 //面板刷新
                 DisplayInfo();
+
+                //如果当前血量已死亡，先判断有无亡语技能（类似复活）
+                if (IsDie())
+                {
+                    //对效果结算，用于触发亡语效果
+                    for (int i = 0; i < _effQueue.Count; i++)
+                    {
+                        if (_effQueue[i].isDieEff)
+                        {
+                            _effQueue[i].DieEffectSettle();
+                            _effQueue.Remove(_effQueue[i]);
+                        }
+                    }
+                }
+
+                // 亡语效果判断完后重新判断是否已经死亡，是的话则发布事件
                 if (IsDie())
                 {
                     //分发事件，单位死亡
@@ -190,11 +206,11 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         public IMgr Ins => Global.GetInstance();
 
         private void DisplayInfo()
-         {
+        {
             _maxHp = maxHp.Value;
             _nowHp = nowHp.Value;
             _armor = armor.Value;
-         }
+        }
         #endregion
     }
 }

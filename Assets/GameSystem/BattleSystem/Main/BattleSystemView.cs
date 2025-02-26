@@ -109,10 +109,10 @@ namespace Assets.GameSystem.BattleSystem.Main
             var body = enemy.Find("body");
             switch (enemyData.enemyType)
             {
-                case EnemyType.史莱姆:
+                case EnemyType.enemy_slime:
                     absUnit = body.AddComponent<EnemySlime>();
                     break;
-                case EnemyType.石头怪:
+                case EnemyType.enemy_store:
                     absUnit = body.AddComponent<EnemyStore>();
                     break;
                 default: break;

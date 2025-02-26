@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.GameSystem.BattleSystem.Scripts.Effect
 {
     [Serializable]
-    public class DefenceEffect : BaseEffect
+    public class ResurrectionEffect : BaseEffect
     {
-        private int _addAmor;
-
-        public void InitDefenceEffData(AbsUnit selfAbs, AbsUnit target,int maxRoundCnt, int amor)
+        public void ResurrectionEffData(AbsUnit selfAbs, AbsUnit target,int maxRoundCnt)
         {
             self = selfAbs;
             targetList = new List<AbsUnit>() { target };
             this.maxRoundCnt = maxRoundCnt;
             _remainRoundCnt = maxRoundCnt;
-            _addAmor = amor;
         }
 
 
@@ -30,19 +28,14 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Effect
 
         protected override void OnExitEffectSettle()
         {
-            if (self.armor.Value - _addAmor < 0)
-            {
-                self.armor.Value = 0;
-            }
-            else
-            {
-                self.armor.Value -= _addAmor;
-            }
+
         }
 
         protected override void OnDieEffectSettle()
         {
-            
+            Debug.Log("死亡复活");
+            var absUnit = targetList[0];
+            absUnit.nowHp.Value = absUnit.maxHp.Value;
         }
     }
 }

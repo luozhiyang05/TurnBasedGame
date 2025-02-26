@@ -35,6 +35,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
         public int id;
         public string effName;
         public string effDesc;
+        public bool isDieEff;
     }
 
     [CreateAssetMenu(fileName = "卡牌库", menuName = "CardLibrarySo", order = 0)]
@@ -100,18 +101,19 @@ namespace Assets.GameSystem.CardSystem.Scripts
         /// <exception cref="Exception"></exception>
         public BaseEffect GetBaseEffectById(int id)
         {
-            var baseEffectData = baseEffectDatas.Find(value => value.id == id);
-            if (baseEffectData == null)
-            {
-                throw new Exception("找不到对应的效果");
-            }
+            var baseEffectData = baseEffectDatas.Find(value => value.id == id) ?? throw new Exception("找不到对应的效果");
 
+            // 返回一个具体的效果，具体参数在技能或者卡牌配置中赋值
             switch (id)
             {
                 case 1:
-                    var baseEffect = new DefenceEffect();
-                    baseEffect.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, null, null);
-                    return baseEffect;
+                    var defEff = new DefenceEffect();
+                    defEff.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, baseEffectData.isDieEff);
+                    return defEff;
+                case 3:
+                    var resEff = new ResurrectionEffect();
+                    resEff.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, baseEffectData.isDieEff);
+                    return resEff;
                 default:
                     throw new Exception("找不到对应的效果");
             }

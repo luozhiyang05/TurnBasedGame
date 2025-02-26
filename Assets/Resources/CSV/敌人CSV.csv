@@ -1,4 +1,4 @@
-﻿id,enemyType,maxHp,maxArmor,atk,skillId
-Int,Enum,Int,Int,Int,Int
-1,0,5,5,0,1001
-2,1,5,5,0,1002
+﻿id,enemyType,maxHp,maxArmor,atk,skillId,,
+Int,Enum,Int,Int,Int,Int,,
+1,0,5,5,0,1002,,史莱姆
+2,1,5,5,0,1001,,石头怪

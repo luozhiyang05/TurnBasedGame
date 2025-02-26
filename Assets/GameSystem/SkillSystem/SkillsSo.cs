@@ -25,6 +25,7 @@ namespace Assets.GameSystem.SkillSystem
         public int effectId;
         public int duration;
         public int param;
+        public bool isOnly;
     }
 
     public class SkillDataPacking

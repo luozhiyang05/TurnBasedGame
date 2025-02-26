@@ -12,3 +12,9 @@ tips_1003,确定,ok
 win_1001,恭喜你，你赢了,Congratulations，you are won
 lose_1001,不要气馁，请重新挑战,Don't be discouraged，try again
 card_name_1001,普通攻击卡,AtkCard
+skill_1001,无限叠甲,Infinite stacks of armor
+skill_1002,死亡复活,Resurrection from the dead
+skill_desc_1001,每隔数个回合自动叠甲,Automatically stacks armor every few turns
+skill_desc_1002,死亡后立刻复活,Resurrection immediately after death
+enemy_slime,史莱姆,Slime
+enemy_store,石头怪,Stone Monsters
