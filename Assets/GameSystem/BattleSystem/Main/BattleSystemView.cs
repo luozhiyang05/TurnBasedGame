@@ -117,7 +117,6 @@ namespace Assets.GameSystem.BattleSystem.Main
                     break;
                 default: break;
             }
-            absUnit.InitSystem(this.GetSystem<IBattleSystemModule>());
             (absUnit as Enemy).InitData(id, enemyData);
             model.SetEnemyAbsUnit(absUnit);
         }
@@ -138,7 +137,6 @@ namespace Assets.GameSystem.BattleSystem.Main
                     absUnit = playerBody.AddComponent<PlayerCat>();
                     break;
             }
-            absUnit.InitSystem(this.GetSystem<IBattleSystemModule>());
             (absUnit as Player).InitData(characterData);
             model.SetPlayerAbsUnit(absUnit);
         }

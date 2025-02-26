@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Assets.GameSystem.BattleSystem;
 using Assets.GameSystem.BattleSystem.Scripts.Effect;
+using Assets.GameSystem.SkillSystem;
 using Framework;
 using GlobalData;
 using Tool.Mono;
@@ -13,7 +14,7 @@ using UnityEngine.UI;
 
 namespace Assets.GameSystem.BattleSystem.Scripts
 {
-    public abstract class AbsUnit : MonoBehaviour,ICanSendCmd
+    public abstract class AbsUnit : MonoBehaviour,ICanSendCmd,ICanGetSystem
     {
         public int id;
         public string unitName; //单位名称
@@ -21,12 +22,17 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         public ValueBindery<int> nowHp = new ValueBindery<int>(5); //当前血量
         public ValueBindery<int> armor = new ValueBindery<int>(); //护盾
         protected IBattleSystemModule _battleSystemModule;
+        protected ISkillSystemModule _skillSystemModule;
         private readonly QArray<BaseEffect> _effQueue = new QArray<BaseEffect>(1);
         protected Slider _hpBar;
         protected Text _txtArmor;
 
         public virtual void Awake()
         {
+            // 获取系统
+            _battleSystemModule = this.GetSystem<IBattleSystemModule>();
+            _skillSystemModule = this.GetSystem<ISkillSystemModule>();
+
             // 获取组件
             _hpBar = transform.Find("hp_bar").GetComponent<Slider>();
             _txtArmor = transform.Find("armor/txt_armor").GetComponent<Text>();
@@ -59,16 +65,6 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             //面板展示
             DisplayInfo();
         }
-
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
-        /// <param name="iBattleSystemModule"></param>
-        public void InitSystem(IBattleSystemModule iBattleSystemModule)
-        {
-            this._battleSystemModule = iBattleSystemModule;
-        }
-
 
         #region 收到卡牌影响逻辑
 
