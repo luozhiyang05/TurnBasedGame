@@ -18,3 +18,14 @@ skill_desc_1001,每隔数个回合自动叠甲,Automatically stacks armor every 
 skill_desc_1002,死亡后立刻复活,Resurrection immediately after death
 enemy_slime,史莱姆,Slime
 enemy_store,石头怪,Stone Monsters
+unit_info_1001,名字：,Name：
+unit_info_1002,血量：,Hp：
+unit_info_1003,护甲：,Armor：
+unit_info_1004,攻击：,Atk：
+unit_info_1005,技能描述,Skill description
+unit_info_1006,效果描述,Description of the effect
+effect_name_1001,叠甲,Stacked nails
+effect_name_1002,削弱,Cripple
+effect_name_1003,复活,Resurrection
+effect_desc_1001,每隔数个回合自动叠甲,Infinite stacks of armor
+effect_desc_1003,死亡后立马复活,Resurrection immediately after death

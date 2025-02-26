@@ -48,7 +48,13 @@ MonoBehaviour:
   baseEffectDatas:
   - id: 1
     effName: "\u53E0\u7532"
-    effDesc: "\u53E0\u7532\u63CF\u8FF0\r"
+    effDesc: "\u53E0\u7532\u63CF\u8FF0"
+    isDieEff: 0
   - id: 2
     effName: "\u524A\u5F31"
-    effDesc: "\u524A\u5F31\u63CF\u8FF0\r"
+    effDesc: "\u524A\u5F31\u63CF\u8FF0"
+    isDieEff: 0
+  - id: 3
+    effName: "\u590D\u6D3B"
+    effDesc: "\u6B7B\u4EA1\u540E\u7ACB\u9A6C\u590D\u6D3B"
+    isDieEff: 1

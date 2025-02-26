@@ -12,5 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cddb0dbe641b80d4495996ec986d2f6f, type: 3}
   m_Name: "\u6280\u80FD\u5E93"
   m_EditorClassIdentifier: 
-  textAsset: {fileID: 0}
-  skillDatas: []
+  textAsset: {fileID: 4900000, guid: c5273e339fe822040b9fe95d631a1ade, type: 3}
+  skillDatas:
+  - id: 1001
+    skillName: skill_1001
+    desc: skill_desc_1001
+    needActCnt: 2
+    useType: 0
+    effectId: 1
+    duration: 1
+    param: 5
+    isOnly: 0
+  - id: 1002
+    skillName: skill_1002
+    desc: skill_desc_1002
+    needActCnt: 1
+    useType: 0
+    effectId: 3
+    duration: 999
+    param: 1
+    isOnly: 1

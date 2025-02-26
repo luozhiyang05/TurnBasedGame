@@ -1,3 +1,4 @@
+using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.CardSystem.Scripts;
 using GlobalData;
 using Tool.UI;
@@ -33,6 +34,24 @@ namespace Tips
             {
                 var historyTips = tips as HistoryTips;
                 historyTips.Open(useCardsHistory);
+            });
+        }
+
+        public static void UnitInfoTips(UnitInfoPacking unitInfoPacking)
+        {
+            uiMgr.GetFromPool("UnitInfoTips", EuiLayer.TipsUI, (tips) =>
+            {
+                var unitInfoTips = tips as UnitInfoTips;
+                unitInfoTips.Open(unitInfoPacking);
+            });
+        }
+
+        public static void DescTips(string descKey)
+        {
+            uiMgr.GetFromPool("DescTips", EuiLayer.TipsUI, (tips) =>
+            {
+                var descTips = tips as DescTips;
+                descTips.Open(descKey);
             });
         }
     }

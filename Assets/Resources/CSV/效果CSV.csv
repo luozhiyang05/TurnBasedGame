@@ -1,5 +1,5 @@
-﻿id,effName,effDesc,isDieEff
-Int,String,String,Bool
-1,叠甲,叠甲描述,0
-2,削弱,削弱描述,0
-3,复活,死亡后立马复活,1
+﻿id,effName,effDesc,isDieEff,,
+Int,String,String,Bool,,
+1,effect_name_1001,effect_desc_1001,0,,叠甲
+2,effect_name_1002,削弱描述,0,,削弱
+3,effect_name_1003,effect_desc_1003,1,,复活

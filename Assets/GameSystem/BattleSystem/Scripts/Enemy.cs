@@ -1,7 +1,10 @@
+using Assets.GameSystem.BattleSystem.Scripts.Effect;
 using Framework;
+using Tips;
 using Tool.Utilities;
 using Tool.Utilities.Bindery;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 namespace Assets.GameSystem.BattleSystem.Scripts
 {
@@ -75,6 +78,21 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             nowHp.Value = maxHp.Value;
             armor.Value = enemyData.maxArmor;
             atk.Value = enemyData.atk;
+
+            // 绑定点击事件，打开UnitInfoTips面板
+            var img_body = transform.Find("img_body");
+            img_body.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                // 获取所有效果的id
+                var effectIds = new QArray<int>();
+                foreach (BaseEffect eff in _effQueue)
+                {
+                    effectIds.Add(eff.id);
+                }
+
+                // 打包数据传递
+                TipsModule.UnitInfoTips(new UnitInfoPacking("", enemyData.enemyType.ToSafeString(), enemyData.maxHp, nowHp.Value, armor.Value, enemyData.atk, enemyData.skillId, effectIds));
+            });
         }
     }
 }

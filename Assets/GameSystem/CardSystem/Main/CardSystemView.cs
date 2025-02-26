@@ -14,20 +14,20 @@ namespace Assets.GameSystem.CardSystem.Main
     public class CardSystemView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
-		public Text Txt_actCnt;
-		public CButton Btn_exitRound;
-		public CButton Btn_obsCards;
-		public CButton Btn_history;
-		public CButton Btn_useCards;
+        public Text Txt_actCnt;
+        public CButton Btn_exitRound;
+        public CButton Btn_obsCards;
+        public CButton Btn_history;
+        public CButton Btn_useCards;
         protected override void AutoInitUI()
         {
-			Txt_actCnt = transform.Find("Main/Txt_actCnt").GetComponent<Text>();
-			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
-			Btn_obsCards = transform.Find("Main/Btn_obsCards").GetComponent<CButton>();
-			Btn_history = transform.Find("Main/Btn_history").GetComponent<CButton>();
-			Btn_useCards = transform.Find("Main/Btn_useCards").GetComponent<CButton>();
+            Txt_actCnt = transform.Find("Main/Txt_actCnt").GetComponent<Text>();
+            Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
+            Btn_obsCards = transform.Find("Main/Btn_obsCards").GetComponent<CButton>();
+            Btn_history = transform.Find("Main/Btn_history").GetComponent<CButton>();
+            Btn_useCards = transform.Find("Main/Btn_useCards").GetComponent<CButton>();
         }
-		#endregion 自动生成UI组件区域结束！
+        #endregion 自动生成UI组件区域结束！
 
         /// <summary>d
         /// 绑定model回调事件
@@ -95,7 +95,7 @@ namespace Assets.GameSystem.CardSystem.Main
         private void GetHeadCards()
         {
             //获取玩家当前手牌
-            _headCardQArray =  _model.GetNowHeadCards();
+            _headCardQArray = _model.GetNowHeadCards();
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Assets.GameSystem.CardSystem.Main
                 _cardsGo.Add(cardGo);
             }
         }
-        
+
         /// <summary>
         /// 更新玩家行动点
         /// </summary>
@@ -163,7 +163,7 @@ namespace Assets.GameSystem.CardSystem.Main
             GetHeadCards();
             DestroyOneCardGo(headCardIdx);
             print(_cardsContent);
-            _cardSystemModule.RenderHandCards(_cardsGo,_headCardQArray,_cardsContent.transform);
+            _cardSystemModule.RenderHandCards(_cardsGo, _headCardQArray, _cardsContent.transform);
             UpdateActCnt();
         }
 

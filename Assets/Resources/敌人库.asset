@@ -18,11 +18,11 @@ MonoBehaviour:
     enemyType: 0
     maxHp: 5
     maxArmor: 5
-    atk: 5
-    skillId: 1001
+    atk: 0
+    skillId: 1002
   - id: 2
     enemyType: 1
     maxHp: 5
     maxArmor: 5
-    atk: 5
-    skillId: 1002
+    atk: 0
+    skillId: 1001

@@ -14,6 +14,28 @@ using UnityEngine.UI;
 
 namespace Assets.GameSystem.BattleSystem.Scripts
 {
+    public class UnitInfoPacking
+    {
+        public string iconName;
+        public string unitName;
+        public int maxHp;
+        public int nowHp;
+        public int armor;
+        public int atk;
+        public int skillId;
+        public QArray<int> effectIds;
+        public UnitInfoPacking(string iconName, string unitName, int maxHp, int nowHp, int armor, int atk,int skillId, QArray<int> effectIds)
+        {
+            this.iconName = iconName;
+            this.unitName = unitName;
+            this.maxHp = maxHp;
+            this.nowHp = nowHp;
+            this.armor = armor;
+            this.atk = atk;
+            this.skillId = skillId;
+            this.effectIds = effectIds;
+        }
+    }
     public abstract class AbsUnit : MonoBehaviour, ICanSendCmd, ICanGetSystem
     {
         public int id;
@@ -23,7 +45,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         public ValueBindery<int> armor = new ValueBindery<int>(); //护盾
         protected IBattleSystemModule _battleSystemModule;
         protected ISkillSystemModule _skillSystemModule;
-        private readonly QArray<BaseEffect> _effQueue = new QArray<BaseEffect>(1);
+        protected readonly QArray<BaseEffect> _effQueue = new QArray<BaseEffect>(1);
         protected Slider _hpBar;
         protected Text _txtArmor;
 

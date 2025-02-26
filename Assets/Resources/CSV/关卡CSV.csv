@@ -1,5 +1,5 @@
 ﻿id,levelName,waveCnt,enemyIds
 Int,String,Int,String
-1,levelName_1001,1,1
+1,levelName_1001,2,1-2/1-2
 2,levelName_1002,2,1-2/1-2
 3,levelName_1003,2,1-2/1-2
