@@ -170,14 +170,24 @@ namespace Tool.Mono
 
             _time += Time.deltaTime;
             var peekActInfo = _actQueue[_nowIdx];
-            if (_time < peekActInfo.durationTime)
+            // 持续时间=0表示只执行一次
+            if (peekActInfo.durationTime == 0)
             {
                 peekActInfo.Action?.Invoke();
+                _nowIdx++;
+                _time = 0;
             }
             else
             {
-                _nowIdx++;
-                _time = 0;
+                if (_time < peekActInfo.durationTime)
+                {
+                    peekActInfo.Action?.Invoke();
+                }
+                else
+                {
+                    _nowIdx++;
+                    _time = 0;
+                }
             }
         }
     }
