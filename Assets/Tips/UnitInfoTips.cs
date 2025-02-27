@@ -1,6 +1,8 @@
 using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.CardSystem.Scripts;
+using Assets.GameSystem.EffectsSystem;
 using Assets.GameSystem.SkillSystem;
+using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
 using Tool.ResourceMgr;
@@ -78,7 +80,7 @@ namespace Tips
                         effIcon.GetComponent<Button>().onClick.RemoveAllListeners();
                         effIcon.GetComponent<Button>().onClick.AddListener(() =>
                         {
-                            TipsModule.DescTips(ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库").GetBaseEffectById(unitInfoPacking.effectIds[index]).effDesc);
+                            TipsModule.DescTips(this.GetSystem<IEffectsSystemModule>().GetBaseEffectById(unitInfoPacking.effectIds[index]).effDesc);
                         });
                     }
                 }

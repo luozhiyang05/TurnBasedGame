@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Assets.GameSystem.CardSystem.Scripts
 {
     [Serializable]
-    public abstract class BaseCard : ICanSendCmd
+    public abstract class BaseCard : ICanSendCmd,ICanGetSystem
     {
         [Header("卡牌基础信息")]
         public int id;

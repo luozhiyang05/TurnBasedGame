@@ -1,6 +1,7 @@
 using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.BattleSystem.Scripts.Effect;
 using Assets.GameSystem.CardSystem.Scripts.Cmd;
+using Assets.GameSystem.EffectsSystem;
 using Framework;
 using Tool.ResourceMgr;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace Assets.GameSystem.CardSystem.Scripts.DefCard
                 self = self,
                 target = target,
                 maxRoundCnt = param1,
-                defenceEffect = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库").GetBaseEffectById(effectId) as DefenceEffect,
+                defenceEffect = this.GetSystem<IEffectsSystemModule>().GetBaseEffectById(effectId) as DefenceEffect,
                 armor = armor
             });
         }
