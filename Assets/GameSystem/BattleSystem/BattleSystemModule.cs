@@ -1,6 +1,7 @@
 using System;
 using Assets.GameSystem.BattleSystem.Main;
 using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.FlyTextSystem;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
@@ -38,25 +39,6 @@ namespace Assets.GameSystem.BattleSystem
         CharacterData GetCharacterData();
 
         /// <summary>
-        /// 弹幕时间
-        /// </summary>
-        /// <param name="callback"></param>
-        /// <param name="screenInfo"></param>
-        void BulletScreenTimeDelegate(Action callback, string screenInfo);
-
-        /// <summary>
-        /// 行动间隔时间
-        /// </summary>
-        /// <param name="callback"></param>
-        void ActInternalTimeDelegate(Action callback);
-
-        /// <summary>
-        /// 切换回合时间
-        /// </summary>
-        /// <param name="callback"></param>
-        void SwitchTurnTimeDelegate(Action callback);
-
-        /// <summary>
         /// 切换回合
         /// </summary>
         void SwitchRound();
@@ -80,7 +62,7 @@ namespace Assets.GameSystem.BattleSystem
         {
             //打开试图
             _viewCtrl ??= new BattleSystemViewCtrl();
-            _viewCtrl.ShowView(EuiLayer.GameUI,characterData,levelData);
+            _viewCtrl.ShowView(EuiLayer.GameUI, characterData, levelData);
         }
 
         private ETurnBased _nowTurnBased = ETurnBased.Start; //当前状态枚举
@@ -95,6 +77,8 @@ namespace Assets.GameSystem.BattleSystem
             switch (_nowTurnBased)
             {
                 case ETurnBased.PlayerTurn:
+                    // 敌人回合 弹幕
+                    this.GetSystem<IFlyTextSystemModule>().FlyText(1, "battle_tip_1007", 1f, 0.5f);
                     SwitchEnemyTurn();
                     break;
                 case ETurnBased.EnemyTurn:
@@ -107,22 +91,22 @@ namespace Assets.GameSystem.BattleSystem
 
         public void SwitchPlayerTurn()
         {
-            //弹幕时间
-            BulletScreenTimeDelegate(() =>
+            // 你的回合 弹幕。弹幕结束后进入 你都会和
+            this.GetSystem<IFlyTextSystemModule>().FlyText(0, "battle_tip_1005", 1f, 0.5f, () =>
             {
                 _nowTurnBased = ETurnBased.PlayerTurn;
                 (_viewCtrl.GetModel() as BattleSystemViewModel).PlayerStartRoundSettle();
-            }, "玩家回合开始");
+            });
         }
 
         private void SwitchEnemyTurn()
         {
-            //弹幕时间
-            BulletScreenTimeDelegate(() =>
+            //间隔后切换敌人回合
+            ActionKit.GetInstance().DelayTime(GameManager.actTntervalTime, () =>
             {
                 _nowTurnBased = ETurnBased.EnemyTurn;
                 (_viewCtrl.GetModel() as BattleSystemViewModel).EnemyStartRoundSettle();
-            }, "敌人回合开始");
+            });
         }
 
         private void JudgeIsHaveMoreEnemies()
@@ -130,31 +114,18 @@ namespace Assets.GameSystem.BattleSystem
             //所有敌人行动完毕
             if ((_viewCtrl.GetModel() as BattleSystemViewModel).IsEnemiesAfterAct())
             {
-                SwitchPlayerTurn();
+                // 敌人回合结束 弹幕，间隔后进入 你的回合
+                this.GetSystem<IFlyTextSystemModule>().FlyText(1, "battle_tip_1008", 1f, 0.5f,()=>{
+                    ActionKit.GetInstance().DelayTime(GameManager.actTntervalTime, () =>
+                    {
+                       SwitchPlayerTurn();
+                    });
+                });
             }
             else
             {
                 SwitchEnemyTurn();
             }
-        }
-
-
-        public void BulletScreenTimeDelegate(Action callback, string screenInfo)
-        {
-            Debug.Log($"（弹幕：{screenInfo}）..........");
-            ActionKit.GetInstance().DelayTime(GameManager.BulletScreenTime, callback);
-        }
-
-        public void ActInternalTimeDelegate(Action callback)
-        {
-            Debug.Log("(行动间隔)........");
-            ActionKit.GetInstance().DelayTime(GameManager.ActInternalTime, callback);
-        }
-
-        public void SwitchTurnTimeDelegate(Action callback)
-        {
-            Debug.Log("(切换回合)........");
-            ActionKit.GetInstance().DelayTime(GameManager.SwitchTurnTime, callback);
         }
 
         public AbsUnit GetPlayerUnit()

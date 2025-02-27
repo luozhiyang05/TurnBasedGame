@@ -1,5 +1,6 @@
 using Assets.GameSystem.CardSystem.Scripts.Cmd;
 using Framework;
+using GlobalData;
 using UnityEngine;
 
 namespace Assets.GameSystem.BattleSystem.Scripts.Unit.EnemyUnit
@@ -8,12 +9,12 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Unit.EnemyUnit
     {
         protected override void OnStartRoundSettle()
         {
-            Debug.Log($"{gameObject.name}回合开始时结算逻辑");
+            Debug.Log($"{GameManager.GetText(enemyData.enemyType.ToString())}回合开始时结算逻辑");
         }
 
         protected override void OnAction()
         {
-            Debug.Log($"{gameObject.name}具体攻击逻辑");
+            Debug.Log($"{GameManager.GetText(enemyData.enemyType.ToString())}具体攻击逻辑");
             this.SendCmd<AtkCmd, AtkData>(new AtkData
             {
                 self = this,
@@ -24,7 +25,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Unit.EnemyUnit
 
         protected override void SettleRound()
         {
-            Debug.Log($"{gameObject.name}回合结束结算逻辑");
+            Debug.Log($"{GameManager.GetText(enemyData.enemyType.ToString())}回合结束结算逻辑");
         }
     }
 }

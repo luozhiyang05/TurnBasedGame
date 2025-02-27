@@ -1,6 +1,7 @@
 using Assets.GameSystem.BattleSystem;
 using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.CardSystem.Scripts;
+using Assets.GameSystem.FlyTextSystem;
 using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;

@@ -24,7 +24,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         public int atk;
         public int skillId;
         public QArray<int> effectIds;
-        public UnitInfoPacking(string iconName, string unitName, int maxHp, int nowHp, int armor, int atk,int skillId, QArray<int> effectIds)
+        public UnitInfoPacking(string iconName, string unitName, int maxHp, int nowHp, int armor, int atk, int skillId, QArray<int> effectIds)
         {
             this.iconName = iconName;
             this.unitName = unitName;
@@ -154,12 +154,8 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             //玩家当前没有死亡，则继续行动
             if (!_battleSystemModule.GetPlayerUnit().IsDie())
             {
-                //行动间隔
-                _battleSystemModule.ActInternalTimeDelegate(() =>
-                {
-                    //弹幕时间
-                    _battleSystemModule.BulletScreenTimeDelegate(Action, "开始行动");
-                });
+                //间隔后行动
+                ActionKit.GetInstance().DelayTime(GameManager.actTntervalTime, Action);
             }
         }
 
@@ -177,11 +173,10 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             //玩家当前没有死亡，则继续行动
             if (!_battleSystemModule.GetPlayerUnit().IsDie())
             {
-                //行动间隔
-                _battleSystemModule.ActInternalTimeDelegate(() =>
+                //间隔后，行动结束
+                ActionKit.GetInstance().DelayTime(GameManager.actTntervalTime, () =>
                 {
-                    //弹幕时间
-                    _battleSystemModule.BulletScreenTimeDelegate(ExitRound, "行动结束");
+                    ExitRound();
                 });
             }
         }
@@ -210,8 +205,8 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// </summary>
         protected void SwitchRound()
         {
-            //切换回合时间
-            _battleSystemModule.SwitchTurnTimeDelegate(() =>
+            //间隔后，切换回合
+            ActionKit.GetInstance().DelayTime(GameManager.actTntervalTime, () =>
             {
                 _battleSystemModule.SwitchRound();
             });

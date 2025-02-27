@@ -56,7 +56,6 @@ namespace Assets.GameSystem.CardSystem.Main
             var cardGroup = this.GetSystem<ICardSystemModule>().GetCardsId(cardGroupId);
             for (int i = 0; i < cardGroup.Count; i++)
             {
-                Debug.Log("加载卡牌id：" + cardGroup[i]);
                 _nowUseCards.Add(this.GetSystem<ICardSystemModule>().GetCardById(cardGroup[i]));
             }
         }

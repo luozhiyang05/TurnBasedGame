@@ -1,4 +1,5 @@
 using Assets.GameSystem.CardSystem;
+using Assets.GameSystem.FlyTextSystem;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Framework;
 using UnityEngine;
@@ -22,8 +23,8 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         public override void StartRoundSettle()
         {
             // 每回合最大行动点+1，直到到达角色最大行动点为止
-            if (++maxActPoint >= characterData.maxActPoint) 
-            maxActPoint = characterData.maxActPoint;
+            if (++maxActPoint >= characterData.maxActPoint)
+                maxActPoint = characterData.maxActPoint;
 
             nowActPoint = maxActPoint;  //恢复行动点
 
@@ -45,7 +46,13 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// <summary>
         /// 手动结束回合
         /// </summary>
-        public void EndRound() => AfterAction();
+        public void EndRound()
+        {
+            // 回合结束 弹幕
+            this.GetSystem<IFlyTextSystemModule>().FlyText(0, "battle_tip_1006", 1f, 0.5f);
+
+            AfterAction();
+        }
 
         /// <summary>
         /// 结算回合逻辑
@@ -59,6 +66,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             SettleRound();      //具体重写的 结算回合 逻辑
 
             this.GetSystem<ICardSystemModule>().UpdateHeadCardInEr();   //丢弃手牌
+
 
             SwitchRound();      //回合切换
 

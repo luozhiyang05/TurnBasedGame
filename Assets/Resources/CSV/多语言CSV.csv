@@ -45,3 +45,7 @@ card_name_1003,攻击防御,AtkAndDefCard
 card_desc_1001,对敌人造成两点伤害,Deal two damage to enemies
 card_desc_1002,为自己叠加1回合的2护甲,Stack 2 armor for 1 turn
 card_desc_1003,对敌人造成两点伤害的同时，为自己叠加1回合的2护甲,Deal 2 damage to enemies and stack 2 armor for 1 turn
+battle_tip_1005,你的回合,Your turn
+battle_tip_1006,回合结束,End of round
+battle_tip_1007,敌人回合,Enemy turn
+battle_tip_1008,敌人回合结束,Enemy turn ends

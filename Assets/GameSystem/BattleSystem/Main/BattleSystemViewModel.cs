@@ -4,6 +4,7 @@ using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
+using Tool.Mono;
 using Tool.Utilities;
 using Tool.Utilities.Events;
 using UnityEngine;
@@ -108,8 +109,9 @@ namespace Assets.GameSystem.BattleSystem.Main
                 else
                 {
                     _nowWaveIndex++;
+
                     //开启下一个波次
-                    this.GetSystem<IBattleSystemModule>().BulletScreenTimeDelegate(SetNextWavaEnemiesData, GameManager.GetText("waveTip_1001"));
+                    ActionKit.GetInstance().DelayTime(GameManager.nextWaveWaitTime, SetNextWavaEnemiesData);
                 }
             }
         }

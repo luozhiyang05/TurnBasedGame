@@ -8,9 +8,8 @@ namespace GlobalData
     public static class GameManager
     {
         public static Languages languages = Languages.中文;
-        public const float SwitchTurnTime = 1.5f;
-        public const float ActInternalTime = 1f;
-        public const float BulletScreenTime = 1f;
+        public const float nextWaveWaitTime = 1f;
+        public const float actTntervalTime = 1f;
 
         public static void InitGlobalData()
         {
