@@ -9,9 +9,11 @@ namespace Assets.GameSystem.MenuSystem.Main
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
 		public CButton Btn_startGame;
+		public CButton Btn_setting;
         protected override void AutoInitUI()
         {
 			Btn_startGame = transform.Find("Main/Btn_startGame").GetComponent<CButton>();
+			Btn_setting = transform.Find("Main/Btn_setting").GetComponent<CButton>();
         }
 		#endregion 自动生成UI组件区域结束！
 
@@ -57,7 +59,10 @@ namespace Assets.GameSystem.MenuSystem.Main
         protected override void OnInit()
         {
             Btn_startGame.Text = GameManager.GetText("menu_1001");
+            Btn_setting.Text = GameManager.GetText("menu_1002");
+
             Btn_startGame.onClick.AddListener(OpenCharacterChoseView);
+            Btn_setting.onClick.AddListener(OpenSettingView);
         }
 
 
@@ -80,6 +85,10 @@ namespace Assets.GameSystem.MenuSystem.Main
         private void OpenCharacterChoseView()
         {
             this.GetSystem<IMenuSystemModule>().ShowCharacterChoseView();
+        }
+        private void OpenSettingView()
+        {
+            this.GetSystem<IMenuSystemModule>().ShowSettingView();
         }
         #endregion
     }

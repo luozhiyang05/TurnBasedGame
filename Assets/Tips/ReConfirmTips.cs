@@ -1,4 +1,5 @@
 using GameSystem.MVCTemplate;
+using GlobalData;
 using UIComponents;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -6,16 +7,11 @@ using UnityEngine.UI;
 namespace Tips
 {
     public class ReConfirmTips : BaseTips
-    {   
+    {
         public Text txtTitle;
         public Text txtContent;
         public CButton btnComfirm;
-        private UnityAction _comfirm;
         public CButton btnCancel;
-        private UnityAction _cancel;
-        private string _title;
-        private string _content;
-        
         #region 遮罩相关
         /// <summary>
         /// 是否启用MaskPanel，启用的话只需要取消注释
@@ -38,34 +34,35 @@ namespace Tips
 
         protected override void Init()
         {
-            txtTitle.text = _title;
-            txtContent.text = _content;
-            btnComfirm.Label.text = "确定";
-            btnCancel.Label.text = "取消";
-            btnComfirm.onClick.AddListener(() =>
-            {
-                _comfirm?.Invoke();
-                OnHide();
-            });
-            btnCancel.onClick.AddListener(() =>
-            {
-                _cancel?.Invoke();
-                OnHide();
-            });
+
         }
 
         protected override void OnOpen(params object[] args)
         {
-            SetAudio("Test","Test");
-            _title = args[0] as string;
-            _content = args[1] as string;
-            _comfirm = args[2] as UnityAction;
-            _cancel = args[3] as UnityAction;
+            SetAudio("Test", "Test");
+
+            txtTitle.text = GameManager.GetText(args[0] as string);
+            txtContent.text = GameManager.GetText(args[1] as string);
+            btnComfirm.Label.text = GameManager.GetText("tips_1003");
+            btnCancel.Label.text = GameManager.GetText("tips_1005");
+
+            btnComfirm.onClick.RemoveAllListeners();
+            btnCancel.onClick.RemoveAllListeners();
+            btnComfirm.onClick.AddListener(() =>
+            {
+                (args[2] as UnityAction)?.Invoke();
+                OnHide();
+            });
+            btnCancel.onClick.AddListener(() =>
+            {
+                (args[3] as UnityAction)?.Invoke();
+                OnHide();
+            });
         }
 
         public override void OnRelease()
         {
-            
+
         }
     }
 }

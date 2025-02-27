@@ -9,6 +9,8 @@ waveTip_1001,更多的敌人正在来临,The next wave of this enemy is coming
 tips_1001,提示,waring
 tips_1002,你已战败,You have been defeated
 tips_1003,确定,ok
+tips_1004,语言设置需要重启游戏，请点击确认退出,The language setting requires a restart of the game，please click Confirm to exit
+tips_1005,取消,cancel
 win_1001,恭喜你，你赢了,Congratulations，you are won
 lose_1001,不要气馁，请重新挑战,Don't be discouraged，try again
 card_name_1001,普通攻击卡,AtkCard
@@ -29,3 +31,5 @@ effect_name_1002,削弱,Cripple
 effect_name_1003,复活,Resurrection
 effect_desc_1001,每隔数个回合自动叠甲,Infinite stacks of armor
 effect_desc_1003,死亡后立马复活,Resurrection immediately after death
+multi_langague_1001,中文,中文
+multi_langague_1002,English,English

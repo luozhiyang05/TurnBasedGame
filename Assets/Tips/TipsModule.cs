@@ -10,12 +10,12 @@ namespace Tips
     public static class TipsModule
     {
         private static UIManager uiMgr => UIManager.GetInstance();
-        public static void ReComfirmTips(string title, string content, UnityAction comfirm, UnityAction cancel)
+        public static void ReComfirmTips(string titleKey, string contentKey, UnityAction comfirm, UnityAction cancel)
         {
             uiMgr.GetFromPool("ReConfirmTips", EuiLayer.TipsUI, (tips) =>
             {
                 var reConfirmTips = tips as ReConfirmTips;
-                reConfirmTips.Open(title, content, comfirm, cancel);
+                reConfirmTips.Open(titleKey, contentKey, comfirm, cancel);
             });
         }
 

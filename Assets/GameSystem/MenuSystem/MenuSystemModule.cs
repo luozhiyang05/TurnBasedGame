@@ -3,15 +3,17 @@ using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Assets.GameSystem.MenuSystem.LevelChose.Main;
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Assets.GameSystem.MenuSystem.Main;
+using Assets.GameSystem.MenuSystem.Setting.Main;
 using Framework;
 
 namespace Assets.GameSystem.MenuSystem
 {
-    public interface IMenuSystemModule: IModule
+    public interface IMenuSystemModule : IModule
     {
         public void ShowView();
         public void ShowCharacterChoseView();
         public void ShowLevelChoseView();
+        public void ShowSettingView();
         public CharacterData GetNowChoseCharacterData();
         public LevelData GetNowChoseLevelData();
     }
@@ -21,6 +23,7 @@ namespace Assets.GameSystem.MenuSystem
         private MenuSystemViewCtrl _viewCtrl;
         private CharacterChoseViewCtrl _characterCHoseViewCtrl;
         private LevelChoseViewCtrl _levelChoseViewCtrl;
+        private SettingViewCtrl _settingViewCtrl;
 
         protected override void OnInit()
         {
@@ -40,6 +43,12 @@ namespace Assets.GameSystem.MenuSystem
         {
             _levelChoseViewCtrl ??= new LevelChoseViewCtrl();
             _levelChoseViewCtrl.ShowView(Tool.UI.EuiLayer.MenuUI);
+        }
+
+        public void ShowSettingView()
+        {
+            _settingViewCtrl ??= new SettingViewCtrl();
+            _settingViewCtrl.ShowView(Tool.UI.EuiLayer.MenuUI);
         }
         public CharacterData GetNowChoseCharacterData()
         {
