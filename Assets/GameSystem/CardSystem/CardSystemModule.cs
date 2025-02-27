@@ -3,6 +3,7 @@ using Assets.GameSystem.CardSystem.Main;
 using Assets.GameSystem.CardSystem.ObsCard.Main;
 using Assets.GameSystem.CardSystem.Scripts;
 using Framework;
+using GlobalData;
 using Tool.Mono;
 using Tool.ResourceMgr;
 using Tool.UI;
@@ -188,8 +189,8 @@ namespace Assets.GameSystem.CardSystem
 
         public void RenderCardInfo(Transform cardCell, BaseCard card)
         {
-            cardCell.Find("bg/txt_name").GetComponent<Text>().text = card.cardName;
-            cardCell.Find("bg/txt_desc").GetComponent<Text>().text = card.cardDesc;
+            cardCell.Find("bg/txt_name").GetComponent<Text>().text = GameManager.GetText(card.cardName);
+            cardCell.Find("bg/txt_desc").GetComponent<Text>().text = GameManager.GetText(card.cardDesc);
         }
 
         public void RenderHistoryInfo(Transform historyCell, UseCardHistory history)

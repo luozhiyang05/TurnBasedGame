@@ -3,6 +3,7 @@ using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.CardSystem.Scripts;
 using Framework;
 using GameSystem.MVCTemplate;
+using GlobalData;
 using Tips;
 using Tool.Utilities;
 using UIComponents;
@@ -55,7 +56,10 @@ namespace Assets.GameSystem.CardSystem.Main
             _cardTemp = _cardsContent.transform.GetChild(0).gameObject;
 
             //文本
-            Btn_exitRound.Label.text = "结束回合";
+            Btn_useCards.Label.text = GameManager.GetText("battle_tip_1001");
+            Btn_exitRound.Label.text = GameManager.GetText("battle_tip_1002");
+            Btn_obsCards.Label.text = GameManager.GetText("battle_tip_1003");
+            Btn_history.Label.text = GameManager.GetText("battle_tip_1004");
 
             //按钮
             Btn_exitRound.onClick.AddListener(() =>

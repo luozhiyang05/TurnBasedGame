@@ -1,5 +1,5 @@
 ﻿id,cardName,petName,depletePoint,canAutoUse,atk,armor,cardDesc,effectId,param1,,
 Int,String,String,Int,Bool,Int,Int,String,Int,Int,,
-1,card_name_1001,,1,0,100,0,秒杀,0,0,,普通攻击卡
-2,普通防御卡,,1,1,0,100,护盾,1,1,,
-3,攻击防御,,1,0,100,100,护盾秒杀,1,0,,
+1,card_name_1001,,1,0,100,0,card_desc_1001,0,0,,普通攻击卡
+2,card_name_1002,,1,1,0,100,card_desc_1002,1,1,,普通防御卡
+3,card_name_1003,,1,0,100,100,card_desc_1003,1,0,,攻击防御卡

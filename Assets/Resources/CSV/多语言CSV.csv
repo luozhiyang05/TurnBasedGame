@@ -13,7 +13,6 @@ tips_1004,语言设置需要重启游戏，请点击确认退出,The language se
 tips_1005,取消,cancel
 win_1001,恭喜你，你赢了,Congratulations，you are won
 lose_1001,不要气馁，请重新挑战,Don't be discouraged，try again
-card_name_1001,普通攻击卡,AtkCard
 skill_1001,无限叠甲,Infinite stacks of armor
 skill_1002,死亡复活,Resurrection from the dead
 skill_desc_1001,每隔数个回合自动叠甲,Automatically stacks armor every few turns
@@ -36,3 +35,13 @@ multi_langague_1002,English,English
 setting_1001,音效,Sound effect
 setting_1002,背景音乐,Background music
 setting_1003,语言,Language
+battle_tip_1001,牌库,CardLibrary
+battle_tip_1002,回合结束,End of round
+battle_tip_1003,弃牌堆,Discard pile
+battle_tip_1004,历史,History
+card_name_1001,普通攻击卡,AtkCard
+card_name_1002,普通防御卡,DefCard
+card_name_1003,攻击防御,AtkAndDefCard
+card_desc_1001,对敌人造成两点伤害,Deal two damage to enemies
+card_desc_1002,为自己叠加1回合的2护甲,Stack 2 armor for 1 turn
+card_desc_1003,对敌人造成两点伤害的同时，为自己叠加1回合的2护甲,Deal 2 damage to enemies and stack 2 armor for 1 turn
