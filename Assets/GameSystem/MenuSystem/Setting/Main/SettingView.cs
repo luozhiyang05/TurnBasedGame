@@ -1,6 +1,7 @@
 using GameSystem.MVCTemplate;
 using GlobalData;
 using Tips;
+using Tool.AudioMgr;
 using UIComponents;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,17 +11,17 @@ namespace Assets.GameSystem.MenuSystem.Setting.Main
     public class SettingView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
-        public CButton Btn_certain;
         public CButton Btn_close;
         public Text Txt_title;
-        public Text Txt_audioTip;
+        public Text Txt_effectAudio;
+        public Text Txt_bgmAudio;
         public Text Txt_language;
         protected override void AutoInitUI()
         {
-            Btn_certain = transform.Find("Main/bg/Btn_certain").GetComponent<CButton>();
             Btn_close = transform.Find("Main/bg/Btn_close").GetComponent<CButton>();
             Txt_title = transform.Find("Main/bg/Txt_title").GetComponent<Text>();
-            Txt_audioTip = transform.Find("Main/bg/Slider_audio/Txt_audioTip").GetComponent<Text>();
+            Txt_effectAudio = transform.Find("Main/bg/Slider_effect/Txt_effectAudio").GetComponent<Text>();
+            Txt_bgmAudio = transform.Find("Main/bg/Slider_bgm/Txt_bgmAudio").GetComponent<Text>();
             Txt_language = transform.Find("Main/bg/Dropdown/Txt_language").GetComponent<Text>();
         }
         #endregion 自动生成UI组件区域结束！
@@ -55,12 +56,34 @@ namespace Assets.GameSystem.MenuSystem.Setting.Main
         #endregion
 
         public Dropdown dropdown;
+        public Slider Slider_effect;
+        public Slider Slider_bgm;
 
         /// <summary>
         /// 初始化,时机在Awake中
         /// </summary>
         protected override void OnInit()
         {
+            // 多语言
+            Txt_title.text = GameManager.GetText("menu_1002");
+            Txt_effectAudio.text = GameManager.GetText("setting_1001");
+            Txt_bgmAudio.text = GameManager.GetText("setting_1002");
+            Txt_language.text = GameManager.GetText("setting_1003");
+
+            // 音量控制
+            Slider_effect = transform.Find("Main/bg/Slider_effect").GetComponent<Slider>();
+            Slider_effect.value = AudioManager.GetInstance().GetVolume(EAudioType.Effect);
+            Slider_effect.onValueChanged.AddListener(value =>
+            {
+                AudioManager.GetInstance().ModifyVolume(EAudioType.Effect, value);
+            });
+            Slider_bgm = transform.Find("Main/bg/Slider_bgm").GetComponent<Slider>();
+            Slider_bgm.value = AudioManager.GetInstance().GetVolume(EAudioType.Bgm);
+            Slider_bgm.onValueChanged.AddListener(value =>
+            {
+                AudioManager.GetInstance().ModifyVolume(EAudioType.Bgm, value);
+            });
+
             // 语言下拉框
             dropdown = transform.Find("Main/bg/Dropdown").GetComponent<Dropdown>();
             var options = dropdown.options;
@@ -75,6 +98,7 @@ namespace Assets.GameSystem.MenuSystem.Setting.Main
                 Debug.Log("选择语言：" + dropdown.options[dropdown.value].text);
                 int nowLanguesIndex = dropdown.value;
 
+                // 确认更换语言提示
                 TipsModule.ReComfirmTips("tips_1001", "tips_1004", () =>
                 {
                     Debug.Log("退出游戏");

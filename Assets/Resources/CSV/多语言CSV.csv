@@ -33,3 +33,6 @@ effect_desc_1001,每隔数个回合自动叠甲,Infinite stacks of armor
 effect_desc_1003,死亡后立马复活,Resurrection immediately after death
 multi_langague_1001,中文,中文
 multi_langague_1002,English,English
+setting_1001,音效,Sound effect
+setting_1002,背景音乐,Background music
+setting_1003,语言,Language
