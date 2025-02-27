@@ -32,6 +32,12 @@ namespace Assets.GameSystem.BattleSystem
         AbsUnit GetPlayerUnit();
 
         /// <summary>
+        /// 获取玩家角色数据
+        /// </summary>
+        /// <returns></returns>
+        CharacterData GetCharacterData();
+
+        /// <summary>
         /// 弹幕时间
         /// </summary>
         /// <param name="callback"></param>
@@ -156,5 +162,9 @@ namespace Assets.GameSystem.BattleSystem
             return (_viewCtrl.GetModel() as BattleSystemViewModel).GetPlayerUnit();
         }
 
+        public CharacterData GetCharacterData()
+        {
+            return (_viewCtrl.GetModel() as BattleSystemViewModel).GetCharacterData();
+        }
     }
 }

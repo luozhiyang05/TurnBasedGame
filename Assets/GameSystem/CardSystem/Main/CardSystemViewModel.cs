@@ -1,4 +1,7 @@
+using Assets.GameSystem.BattleSystem;
+using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.CardSystem.Scripts;
+using Framework;
 using GameSystem.MVCTemplate;
 using Tool.ResourceMgr;
 using Tool.Utilities;
@@ -49,14 +52,12 @@ namespace Assets.GameSystem.CardSystem.Main
         /// </summary>
         public void LoadUseCards(int cardGroupId)
         {
-            var CardGroupsSo = ResMgr.GetInstance().SyncLoad<CardGroupsSo>("卡牌组");
-            var cardLibrarySo = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库");
             // 根据卡组id，获取卡组中的卡牌id
-            var cardGroup = CardGroupsSo.GetCardsId(cardGroupId);
+            var cardGroup = this.GetSystem<ICardSystemModule>().GetCardsId(cardGroupId);
             for (int i = 0; i < cardGroup.Count; i++)
             {
                 Debug.Log("加载卡牌id：" + cardGroup[i]);
-                _nowUseCards.Add(cardLibrarySo.GetCardById(cardGroup[i]));
+                _nowUseCards.Add(this.GetSystem<ICardSystemModule>().GetCardById(cardGroup[i]));
             }
         }
 
@@ -109,7 +110,8 @@ namespace Assets.GameSystem.CardSystem.Main
         public void UpdateHeadCardInSr()
         {
             //获取新的卡牌
-            GetCardsFormUseCards(10);
+            var characterData = this.GetSystem<IBattleSystemModule>().GetCharacterData();
+            GetCardsFormUseCards(characterData.maxHeadCardCnt);
 
             //通知视图更新
             UpdateView();

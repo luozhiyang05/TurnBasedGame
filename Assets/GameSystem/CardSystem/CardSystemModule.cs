@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using Assets.GameSystem.CardSystem.Main;
 using Assets.GameSystem.CardSystem.ObsCard.Main;
 using Assets.GameSystem.CardSystem.Scripts;
 using Framework;
 using Tool.Mono;
+using Tool.ResourceMgr;
 using Tool.UI;
 using Tool.Utilities;
 using UnityEngine;
@@ -50,6 +52,20 @@ namespace Assets.GameSystem.CardSystem
         /// <param name="cardData"></param>
         void RenderHistoryInfo(Transform historyCell, UseCardHistory history);
 
+        /// <summary>
+        /// 根据卡牌Id获取卡牌
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        BaseCard GetCardById(int id);
+
+        /// <summary>
+        /// 根据卡牌组Id获取卡牌Id列表
+        /// </summary>
+        /// <param name="cardGroupId"></param>
+        /// <returns></returns>
+        List<int> GetCardsId(int cardGroupId);
+
         #region 卡牌动画
         /// <summary>
         /// 选择卡牌时的动画
@@ -77,12 +93,14 @@ namespace Assets.GameSystem.CardSystem
 
     public class CardSystemModule : AbsModule, ICardSystemModule
     {
+        private CardLibrarySo cardLibrarySo;
+        private CardGroupsSo cardGroupsSo;
         private CardSystemViewCtrl _viewCtrl;
-
 
         protected override void OnInit()
         {
-
+            cardLibrarySo = ResMgr.GetInstance().SyncLoad<CardLibrarySo>("卡牌库");
+            cardGroupsSo = ResMgr.GetInstance().SyncLoad<CardGroupsSo>("卡牌组");
         }
 
         public void ShowView(int cardGroupId)
@@ -230,6 +248,16 @@ namespace Assets.GameSystem.CardSystem
                 canvasGroup.alpha = Mathf.Lerp(0.2f, 1, percent);
             }, 0.12f)
             .Execute();
+        }
+
+        public BaseCard GetCardById(int id)
+        {
+            return cardLibrarySo.GetCardById(id);
+        }
+
+        public List<int> GetCardsId(int id)
+        {
+           return cardGroupsSo.GetCardsId(id);
         }
     }
 }
