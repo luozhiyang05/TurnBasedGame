@@ -12,6 +12,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         public int skillCardId;
 
         public bool canAction = false;
+        public CharacterData characterData;
 
         /// <summary>
         /// 回合开始时结算逻辑
@@ -20,6 +21,10 @@ namespace Assets.GameSystem.BattleSystem.Scripts
 
         public override void StartRoundSettle()
         {
+            // 每回合最大行动点+1，直到到达角色最大行动点为止
+            if (++maxActPoint >= characterData.maxActPoint) 
+            maxActPoint = characterData.maxActPoint;
+
             nowActPoint = maxActPoint;  //恢复行动点
 
             base.StartRoundSettle();    //结算单位身上的效果
@@ -75,10 +80,11 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// </summary>
         public void InitData(CharacterData characterData)
         {
+            this.characterData = characterData;
             unitName = characterData.characterType.ToString();
             maxHp.Value = characterData.maxHp;
             nowHp.Value = characterData.maxHp;
-            maxActPoint = characterData.maxActPoint;
+            maxActPoint = characterData.startMaxActCnt;
             nowActPoint = characterData.maxActPoint;
             skillCardId = characterData.skillCardId;
         }
