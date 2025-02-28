@@ -4,15 +4,15 @@ using Framework;
 
 namespace Assets.GameSystem.CardSystem.Scripts.FunctionCard
 {
-    public class RestoreHpCard : BaseCard
+    public class GetCardsCard : BaseCard
     {
         protected override void OnUseCard(AbsUnit self, AbsUnit target)
         {
-            this.SendCmd<AddHpCmd, AddHpData>(new AddHpData
+            this.SendCmd<GetCardCmd, CardCmdData>(new CardCmdData
             {
                 self = self,
                 target = target,
-                addHp = param1  // param1为回复的血量
+                param1 = param1  // param1为额外获取的卡牌数
             });
         }
     }

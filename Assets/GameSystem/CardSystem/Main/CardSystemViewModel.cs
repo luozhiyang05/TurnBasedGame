@@ -64,7 +64,7 @@ namespace Assets.GameSystem.CardSystem.Main
         /// 从玩家出战卡牌中获取卡牌到手牌
         /// </summary>
         /// <param name="count"></param>
-        public void GetCardsFormUseCards(int count)
+        public void GetCardsFormUseCards(int count, bool needUpdateView = false)
         {
             //如果当前出战卡组剩余卡牌不足获取，则将弃牌堆中的卡牌洗入出战卡组中
             if (_nowUseCards.Count < count)
@@ -82,6 +82,12 @@ namespace Assets.GameSystem.CardSystem.Main
             {
                 var card = _nowUseCards.RemoveRange();
                 _nowHeadCards.Add(card);
+            }
+
+            // 是否需要手动更新卡牌试图，一般用于手动获取卡牌时
+            if (needUpdateView)
+            {
+                UpdateView();
             }
         }
 

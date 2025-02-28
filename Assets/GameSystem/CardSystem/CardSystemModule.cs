@@ -54,6 +54,12 @@ namespace Assets.GameSystem.CardSystem
         void RenderHistoryInfo(Transform historyCell, UseCardHistory history);
 
         /// <summary>
+        /// 从玩家卡牌库中获取指定数量的卡牌
+        /// </summary>
+        /// <param name="cnt"></param>
+        void GetCardsFormUseCards(int cnt);
+
+        /// <summary>
         /// 根据卡牌Id获取卡牌
         /// </summary>
         /// <param name="id"></param>
@@ -259,6 +265,11 @@ namespace Assets.GameSystem.CardSystem
         public List<int> GetCardsId(int id)
         {
            return cardGroupsSo.GetCardsId(id);
+        }
+
+        public void GetCardsFormUseCards(int cnt)
+        {
+            (_viewCtrl.GetModel() as CardSystemViewModel).GetCardsFormUseCards(cnt,true);
         }
     }
 }

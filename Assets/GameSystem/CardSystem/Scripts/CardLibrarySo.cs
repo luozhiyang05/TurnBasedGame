@@ -5,7 +5,9 @@ namespace Assets.GameSystem.CardSystem.Scripts
     using System.Reflection;
     using Assets.GameSystem.BattleSystem.Scripts.Effect;
     using Assets.GameSystem.CardSystem.Scripts.AtkCard;
+    using Assets.GameSystem.CardSystem.Scripts.Cmd;
     using Assets.GameSystem.CardSystem.Scripts.DefCard;
+    using Assets.GameSystem.CardSystem.Scripts.FunctionCard;
     using Tool.Utilities.CSV;
     using UnityEngine;
 
@@ -82,6 +84,10 @@ namespace Assets.GameSystem.CardSystem.Scripts
                     var restoreHpCard = new RestoreHpCard();
                     restoreHpCard.Init(baseCardDataPacking);
                     return restoreHpCard;
+                    case 5:
+                    var getCardCmd = new GetCardsCard();
+                    getCardCmd.Init(baseCardDataPacking);
+                    return getCardCmd;
                 default:
                     throw new Exception("找不到对应的卡牌");
             }
