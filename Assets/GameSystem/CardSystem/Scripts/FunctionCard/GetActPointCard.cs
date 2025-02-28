@@ -4,15 +4,15 @@ using Framework;
 
 namespace Assets.GameSystem.CardSystem.Scripts.FunctionCard
 {
-    public class RestoreHpCard : BaseCard
+    public class GetActPointCard : BaseCard
     {
         protected override void OnUseCard(AbsUnit self, AbsUnit target)
         {
-            this.SendCmd<AddHpCmd, CardCmdData>(new CardCmdData
+            this.SendCmd<GetActPointCmd, CardCmdData>(new CardCmdData
             {
                 self = self,
                 target = target,
-                param1 = param1  // param1为回复的血量
+                param1 = param1  // param1为获取的行动点
             });
         }
     }

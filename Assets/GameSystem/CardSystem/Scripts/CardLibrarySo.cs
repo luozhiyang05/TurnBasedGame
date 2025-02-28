@@ -84,10 +84,14 @@ namespace Assets.GameSystem.CardSystem.Scripts
                     var restoreHpCard = new RestoreHpCard();
                     restoreHpCard.Init(baseCardDataPacking);
                     return restoreHpCard;
-                    case 5:
+                case 5:
                     var getCardCmd = new GetCardsCard();
                     getCardCmd.Init(baseCardDataPacking);
                     return getCardCmd;
+                case 6:
+                    var getActPointCard = new GetActPointCard();
+                    getActPointCard.Init(baseCardDataPacking);
+                    return getActPointCard;
                 default:
                     throw new Exception("找不到对应的卡牌");
             }

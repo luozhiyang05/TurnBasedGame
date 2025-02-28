@@ -5,26 +5,20 @@ using UnityEngine;
 
 namespace Assets.GameSystem.CardSystem.Scripts.Cmd
 {
-    public struct AddHpData
+    public class AddHpCmd : AbsCommand<CardCmdData>
     {
-        public AbsUnit self;
-        public AbsUnit target;
-        public int addHp;
-    }
-    public class AddHpCmd : AbsCommand<AddHpData>
-    {
-        public override void Do(AddHpData addHpData)
+        public override void Do(CardCmdData cardCmdData)
         {
-            base.Do(addHpData);
-            if (addHpData.target.nowHp.Value + addHpData.addHp > addHpData.target.maxHp.Value)
+            base.Do(cardCmdData);
+            if (cardCmdData.target.nowHp.Value + cardCmdData.param1 > cardCmdData.target.maxHp.Value)
             {
-                addHpData.target.nowHp.Value = addHpData.target.maxHp.Value;
+                cardCmdData.target.nowHp.Value = cardCmdData.target.maxHp.Value;
             }
             else
             {
-                addHpData.target.nowHp.Value += addHpData.addHp;
+                cardCmdData.target.nowHp.Value += cardCmdData.param1;
             }
-            Debug.LogWarning($"{GameManager.GetText(addHpData.self.unitName)}对{GameManager.GetText(addHpData.target.unitName)}回复了{addHpData.addHp}点血");
+            Debug.LogWarning($"{GameManager.GetText(cardCmdData.self.unitName)}对{GameManager.GetText(cardCmdData.target.unitName)}回复了{cardCmdData.param1}点血");
         }
     }
 }

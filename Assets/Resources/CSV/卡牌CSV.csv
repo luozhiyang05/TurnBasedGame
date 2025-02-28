@@ -3,5 +3,6 @@ Int,String,String,Int,Bool,Int,Int,String,Int,Int,,
 1,card_name_1001,,1,0,2,0,card_desc_1001,0,0,,普通攻击卡
 2,card_name_1002,,1,1,0,5,card_desc_1002,1,1,,普通防御卡
 3,card_name_1003,,1,0,2,5,card_desc_1003,1,0,,攻击防御卡
-4,card_name_1004,,2,1,0,0,card_desc_1005,0,5,,加血卡
-5,card_name_1005,,1,1,0,0,card_desc_1006,0,2,,再来两张卡
+4,card_name_1004,,2,1,0,0,card_desc_1004,0,5,,加血卡
+5,card_name_1005,,1,1,0,0,card_desc_1005,0,2,,再来两张卡
+6,card_name_1006,,0,1,0,0,card_desc_1006,0,2,,行动点回复
