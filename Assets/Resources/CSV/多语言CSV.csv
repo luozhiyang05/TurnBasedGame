@@ -41,11 +41,17 @@ battle_tip_1003,弃牌堆,Discard pile
 battle_tip_1004,历史,History
 card_name_1001,普通攻击卡,AtkCard
 card_name_1002,普通防御卡,DefCard
-card_name_1003,攻击防御,AtkAndDefCard
+card_name_1003,攻击防御卡,AtkAndDefCard
+card_name_1004,回复血量卡,RestoreHealthCard
 card_desc_1001,对敌人造成两点伤害,Deal two damage to enemies
 card_desc_1002,为自己叠加1回合的2护甲,Stack 2 armor for 1 turn
 card_desc_1003,对敌人造成两点伤害的同时，为自己叠加1回合的2护甲,Deal 2 damage to enemies and stack 2 armor for 1 turn
+card_desc_1005,回复5点血量,Heals 5 HP
 battle_tip_1005,你的回合,Your turn
 battle_tip_1006,回合结束,End of round
 battle_tip_1007,敌人回合,Enemy turn
 battle_tip_1008,敌人回合结束,Enemy turn ends
+character_cat,猫猫,Cat
+character_dog,狗狗,Dog
+character_duck,鸭子,Duck
+choose_character_1001,请选择一个角色,Please choose a character

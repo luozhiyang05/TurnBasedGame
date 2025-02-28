@@ -80,7 +80,7 @@ namespace Assets.GameSystem.CardSystem.Main
             //根据要获取的卡牌数获取卡牌到手牌中
             for (int i = 0; i < count; i++)
             {
-                var card = _nowUseCards.GetFromHead();
+                var card = _nowUseCards.RemoveRange();
                 _nowHeadCards.Add(card);
             }
         }

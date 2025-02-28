@@ -13,48 +13,44 @@ MonoBehaviour:
   m_Name: "\u5361\u724C\u5E93"
   m_EditorClassIdentifier: 
   cardAsset: {fileID: 4900000, guid: 13b98e9365e38d8418ba2524277554f8, type: 3}
-  effAsset: {fileID: 4900000, guid: 2aa3461f02d4ba5429a5112e3ebd1d67, type: 3}
   baseCardDataPackings:
   - id: 1
     cardName: card_name_1001
     petName: 
     depletePoint: 1
     canAutoUse: 0
-    atk: 100
+    atk: 2
     armor: 0
     param1: 0
-    cardDesc: "\u79D2\u6740"
+    cardDesc: card_desc_1001
     effectId: 0
   - id: 2
-    cardName: "\u666E\u901A\u9632\u5FA1\u5361"
+    cardName: card_name_1002
     petName: 
     depletePoint: 1
     canAutoUse: 1
     atk: 0
-    armor: 100
+    armor: 5
     param1: 1
-    cardDesc: "\u62A4\u76FE"
+    cardDesc: card_desc_1002
     effectId: 1
   - id: 3
-    cardName: "\u653B\u51FB\u9632\u5FA1"
+    cardName: card_name_1003
     petName: 
     depletePoint: 1
     canAutoUse: 0
-    atk: 100
-    armor: 100
+    atk: 2
+    armor: 5
     param1: 0
-    cardDesc: "\u62A4\u76FE\u79D2\u6740"
+    cardDesc: card_desc_1003
     effectId: 1
-  baseEffectDatas:
-  - id: 1
-    effName: "\u53E0\u7532"
-    effDesc: "\u53E0\u7532\u63CF\u8FF0"
-    isDieEff: 0
-  - id: 2
-    effName: "\u524A\u5F31"
-    effDesc: "\u524A\u5F31\u63CF\u8FF0"
-    isDieEff: 0
-  - id: 3
-    effName: "\u590D\u6D3B"
-    effDesc: "\u6B7B\u4EA1\u540E\u7ACB\u9A6C\u590D\u6D3B"
-    isDieEff: 1
+  - id: 4
+    cardName: card_name_1004
+    petName: 
+    depletePoint: 2
+    canAutoUse: 1
+    atk: 0
+    armor: 0
+    param1: 5
+    cardDesc: card_desc_1005
+    effectId: 0

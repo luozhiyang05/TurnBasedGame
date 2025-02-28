@@ -1,5 +1,6 @@
 using Framework;
 using GameSystem.MVCTemplate;
+using GlobalData;
 using UIComponents;
 using UnityEngine;
 using UnityEngine.UI;
@@ -58,8 +59,8 @@ namespace Assets.GameSystem.MenuSystem.CharacterChose.Main
         protected override void OnInit()
         {
             //TODO:多语言
-            Txt_title.text = "选择角色";
-            Btn_certain.Text = "确定";
+            Txt_title.text = GameManager.GetText("choose_character_1001");
+            Btn_certain.Text = GameManager.GetText("tips_1003");
 
             _toggleGroup = transform.Find("Main/Characters").GetComponent<ToggleGroup>();
             _charactes = transform.Find("Main/Characters");
@@ -105,7 +106,7 @@ namespace Assets.GameSystem.MenuSystem.CharacterChose.Main
             {
                 var characterData = model.GetCharacterDataById(i + 1);
                 var txtName = _charactes.GetChild(i).Find("txt_name").GetComponent<Text>();
-                txtName.text = characterData.characterType.ToString();
+                txtName.text = GameManager.GetText(characterData.characterType.ToString());
             }
         }
 

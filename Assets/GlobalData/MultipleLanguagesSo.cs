@@ -44,7 +44,7 @@ namespace GlobalData
                 }
                 return text;
             }
-            throw new Exception("找不到多语言");
+            return key;
         }
     }
 }

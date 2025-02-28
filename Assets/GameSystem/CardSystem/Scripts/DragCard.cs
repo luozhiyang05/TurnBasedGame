@@ -61,15 +61,20 @@ namespace Assets.GameSystem.CardSystem.Scripts
                     var player = this.GetSystem<IBattleSystemModule>().GetPlayerUnit() as Player;
                     if (BaseCard.canAutoUse && GetDargDistance() > 350f)
                     {
-                        //使用卡牌的命令
-                        this.SendCmd<UseCardCmd, CardData>(new CardData()
+                        // 判断行动点数是否够用
+                        if (player.nowActPoint >= BaseCard.depletePoint)
                         {
-                            user = player,
-                            headCardIdx = headCardIdx,
-                            cardSo = BaseCard,
-                            target = player.gameObject  //自动使用的卡牌目标为自己
-                        });
-                        return;
+
+                            //使用卡牌的命令
+                            this.SendCmd<UseCardCmd, CardData>(new CardData()
+                            {
+                                user = player,
+                                headCardIdx = headCardIdx,
+                                cardSo = BaseCard,
+                                target = player.gameObject  //自动使用的卡牌目标为自己
+                            });
+                            return;
+                        }
                     }
                 }
             }

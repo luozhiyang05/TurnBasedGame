@@ -78,6 +78,10 @@ namespace Assets.GameSystem.CardSystem.Scripts
                     var atkDefCard = new AttackDefCard();
                     atkDefCard.Init(baseCardDataPacking);
                     return atkDefCard;
+                case 4:
+                    var restoreHpCard = new RestoreHpCard();
+                    restoreHpCard.Init(baseCardDataPacking);
+                    return restoreHpCard;
                 default:
                     throw new Exception("找不到对应的卡牌");
             }

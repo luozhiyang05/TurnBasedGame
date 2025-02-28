@@ -36,9 +36,9 @@ namespace GlobalData
 
     public enum CharacterType
     {
-        猫猫,
-        狗狗,
-        鸭子
+        character_cat,
+        character_dog,
+        character_duck
     }
 
     public enum EnemyType
