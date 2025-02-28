@@ -8,6 +8,7 @@ using Framework;
 using GlobalData;
 using Tool.Mono;
 using Tool.UI;
+using Tool.Utilities;
 using UnityEngine;
 
 namespace Assets.GameSystem.BattleSystem
@@ -37,6 +38,12 @@ namespace Assets.GameSystem.BattleSystem
         /// </summary>
         /// <returns></returns>
         CharacterData GetCharacterData();
+
+        /// <summary>
+        /// 获取当前波次的敌人列表
+        /// </summary>
+        /// <returns></returns>
+        QArray<AbsUnit> GetNowWavaAllEnemies();
 
         /// <summary>
         /// 切换回合
@@ -136,6 +143,11 @@ namespace Assets.GameSystem.BattleSystem
         public CharacterData GetCharacterData()
         {
             return (_viewCtrl.GetModel() as BattleSystemViewModel).GetCharacterData();
+        }
+
+        public QArray<AbsUnit> GetNowWavaAllEnemies()
+        {
+            return (_viewCtrl.GetModel() as BattleSystemViewModel).GetNowWavaAllEnemies();
         }
     }
 }

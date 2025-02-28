@@ -88,6 +88,7 @@ namespace Assets.GameSystem.BattleSystem.Main
 
         #region 数据获取
         public int GetEnemyCount() => _enemyList.Count;
+        public QArray<AbsUnit> GetNowWavaAllEnemies() => _enemyList;
         public WavasData GetNowWava() => _levelData.GetWavaData(_nowWaveIndex);
 
         public AbsUnit GetPlayerUnit() => _player;

@@ -45,12 +45,14 @@ card_name_1003,攻击防御卡,AtkAndDefCard
 card_name_1004,回复血量卡,RestoreHealthCard
 card_name_1005,再来两张卡,TwoMoreCard
 card_name_1006,行动点回复,RestoreActCnt
+card_name_1007,打击,Hit all
 card_desc_1001,造成2点伤害,Deal two damage
 card_desc_1002,叠加1回合的2护甲,Stack 2 armor for 1 turn
 card_desc_1003,造成2点伤害的，叠加1回合的2护甲,Deal 2 damage and stack 2 armor for 1 turn
 card_desc_1004,回复5点血量,Heals 5 HP
 card_desc_1005,抽取牌库两张卡,Draw 2 cards from the card library
 card_desc_1006,获取2行动点,Get 2 action points
+card_desc_1007,全体造成3点伤害,Deal 3 damage for all
 battle_tip_1005,你的回合,Your turn
 battle_tip_1006,回合结束,End of round
 battle_tip_1007,敌人回合,Enemy turn

@@ -6,3 +6,4 @@ Int,String,String,Int,Bool,Int,Int,String,Int,Int,,
 4,card_name_1004,,2,1,0,0,card_desc_1004,0,5,,加血卡
 5,card_name_1005,,1,1,0,0,card_desc_1005,0,2,,再来两张卡
 6,card_name_1006,,0,1,0,0,card_desc_1006,0,2,,行动点回复
+7,card_name_1007,,2,1,0,0,card_desc_1007,0,3,,对所有单位造成伤害

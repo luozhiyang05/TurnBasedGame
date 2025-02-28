@@ -32,7 +32,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
                 pointerEvent.position = Input.mousePosition;
                 List<RaycastResult> raycastResults = new List<RaycastResult>();
                 EventSystem.current.RaycastAll(pointerEvent, raycastResults);
-                if (raycastResults.Count > 0)
+                if (raycastResults.Count > 0 && !BaseCard.canAutoUse)
                 {
                     if (raycastResults[0].gameObject.name.Equals("img_body"))
                     {

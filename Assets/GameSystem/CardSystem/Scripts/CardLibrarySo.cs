@@ -92,6 +92,10 @@ namespace Assets.GameSystem.CardSystem.Scripts
                     var getActPointCard = new GetActPointCard();
                     getActPointCard.Init(baseCardDataPacking);
                     return getActPointCard;
+                case 7:
+                    var hitForAllCard = new HitForAllCard();
+                    hitForAllCard.Init(baseCardDataPacking);
+                    return hitForAllCard;
                 default:
                     throw new Exception("找不到对应的卡牌");
             }
