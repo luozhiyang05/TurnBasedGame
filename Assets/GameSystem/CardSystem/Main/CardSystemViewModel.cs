@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Assets.GameSystem.BattleSystem;
 using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.CardSystem.Scripts;
@@ -67,17 +68,42 @@ namespace Assets.GameSystem.CardSystem.Main
         /// <param name="count"></param>
         public void ComputeRangeIndexs(int count)
         {
-            if (count-rangeIndexs.Count > 0)
+            count = count > _nowUseCards.Count ? _nowUseCards.Count : count;
+            if (count - rangeIndexs.Count > 0)
             {
                 while (rangeIndexs.Count != count)
                 {
-                    var index = UnityEngine.Random.Range(0, _nowUseCards.Count)+1;
+                    var index = UnityEngine.Random.Range(0, _nowUseCards.Count) + 1;
                     if (!rangeIndexs.ContainValue(index))
                     {
                         rangeIndexs.Add(index);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 获取随机索引的卡牌ids
+        /// </summary>
+        /// <param name="cnt"></param>
+        /// <returns></returns>
+        public QArray<int> GetRangeIndexs()
+        {
+            QArray<int> tempRangeIndexs = new QArray<int>();
+            for (int i = 0; i < rangeIndexs.Count; i++)
+            {
+                tempRangeIndexs.Add(rangeIndexs[i]);
+            }
+            return tempRangeIndexs;
+        }
+
+        /// <summary>
+        /// 从随即索引数组中删除某个卡牌索引
+        /// </summary>
+        /// <param name="cardIndex"></param>
+        public void DeleteCardIndex(int cardIndex)
+        {
+            rangeIndexs.Remove(cardIndex);
         }
 
         /// <summary>
@@ -105,7 +131,7 @@ namespace Assets.GameSystem.CardSystem.Main
             var tempCards = new QArray<BaseCard>(count);
             for (int i = 0; i < cnt; i++)
             {
-                var card = _nowUseCards[rangeIndexs[0]-1];
+                var card = _nowUseCards[rangeIndexs[0] - 1];
                 tempCards.Add(card);
                 _nowHeadCards.Add(card);
                 // _nowUseCards.Remove(card);   不能在这移除，因为移除后，后面的索引会前移，索引可能会出错报错
@@ -121,6 +147,45 @@ namespace Assets.GameSystem.CardSystem.Main
             {
                 UpdateView();
             }
+        }
+
+        /// <summary>
+        /// 将卡牌库某张卡牌放入手牌中
+        /// </summary>
+        /// <param name="baseCard"></param>
+        public void GetCardsToHeadCardsFormUseCards(QArray<BaseCard> baseCards)
+        {
+            // 放入手牌
+            for (int i = 0; i < baseCards.Count; i++)
+            {
+                _nowHeadCards.Add(baseCards[i]);
+            }
+            // 从卡牌库中移除该卡牌
+            for (int i = 0; i < baseCards.Count; i++)
+            {
+                _nowUseCards.Remove(baseCards[i]);
+            }
+            UpdateView();
+        }
+
+        /// <summary>
+        /// 根据牌库索引获取卡牌id
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public int GetCardIdByIndexFormUseCards(int index)
+        {
+            return _nowUseCards[index].id;
+        }
+
+        /// <summary>
+        /// 根据牌库索引获取卡牌
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public BaseCard GetCardByIndexFormUseCards(int index)
+        {
+            return _nowUseCards[index];
         }
 
         /// <summary>

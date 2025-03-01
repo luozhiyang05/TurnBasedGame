@@ -3,6 +3,7 @@ using Assets.GameSystem.CardSystem.Scripts;
 using GlobalData;
 using Tool.UI;
 using Tool.Utilities;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Tips
@@ -52,6 +53,16 @@ namespace Tips
             {
                 var descTips = tips as DescTips;
                 descTips.Open(descKey);
+            });
+        }
+
+        public static void CardsCheckTips(QArray<int> cardIndexInUseCards,UnityAction<QArray<int>> chooseAction,string titleKey)
+        {
+            uiMgr.GetFromPool("CardsCheckTips", EuiLayer.TipsUI, (tips) =>
+            {
+                var cardsCheckTips = tips as CardsCheckTips;
+                cardsCheckTips.Open(cardIndexInUseCards, 2, titleKey);
+                cardsCheckTips.SetChooseAction(chooseAction);
             });
         }
     }

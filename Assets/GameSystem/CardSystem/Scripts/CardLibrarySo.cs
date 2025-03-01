@@ -27,6 +27,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
         public int armor;
         [Header("额外参数")]
         public int param1;
+        public int param2;
         [Header("卡片描述")]
         [TextArea]
         public string cardDesc;
@@ -97,6 +98,10 @@ namespace Assets.GameSystem.CardSystem.Scripts
                     var hitForAllCard = new HitForAllCard();
                     hitForAllCard.Init(baseCardDataPacking);
                     return hitForAllCard;
+                    case 8:
+                    var getCardsFormTopCard = new GetOneCardFormTopCard();
+                    getCardsFormTopCard.Init(baseCardDataPacking);
+                    return getCardsFormTopCard;
                 default:
                     throw new Exception("找不到对应的卡牌");
             }

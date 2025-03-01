@@ -21,6 +21,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
         public int armor;
         [Header("额外参数")]
         public int param1;
+        public int param2;
         [Header("卡片描述")]
         [TextArea]
         public string cardDesc;
@@ -39,6 +40,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
             atk = baseCardDataPacking.atk;
             armor = baseCardDataPacking.armor;
             param1 = baseCardDataPacking.param1;
+            param2 = baseCardDataPacking.param2;
             cardDesc = baseCardDataPacking.cardDesc;
             effectId = baseCardDataPacking.effectId;
         }

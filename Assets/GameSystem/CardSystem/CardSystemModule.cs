@@ -67,12 +67,43 @@ namespace Assets.GameSystem.CardSystem
         BaseCard GetCardById(int id);
 
         /// <summary>
+        /// 根据牌库的索引获取卡牌
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        int GetCardIdByUseCardsIndex(int index);
+
+        /// <summary>
         /// 根据卡牌组Id获取卡牌Id列表
         /// </summary>
         /// <param name="cardGroupId"></param>
         /// <returns></returns>
         List<int> GetCardsId(int cardGroupId);
 
+        /// <summary>
+        /// 从牌库top中Peek卡牌，返回的是peek的卡牌在卡牌库的index
+        /// </summary>
+        /// <param name="cnt"></param>
+        public QArray<int> PeekCards(int cnt);
+
+        /// <summary>
+        /// 将卡牌库某张卡牌放入手牌中
+        /// </summary>
+        /// <param name="baseCard"></param>
+        public void GetCardsToHeadCardsFormUseCards(QArray<BaseCard> baseCards);
+
+        /// <summary>
+        /// 从随即索引数组中删除某个卡牌索引
+        /// </summary>
+        /// <param name="cardIndex"></param>
+        public void DeleteCardIndex(int cardIndex);
+
+        /// <summary>
+        /// 根据牌库的索引获取卡牌
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public BaseCard GetCardByIndexFormUseCards(int index);
         #region 卡牌动画
         /// <summary>
         /// 选择卡牌时的动画
@@ -274,6 +305,32 @@ namespace Assets.GameSystem.CardSystem
         public void GetCardsFormUseCards(int cnt)
         {
             (_viewCtrl.GetModel() as CardSystemViewModel).GetCardsFormUseCards(cnt,true);
+        }
+
+        public QArray<int> PeekCards(int cnt)
+        {
+            (_viewCtrl.GetModel() as CardSystemViewModel).ComputeRangeIndexs(cnt);
+            return (_viewCtrl.GetModel() as CardSystemViewModel).GetRangeIndexs();
+        }
+
+        public int GetCardIdByUseCardsIndex(int index)
+        {
+           return (_viewCtrl.GetModel() as CardSystemViewModel).GetCardIdByIndexFormUseCards(index);
+        }
+
+        public BaseCard GetCardByIndexFormUseCards(int index)
+        {
+            return (_viewCtrl.GetModel() as CardSystemViewModel).GetCardByIndexFormUseCards(index);
+        }
+
+        public void GetCardsToHeadCardsFormUseCards(QArray<BaseCard> baseCards)
+        {
+            (_viewCtrl.GetModel() as CardSystemViewModel).GetCardsToHeadCardsFormUseCards(baseCards);
+        }
+
+        public void DeleteCardIndex(int cardIndex)
+        {
+            (_viewCtrl.GetModel() as CardSystemViewModel).DeleteCardIndex(cardIndex);
         }
     }
 }
