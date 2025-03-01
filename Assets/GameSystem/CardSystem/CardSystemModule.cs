@@ -240,8 +240,11 @@ namespace Assets.GameSystem.CardSystem
             float percent = 0f;
             ActionKit.GetInstance().CreateActQue(trans.gameObject, () =>
             {
-                percent += Time.deltaTime / 0.1f;
-                canvasGroup.alpha = Mathf.Lerp(1, 0.2f, percent);
+                if (canvasGroup)
+                {
+                    percent += Time.deltaTime / 0.1f;
+                    canvasGroup.alpha = Mathf.Lerp(1, 0.2f, percent);
+                }
             }, 0.12f)
             .Execute();
         }

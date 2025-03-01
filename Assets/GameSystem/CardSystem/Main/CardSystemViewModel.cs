@@ -19,6 +19,7 @@ namespace Assets.GameSystem.CardSystem.Main
         private QArray<BaseCard> _discardCards;   // 弃牌堆
         private QArray<UseCardHistory> _usedCardsHistory;   // 历史记录
 
+        private QArray<int> rangeIndexs = new QArray<int>(); // 获取卡牌的随机索引
         private UnityAction _updateViewCallback;
         private UnityAction<int> _useCardCallback;
 
@@ -61,6 +62,25 @@ namespace Assets.GameSystem.CardSystem.Main
         }
 
         /// <summary>
+        /// 根据要计算的卡牌个数，计算随机索引
+        /// </summary>
+        /// <param name="count"></param>
+        public void ComputeRangeIndexs(int count)
+        {
+            if (count-rangeIndexs.Count > 0)
+            {
+                while (rangeIndexs.Count != count)
+                {
+                    var index = UnityEngine.Random.Range(0, _nowUseCards.Count)+1;
+                    if (!rangeIndexs.ContainValue(index))
+                    {
+                        rangeIndexs.Add(index);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// 从玩家出战卡牌中获取卡牌到手牌
         /// </summary>
         /// <param name="count"></param>
@@ -77,11 +97,23 @@ namespace Assets.GameSystem.CardSystem.Main
                 }
             }
 
-            //根据要获取的卡牌数获取卡牌到手牌中
-            for (int i = 0; i < count; i++)
+            // 如果当前随机索引数量不满足要获取的卡牌数，先获取足够的随机索引
+            ComputeRangeIndexs(count);
+
+            //根据要获取的卡牌数，使用随机索引获取卡牌到手牌中
+            var cnt = rangeIndexs.Count;
+            var tempCards = new QArray<BaseCard>(count);
+            for (int i = 0; i < cnt; i++)
             {
-                var card = _nowUseCards.RemoveRange();
+                var card = _nowUseCards[rangeIndexs[0]-1];
+                tempCards.Add(card);
                 _nowHeadCards.Add(card);
+                // _nowUseCards.Remove(card);   不能在这移除，因为移除后，后面的索引会前移，索引可能会出错报错
+                rangeIndexs.RemoveAt(0);
+            }
+            for (int i = 0; i < tempCards.Count; i++)
+            {
+                _nowUseCards.Remove(tempCards[i]);
             }
 
             // 是否需要手动更新卡牌试图，一般用于手动获取卡牌时
@@ -96,18 +128,21 @@ namespace Assets.GameSystem.CardSystem.Main
         /// </summary>
         public void DiscardCards(int headCardIdx = -1)
         {
+            // 根据手牌索引，丢弃指定卡牌
             if (headCardIdx != -1)
             {
                 var cardSo = _nowHeadCards.RemoveAt(headCardIdx);
                 _discardCards.Add(cardSo);
                 return;
             }
+
+            // 丢弃所有可以丢弃的卡牌
             for (int i = 0; i < _nowHeadCards.Count; i++)
             {
                 // 将可以丢弃的卡牌丢弃
                 if (_nowHeadCards[i].discard)
                 {
-                    var card =  _nowHeadCards.RemoveAt(i);
+                    var card = _nowHeadCards.RemoveAt(i);
                     _discardCards.Add(card);
                     i--;    //丢弃后，后面的元素会前移，所以要重新检测当前索引的卡牌
                 }

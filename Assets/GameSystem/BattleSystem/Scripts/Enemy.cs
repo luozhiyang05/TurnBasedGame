@@ -81,7 +81,9 @@ namespace Assets.GameSystem.BattleSystem.Scripts
 
             // 绑定点击事件，打开UnitInfoTips面板
             var img_body = transform.Find("img_body");
-            img_body.GetComponent<Button>().onClick.AddListener(() =>
+            var btn_body = img_body.GetComponent<Button>();
+            btn_body.onClick.RemoveAllListeners();
+            btn_body.onClick.AddListener(() =>
             {
                 // 获取所有效果的id
                 var effectIds = new QArray<int>();
