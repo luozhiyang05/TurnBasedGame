@@ -197,6 +197,7 @@ namespace Assets.GameSystem.CardSystem
         {
             cardCell.Find("bg/txt_name").GetComponent<Text>().text = GameManager.GetText(card.cardName);
             cardCell.Find("bg/txt_desc").GetComponent<Text>().text = GameManager.GetText(card.cardDesc);
+            cardCell.Find("bg/bg_actPoint/txt_actPoint").GetComponent<Text>().text = card.depletePoint.ToString();
         }
 
         public void RenderHistoryInfo(Transform historyCell, UseCardHistory history)

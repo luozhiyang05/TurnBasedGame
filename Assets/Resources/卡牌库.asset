@@ -52,5 +52,35 @@ MonoBehaviour:
     atk: 0
     armor: 0
     param1: 5
+    cardDesc: card_desc_1004
+    effectId: 0
+  - id: 5
+    cardName: card_name_1005
+    petName: 
+    depletePoint: 1
+    canAutoUse: 1
+    atk: 0
+    armor: 0
+    param1: 2
     cardDesc: card_desc_1005
+    effectId: 0
+  - id: 6
+    cardName: card_name_1006
+    petName: 
+    depletePoint: 0
+    canAutoUse: 1
+    atk: 0
+    armor: 0
+    param1: 2
+    cardDesc: card_desc_1006
+    effectId: 0
+  - id: 7
+    cardName: card_name_1007
+    petName: 
+    depletePoint: 2
+    canAutoUse: 1
+    atk: 0
+    armor: 0
+    param1: 3
+    cardDesc: card_desc_1007
     effectId: 0
