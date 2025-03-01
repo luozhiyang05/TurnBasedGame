@@ -14,7 +14,8 @@ namespace Assets.GameSystem.CardSystem.Scripts
         public string cardName;
         public string petName;
         public int depletePoint;
-        public bool canAutoUse = false;
+        public bool canAutoUse;
+        public bool discard;
         [Header("基础属性")]
         public int atk;
         public int armor;
@@ -34,6 +35,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
             petName = baseCardDataPacking.petName;
             depletePoint = baseCardDataPacking.depletePoint;
             canAutoUse = baseCardDataPacking.canAutoUse;
+            discard = baseCardDataPacking.discard;
             atk = baseCardDataPacking.atk;
             armor = baseCardDataPacking.armor;
             param1 = baseCardDataPacking.param1;

@@ -102,10 +102,15 @@ namespace Assets.GameSystem.CardSystem.Main
                 _discardCards.Add(cardSo);
                 return;
             }
-            while (_nowHeadCards.Count > 0)
+            for (int i = 0; i < _nowHeadCards.Count; i++)
             {
-                var card = _nowHeadCards.GetFromHead();
-                _discardCards.Add(card);
+                // 将可以丢弃的卡牌丢弃
+                if (_nowHeadCards[i].discard)
+                {
+                    var card =  _nowHeadCards.RemoveAt(i);
+                    _discardCards.Add(card);
+                    i--;    //丢弃后，后面的元素会前移，所以要重新检测当前索引的卡牌
+                }
             }
         }
 

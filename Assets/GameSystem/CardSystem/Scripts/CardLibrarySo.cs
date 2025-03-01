@@ -20,7 +20,8 @@ namespace Assets.GameSystem.CardSystem.Scripts
         public string cardName;
         public string petName;
         public int depletePoint;
-        public bool canAutoUse = false;
+        public bool canAutoUse;
+        public bool discard;
         [Header("基础属性")]
         public int atk;
         public int armor;
