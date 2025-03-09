@@ -2,6 +2,7 @@
 String,String,String
 menu_1001,游戏开始,StartGame
 menu_1002,游戏设置,Setting
+menu_1003,返回菜单,BackToMenu
 levelName_1001,关卡1,Level_1
 levelName_1002,关卡2,Level_2
 levelName_1003,关卡3,Level_3

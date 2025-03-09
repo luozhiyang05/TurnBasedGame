@@ -134,6 +134,8 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// </summary>
         public virtual void StartRoundSettle()
         {
+            // 防止在任何实际选择返回菜单时报错
+            if (_battleSystemModule.GetIsStarBattle() == false) return;
             //对效果结算
             int effCount = _effQueue.Count;
             for (int i = 0; i < effCount; i++)
@@ -152,6 +154,8 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// </summary>
         protected void AfterStartRoundSettle()
         {
+            // 防止在任何实际选择返回菜单时报错
+            if (_battleSystemModule.GetIsStarBattle() == false) return;
             //玩家当前没有死亡，则继续行动
             if (!_battleSystemModule.GetPlayerUnit().IsDie())
             {
@@ -171,6 +175,8 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// </summary>
         protected void AfterAction()
         {
+            // 防止在任何实际选择返回菜单时报错
+            if (_battleSystemModule.GetIsStarBattle() == false) return;
             //玩家当前没有死亡，则继续行动
             if (!_battleSystemModule.GetPlayerUnit().IsDie())
             {
@@ -188,6 +194,8 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// </summary>
         protected virtual void ExitRound()
         {
+            // 防止在任何实际选择返回菜单时报错
+            if (_battleSystemModule.GetIsStarBattle() == false) return;
             //对效果结算
             int effCount = _effQueue.Count;
             for (int i = 0; i < effCount; i++)
@@ -209,6 +217,8 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             //间隔后，切换回合
             ActionKit.GetInstance().DelayTime(GameManager.actTntervalTime, () =>
             {
+                // 防止在任何实际选择返回菜单时报错
+                if (_battleSystemModule.GetIsStarBattle() == false) return;
                 beforeSwitchRound?.Invoke();
                 _battleSystemModule.SwitchRound();
             });

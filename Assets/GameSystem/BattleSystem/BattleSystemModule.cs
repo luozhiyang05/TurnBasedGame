@@ -28,6 +28,18 @@ namespace Assets.GameSystem.BattleSystem
     public interface IBattleSystemModule : IModule
     {
         /// <summary>
+        /// 设置是否开始战斗
+        /// </summary>
+        /// <param name="isStartBattle"></param>
+        void SetIsStartBattle(bool isStartBattle);
+
+        /// <summary>
+        /// 获取是否开始战斗
+        /// </summary>
+        /// <returns></returns>
+        bool GetIsStarBattle();
+
+        /// <summary>
         /// 获取玩家单位
         /// </summary>
         /// <returns></returns>
@@ -69,6 +81,7 @@ namespace Assets.GameSystem.BattleSystem
 
     public class BattleSystemModule : AbsModule, IBattleSystemModule
     {
+        private bool _isStartBattle = false;
         private BattleSystemViewCtrl _viewCtrl;
 
         public void ShowView(CharacterData characterData, LevelData levelData)
@@ -87,6 +100,12 @@ namespace Assets.GameSystem.BattleSystem
 
         public void SwitchRound()
         {
+            // TODO:在游戏中选择返回菜单时，停止切换回合
+            if (!_isStartBattle)
+            {
+                return;
+            }
+
             switch (_nowTurnBased)
             {
                 case ETurnBased.PlayerTurn:
@@ -160,6 +179,16 @@ namespace Assets.GameSystem.BattleSystem
         public bool GetUseCardLimit()
         {
              return (_viewCtrl.GetModel() as BattleSystemViewModel).GetUseCardLimit();
+        }
+
+        public void SetIsStartBattle(bool isStartBattle)
+        {
+            _isStartBattle = isStartBattle;
+        }
+
+        public bool GetIsStarBattle()
+        {
+            return _isStartBattle;
         }
     }
 }

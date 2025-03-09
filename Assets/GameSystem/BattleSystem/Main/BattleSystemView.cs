@@ -86,6 +86,7 @@ namespace Assets.GameSystem.BattleSystem.Main
             SetPlayerData();
 
             //设置当前回合为玩家回合
+            this.GetSystem<IBattleSystemModule>().SetIsStartBattle(true);
             this.GetSystem<IBattleSystemModule>().SwitchPlayerTurn();
         }
 
@@ -142,6 +143,8 @@ namespace Assets.GameSystem.BattleSystem.Main
             BattleSystemViewModel model = Model as BattleSystemViewModel;
             AbsUnit absUnit = null;
             var body = enemy.Find("body");
+            var oldAbsUnit = body.GetComponent<AbsUnit>();
+            if (oldAbsUnit) Destroy(oldAbsUnit);
             switch (enemyData.enemyType)
             {
                 case EnemyType.enemy_slime:

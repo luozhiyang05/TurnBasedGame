@@ -1,7 +1,10 @@
+using Assets.GameSystem.BattleSystem;
+using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
 using Tips;
 using Tool.AudioMgr;
+using Tool.UI;
 using UIComponents;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,20 +14,22 @@ namespace Assets.GameSystem.MenuSystem.Setting.Main
     public class SettingView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
-        public CButton Btn_close;
-        public Text Txt_title;
-        public Text Txt_effectAudio;
-        public Text Txt_bgmAudio;
-        public Text Txt_language;
+		public CButton Btn_close;
+		public CButton Btn_backToMenu;
+		public Text Txt_title;
+		public Text Txt_effectAudio;
+		public Text Txt_bgmAudio;
+		public Text Txt_language;
         protected override void AutoInitUI()
         {
-            Btn_close = transform.Find("Main/bg/Btn_close").GetComponent<CButton>();
-            Txt_title = transform.Find("Main/bg/Txt_title").GetComponent<Text>();
-            Txt_effectAudio = transform.Find("Main/bg/Slider_effect/Txt_effectAudio").GetComponent<Text>();
-            Txt_bgmAudio = transform.Find("Main/bg/Slider_bgm/Txt_bgmAudio").GetComponent<Text>();
-            Txt_language = transform.Find("Main/bg/Dropdown/Txt_language").GetComponent<Text>();
+			Btn_close = transform.Find("Main/bg/Btn_close").GetComponent<CButton>();
+			Btn_backToMenu = transform.Find("Main/bg/Btn_backToMenu").GetComponent<CButton>();
+			Txt_title = transform.Find("Main/bg/Txt_title").GetComponent<Text>();
+			Txt_effectAudio = transform.Find("Main/bg/Slider_effect/Txt_effectAudio").GetComponent<Text>();
+			Txt_bgmAudio = transform.Find("Main/bg/Slider_bgm/Txt_bgmAudio").GetComponent<Text>();
+			Txt_language = transform.Find("Main/bg/Dropdown/Txt_language").GetComponent<Text>();
         }
-        #endregion 自动生成UI组件区域结束！
+		#endregion 自动生成UI组件区域结束！
 
         #region 遮罩相关
         // /// <summary>
@@ -69,6 +74,7 @@ namespace Assets.GameSystem.MenuSystem.Setting.Main
             Txt_effectAudio.text = GameManager.GetText("setting_1001");
             Txt_bgmAudio.text = GameManager.GetText("setting_1002");
             Txt_language.text = GameManager.GetText("setting_1003");
+            Btn_backToMenu.Label.text = GameManager.GetText("menu_1003");
 
             // 音量控制
             Slider_effect = transform.Find("Main/bg/Slider_effect").GetComponent<Slider>();
@@ -113,6 +119,13 @@ namespace Assets.GameSystem.MenuSystem.Setting.Main
             // 按钮事件
             Btn_close.onClick.AddListener(() =>
             {
+                OnHide();
+            });
+            Btn_backToMenu.onClick.AddListener(() =>
+            {
+                this.GetSystem<IBattleSystemModule>().SetIsStartBattle(false);
+                UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.GameUI);
+                this.GetSystem<IMenuSystemModule>().ShowView();
                 OnHide();
             });
         }
