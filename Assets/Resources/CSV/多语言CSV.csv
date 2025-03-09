@@ -60,6 +60,8 @@ battle_tip_1006,回合结束,End of round
 battle_tip_1007,敌人回合,Enemy turn
 battle_tip_1008,敌人回合结束,Enemy turn ends
 battle_tip_1009,牌库中已经没有可用的卡牌,There are no more cards available in the library
+battle_tip_1010,波数：,Wavenumber：
+battle_tip_1011,回合数：,Roundnumver:
 character_cat,猫猫,Cat
 character_dog,狗狗,Dog
 character_duck,鸭子,Duck

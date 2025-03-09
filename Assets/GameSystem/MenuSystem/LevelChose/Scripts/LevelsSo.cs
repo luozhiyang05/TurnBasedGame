@@ -55,6 +55,15 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Scripts
         public string enemyIds; //1-2/1-2
 
         /// <summary>
+        /// 获取当前关卡的波次数量
+        /// </summary>
+        /// <returns></returns>
+        public int GetWaveCnt()
+        {
+            return waveCnt;
+        }
+
+        /// <summary>
         /// 获取当前波次的敌人数据
         /// </summary>
         /// <param name="wava"></param>

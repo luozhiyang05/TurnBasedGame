@@ -21,13 +21,16 @@ namespace Assets.GameSystem.BattleSystem.Main
         private LevelData _levelData;
         private int _nowEnemyIndex; //当前敌人下标
         private int _nowWaveIndex;  //当前波次下标
+        private int _nowRoundCnt = 0;
 
+        private UnityAction<int> updateRoundCntTxtDelegate;
         private UnityAction setNextWavaEnemiesDataDelegate;
         private UnityAction passLevelDelegate;
         private UnityAction loseLevelDelegate;
         public override void Init()
         {
             _nowEnemyIndex = 0;
+            _nowRoundCnt = 0;
             _nowWaveIndex = 1;
         }
 
@@ -51,6 +54,15 @@ namespace Assets.GameSystem.BattleSystem.Main
             _enemyList.RemoveListenEvent(IListEventType.Remove, RemoveUnit);
 
             EventsHandle.RemoveOneEventByEventName<AbsUnit>(EventsNameConst.ABSUNIT_DIE, AbsUnitDie);
+        }
+
+        /// <summary>
+        /// 回合数+1
+        /// </summary>
+        public void UpdateRoundCnt()
+        {
+            _nowRoundCnt++;
+            UpdateRoundCntTxt();
         }
 
         public void SetBattleData(CharacterData characterData,LevelData levelData)
@@ -93,6 +105,8 @@ namespace Assets.GameSystem.BattleSystem.Main
 
         public AbsUnit GetPlayerUnit() => _player;
         public CharacterData GetCharacterData() => _characterData;
+        public int GetWaveCnt() => _levelData.GetWaveCnt();
+        public int GetNowWaveIndex() => _nowWaveIndex;
         #endregion
 
         #region 单位死亡事件
@@ -138,6 +152,14 @@ namespace Assets.GameSystem.BattleSystem.Main
         #endregion
 
         #region 事件回调
+        public void SetUpdateRoundCntTxtAction(UnityAction<int> unityAction)
+        {
+            updateRoundCntTxtDelegate += unityAction;
+        }
+        public void UpdateRoundCntTxt()
+        {
+            updateRoundCntTxtDelegate?.Invoke(_nowRoundCnt);
+        }
         public void SetNextWavaEnemiesDataAction(UnityAction unityAction)
         {
             setNextWavaEnemiesDataDelegate = unityAction;

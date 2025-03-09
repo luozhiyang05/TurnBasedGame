@@ -102,6 +102,7 @@ namespace Assets.GameSystem.BattleSystem
             this.GetSystem<IFlyTextSystemModule>().FlyText(0, "battle_tip_1005", 1f, 0.5f, () =>
             {
                 _nowTurnBased = ETurnBased.PlayerTurn;
+                (_viewCtrl.GetModel() as BattleSystemViewModel).UpdateRoundCnt();
                 (_viewCtrl.GetModel() as BattleSystemViewModel).PlayerStartRoundSettle();
             });
         }

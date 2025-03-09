@@ -18,16 +18,12 @@ namespace Assets.GameSystem.CardSystem.Main
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
 		public Text Txt_actCnt;
-		public CButton Btn_setting;
-		public CButton Btn_exitRound;
 		public CButton Btn_obsCards;
 		public CButton Btn_history;
 		public CButton Btn_useCards;
         protected override void AutoInitUI()
         {
 			Txt_actCnt = transform.Find("Main/Txt_actCnt").GetComponent<Text>();
-			Btn_setting = transform.Find("Main/Btn_setting").GetComponent<CButton>();
-			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
 			Btn_obsCards = transform.Find("Main/Btn_obsCards").GetComponent<CButton>();
 			Btn_history = transform.Find("Main/Btn_history").GetComponent<CButton>();
 			Btn_useCards = transform.Find("Main/Btn_useCards").GetComponent<CButton>();
@@ -61,16 +57,10 @@ namespace Assets.GameSystem.CardSystem.Main
 
             //文本
             Btn_useCards.Label.text = GameManager.GetText("battle_tip_1001");
-            Btn_exitRound.Label.text = GameManager.GetText("battle_tip_1002");
             Btn_obsCards.Label.text = GameManager.GetText("battle_tip_1003");
             Btn_history.Label.text = GameManager.GetText("battle_tip_1004");
-            Btn_setting.Label.text = GameManager.GetText("menu_1002");
 
             //按钮
-            Btn_exitRound.onClick.AddListener(() =>
-            {
-                (_battleSystemModule.GetPlayerUnit() as Player)?.EndRound();
-            });
             Btn_obsCards.onClick.AddListener(() =>
             {
                 _cardSystemModule.ShowObsCardsView(_model.GetDiscardCards(), false);
@@ -82,10 +72,6 @@ namespace Assets.GameSystem.CardSystem.Main
             Btn_history.onClick.AddListener(() =>
             {
                 TipsModule.HistoryTips(_model.GetHistory());
-            });
-            Btn_setting.onClick.AddListener(() =>
-            {
-                this.GetSystem<IMenuSystemModule>().ShowSettingView(Tool.UI.EuiLayer.GameUI);
             });
         }
 

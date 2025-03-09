@@ -10,18 +10,30 @@ using GameSystem.MVCTemplate;
 using GlobalData;
 using Tips;
 using Tool.UI;
+using UIComponents;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.GameSystem.BattleSystem.Main
 {
     public class BattleSystemView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
+		public CButton Btn_setting;
+		public CButton Btn_exitRound;
+		public Text Txt_waveCnt;
+		public Text Txt_roundCnt;
         protected override void AutoInitUI()
         {
+			Btn_setting = transform.Find("Main/Btn_setting").GetComponent<CButton>();
+			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
+			Txt_waveCnt = transform.Find("Main/BattleInfos/Txt_waveCnt").GetComponent<Text>();
+			Txt_roundCnt = transform.Find("Main/BattleInfos/Txt_roundCnt").GetComponent<Text>();
         }
-        #endregion 自动生成UI组件区域结束！
+		#endregion 自动生成UI组件区域结束！
+
+        private IBattleSystemModule _battleSystemModule;
 
         /// <summary>
         /// 绑定model回调事件
@@ -31,6 +43,7 @@ namespace Assets.GameSystem.BattleSystem.Main
             (Model as BattleSystemViewModel).SetNextWavaEnemiesDataAction(SetWaveEnemiesData);
             (Model as BattleSystemViewModel).SetPassLevelAction(PassLevel);
             (Model as BattleSystemViewModel).SetLoseLevelAction(LoseLevel);
+            (Model as BattleSystemViewModel).SetUpdateRoundCntTxtAction(UpdateRoundCntTxt);
         }
 
 
@@ -39,7 +52,24 @@ namespace Assets.GameSystem.BattleSystem.Main
         /// </summary>
         protected override void OnInit()
         {
+            // 获取系统
+            _battleSystemModule = this.GetSystem<IBattleSystemModule>();
 
+            //文本
+            Btn_exitRound.Label.text = GameManager.GetText("battle_tip_1002");
+            Btn_setting.Label.text = GameManager.GetText("menu_1002");
+            Txt_waveCnt.text = GameManager.GetText("battle_tip_1010");
+            Txt_roundCnt.text = GameManager.GetText("battle_tip_1011") + 0;
+
+            //按钮
+            Btn_exitRound.onClick.AddListener(() =>
+            {
+                (_battleSystemModule.GetPlayerUnit() as Player)?.EndRound();
+            });
+            Btn_setting.onClick.AddListener(() =>
+            {
+                this.GetSystem<IMenuSystemModule>().ShowSettingView(Tool.UI.EuiLayer.GameUI);
+            });
         }
 
 
@@ -93,6 +123,9 @@ namespace Assets.GameSystem.BattleSystem.Main
                 AddEnemyUnit(enemy, i + 1, wava.enemies[i]);
                 enemy.gameObject.SetActive(true);
             }
+
+            // 设置文本提示
+            Txt_waveCnt.text = GameManager.GetText("battle_tip_1010") + model.GetNowWaveIndex() + "/" + model.GetWaveCnt();
         }
 
         /// <summary>
@@ -165,6 +198,15 @@ namespace Assets.GameSystem.BattleSystem.Main
                 UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.GameUI);
                 this.GetSystem<IMenuSystemModule>().ShowView();
             });
+        }
+
+        /// <summary>
+        /// 更新回合数文本
+        /// </summary>
+        /// <param name="nowRoundCnt"></param>
+        private void UpdateRoundCntTxt(int nowRoundCnt)
+        {
+            Txt_roundCnt.text = GameManager.GetText("battle_tip_1011") + nowRoundCnt;
         }
     }
 }
