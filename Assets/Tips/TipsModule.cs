@@ -56,12 +56,19 @@ namespace Tips
             });
         }
 
-        public static void CardsCheckTips(QArray<int> cardIndexInUseCards,UnityAction<QArray<int>> chooseAction,string titleKey)
+        /// <summary>
+        /// 打开卡牌检测Tips
+        /// </summary>
+        /// <param name="cardIndexInUseCards">牌库中的卡牌下标</param>
+        /// <param name="chooseCardsCnt">选择的卡牌数量</param>
+        /// <param name="chooseAction">确定的方法</param>
+        /// <param name="titleKey">标题</param>
+        public static void CardsCheckTips(QArray<int> cardIndexInUseCards,int chooseCardsCnt,UnityAction<QArray<int>> chooseAction,string titleKey)
         {
             uiMgr.GetFromPool("CardsCheckTips", EuiLayer.TipsUI, (tips) =>
             {
                 var cardsCheckTips = tips as CardsCheckTips;
-                cardsCheckTips.Open(cardIndexInUseCards, 2, titleKey);
+                cardsCheckTips.Open(cardIndexInUseCards, chooseCardsCnt, titleKey);
                 cardsCheckTips.SetChooseAction(chooseAction);
             });
         }

@@ -22,7 +22,7 @@ namespace Assets.GameSystem.CardSystem.Scripts.Cmd
             else
             {
                 // 打开CardsCheckTips
-                TipsModule.CardsCheckTips(cardIndexs, cardCmdData.action,GameManager.GetText("card_tip_1002"));
+                TipsModule.CardsCheckTips(cardIndexs, cardCmdData.param2,cardCmdData.action,GameManager.GetText("card_tip_1002"));
             }
         }
     }
