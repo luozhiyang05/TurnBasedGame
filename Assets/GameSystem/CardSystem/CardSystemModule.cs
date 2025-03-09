@@ -104,6 +104,7 @@ namespace Assets.GameSystem.CardSystem
         /// <param name="index"></param>
         /// <returns></returns>
         public BaseCard GetCardByIndexFormUseCards(int index);
+
         #region 卡牌动画
         /// <summary>
         /// 选择卡牌时的动画

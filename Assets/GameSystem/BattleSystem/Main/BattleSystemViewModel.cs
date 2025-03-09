@@ -6,6 +6,7 @@ using GameSystem.MVCTemplate;
 using GlobalData;
 using Tool.Mono;
 using Tool.Utilities;
+using Tool.Utilities.Bindery;
 using Tool.Utilities.Events;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,7 +23,9 @@ namespace Assets.GameSystem.BattleSystem.Main
         private int _nowEnemyIndex; //当前敌人下标
         private int _nowWaveIndex;  //当前波次下标
         private int _nowRoundCnt = 0;
+        private ValueBindery<bool> _canUseCard = new ValueBindery<bool>(false);
 
+        private UnityAction<bool> setUseCardLimitDelegate;
         private UnityAction<int> updateRoundCntTxtDelegate;
         private UnityAction setNextWavaEnemiesDataDelegate;
         private UnityAction passLevelDelegate;
@@ -32,6 +35,7 @@ namespace Assets.GameSystem.BattleSystem.Main
             _nowEnemyIndex = 0;
             _nowRoundCnt = 0;
             _nowWaveIndex = 1;
+            _canUseCard.OnRegister(SetUseCardLimit);
         }
 
         /// <summary>
@@ -56,9 +60,6 @@ namespace Assets.GameSystem.BattleSystem.Main
             EventsHandle.RemoveOneEventByEventName<AbsUnit>(EventsNameConst.ABSUNIT_DIE, AbsUnitDie);
         }
 
-        /// <summary>
-        /// 回合数+1
-        /// </summary>
         public void UpdateRoundCnt()
         {
             _nowRoundCnt++;
@@ -81,6 +82,11 @@ namespace Assets.GameSystem.BattleSystem.Main
             _player = absUnit;
         }
 
+        public void BanUseCard()
+        {
+            _canUseCard.Value = false;
+        }
+
         public void EnemyStartRoundSettle()
         {
             _enemyList[_nowEnemyIndex++].StartRoundSettle();
@@ -89,6 +95,7 @@ namespace Assets.GameSystem.BattleSystem.Main
         public void PlayerStartRoundSettle()
         {
             _player.StartRoundSettle();
+            _canUseCard.Value = true;   //玩家回合结算后，可以使用卡牌
         }
 
         public bool IsEnemiesAfterAct()
@@ -107,6 +114,7 @@ namespace Assets.GameSystem.BattleSystem.Main
         public CharacterData GetCharacterData() => _characterData;
         public int GetWaveCnt() => _levelData.GetWaveCnt();
         public int GetNowWaveIndex() => _nowWaveIndex;
+        public bool GetUseCardLimit() => _canUseCard.Value;
         #endregion
 
         #region 单位死亡事件
@@ -152,6 +160,14 @@ namespace Assets.GameSystem.BattleSystem.Main
         #endregion
 
         #region 事件回调
+        public void SetSetUseCardLimitAction(UnityAction<bool> unityAction)
+        {
+            setUseCardLimitDelegate = unityAction;
+        }
+        public void SetUseCardLimit(bool value)
+        {
+            setUseCardLimitDelegate?.Invoke(value);
+        }
         public void SetUpdateRoundCntTxtAction(UnityAction<int> unityAction)
         {
             updateRoundCntTxtDelegate += unityAction;

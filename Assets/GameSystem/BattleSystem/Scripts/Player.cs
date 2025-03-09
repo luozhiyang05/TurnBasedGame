@@ -11,8 +11,6 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         public int maxActPoint;
         public int nowActPoint;
         public int skillCardId;
-
-        public bool canAction = false;
         public CharacterData characterData;
 
         /// <summary>
@@ -33,14 +31,11 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             OnStartRoundSettle();       //具体重写的 回合开始时 逻辑
 
             this.GetSystem<ICardSystemModule>().UpdateHeadCardInSr();       //获取手牌
-
-            canAction = true;
         }
 
         public override void Action()
         {
             Debug.Log("玩家开始出牌");
-            canAction = true;
         }
 
         /// <summary>
@@ -65,12 +60,10 @@ namespace Assets.GameSystem.BattleSystem.Scripts
 
             SettleRound();      //具体重写的 结算回合 逻辑
 
-            this.GetSystem<ICardSystemModule>().UpdateHeadCardInEr();   //丢弃手牌
-
-
-            SwitchRound();      //回合切换
-
-            canAction = false;
+            SwitchRound(() =>   //回合切换
+            {
+                this.GetSystem<ICardSystemModule>().UpdateHeadCardInEr();   //丢弃手牌
+            });
         }
 
         /// <summary>

@@ -44,6 +44,7 @@ namespace Assets.GameSystem.BattleSystem.Main
             (Model as BattleSystemViewModel).SetPassLevelAction(PassLevel);
             (Model as BattleSystemViewModel).SetLoseLevelAction(LoseLevel);
             (Model as BattleSystemViewModel).SetUpdateRoundCntTxtAction(UpdateRoundCntTxt);
+            (Model as BattleSystemViewModel).SetSetUseCardLimitAction(SetUseCardLimit);
         }
 
 
@@ -65,6 +66,7 @@ namespace Assets.GameSystem.BattleSystem.Main
             Btn_exitRound.onClick.AddListener(() =>
             {
                 (_battleSystemModule.GetPlayerUnit() as Player)?.EndRound();
+                (Model as BattleSystemViewModel).BanUseCard();  //玩家推出回合后，禁止使用卡牌
             });
             Btn_setting.onClick.AddListener(() =>
             {
@@ -207,6 +209,11 @@ namespace Assets.GameSystem.BattleSystem.Main
         private void UpdateRoundCntTxt(int nowRoundCnt)
         {
             Txt_roundCnt.text = GameManager.GetText("battle_tip_1011") + nowRoundCnt;
+        }
+
+        private void SetUseCardLimit(bool value)
+        {
+            Btn_exitRound.interactable = value;
         }
     }
 }

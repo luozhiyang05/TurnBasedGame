@@ -59,6 +59,12 @@ namespace Assets.GameSystem.BattleSystem
         /// 切换至玩家回合
         /// </summary>
         void SwitchPlayerTurn();
+
+        /// <summary>
+        /// 获取是否可以使用卡牌
+        /// </summary>
+        /// <returns></returns>
+        public bool GetUseCardLimit();
     }
 
     public class BattleSystemModule : AbsModule, IBattleSystemModule
@@ -149,6 +155,11 @@ namespace Assets.GameSystem.BattleSystem
         public QArray<AbsUnit> GetNowWavaAllEnemies()
         {
             return (_viewCtrl.GetModel() as BattleSystemViewModel).GetNowWavaAllEnemies();
+        }
+
+        public bool GetUseCardLimit()
+        {
+             return (_viewCtrl.GetModel() as BattleSystemViewModel).GetUseCardLimit();
         }
     }
 }

@@ -23,11 +23,11 @@ namespace Assets.GameSystem.CardSystem.Scripts
         protected override void OnFinishDrag(PointerEventData eventData)
         {
             SetCanBlockRaycasts(false);
-            if (Camera.main != null)
+
+            // 当前可以使用卡牌，则去判断
+            if (Camera.main != null && this.GetSystem<IBattleSystemModule>().GetUseCardLimit())
             {
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
-                //RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-
                 PointerEventData pointerEvent = new(EventSystem.current);
                 pointerEvent.position = Input.mousePosition;
                 List<RaycastResult> raycastResults = new List<RaycastResult>();

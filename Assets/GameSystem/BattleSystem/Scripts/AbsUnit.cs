@@ -10,6 +10,7 @@ using Tool.Utilities;
 using Tool.Utilities.Bindery;
 using Tool.Utilities.Events;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Assets.GameSystem.BattleSystem.Scripts
@@ -203,11 +204,12 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         /// <summary>
         /// 该单位完全行动后，切换回合
         /// </summary>
-        protected void SwitchRound()
+        protected void SwitchRound(UnityAction beforeSwitchRound = null)
         {
             //间隔后，切换回合
             ActionKit.GetInstance().DelayTime(GameManager.actTntervalTime, () =>
             {
+                beforeSwitchRound?.Invoke();
                 _battleSystemModule.SwitchRound();
             });
         }
