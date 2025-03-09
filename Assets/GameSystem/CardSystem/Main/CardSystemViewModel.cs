@@ -4,6 +4,7 @@ using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.CardSystem.Scripts;
 using Framework;
 using GameSystem.MVCTemplate;
+using GlobalData;
 using Tool.ResourceMgr;
 using Tool.Utilities;
 using Tool.Utilities.Events;
@@ -278,13 +279,12 @@ namespace Assets.GameSystem.CardSystem.Main
         #region 事件
         private void UseCardDelegate(CardData CardData)
         {
-            Debug.Log("出牌的序号为：" + CardData.headCardIdx + ";" + "出牌的名字为：" + CardData.cardSo.cardName);
             //记录历史
             _usedCardsHistory.Add(new UseCardHistory
             {
-                cardName = CardData.cardSo.cardName,
-                userName = CardData.user.name,
-                targetName = CardData.target.name
+                cardName = GameManager.GetText(CardData.cardSo.cardName.ToString()),
+                userName = GameManager.GetText(CardData.user.unitName.ToString()),
+                targetName = GameManager.GetText(CardData.target.unitName.ToString())
             });
             //丢弃卡牌
             DiscardCards(CardData.headCardIdx);

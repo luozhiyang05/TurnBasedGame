@@ -235,7 +235,7 @@ namespace Assets.GameSystem.CardSystem
         public void RenderHistoryInfo(Transform historyCell, UseCardHistory history)
         {
             var txtDesc = historyCell.Find("txt_desc").GetComponent<Text>();
-            txtDesc.text = $"{history.userName} 对 {history.targetName} 使用了{history.cardName} 卡牌";
+            txtDesc.text = GameManager.GetText("history_tip_1003",history.userName,history.cardName,history.targetName);
         }
 
         public void SelectCardAction(Transform trans)

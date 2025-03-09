@@ -49,7 +49,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
                                 user = player,
                                 headCardIdx = headCardIdx,
                                 cardSo = BaseCard,
-                                target = currentObjectUnderCursor.transform.parent.gameObject
+                                target = currentObjectUnderCursor.transform.parent.GetComponent<AbsUnit>()
                             });
                             return;
                         }
@@ -71,7 +71,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
                                 user = player,
                                 headCardIdx = headCardIdx,
                                 cardSo = BaseCard,
-                                target = player.gameObject  //自动使用的卡牌目标为自己
+                                target = player  //自动使用的卡牌目标为自己
                             });
                             return;
                         }
@@ -110,9 +110,9 @@ namespace Assets.GameSystem.CardSystem.Scripts
     public struct CardData
     {
         public AbsUnit user;
+        public AbsUnit target;
         public int headCardIdx;
         public BaseCard cardSo;
-        public GameObject target;
     }
 
     public struct UseCardHistory

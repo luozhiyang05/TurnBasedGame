@@ -22,9 +22,24 @@ namespace GlobalData
             };
         }
 
-        public static string GetText(string key)
+        public static string GetText(string key,params string[] args)
         {
-            return ResMgr.GetInstance().SyncLoad<MultipleLanguagesSo>("多语言配置").GetLanguageText(key);
+            string ReplaceFirst(string text, string search, string replace)
+            {
+                int pos = text.IndexOf(search);
+                if (pos < 0)
+                {
+                    return text;
+                }
+                return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+            }
+
+            var str = ResMgr.GetInstance().SyncLoad<MultipleLanguagesSo>("多语言配置").GetLanguageText(key);
+            for (int i = 0; i < args.Length; i++)
+            {
+                str = ReplaceFirst(str, "%s", "{" + i + "}");
+            }
+            return string.Format(str, args);    // 替换字符串
         }
     }
 

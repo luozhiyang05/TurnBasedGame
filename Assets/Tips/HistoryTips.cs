@@ -2,6 +2,7 @@ using Assets.GameSystem.CardSystem;
 using Assets.GameSystem.CardSystem.Scripts;
 using Framework;
 using GameSystem.MVCTemplate;
+using GlobalData;
 using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,8 +48,8 @@ namespace Tips
         protected override void OnOpen(params object[] args)
         {
             //文本处理
-            _txtTitle.text = "使用卡牌记录";
-            _txtCntTip.text = "最多存10条记录";
+            _txtTitle.text = GameManager.GetText("history_tip_1001");
+            _txtCntTip.text = GameManager.GetText("history_tip_1002");
 
             //只保留最近10条记录
             var useCardsHistory = args[0] as QArray<UseCardHistory>;

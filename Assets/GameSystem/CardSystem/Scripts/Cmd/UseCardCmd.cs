@@ -12,8 +12,7 @@ namespace Assets.GameSystem.CardSystem.Scripts.Cmd
             base.Do(cardData);
 
             //对目标使用卡牌
-            var absUnit = cardData.target.GetComponent<AbsUnit>();
-            cardData.cardSo.UseCard(cardData.user, absUnit);
+            cardData.cardSo.UseCard(cardData.user, cardData.target);
 
             //分发事件，成功使用卡牌
             EventsHandle.EventTrigger(EventsNameConst.SUCCESS_USE_CARD,cardData);
