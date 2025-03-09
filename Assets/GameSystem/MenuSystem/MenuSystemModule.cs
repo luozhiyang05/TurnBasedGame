@@ -5,6 +5,7 @@ using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using Assets.GameSystem.MenuSystem.Main;
 using Assets.GameSystem.MenuSystem.Setting.Main;
 using Framework;
+using Tool.UI;
 
 namespace Assets.GameSystem.MenuSystem
 {
@@ -13,7 +14,7 @@ namespace Assets.GameSystem.MenuSystem
         public void ShowView();
         public void ShowCharacterChoseView();
         public void ShowLevelChoseView();
-        public void ShowSettingView();
+        public void ShowSettingView(EuiLayer euiLayer = Tool.UI.EuiLayer.MenuUI);
         public CharacterData GetNowChoseCharacterData();
         public LevelData GetNowChoseLevelData();
     }
@@ -45,10 +46,10 @@ namespace Assets.GameSystem.MenuSystem
             _levelChoseViewCtrl.ShowView(Tool.UI.EuiLayer.MenuUI);
         }
 
-        public void ShowSettingView()
+        public void ShowSettingView(EuiLayer euiLayer = Tool.UI.EuiLayer.MenuUI)
         {
             _settingViewCtrl ??= new SettingViewCtrl();
-            _settingViewCtrl.ShowView(Tool.UI.EuiLayer.MenuUI);
+            _settingViewCtrl.ShowView(euiLayer);
         }
         public CharacterData GetNowChoseCharacterData()
         {
