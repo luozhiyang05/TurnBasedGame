@@ -103,19 +103,19 @@ namespace Tool.UI
             PublicMonoKit.GetInstance().OnRegisterUpdate(IsClickOnMaskPanel);
 
             //生成UI层
-            _menuUI = new GameObject("MenuUI").transform;
+            _menuUI = new GameObject(EuiLayer.MenuUI.ToString()).transform;
             _menuUI.SetParent(_canvasRectTrans);
             _menuUI.localPosition = Vector3.zero;
 
-            _gameUI = new GameObject("GameUI").transform;
+            _gameUI = new GameObject(EuiLayer.GameUI.ToString()).transform;
             _gameUI.SetParent(_canvasRectTrans);
             _gameUI.localPosition = Vector3.zero;
 
-            _tipsUI = new GameObject("TipsUI").transform;
+            _tipsUI = new GameObject(EuiLayer.TipsUI.ToString()).transform;
             _tipsUI.SetParent(_canvasRectTrans);
             _tipsUI.localPosition = Vector3.zero;
 
-            _warnUI = new GameObject("SstemtUI").transform;
+            _warnUI = new GameObject(EuiLayer.SystemUI.ToString()).transform;
             _warnUI.SetParent(_canvasRectTrans);
             _warnUI.localPosition = Vector3.zero;
             #endregion
