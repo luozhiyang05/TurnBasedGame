@@ -1,6 +1,9 @@
 using Assets.GameSystem.MenuSystem.LevelChose.Scripts;
 using GameSystem.MVCTemplate;
+using GlobalData;
 using Tool.ResourceMgr;
+using Tool.Utilities.Save;
+using UnityEngine;
 
 namespace Assets.GameSystem.MenuSystem.LevelChose.Main
 {

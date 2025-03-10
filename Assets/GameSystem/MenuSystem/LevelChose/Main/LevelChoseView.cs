@@ -2,6 +2,7 @@ using Assets.GameSystem.BattleSystem;
 using Assets.GameSystem.CardSystem;
 using Framework;
 using GameSystem.MVCTemplate;
+using GlobalData;
 using Tool.UI;
 using UIComponents;
 using UnityEngine;
@@ -60,10 +61,11 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Main
         /// </summary>
         protected override void OnInit()
         {
-            //TODO:多语言
-            Txt_title.text = "选择角色";
-            Btn_certain.Text = "确定";
+            // 多语言
+            Txt_title.text = GameManager.GetText("choose_level_1001");
+            Btn_certain.Text = GameManager.GetText("tips_1003");
 
+            // 关卡按钮
             _toggleGroup = transform.Find("Main/Levels").GetComponent<ToggleGroup>();
             _levels = transform.Find("Main/Levels");
             for (int i = 0; i < _levels.childCount; i++)

@@ -72,3 +72,4 @@ card_tip_1002,选择一张卡牌到手牌中,Choose one card to add to your hand
 history_tip_1001,使用卡牌记录,Records of the cards used
 history_tip_1002,最多存10条记录,A maximum of 10 records can be saved
 history_tip_1003,%s 使用了 %s 卡牌 作用于 %s,%s used the %s card on %s.
+choose_level_1001,选择关卡,Choose level
