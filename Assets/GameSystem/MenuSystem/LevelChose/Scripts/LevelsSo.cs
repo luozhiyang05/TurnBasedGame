@@ -53,6 +53,7 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Scripts
         public string levelName;
         public int waveCnt;
         public string enemyIds; //1-2/1-2
+        public string bgName;
 
         /// <summary>
         /// 获取当前关卡的波次数量

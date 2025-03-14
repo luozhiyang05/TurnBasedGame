@@ -109,7 +109,7 @@ namespace Assets.GameSystem.BattleSystem.Main
         public int GetEnemyCount() => _enemyList.Count;
         public QArray<AbsUnit> GetNowWavaAllEnemies() => _enemyList;
         public WavasData GetNowWava() => _levelData.GetWavaData(_nowWaveIndex);
-
+        public string GetBgName()=> _levelData.bgName;
         public AbsUnit GetPlayerUnit() => _player;
         public CharacterData GetCharacterData() => _characterData;
         public int GetWaveCnt() => _levelData.GetWaveCnt();

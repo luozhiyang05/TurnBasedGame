@@ -1,3 +1,4 @@
+using System;
 using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.BattleSystem.Scripts.Unit;
 using Assets.GameSystem.BattleSystem.Scripts.Unit.EnemyUnit;
@@ -9,6 +10,7 @@ using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
 using Tips;
+using Tool.ResourceMgr;
 using Tool.UI;
 using UIComponents;
 using Unity.VisualScripting;
@@ -20,12 +22,14 @@ namespace Assets.GameSystem.BattleSystem.Main
     public class BattleSystemView : BaseView
     {
         #region 自动生成UI组件区域，内部禁止手动更改！
+		public Image Img_bg;
 		public CButton Btn_setting;
 		public CButton Btn_exitRound;
 		public Text Txt_waveCnt;
 		public Text Txt_roundCnt;
         protected override void AutoInitUI()
         {
+			Img_bg = transform.Find("Main/Img_bg").GetComponent<Image>();
 			Btn_setting = transform.Find("Main/Btn_setting").GetComponent<CButton>();
 			Btn_exitRound = transform.Find("Main/Btn_exitRound").GetComponent<CButton>();
 			Txt_waveCnt = transform.Find("Main/BattleInfos/Txt_waveCnt").GetComponent<Text>();
@@ -78,6 +82,8 @@ namespace Assets.GameSystem.BattleSystem.Main
         public override void OnShow()
         {
             base.OnShow();
+            //设置关卡背景
+            SetBg();
 
             //设置当前波次的敌人信息
             SetWaveEnemiesData();
@@ -109,6 +115,20 @@ namespace Assets.GameSystem.BattleSystem.Main
             var characterData = model.GetCharacterData();
             AddPlayerUnit(playerBody, characterData);
             player.gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// 设置背景图片
+        /// </summary>
+        public void SetBg()
+        {
+            BattleSystemViewModel model = Model as BattleSystemViewModel;
+            string bgName = model.GetBgName();
+            string bgPath =( GameManager.BgPath + bgName).Trim();
+            ResMgr.GetInstance().AsyncLoad<Sprite>(bgPath, (sprite) =>
+            {
+                Img_bg.sprite = sprite;
+            });
         }
 
         /// <summary>
