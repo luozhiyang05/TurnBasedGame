@@ -82,7 +82,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             armor.Value = enemyData.maxArmor;
             atk.Value = enemyData.atk;
 
-            // 图片显示
+            // 动画
             var iconName = enemyData.iconName.Trim();
             for (int i = 1; i <= GameManager.UnitIconCnt; i++)
             {

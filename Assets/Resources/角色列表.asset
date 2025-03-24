@@ -16,22 +16,28 @@ MonoBehaviour:
   characterDatas:
   - id: 1
     characterType: 0
+    iconName: "\u73A9\u5BB61\r"
     maxHp: 5
-    maxActPoint: 5
+    startMaxActCnt: 0
+    maxActPoint: 3
     maxHeadCardCnt: 5
     skillCardId: 1001
     cardGroupId: 1
   - id: 2
     characterType: 1
+    iconName: "\u73A9\u5BB62\r"
     maxHp: 5
-    maxActPoint: 5
+    startMaxActCnt: 0
+    maxActPoint: 3
     maxHeadCardCnt: 5
     skillCardId: 1002
     cardGroupId: 2
   - id: 3
     characterType: 2
+    iconName: "\r"
     maxHp: 5
-    maxActPoint: 5
+    startMaxActCnt: 0
+    maxActPoint: 3
     maxHeadCardCnt: 5
     skillCardId: 1003
     cardGroupId: 2

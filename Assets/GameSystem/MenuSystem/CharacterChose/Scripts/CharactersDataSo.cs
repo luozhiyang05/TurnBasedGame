@@ -11,6 +11,7 @@ namespace Assets.GameSystem.MenuSystem.CharacterChose.Scripts
     {
         public int id;
         public CharacterType characterType;
+        public string iconName;
         public int maxHp;
         public int startMaxActCnt;
         public int maxActPoint;

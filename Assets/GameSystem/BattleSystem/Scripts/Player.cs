@@ -2,6 +2,9 @@ using Assets.GameSystem.CardSystem;
 using Assets.GameSystem.FlyTextSystem;
 using Assets.GameSystem.MenuSystem.CharacterChose.Scripts;
 using Framework;
+using GlobalData;
+using Tool.ResourceMgr;
+using Tool.Utilities;
 using UnityEngine;
 
 namespace Assets.GameSystem.BattleSystem.Scripts
@@ -88,6 +91,23 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             maxActPoint = characterData.startMaxActCnt;
             nowActPoint = characterData.maxActPoint;
             skillCardId = characterData.skillCardId;
+
+            // 动画
+            var iconName = characterData.iconName.Trim();
+            for (int i = 1; i <= GameManager.UnitIconCnt; i++)
+            {
+                var path = GameManager.UnitIconPath + iconName + "/" + iconName + "_" + i;
+                var sprite = ResMgr.GetInstance().SyncLoad<Sprite>(path);
+                if (sprite != null)
+                {
+                    var animation2D = transform.Find("img_body").GetComponent<Animation2D>();
+                    if (animation2D)
+                    {
+                        animation2D.SetSprites(sprite);
+                        animation2D.SetFrames(GameManager.AnimationFrame);
+                    }
+                }
+            }
         }
     }
 }
