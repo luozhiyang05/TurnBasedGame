@@ -1,9 +1,12 @@
 using Assets.GameSystem.BattleSystem.Scripts.Effect;
 using Framework;
+using GlobalData;
 using Tips;
+using Tool.ResourceMgr;
 using Tool.Utilities;
 using Tool.Utilities.Bindery;
 using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.GameSystem.BattleSystem.Scripts
@@ -78,6 +81,23 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             nowHp.Value = maxHp.Value;
             armor.Value = enemyData.maxArmor;
             atk.Value = enemyData.atk;
+
+            // 图片显示
+            var iconName = enemyData.iconName.Trim();
+            for (int i = 1; i <= GameManager.UnitIconCnt; i++)
+            {
+                var path = GameManager.UnitIconPath + iconName + "/" + iconName + "_" + i;
+                var sprite = ResMgr.GetInstance().SyncLoad<Sprite>(path);
+                if (sprite!=null)
+                {
+                    var animation2D = transform.Find("img_body").GetComponent<Animation2D>();
+                    if (animation2D)
+                    {
+                        animation2D.SetSprites(sprite);
+                        animation2D.SetFrames(GameManager.AnimationFrame);
+                    }
+                }
+            }
 
             // 绑定点击事件，打开UnitInfoTips面板
             var img_body = transform.Find("img_body");

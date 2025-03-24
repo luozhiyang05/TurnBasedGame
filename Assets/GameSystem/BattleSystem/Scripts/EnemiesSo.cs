@@ -38,5 +38,6 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         public int maxArmor;
         public int atk;
         public int skillId;
+        public string iconName;
     }
 }

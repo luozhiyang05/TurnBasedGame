@@ -105,27 +105,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u6D77\u76D7_0"
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 48
-        width: 16
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cf958e2ca9ff49f48b3e7f2a724e1948
-      internalID: 1857979017
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: "\u6D77\u76D7_1"
       rect:
         serializedVersion: 2
@@ -134,7 +113,7 @@ TextureImporter:
         width: 16
         height: 20
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -150,33 +129,12 @@ TextureImporter:
       name: "\u6D77\u76D7_2"
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 64
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 374c75160fd4ed944ba85b356a0bb90d
-      internalID: -952170203
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "\u6D77\u76D7_3"
-      rect:
-        serializedVersion: 2
         x: 16
         y: 24
         width: 16
         height: 20
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -189,7 +147,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u6D77\u76D7_4"
+      name: "\u6D77\u76D7_3"
       rect:
         serializedVersion: 2
         x: 32
@@ -197,7 +155,7 @@ TextureImporter:
         width: 16
         height: 20
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -210,7 +168,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u6D77\u76D7_5"
+      name: "\u6D77\u76D7_4"
       rect:
         serializedVersion: 2
         x: 48
@@ -218,7 +176,7 @@ TextureImporter:
         width: 16
         height: 20
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -243,10 +201,10 @@ TextureImporter:
     nameFileIdTable:
       "\u6D77\u76D7_0": 1857979017
       "\u6D77\u76D7_1": 133896127
-      "\u6D77\u76D7_2": -952170203
-      "\u6D77\u76D7_3": 1368435514
-      "\u6D77\u76D7_4": 96872040
-      "\u6D77\u76D7_5": 1503338306
+      "\u6D77\u76D7_2": 1368435514
+      "\u6D77\u76D7_3": 96872040
+      "\u6D77\u76D7_4": 1503338306
+      "\u6D77\u76D7_8": -952170203
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

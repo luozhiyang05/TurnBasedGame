@@ -18,11 +18,13 @@ MonoBehaviour:
     enemyType: 0
     maxHp: 5
     maxArmor: 5
-    atk: 0
+    atk: 2
     skillId: 1002
+    iconName: "\u50F5\u5C38\r"
   - id: 2
     enemyType: 1
     maxHp: 5
     maxArmor: 5
-    atk: 0
+    atk: 2
     skillId: 1001
+    iconName: "\u50F5\u5C38\r"
