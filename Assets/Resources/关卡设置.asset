@@ -17,12 +17,15 @@ MonoBehaviour:
   - id: 1
     levelName: levelName_1001
     waveCnt: 2
-    enemyIds: "1-2/1-2\r"
+    enemyIds: 1-2/1-2
+    bgName: "\u80CC\u666F1\r"
   - id: 2
     levelName: levelName_1002
     waveCnt: 2
-    enemyIds: "1-2/1-2\r"
+    enemyIds: 1-2/1-2
+    bgName: "\u80CC\u666F2\r"
   - id: 3
     levelName: levelName_1003
     waveCnt: 2
-    enemyIds: "1-2/1-2\r"
+    enemyIds: 1-2/1-2
+    bgName: "\u80CC\u666F3\r"
