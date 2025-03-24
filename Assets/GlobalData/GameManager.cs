@@ -51,6 +51,12 @@ namespace GlobalData
             iconName = iconName.Trim();
             return UnitIconPath + iconName + "/" + iconName+ "_" + index;
         }
+
+        public static string GetBgPath(string bgName)
+        {
+            bgName = bgName.Trim();
+            return BgPath + bgName;
+        }
     }
 
     public enum Languages

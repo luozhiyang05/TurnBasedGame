@@ -124,8 +124,7 @@ namespace Assets.GameSystem.BattleSystem.Main
         {
             BattleSystemViewModel model = Model as BattleSystemViewModel;
             string bgName = model.GetBgName();
-            string bgPath =( GameManager.BgPath + bgName).Trim();
-            ResMgr.GetInstance().AsyncLoad<Sprite>(bgPath, (sprite) =>
+            ResMgr.GetInstance().AsyncLoad<Sprite>(GameManager.GetBgPath(bgName), (sprite) =>
             {
                 Img_bg.sprite = sprite;
             });

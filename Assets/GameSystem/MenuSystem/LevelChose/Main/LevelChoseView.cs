@@ -3,6 +3,7 @@ using Assets.GameSystem.CardSystem;
 using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
+using Tool.ResourceMgr;
 using Tool.UI;
 using UIComponents;
 using UnityEngine;
@@ -108,8 +109,9 @@ namespace Assets.GameSystem.MenuSystem.LevelChose.Main
             var model = Model as LevelChoseViewModel;
             for (int i = 0; i < _levels.childCount; i++)
             {
-                var txtName = _levels.GetChild(i).Find("txt_name").GetComponent<Text>();
-                txtName.text = model.GetLevelNameById(i + 1);
+                var bgName = model.GetLevelNameById(i + 1);
+                _levels.GetChild(i).Find("txt_name").GetComponent<Text>().text = bgName;
+                _levels.GetChild(i).Find("Background").GetComponent<Image>().sprite = ResMgr.GetInstance().SyncLoad<Sprite>(GameManager.GetBgPath(bgName));
             }
         }
 
