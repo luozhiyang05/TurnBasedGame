@@ -93,11 +93,9 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             skillCardId = characterData.skillCardId;
 
             // 动画
-            var iconName = characterData.iconName.Trim();
             for (int i = 1; i <= GameManager.UnitIconCnt; i++)
             {
-                var path = GameManager.UnitIconPath + iconName + "/" + iconName + "_" + i;
-                var sprite = ResMgr.GetInstance().SyncLoad<Sprite>(path);
+                var sprite = ResMgr.GetInstance().SyncLoad<Sprite>(GameManager.GetIconPath(characterData.iconName, i));
                 if (sprite != null)
                 {
                     var animation2D = transform.Find("img_body").GetComponent<Animation2D>();

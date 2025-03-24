@@ -45,6 +45,12 @@ namespace GlobalData
             }
             return string.Format(str, args);    // 替换字符串
         }
+
+        public static string GetIconPath(string iconName,int index = 1)
+        {
+            iconName = iconName.Trim();
+            return UnitIconPath + iconName + "/" + iconName+ "_" + index;
+        }
     }
 
     public enum Languages

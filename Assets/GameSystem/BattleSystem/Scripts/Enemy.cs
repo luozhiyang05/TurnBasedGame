@@ -83,11 +83,9 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             atk.Value = enemyData.atk;
 
             // 动画
-            var iconName = enemyData.iconName.Trim();
             for (int i = 1; i <= GameManager.UnitIconCnt; i++)
             {
-                var path = GameManager.UnitIconPath + iconName + "/" + iconName + "_" + i;
-                var sprite = ResMgr.GetInstance().SyncLoad<Sprite>(path);
+                var sprite = ResMgr.GetInstance().SyncLoad<Sprite>(GameManager.GetIconPath(enemyData.iconName, i));
                 if (sprite!=null)
                 {
                     var animation2D = transform.Find("img_body").GetComponent<Animation2D>();
