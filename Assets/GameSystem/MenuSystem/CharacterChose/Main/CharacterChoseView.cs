@@ -1,6 +1,7 @@
 using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
+using Tool.ResourceMgr;
 using UIComponents;
 using UnityEngine;
 using UnityEngine.UI;
@@ -105,8 +106,12 @@ namespace Assets.GameSystem.MenuSystem.CharacterChose.Main
             for (int i = 0; i < _charactes.childCount; i++)
             {
                 var characterData = model.GetCharacterDataById(i + 1);
-                var txtName = _charactes.GetChild(i).Find("txt_name").GetComponent<Text>();
+                var characterCode = _charactes.GetChild(i);
+                var bg = characterCode.Find("Background");
+                var txtName = characterCode.Find("txt_name").GetComponent<Text>();
                 txtName.text = GameManager.GetText(characterData.characterType.ToString());
+                var sprite = ResMgr.GetInstance().SyncLoad<Sprite>(GameManager.GetIconPath(characterData.iconName, 1));
+                bg.GetComponent<Image>().sprite = sprite;
             }
         }
 

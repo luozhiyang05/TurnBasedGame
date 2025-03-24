@@ -32,12 +32,3 @@ MonoBehaviour:
     maxHeadCardCnt: 5
     skillCardId: 1002
     cardGroupId: 2
-  - id: 3
-    characterType: 2
-    iconName: "\r"
-    maxHp: 5
-    startMaxActCnt: 0
-    maxActPoint: 3
-    maxHeadCardCnt: 5
-    skillCardId: 1003
-    cardGroupId: 2
