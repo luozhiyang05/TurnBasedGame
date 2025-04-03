@@ -25,6 +25,11 @@ namespace Assets.GameSystem.CardSystem
         void ShowObsCardsView(QArray<BaseCard> obsCards, bool isUseCards);
 
         /// <summary>
+        /// 清空所有卡牌，用于返回菜单时
+        /// </summary>
+        void ClearAllCards();
+
+        /// <summary>
         /// 回合结束丢弃手牌
         /// </summary>
         void UpdateHeadCardInEr();
@@ -332,6 +337,11 @@ namespace Assets.GameSystem.CardSystem
         public void DeleteCardIndex(int cardIndex)
         {
             (_viewCtrl.GetModel() as CardSystemViewModel).DeleteCardIndex(cardIndex);
+        }
+
+        public void ClearAllCards()
+        {
+            (_viewCtrl.GetModel() as CardSystemViewModel).ClearAllCards();
         }
     }
 }

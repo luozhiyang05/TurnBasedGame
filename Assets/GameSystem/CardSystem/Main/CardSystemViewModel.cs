@@ -51,6 +51,17 @@ namespace Assets.GameSystem.CardSystem.Main
         }
 
         /// <summary>
+        /// 清除所有牌库
+        /// </summary>
+        public void ClearAllCards()
+        {
+            _nowUseCards.Clear();
+            _nowHeadCards.Clear();
+            _discardCards.Clear();
+            _usedCardsHistory.Clear();
+        }
+
+        /// <summary>
         /// 加载玩家出战卡牌
         /// </summary>
         public void LoadUseCards(int cardGroupId)

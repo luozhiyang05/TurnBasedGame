@@ -184,6 +184,22 @@ namespace Assets.GameSystem.BattleSystem
         public void SetIsStartBattle(bool isStartBattle)
         {
             _isStartBattle = isStartBattle;
+
+            // 返回菜单时的逻辑
+            if (isStartBattle == false)
+            {
+                var model = _viewCtrl.GetModel() as BattleSystemViewModel;
+                // 清除敌人列表
+                model.SetEnemyAbsUnit(null);
+
+                // 重置敌人和玩家的icon
+                QArray<AbsUnit> absUnits = model.GetNowWavaAllEnemies();
+                for (int i = 0; i < absUnits.Count; i++)
+                {
+                    absUnits[i].transform.Find("img_body").GetComponent<Animation2D>().ClearSprites();
+                }
+                model.GetPlayerUnit().transform.Find("img_body").GetComponent<Animation2D>().ClearSprites();
+            }
         }
 
         public bool GetIsStarBattle()

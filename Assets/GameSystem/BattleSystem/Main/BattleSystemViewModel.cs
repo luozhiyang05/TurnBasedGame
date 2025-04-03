@@ -74,7 +74,12 @@ namespace Assets.GameSystem.BattleSystem.Main
 
         public void SetEnemyAbsUnit(AbsUnit absUnit)
         {
-            _enemyList.Add(absUnit);
+            if (absUnit != null)
+            {
+                _enemyList.Add(absUnit);
+                return;
+            }
+            _enemyList.Clear();
         }
 
         public void SetPlayerAbsUnit(AbsUnit absUnit)

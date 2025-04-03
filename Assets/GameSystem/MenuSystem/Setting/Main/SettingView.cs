@@ -1,4 +1,5 @@
 using Assets.GameSystem.BattleSystem;
+using Assets.GameSystem.CardSystem;
 using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
@@ -124,6 +125,8 @@ namespace Assets.GameSystem.MenuSystem.Setting.Main
             Btn_backToMenu.onClick.AddListener(() =>
             {
                 this.GetSystem<IBattleSystemModule>().SetIsStartBattle(false);
+                this.GetSystem<ICardSystemModule>().ClearAllCards();
+
                 UIManager.GetInstance().CloseAllViewByLayer(EuiLayer.GameUI);
                 this.GetSystem<IMenuSystemModule>().ShowView();
                 OnHide();
