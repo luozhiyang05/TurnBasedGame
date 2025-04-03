@@ -3,6 +3,7 @@ using Assets.GameSystem.CardSystem;
 using Assets.GameSystem.EffectsSystem;
 using Assets.GameSystem.FlyTextSystem;
 using Assets.GameSystem.MenuSystem;
+using Assets.GameSystem.MotionSystem;
 using Assets.GameSystem.SkillSystem;
 using GlobalData;
 namespace Framework
@@ -19,6 +20,7 @@ namespace Framework
 			this.RegisterModule<IMenuSystemModule>(new MenuSystemModule());
 			this.RegisterModule<ISkillSystemModule>(new SkillSystemModule());
 			this.RegisterModule<IFlyTextSystemModule>(new FlyTextSystemModule());
+            this.RegisterModule<IMotionSystemModule>(new MotionSystemModule());
         }
     }
 }

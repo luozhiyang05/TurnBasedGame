@@ -105,6 +105,11 @@ namespace Assets.GameSystem.BattleSystem.Scripts
             DisplayInfo();
         }
 
+        public GameObject GetUnitGameObject()
+        {
+            return transform.parent.gameObject;
+        }
+
         #region 收到卡牌影响逻辑
 
         //是否死亡
