@@ -50,5 +50,11 @@ namespace Tool.Utilities
             oneSecondFrames = frames;
             _intervalTime = 1f / oneSecondFrames;
         }
+
+        public void ClearSprites()
+        {
+            _index = 0;
+            sprites.Clear();
+        }
     }
 }
