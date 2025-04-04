@@ -14,6 +14,8 @@ namespace GlobalData
         public static Languages languages = Languages.中文;
         public const float nextWaveWaitTime = 1f;
         public const float actTntervalTime = 1f;
+        public const float atkAnimationTime = 0.3f;
+        public const float atkStayTime = 0.1f;
 
         public static void InitGlobalData()
         {

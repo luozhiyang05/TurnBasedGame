@@ -1,6 +1,7 @@
 using Assets.GameSystem.BattleSystem.Scripts;
 using Assets.GameSystem.MotionSystem;
 using Framework;
+using GlobalData;
 using UnityEngine;
 
 namespace Assets.GameSystem.CardSystem.Scripts.Cmd
@@ -18,7 +19,7 @@ namespace Assets.GameSystem.CardSystem.Scripts.Cmd
             base.Do(atkData);
 
             // 攻击动画
-            this.GetSystem<IMotionSystemModule>().AttackAct(atkData.self.GetUnitGameObject(), atkData.target.GetUnitGameObject(), 0.5f, 0.1f, () =>
+            this.GetSystem<IMotionSystemModule>().AttackAct(atkData.self.GetUnitGameObject(), atkData.target.GetUnitGameObject(), GameManager.atkAnimationTime, GameManager.atkStayTime, () =>
             {
                 // 攻击命中的逻辑
                 var self = atkData.self;
