@@ -53,6 +53,7 @@ namespace Tool.Utilities
 
         public void ClearSprites()
         {
+            _index = 0;
             sprites.Clear();
         }
     }
