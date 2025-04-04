@@ -13,6 +13,7 @@ namespace Assets.GameSystem.EffectsSystem
         public int id;
         public string effName;
         public string effDesc;
+        public string iconName;
         public bool isDieEff;
     }
 
@@ -51,11 +52,11 @@ namespace Assets.GameSystem.EffectsSystem
             {
                 case 1:
                     var defEff = new DefenceEffect();
-                    defEff.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, baseEffectData.isDieEff);
+                    defEff.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, baseEffectData.iconName, baseEffectData.isDieEff);
                     return defEff;
                 case 3:
                     var resEff = new ResurrectionEffect();
-                    resEff.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, baseEffectData.isDieEff);
+                    resEff.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, baseEffectData.iconName, baseEffectData.isDieEff);
                     return resEff;
                 default:
                     throw new Exception("找不到对应的效果");

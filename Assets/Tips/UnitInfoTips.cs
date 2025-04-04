@@ -64,7 +64,7 @@ namespace Tips
             var skillData = ResMgr.GetInstance().SyncLoad<SkillsSo>("技能库").GetSkillDataById(unitInfoPacking.skillId);
             Txt_skillDesc.text = GameManager.GetText(skillData.desc);
 
-            // 状态描述
+            // 效果描述
             var hadEffect = unitInfoPacking.effectIds.Count > 0;
             effectInfos.gameObject.SetActive(hadEffect);
             if (hadEffect)
@@ -76,12 +76,20 @@ namespace Tips
                     effIcon.gameObject.SetActive(needDisplay);
                     if (needDisplay)
                     {
+                        // 效果点击
                         var index = i - 1;
                         effIcon.GetComponent<Button>().onClick.RemoveAllListeners();
                         effIcon.GetComponent<Button>().onClick.AddListener(() =>
                         {
                             TipsModule.DescTips(this.GetSystem<IEffectsSystemModule>().GetBaseEffectById(unitInfoPacking.effectIds[index]).effDesc);
                         });
+
+                        // 效果图片
+                        var iconName = this.GetSystem<IEffectsSystemModule>().GetBaseEffectById(unitInfoPacking.effectIds[index]).iconName;
+                        ResMgr.GetInstance().AsyncLoad<Sprite>(GameManager.EffectIconPath + iconName, (sprite) =>
+                        {
+                            effIcon.GetComponent<Image>().sprite = sprite;
+                        }, false);
                     }
                 }
             }

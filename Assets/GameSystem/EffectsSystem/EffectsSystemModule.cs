@@ -6,6 +6,7 @@ namespace Assets.GameSystem.EffectsSystem
     public interface IEffectsSystemModule: IModule
     {
         public BaseEffect GetBaseEffectById(int id);
+        public string GetEffectIconName(int id);
     }
 
     public class EffectsSystemModule : AbsModule, IEffectsSystemModule
@@ -20,5 +21,9 @@ namespace Assets.GameSystem.EffectsSystem
             return effectsSo.GetBaseEffectById(id);
         }
 
+        public string GetEffectIconName(int id)
+        {
+            return effectsSo.GetBaseEffectById(id).iconName;
+        }
     }
 }

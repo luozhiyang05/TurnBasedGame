@@ -10,6 +10,7 @@ namespace GlobalData
         public const string BgPath = "Sprite/Bg/";
         public const string UnitIconPath = "Sprite/UnitIcon/";
         public const string SkillIconPath = "Sprite/Skill/";
+        public const string EffectIconPath = "Sprite/Effect/";
         public const int AnimationFrame = 6;
         public const int UnitIconCnt = 4;
         public static Languages languages = Languages.中文;

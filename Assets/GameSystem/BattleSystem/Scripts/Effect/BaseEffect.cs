@@ -9,6 +9,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Effect
         public int id;
         public string effName;
         public string effDesc;
+        public string iconName;
         public bool isDieEff;
         public int maxRoundCnt; //最大回合数
         protected int _remainRoundCnt; //剩余回合数
@@ -16,11 +17,12 @@ namespace Assets.GameSystem.BattleSystem.Scripts.Effect
         protected AbsUnit self;
         protected List<AbsUnit> targetList;
 
-        public void InitBaseData(int id, string effName, string effDesc, bool isDieEff)
+        public void InitBaseData(int id, string effName, string effDesc,string iconName, bool isDieEff)
         {
             this.id = id;
             this.effName = effName;
             this.effDesc = effDesc;
+            this.iconName = iconName;
             this.isDieEff = isDieEff;
         }
 
