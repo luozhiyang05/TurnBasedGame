@@ -9,6 +9,7 @@ namespace GlobalData
     {
         public const string BgPath = "Sprite/Bg/";
         public const string UnitIconPath = "Sprite/UnitIcon/";
+        public const string SkillIconPath = "Sprite/Skill/";
         public const int AnimationFrame = 6;
         public const int UnitIconCnt = 4;
         public static Languages languages = Languages.中文;
@@ -18,6 +19,9 @@ namespace GlobalData
         public const float atkStayTime = 0.1f;
         public const float atkCameraShakeDurationTime = 0.3f;
         public const float atkCameraShakeForce = 5f;
+        public const float skillTipFlyDurationTime = 0.5f;
+        public static float skillTipStayTime = 0.25f;
+        public static float skillTipFadeTime = 0.5f;
 
         public static void InitGlobalData()
         {

@@ -17,6 +17,7 @@ MonoBehaviour:
   - id: 1001
     skillName: skill_1001
     desc: skill_desc_1001
+    iconName: 
     needActCnt: 2
     useType: 0
     effectId: 1
@@ -26,6 +27,7 @@ MonoBehaviour:
   - id: 1002
     skillName: skill_1002
     desc: skill_desc_1002
+    iconName: "\u590D\u6D3B"
     needActCnt: 1
     useType: 0
     effectId: 3

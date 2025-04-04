@@ -20,6 +20,7 @@ namespace Assets.GameSystem.SkillSystem
         public int id;
         public string skillName;
         public string desc;
+        public string iconName;
         public int needActCnt;
         public UseType useType;
         public int effectId;

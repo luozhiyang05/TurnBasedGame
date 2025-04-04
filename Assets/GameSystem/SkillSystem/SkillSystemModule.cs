@@ -1,5 +1,6 @@
 using Assets.GameSystem.BattleSystem;
 using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.MotionSystem;
 using Assets.GameSystem.SkillSystem.Scripts.Cmd;
 using Framework;
 using GlobalData;
@@ -25,6 +26,13 @@ namespace Assets.GameSystem.SkillSystem
         /// <param name="skillId"></param>
         /// <param name="user"></param>
         public void UseSkill(int skillId, AbsUnit user);
+
+        /// <summary>
+        /// 获取技能图标名
+        /// </summary>
+        /// <param name="skillId"></param>
+        /// <returns></returns>
+        public string GetSkillIconName(int skillId);
     }
 
     public class SkillSystemModule : AbsModule, ISkillSystemModule
@@ -61,7 +69,15 @@ namespace Assets.GameSystem.SkillSystem
                     break;
             }
 
+            // 使用技能动效
+            this.GetSystem<IMotionSystemModule>().SkillTip(user.GetUnitGameObject(), skillId);
             Debug.Log(GameManager.GetText((user as Enemy).enemyData.enemyType.ToString()) + "使用技能" + GameManager.GetText(skillData.skillName));
+        }
+
+        public string GetSkillIconName(int skillId)
+        {
+            var skillData = skillsSo.GetSkillDataById(skillId);
+            return skillData.iconName;
         }
     }
 }

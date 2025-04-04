@@ -1,4 +1,4 @@
-﻿id,skillName,desc,needActCnt,useType,effectId,duration,param,isOnly,
-Int,String,String,Int,Enum,Int,Int,Int,Bool,
-1001,skill_1001,skill_desc_1001,2,0,1,1,5,0,叠甲技能
-1002,skill_1002,skill_desc_1002,1,0,3,999,1,1,死亡复活
+﻿id,skillName,desc,iconName,needActCnt,useType,effectId,duration,param,isOnly,
+Int,String,String,String,Int,Enum,Int,Int,Int,Bool,
+1001,skill_1001,skill_desc_1001,护甲,2,0,1,1,5,0,叠甲技能
+1002,skill_1002,skill_desc_1002,复活,1,0,3,999,1,1,死亡复活
