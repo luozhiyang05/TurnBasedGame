@@ -16,6 +16,8 @@ namespace GlobalData
         public const float actTntervalTime = 1f;
         public const float atkAnimationTime = 0.3f;
         public const float atkStayTime = 0.1f;
+        public const float atkCameraShakeDurationTime = 0.3f;
+        public const float atkCameraShakeForce = 5f;
 
         public static void InitGlobalData()
         {

@@ -1,6 +1,7 @@
 using System;
 using Assets.GameSystem.BattleSystem.Scripts;
 using Framework;
+using GlobalData;
 using Tool.Mono;
 using UnityEngine;
 namespace Assets.GameSystem.MotionSystem
@@ -8,6 +9,7 @@ namespace Assets.GameSystem.MotionSystem
     public interface IMotionSystemModule : IModule
     {
         void AttackAct(GameObject atker, GameObject defener, float durationTime, float stayTime, Action finishAct = null);
+        void CamareShake(float durationTime, float shakeForce);
     }
 
     public class MotionSystemModule : AbsModule, IMotionSystemModule
@@ -22,6 +24,7 @@ namespace Assets.GameSystem.MotionSystem
             Transform atkCode = GameObject.Find("AtkCode").transform;
             var absUnitsTrans = atker.transform.parent;
             var enemyParent = defener.transform.parent;
+            var defenId = defener.transform.Find("body").GetComponent<AbsUnit>().id;
             defener.transform.SetParent(atkCode);
             atker.transform.SetParent(atkCode);
 
@@ -41,6 +44,8 @@ namespace Assets.GameSystem.MotionSystem
             {
                 percent = 0;
                 finishAct?.Invoke();
+                // 相机震动
+                CamareShake(GameManager.atkCameraShakeDurationTime, GameManager.atkCameraShakeForce);
             }, 0f)
             // 等待
             .Append(() => { }, stayTime)
@@ -55,7 +60,23 @@ namespace Assets.GameSystem.MotionSystem
             {
                 atker.transform.SetParent(absUnitsTrans);
                 defener.transform.SetParent(enemyParent);
-                defener.transform.SetSiblingIndex(defener.transform.Find("body").GetComponent<AbsUnit>().id - 1);
+                defener.transform.SetSiblingIndex(defenId - 1);
+            }, 0f)
+            .Execute();
+        }
+
+        public void CamareShake(float durationTime, float shakeForce)
+        {
+            // 用背景震动替代相机，因为单位是UI制作，没法震动相机
+            var cameraTrans = GameObject.Find("Img_bg").transform;
+            var oldCameraPos = cameraTrans.position;
+            ActionKit.GetInstance().CreateActQue(cameraTrans.gameObject, () =>
+            {
+                cameraTrans.position = oldCameraPos + (Vector3)(UnityEngine.Random.insideUnitCircle * shakeForce);
+            }, durationTime)
+            .Append(() =>
+            {
+                cameraTrans.position = oldCameraPos;
             }, 0f)
             .Execute();
         }
