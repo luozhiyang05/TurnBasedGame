@@ -54,6 +54,10 @@ namespace Assets.GameSystem.EffectsSystem
                     var defEff = new DefenceEffect();
                     defEff.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, baseEffectData.iconName, baseEffectData.isDieEff);
                     return defEff;
+                case 2:
+                    var weakEff = new WeakEffect();
+                    weakEff.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, baseEffectData.iconName, baseEffectData.isDieEff);
+                    return weakEff;
                 case 3:
                     var resEff = new ResurrectionEffect();
                     resEff.InitBaseData(id, baseEffectData.effName, baseEffectData.effDesc, baseEffectData.iconName, baseEffectData.isDieEff);

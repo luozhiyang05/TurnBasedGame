@@ -8,3 +8,4 @@ Int,String,String,Int,Bool,Bool,Int,Int,String,Int,Int,Int,
 6,card_name_1006,,0,1,1,0,0,card_desc_1006,0,2,0,行动点回复
 7,card_name_1007,,2,1,0,0,0,card_desc_1007,0,3,0,对所有单位造成伤害
 8,card_name_1008,,0,1,1,0,0,card_desc_1008,0,5,1,观星卡
+9,card_name_1009,,1,0,1,0,0,card_desc_1009,2,2,0,虚弱卡

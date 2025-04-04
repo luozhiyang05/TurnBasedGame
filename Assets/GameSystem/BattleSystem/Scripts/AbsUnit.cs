@@ -44,6 +44,11 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         public ValueBindery<int> maxHp = new ValueBindery<int>(5); //最大血量
         public ValueBindery<int> nowHp = new ValueBindery<int>(5); //当前血量
         public ValueBindery<int> armor = new ValueBindery<int>(); //护盾
+
+        #region 单位状态
+        public bool Weak => _isWeak;
+        private bool _isWeak;
+        #endregion
         protected IBattleSystemModule _battleSystemModule;
         protected ISkillSystemModule _skillSystemModule;
         protected readonly QArray<BaseEffect> _effQueue = new QArray<BaseEffect>(1);
@@ -109,6 +114,10 @@ namespace Assets.GameSystem.BattleSystem.Scripts
         {
             return transform.parent.gameObject;
         }
+
+        #region 状态设置
+        public void SetWeak(bool IsWeak)=>_isWeak = IsWeak;
+        #endregion
 
         #region 收到卡牌影响逻辑
 

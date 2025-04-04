@@ -98,10 +98,14 @@ namespace Assets.GameSystem.CardSystem.Scripts
                     var hitForAllCard = new HitForAllCard();
                     hitForAllCard.Init(baseCardDataPacking);
                     return hitForAllCard;
-                    case 8:
+                case 8:
                     var getCardsFormTopCard = new GetOneCardFormTopCard();
                     getCardsFormTopCard.Init(baseCardDataPacking);
                     return getCardsFormTopCard;
+                case 9:
+                    var weakCard = new WeakCard();
+                    weakCard.Init(baseCardDataPacking);
+                    return weakCard;
                 default:
                     throw new Exception("找不到对应的卡牌");
             }

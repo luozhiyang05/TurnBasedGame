@@ -1,4 +1,4 @@
 ﻿id,enemyType,maxHp,maxArmor,atk,skillId,iconName
 Int,Enum,Int,Int,Int,Int,String
-1,0,5,5,2,1002,僵尸
-2,1,5,5,2,1001,史莱姆
+1,0,5,5,2,1001,僵尸
+2,1,5,5,2,1002,史莱姆

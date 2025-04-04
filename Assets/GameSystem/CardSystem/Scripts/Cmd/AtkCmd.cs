@@ -24,7 +24,7 @@ namespace Assets.GameSystem.CardSystem.Scripts.Cmd
                 // 攻击命中的逻辑
                 var self = atkData.self;
                 var target = atkData.target;
-                var atk = atkData.atk;
+                var atk = self.Weak ? (atkData.atk / 2) : atkData.atk;    // 虚弱时造成伤害减少一半
                 var reduceHp = target.armor.Value - atk;
                 if (reduceHp < 0)
                 {

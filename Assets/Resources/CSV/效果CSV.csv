@@ -1,5 +1,5 @@
 ﻿id,effName,effDesc,iconName,isDieEff,,
 Int,String,String,String,Bool,,
 1,effect_name_1001,effect_desc_1001,叠加效果,0,,叠甲
-2,effect_name_1002,削弱描述,,0,,削弱
+2,effect_name_1002,effect_desc_1002,虚弱效果,0,,削弱
 3,effect_name_1003,effect_desc_1003,复活效果,1,,复活

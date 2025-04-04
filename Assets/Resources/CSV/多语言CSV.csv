@@ -48,6 +48,7 @@ card_name_1005,再来两张卡,TwoMoreCard
 card_name_1006,行动点回复,RestoreActCnt
 card_name_1007,打击,Hit all
 card_name_1008,观星,Stargazing
+card_name_1009,Weak+A60:C75,
 card_desc_1001,造成2点伤害,Deal two damage
 card_desc_1002,叠加1回合的2护甲,Stack 2 armor for 1 turn
 card_desc_1003,造成2点伤害的，叠加1回合的2护甲,Deal 2 damage and stack 2 armor for 1 turn
@@ -56,6 +57,7 @@ card_desc_1005,抽取牌库两张卡,Draw 2 cards from the card library
 card_desc_1006,获取2行动点,Get 2 action points
 card_desc_1007,全体造成3点伤害,Deal 3 damage for all
 card_desc_1008,观看牌库前三张牌，选择一张牌到手牌中,Look at the top three cards of the deck and choose one card to add to your hand
+card_desc_1009,使用目标造成伤害减少一半，持续2回合,Reduces damage dealt by half with the target for 2 turns
 battle_tip_1005,你的回合,Your turn
 battle_tip_1006,回合结束,End of round
 battle_tip_1007,敌人回合,Enemy turn
@@ -73,3 +75,4 @@ history_tip_1001,使用卡牌记录,Records of the cards used
 history_tip_1002,最多存10条记录,A maximum of 10 records can be saved
 history_tip_1003,%s 使用了 %s 卡牌 作用于 %s,%s used the %s card on %s.
 choose_level_1001,选择关卡,Choose level
+effect_desc_1002,该单位造成伤害减少一半，持续数个回合,The unit deals half the damage for several turns
