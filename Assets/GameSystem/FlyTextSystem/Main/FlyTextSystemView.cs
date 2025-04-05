@@ -1,4 +1,10 @@
 using GameSystem.MVCTemplate;
+using GlobalData;
+using Tool.Mono;
+using Tool.Utilities;
+using Tool.Utilities.Events;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.GameSystem.FlyTextSystem.Main
 {
@@ -39,6 +45,8 @@ namespace Assets.GameSystem.FlyTextSystem.Main
         // }
         #endregion
 
+        public Transform flyTxtTemp;
+
         /// <summary>
         /// 绑定model回调事件
         /// </summary>
@@ -51,6 +59,7 @@ namespace Assets.GameSystem.FlyTextSystem.Main
         /// </summary>
         protected override void OnInit()
         {
+
         }
 
 
@@ -68,5 +77,31 @@ namespace Assets.GameSystem.FlyTextSystem.Main
         {
             base.OnRelease();
         }
+
+        public void AtkTxtFly(GameObject defenerGo, string atkTxt)
+        {
+            var txt = flyTxtTemp.GetComponent<Text>();
+            flyTxtTemp.gameObject.SetActive(true);
+            flyTxtTemp.position = defenerGo.transform.position;
+            txt.text = atkTxt;
+            txt.color = Color.red;
+            var targetPosY = defenerGo.transform.position.y + GameManager.atkTxtFlyHight;
+            var oldPosY = flyTxtTemp.position.y;
+            var percent = 0f;
+            ActionKit.GetInstance().CreateActQue(flyTxtTemp.gameObject, () =>
+            {
+                percent += Time.deltaTime / GameManager.atkTxtFlyDurationTime;
+                flyTxtTemp.position = new Vector3(flyTxtTemp.position.x, Mathf.Lerp(oldPosY, targetPosY, percent), flyTxtTemp.position.z);
+            }, GameManager.atkTxtFlyDurationTime)
+            .Append(() => { }, GameManager.aykTxtStayTime)
+            .Append(() => { percent = 0; }, 0)
+            .Append(() =>
+            {
+                percent += Time.deltaTime / GameManager.aykTxtFadeTime;
+                txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, Mathf.Lerp(1, 0, percent));
+            }, GameManager.aykTxtFadeTime)
+            .Append(() => { flyTxtTemp.gameObject.SetActive(false); }, 0).Execute();
+        }
+
     }
 }

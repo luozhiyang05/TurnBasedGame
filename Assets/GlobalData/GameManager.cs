@@ -23,6 +23,10 @@ namespace GlobalData
         public const float skillTipFlyDurationTime = 0.5f;
         public static float skillTipStayTime = 0.25f;
         public static float skillTipFadeTime = 0.5f;
+        public static float atkTxtFlyDurationTime = 0.5f;
+        public static float atkTxtFlyHight = 200;
+        public static float aykTxtStayTime = 0.25f;
+        public static float aykTxtFadeTime = 0.25f;
 
         public static void InitGlobalData()
         {

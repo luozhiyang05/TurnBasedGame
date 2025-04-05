@@ -1,4 +1,5 @@
 using Assets.GameSystem.BattleSystem.Scripts;
+using Assets.GameSystem.FlyTextSystem;
 using Assets.GameSystem.MotionSystem;
 using Framework;
 using GlobalData;
@@ -38,6 +39,11 @@ namespace Assets.GameSystem.CardSystem.Scripts.Cmd
                     target.armor.Value -= atk;
                     Debug.LogWarning($"{self.transform.parent.name}对{target.transform.parent.name}造成{atk}点护甲伤害,目前{target.transform.parent.name}护甲为{target.armor}");
                 }
+
+                // 攻击数字票字
+                var atkTxt = atkData.atk.ToString();
+                var flyTextSystemModule = this.GetSystem<IFlyTextSystemModule>();
+                flyTextSystemModule.AtkTxtFly(atkData.target.GetUnitGameObject(), atkTxt);
             });
         }
     }

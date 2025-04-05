@@ -21,6 +21,13 @@ namespace Assets.GameSystem.FlyTextSystem
         /// <param name="stayTime">停留时间</param>
         /// <param name="flyTime">飞行一次的时间</param>
         public void FlyText(int leftOrRight, string contentKey, float stayTime, float flyTime, UnityAction action = null);
+
+        /// <summary>
+        /// 攻击文本飞
+        /// </summary>
+        /// <param name="defenerGo"></param>
+        /// <param name="atkTxt"></param>
+        public void AtkTxtFly(GameObject defenerGo, string atkTxt);
     }
 
     public class FlyTextSystemModule : AbsModule, IFlyTextSystemModule
@@ -70,5 +77,10 @@ namespace Assets.GameSystem.FlyTextSystem
             }, 0).Execute();
         }
 
+        public void AtkTxtFly(GameObject defenerGo, string atkTxt)
+        {
+            _view ??= _viewCtrl.GetView() as FlyTextSystemView;
+            _view.AtkTxtFly(defenerGo,atkTxt);
+        }
     }
 }
