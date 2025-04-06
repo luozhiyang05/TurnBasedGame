@@ -1,6 +1,9 @@
+using Assets.GameSystem.EffectsSystem;
 using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
+using Tips;
+using Tool.Utilities;
 using UIComponents;
 
 namespace Assets.GameSystem.MenuSystem.Main
@@ -10,10 +13,18 @@ namespace Assets.GameSystem.MenuSystem.Main
         #region 自动生成UI组件区域，内部禁止手动更改！
 		public CButton Btn_startGame;
 		public CButton Btn_setting;
+		public CButton Btn_effects;
+		public CButton Btn_cards;
+		public CButton Btn_enemies;
+		public CButton Btn_quit;
         protected override void AutoInitUI()
         {
 			Btn_startGame = transform.Find("Main/Btn_startGame").GetComponent<CButton>();
 			Btn_setting = transform.Find("Main/Btn_setting").GetComponent<CButton>();
+			Btn_effects = transform.Find("Main/Btn_effects").GetComponent<CButton>();
+			Btn_cards = transform.Find("Main/Btn_cards").GetComponent<CButton>();
+			Btn_enemies = transform.Find("Main/Btn_enemies").GetComponent<CButton>();
+			Btn_quit = transform.Find("Main/Btn_quit").GetComponent<CButton>();
         }
 		#endregion 自动生成UI组件区域结束！
 
@@ -63,6 +74,7 @@ namespace Assets.GameSystem.MenuSystem.Main
 
             Btn_startGame.onClick.AddListener(OpenCharacterChoseView);
             Btn_setting.onClick.AddListener(OpenSettingView);
+            Btn_effects.onClick.AddListener(OpenEffectsInfosTip);
         }
 
 
@@ -89,6 +101,21 @@ namespace Assets.GameSystem.MenuSystem.Main
         private void OpenSettingView()
         {
             this.GetSystem<IMenuSystemModule>().ShowSettingView();
+        }
+        private void OpenEffectsInfosTip()
+        {
+            var qArray = new QArray<InfosPacking>();
+            var effectsSystemModule = this.GetSystem<IEffectsSystemModule>();
+            for (int i = 0; i < effectsSystemModule.GetEffectsCnt(); i++)
+            {
+                qArray.Add(new InfosPacking
+                {
+                    sprite = effectsSystemModule.GetEffectIcon(i+1),
+                    name = effectsSystemModule.GetEffectName(i+1),
+                    desc = effectsSystemModule.GetEffectDesc(i+1)
+                });
+            }
+            TipsModule.InfosDesplayTips(qArray);
         }
         #endregion
     }

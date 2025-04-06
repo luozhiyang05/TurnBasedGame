@@ -72,5 +72,23 @@ namespace Tips
                 cardsCheckTips.SetChooseAction(chooseAction);
             });
         }
+
+        public static void InfosDesplayTips(QArray<InfosPacking> qArray)
+        {
+            uiMgr.GetFromPool("InfosDesplayTips", EuiLayer.TipsUI, (tips) =>
+            {
+                var infosDesplayTips = tips as InfosDesplayTips;
+                infosDesplayTips.Open(qArray);
+            });
+        }
+
+        public static void InfoTips(InfosPacking infosPacking)
+        {
+            uiMgr.GetFromPool("InfoTips", EuiLayer.TipsUI, (tips) =>
+            {
+                var infoTips = tips as InfoTips;
+                infoTips.Open(infosPacking);
+            });
+        }
     }
 }

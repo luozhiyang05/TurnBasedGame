@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 8845606053397588772}
   - component: {fileID: 5163590563071460369}
   m_Layer: 0
-  m_Name: Btn_setting (2)
+  m_Name: Btn_cards
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -782,7 +782,7 @@ GameObject:
   - component: {fileID: 3750375376925565778}
   - component: {fileID: 3257818058697304899}
   m_Layer: 0
-  m_Name: Btn_setting (1)
+  m_Name: Btn_effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -971,7 +971,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6548\u679C\u56FE\u9274"
+  m_Text: "\u6E38\u620F\u8BBE\u7F6E"
 --- !u!1 &5703719089734480477
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,7 +1141,7 @@ GameObject:
   - component: {fileID: 8493743396201360307}
   - component: {fileID: 2751591665267724967}
   m_Layer: 0
-  m_Name: Btn_setting (3)
+  m_Name: Btn_enemies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1264,7 +1264,7 @@ GameObject:
   - component: {fileID: 2451738814657975426}
   - component: {fileID: 418219365802509894}
   m_Layer: 0
-  m_Name: Btn_setting (4)
+  m_Name: Btn_quit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
