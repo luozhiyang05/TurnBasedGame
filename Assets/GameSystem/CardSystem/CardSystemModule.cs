@@ -17,6 +17,17 @@ namespace Assets.GameSystem.CardSystem
     {
         void ShowView(int cardGroupId);
 
+        #region 关于游戏所有卡牌的操作
+        /// <summary>
+        /// 获取游戏所有卡牌的数量
+        /// </summary>
+        /// <returns></returns>
+        int GetAllCardsCnt();
+        Sprite GetCardIcon(int id);
+        string GetCardName(int id);
+        string GetCardDesc(int id);
+        #endregion
+
         /// <summary>
         /// 打开观察卡牌视图
         /// </summary>
@@ -342,6 +353,26 @@ namespace Assets.GameSystem.CardSystem
         public void ClearAllCards()
         {
             (_viewCtrl.GetModel() as CardSystemViewModel).ClearAllCards();
+        }
+
+        public int GetAllCardsCnt()
+        {
+            return cardLibrarySo.GetAllCardsCnt();
+        }
+
+        public Sprite GetCardIcon(int id)
+        {
+            return cardLibrarySo.GetCardIcon(id);
+        }
+
+        public string GetCardName(int id)
+        {
+            return cardLibrarySo.GetCardName(id);
+        }
+
+        public string GetCardDesc(int id)
+        {
+            return cardLibrarySo.GetCardDesc(id);
         }
     }
 }

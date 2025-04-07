@@ -12,15 +12,23 @@ using UnityEngine.UI;
 
 namespace Tips
 {
+    public enum HandbookType
+    {
+        Effect,
+        Card,
+        Enemy
+    }
     public class InfosPacking
     {
         public Sprite sprite;
         public string name;
         public string desc;
     }
-    public class InfosDesplayTips : BaseTips
+    public class HandbookDisplayTips : BaseTips
     {
+        private HandbookType handbookType;
         private QArray<InfosPacking> infosQarray;
+        public Text txt_title;
         public Transform content;
         public Transform girdTemp;
         #region 遮罩相关
@@ -46,6 +54,22 @@ namespace Tips
         protected override void Init()
         {
 
+        }
+        public void SetHandbookType(HandbookType handbookType)
+        {
+            this.handbookType = handbookType;
+            switch (this.handbookType)
+            {
+                case HandbookType.Effect:
+                    txt_title.text = GameManager.GetText("menu_1004");
+                    break;
+                case HandbookType.Card:
+                    txt_title.text = GameManager.GetText("menu_1005");
+                    break;
+                case HandbookType.Enemy:
+                    txt_title.text = GameManager.GetText("menu_1006");
+                    break;
+            }
         }
 
         protected override void OnOpen(params object[] args)

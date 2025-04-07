@@ -1,4 +1,5 @@
 using GameSystem.MVCTemplate;
+using GlobalData;
 using UnityEngine.UI;
 
 namespace Tips
@@ -38,8 +39,8 @@ namespace Tips
         {
             var infosPacking = args[0] as InfosPacking;
             Img_icon.sprite = infosPacking.sprite;
-            Txt_name.text = infosPacking.name;
-            Txt_desc.text = infosPacking.desc;
+            Txt_name.text = GameManager.GetText(infosPacking.name);
+            Txt_desc.text = GameManager.GetText(infosPacking.desc);
         }
 
 

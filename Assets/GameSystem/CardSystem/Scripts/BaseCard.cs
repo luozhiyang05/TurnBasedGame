@@ -33,7 +33,6 @@ namespace Assets.GameSystem.CardSystem.Scripts
         {
             id = baseCardDataPacking.id;
             cardName = baseCardDataPacking.cardName;
-            petName = baseCardDataPacking.petName;
             depletePoint = baseCardDataPacking.depletePoint;
             canAutoUse = baseCardDataPacking.canAutoUse;
             discard = baseCardDataPacking.discard;

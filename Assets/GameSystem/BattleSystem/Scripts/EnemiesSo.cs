@@ -4,6 +4,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
     using System.Collections.Generic;
     using System.Reflection;
     using GlobalData;
+    using Tool.ResourceMgr;
     using Tool.Utilities.CSV;
     using UnityEngine;
 
@@ -23,6 +24,22 @@ namespace Assets.GameSystem.BattleSystem.Scripts
                 });
             }
         }
+        public int GetEnemyCnt()
+        {
+            return enemies.Count;
+        }
+        public Sprite GetEnemyIcon(int id)
+        {
+            return ResMgr.GetInstance().SyncLoad<Sprite>(GameManager.GetIconPath(enemies.Find(value=>value.id==id).iconName));
+        }
+        public string GetEnemyName(int id)
+        {
+            return enemies.Find(value=>value.id==id).enemyType.ToString();
+        }
+        public string GetEnemyDesc(int id)
+        {
+            return enemies.Find(value=>value.id==id).desc;
+        }
         public EnemyData GetEnemyDataById(int id)
         {
             return enemies.Find(value=>value.id==id);
@@ -34,6 +51,7 @@ namespace Assets.GameSystem.BattleSystem.Scripts
     {
         public int id;
         public EnemyType enemyType;
+        public string desc;
         public int maxHp;
         public int maxArmor;
         public int atk;

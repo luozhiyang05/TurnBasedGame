@@ -1,6 +1,7 @@
 using Assets.GameSystem.BattleSystem;
 using Assets.GameSystem.CardSystem;
 using Assets.GameSystem.EffectsSystem;
+using Assets.GameSystem.EnemySystem;
 using Assets.GameSystem.FlyTextSystem;
 using Assets.GameSystem.MenuSystem;
 using Assets.GameSystem.MotionSystem;
@@ -21,6 +22,7 @@ namespace Framework
 			this.RegisterModule<ISkillSystemModule>(new SkillSystemModule());
 			this.RegisterModule<IFlyTextSystemModule>(new FlyTextSystemModule());
             this.RegisterModule<IMotionSystemModule>(new MotionSystemModule());
+            this.RegisterModule<IEnemySystemModule>(new EnemySystemModule());
         }
     }
 }

@@ -73,12 +73,13 @@ namespace Tips
             });
         }
 
-        public static void InfosDesplayTips(QArray<InfosPacking> qArray)
+        public static void HandbookDisplayTips(QArray<InfosPacking> qArray,HandbookType handbookType)
         {
-            uiMgr.GetFromPool("InfosDesplayTips", EuiLayer.TipsUI, (tips) =>
+            uiMgr.GetFromPool("HandbookDisplayTips", EuiLayer.TipsUI, (tips) =>
             {
-                var infosDesplayTips = tips as InfosDesplayTips;
-                infosDesplayTips.Open(qArray);
+                var HandbookDisplayTips = tips as HandbookDisplayTips;
+                HandbookDisplayTips.SetHandbookType(handbookType);
+                HandbookDisplayTips.Open(qArray);
             });
         }
 

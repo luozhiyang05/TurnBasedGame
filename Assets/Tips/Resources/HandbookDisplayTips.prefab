@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 6933871492876999972}
   - component: {fileID: 6297691432949335921}
   m_Layer: 0
-  m_Name: InfosDesplayTips
+  m_Name: HandbookDisplayTips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -547,6 +547,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOpen: 0
   main: {fileID: 6849666730956351535}
+  txt_title: {fileID: 9173938397578587672}
   content: {fileID: 4204875105752107383}
   girdTemp: {fileID: 1262717391795451035}
 --- !u!1 &7791957074497449912
@@ -853,7 +854,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6807\u9898"
+  m_Text: 
 --- !u!1 &8905879754579448272
 GameObject:
   m_ObjectHideFlags: 0

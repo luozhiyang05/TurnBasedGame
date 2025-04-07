@@ -8,6 +8,8 @@ namespace Assets.GameSystem.CardSystem.Scripts
     using Assets.GameSystem.CardSystem.Scripts.Cmd;
     using Assets.GameSystem.CardSystem.Scripts.DefCard;
     using Assets.GameSystem.CardSystem.Scripts.FunctionCard;
+    using GlobalData;
+    using Tool.ResourceMgr;
     using Tool.Utilities.CSV;
     using UnityEngine;
 
@@ -18,7 +20,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
         [Header("卡牌基础信息")]
         public int id;
         public string cardName;
-        public string petName;
+        public string iconName;
         public int depletePoint;
         public bool canAutoUse;
         public bool discard;
@@ -57,6 +59,26 @@ namespace Assets.GameSystem.CardSystem.Scripts
                    baseCardDataPackings.Add(value);
                });
             }
+        }
+
+        public int GetAllCardsCnt()
+        {
+            return baseCardDataPackings.Count;
+        }
+
+        public Sprite GetCardIcon(int id)
+        {
+            return ResMgr.GetInstance().SyncLoad<Sprite>(GameManager.CardIconPath + baseCardDataPackings.Find(value => value.id == id).iconName);
+        }
+
+        public string GetCardName(int id)
+        {
+            return baseCardDataPackings.Find(value => value.id == id).cardName;
+        }
+
+        public string GetCardDesc(int id)
+        {
+            return baseCardDataPackings.Find(value => value.id == id).cardDesc;
         }
 
         /// <summary>

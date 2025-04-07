@@ -1,4 +1,6 @@
+using Assets.GameSystem.CardSystem;
 using Assets.GameSystem.EffectsSystem;
+using Assets.GameSystem.EnemySystem;
 using Framework;
 using GameSystem.MVCTemplate;
 using GlobalData;
@@ -74,7 +76,9 @@ namespace Assets.GameSystem.MenuSystem.Main
 
             Btn_startGame.onClick.AddListener(OpenCharacterChoseView);
             Btn_setting.onClick.AddListener(OpenSettingView);
-            Btn_effects.onClick.AddListener(OpenEffectsInfosTip);
+            Btn_effects.onClick.AddListener(OpenEffectsHandbookTips);
+            Btn_cards.onClick.AddListener(OpenCardsHandbookTips);
+            Btn_enemies.onClick.AddListener(OpenEnemiesHandbookTips);
         }
 
 
@@ -102,7 +106,7 @@ namespace Assets.GameSystem.MenuSystem.Main
         {
             this.GetSystem<IMenuSystemModule>().ShowSettingView();
         }
-        private void OpenEffectsInfosTip()
+        private void OpenEffectsHandbookTips()
         {
             var qArray = new QArray<InfosPacking>();
             var effectsSystemModule = this.GetSystem<IEffectsSystemModule>();
@@ -115,7 +119,37 @@ namespace Assets.GameSystem.MenuSystem.Main
                     desc = effectsSystemModule.GetEffectDesc(i+1)
                 });
             }
-            TipsModule.InfosDesplayTips(qArray);
+            TipsModule.HandbookDisplayTips(qArray,HandbookType.Effect);
+        }
+        private void OpenCardsHandbookTips()
+        {
+            var qArray = new QArray<InfosPacking>();
+            var cardsSystemModule = this.GetSystem<ICardSystemModule>();
+            for (int i = 0; i < cardsSystemModule.GetAllCardsCnt(); i++)
+            {
+                qArray.Add(new InfosPacking
+                {
+                    sprite = cardsSystemModule.GetCardIcon(i+1),
+                    name = cardsSystemModule.GetCardName(i+1),
+                    desc = cardsSystemModule.GetCardDesc(i+1)
+                });
+            }
+            TipsModule.HandbookDisplayTips(qArray,HandbookType.Card);
+        }
+        private void OpenEnemiesHandbookTips()
+        {
+            var qArray = new QArray<InfosPacking>();
+            var enemySystemModule = this.GetSystem<IEnemySystemModule>();
+            for (int i = 0; i < enemySystemModule.GetAllEnemiesCnt(); i++)
+            {
+                qArray.Add(new InfosPacking
+                {
+                    sprite = enemySystemModule.GetEnemyIcon(i+1),
+                    name = enemySystemModule.GetEnemyName(i+1),
+                    desc = enemySystemModule.GetEnemyDesc(i+1)
+                });
+            }
+            TipsModule.HandbookDisplayTips(qArray,HandbookType.Enemy);
         }
         #endregion
     }

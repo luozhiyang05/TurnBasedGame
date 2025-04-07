@@ -38,12 +38,12 @@ namespace Assets.GameSystem.EffectsSystem
 
         public string GetEffectName(int id)
         {
-            return GameManager.GetText(effectsSo.GetBaseEffectById(id).effName);
+            return effectsSo.GetBaseEffectById(id).effName;
         }
 
         public string GetEffectDesc(int id)
         {
-            return GameManager.GetText(effectsSo.GetBaseEffectById(id).effDesc);
+            return effectsSo.GetBaseEffectById(id).effDesc;
         }
     }
 }
