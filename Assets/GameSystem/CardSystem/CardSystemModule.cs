@@ -243,6 +243,7 @@ namespace Assets.GameSystem.CardSystem
 
         public void RenderCardInfo(Transform cardCell, BaseCard card)
         {
+            cardCell.Find("bg/img_card").GetComponent<Image>().sprite = ResMgr.GetInstance().SyncLoad<Sprite>(GameManager.CardIconPath + card.iconName);
             cardCell.Find("bg/txt_name").GetComponent<Text>().text = GameManager.GetText(card.cardName);
             cardCell.Find("bg/txt_desc").GetComponent<Text>().text = GameManager.GetText(card.cardDesc) + (!card.discard ? GameManager.GetText("card_tip_1001") : "");
             cardCell.Find("bg/bg_actPoint/txt_actPoint").GetComponent<Text>().text = card.depletePoint.ToString();

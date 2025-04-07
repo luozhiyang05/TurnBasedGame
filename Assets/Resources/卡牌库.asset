@@ -16,89 +16,109 @@ MonoBehaviour:
   baseCardDataPackings:
   - id: 1
     cardName: card_name_1001
-    petName: 
-    depletePoint: 1
+    iconName: "\u666E\u901A\u653B\u51FB\u5361"
+    depletePoint: 0
     canAutoUse: 0
     discard: 1
     atk: 2
     armor: 0
     param1: 0
+    param2: 0
     cardDesc: card_desc_1001
     effectId: 0
   - id: 2
     cardName: card_name_1002
-    petName: 
+    iconName: "\u666E\u901A\u9632\u5FA1\u5361"
     depletePoint: 1
     canAutoUse: 1
     discard: 1
     atk: 0
     armor: 5
     param1: 1
+    param2: 0
     cardDesc: card_desc_1002
     effectId: 1
   - id: 3
     cardName: card_name_1003
-    petName: 
+    iconName: "\u653B\u51FB\u9632\u5FA1\u5361"
     depletePoint: 1
     canAutoUse: 0
     discard: 1
     atk: 2
     armor: 5
-    param1: 0
+    param1: 2
+    param2: 0
     cardDesc: card_desc_1003
     effectId: 1
   - id: 4
     cardName: card_name_1004
-    petName: 
+    iconName: "\u52A0\u8840\u5361"
     depletePoint: 2
     canAutoUse: 1
     discard: 1
     atk: 0
     armor: 0
     param1: 5
+    param2: 0
     cardDesc: card_desc_1004
     effectId: 0
   - id: 5
     cardName: card_name_1005
-    petName: 
+    iconName: "\u518D\u6765\u4E24\u5F20\u5361"
     depletePoint: 1
     canAutoUse: 1
     discard: 1
     atk: 0
     armor: 0
     param1: 2
+    param2: 0
     cardDesc: card_desc_1005
     effectId: 0
   - id: 6
     cardName: card_name_1006
-    petName: 
+    iconName: "\u884C\u52A8\u70B9\u56DE\u590D"
     depletePoint: 0
     canAutoUse: 1
     discard: 1
     atk: 0
     armor: 0
     param1: 2
+    param2: 0
     cardDesc: card_desc_1006
     effectId: 0
   - id: 7
     cardName: card_name_1007
-    petName: 
+    iconName: "\u7FA4\u4F24\u5361"
     depletePoint: 2
     canAutoUse: 1
     discard: 0
     atk: 0
     armor: 0
     param1: 3
+    param2: 0
     cardDesc: card_desc_1007
     effectId: 0
   - id: 8
     cardName: card_name_1008
-    petName: 
+    iconName: "\u89C2\u661F\u5361"
+    depletePoint: 0
+    canAutoUse: 1
+    discard: 1
+    atk: 0
+    armor: 0
+    param1: 5
+    param2: 1
+    cardDesc: card_desc_1008
+    effectId: 0
+  - id: 9
+    cardName: card_name_1009
+    iconName: "\u865A\u5F31\u6548\u679C"
     depletePoint: 1
     canAutoUse: 0
     discard: 1
     atk: 0
     armor: 0
-    param1: 0
-    cardDesc: card_desc_1008
-    effectId: 0
+    param1: 2
+    param2: 0
+    cardDesc: card_desc_1009
+    effectId: 2

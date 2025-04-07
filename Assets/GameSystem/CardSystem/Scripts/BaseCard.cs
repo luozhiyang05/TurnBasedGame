@@ -12,7 +12,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
         [Header("卡牌基础信息")]
         public int id;
         public string cardName;
-        public string petName;
+        public string iconName;
         public int depletePoint;
         public bool canAutoUse;
         public bool discard;
@@ -33,6 +33,7 @@ namespace Assets.GameSystem.CardSystem.Scripts
         {
             id = baseCardDataPacking.id;
             cardName = baseCardDataPacking.cardName;
+            iconName = baseCardDataPacking.iconName;
             depletePoint = baseCardDataPacking.depletePoint;
             canAutoUse = baseCardDataPacking.canAutoUse;
             discard = baseCardDataPacking.discard;
