@@ -2,7 +2,8 @@ using System;
 using Framework;
 using Tool.UI;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.Events;
+using Tool.AudioMgr;
 
 namespace GameSystem.MVCTemplate
 {
@@ -11,50 +12,76 @@ namespace GameSystem.MVCTemplate
     {
         [NonSerialized] public CanvasGroup CanvasGroup;
         [NonSerialized] public EuiLayer EuiLayer;
-        public bool isOpen;
+        [NonReorderable] public bool isOpen;
         protected BaseModel Model;
+
+        private UnityAction _closeCallback;
+        private UnityAction _releaseCallback;
 
         private void Awake()
         {
             CanvasGroup = GetComponent<CanvasGroup>();
             AutoInitUI();
-        }
-
-        protected override void AutoInitUI()
-        {
-            
-        }
-
-        private void Start()
-        {
-            BindModelListener();
             OnInit();
         }
 
-        public void SetModel(BaseModel model)
-        {
-            Model = model;
-        }
+        protected override void AutoInitUI() { }
+        protected override void OnInit() { }
+        private void Start() => BindModelListener();
+        private void OnEnable() => isOpen = true;
+        private void OnDisable() => isOpen = false;
+        public void SetModel(BaseModel model) => Model = model;
 
         protected abstract void BindModelListener();
 
-        protected override void OnInit()
-        {
-            
-        }
-
         public override void OnShow()
         {
-            isOpen = true;
-            Model.BindListener();
-            gameObject.SetActive(true);
+            if (useAudio)
+            {
+                PlayAudio(EAudioType.Effect);
+                PlayAudio(EAudioType.Bgm);
+            }
+            transform.SetAsLastSibling();
+            if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
         }
 
         public override void OnHide()
         {
-            isOpen = false;
-            Model.RemoveListener();
-            UIManager.GetInstance().ClosePanel(EuiLayer);
+            if (isOpen==false)
+            {
+                return;
+            }
+            if (useAudio)
+            {
+                PlayAudio(EAudioType.Effect, false);
+                CloseBgm();
+            }
+            _closeCallback?.Invoke();
+            gameObject.SetActive(false);
+            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
+        }
+
+        public void SetClose(UnityAction callback)
+        {
+            _closeCallback = callback;
+        }
+
+        public void SetRelease(UnityAction callback)
+        {
+            _releaseCallback = callback;
+        }
+
+        /// <summary>
+        /// 点击遮罩事件
+        /// </summary>
+        public override void OnClickMaskPanel()
+        {
+            OnHide();
+        }
+
+        public override void OnRelease()
+        {
+            _releaseCallback?.Invoke();
         }
 
         public IMgr Ins => Global.GetInstance();

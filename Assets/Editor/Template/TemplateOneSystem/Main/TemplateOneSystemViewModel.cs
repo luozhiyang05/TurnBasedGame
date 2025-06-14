@@ -1,10 +1,10 @@
 using GameSystem.MVCTemplate;
 
-namespace GameSystem.TemplateOneSystem.Main
+namespace Assets.GameSystem.TemplateOneSystem.Main
 {
     public class TemplateOneSystemViewModel : BaseModel
     {
-        protected override void OnInit()
+        public override void Init()
         {
         }
 

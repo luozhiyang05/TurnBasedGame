@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Tool.Utilities.Events;
 using UnityEngine;
 
 namespace Tool.Utilities
@@ -66,11 +67,11 @@ namespace Tool.Utilities
 
     public static class EventsHandle
     {
-        private static Dictionary<string, EventBase> _eventBasesDic = new Dictionary<string, EventBase>();
+        private static Dictionary<EventsNameConst, EventBase> _eventBasesDic = new Dictionary<EventsNameConst, EventBase>();
 
         #region 添加事件
 
-        public static void AddListenEvent(string eventName, Action action)
+        public static void AddListenEvent(EventsNameConst eventName, Action action)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
                 (eventBase as Event).AddEvent(action);
@@ -78,7 +79,7 @@ namespace Tool.Utilities
                 _eventBasesDic.Add(eventName, new Event(action));
         }
 
-        public static void AddListenEvent<T>(string eventName, Action<T> action)
+        public static void AddListenEvent<T>(EventsNameConst eventName, Action<T> action)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
                 (eventBase as Event<T>).AddEvent(action);
@@ -86,7 +87,7 @@ namespace Tool.Utilities
                 _eventBasesDic.Add(eventName, new Event<T>(action));
         }
 
-        public static void AddListenEvent<T, K>(string eventName, Action<T, K> action)
+        public static void AddListenEvent<T, K>(EventsNameConst eventName, Action<T, K> action)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
                 (eventBase as Event<T, K>).AddEvent(action);
@@ -94,7 +95,7 @@ namespace Tool.Utilities
                 _eventBasesDic.Add(eventName, new Event<T, K>(action));
         }
 
-        public static void AddListenEvent<T, K, Q>(string eventName, Action<T, K, Q> action)
+        public static void AddListenEvent<T, K, Q>(EventsNameConst eventName, Action<T, K, Q> action)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
                 (eventBase as Event<T, K, Q>).AddEvent(action);
@@ -102,12 +103,12 @@ namespace Tool.Utilities
                 _eventBasesDic.Add(eventName, new Event<T, K, Q>(action));
         }
 
-        public static void AddListenEvent<V>(string eventName, Func<V> action)
+        public static void AddListenEvent<V>(EventsNameConst eventName, Func<V> action)
         {
             _eventBasesDic.Add(eventName, new ReturnValueEvent<V>(action));
         }
         
-        public static void AddListenEvent<V,T>(string eventName, Func<V,T> action)
+        public static void AddListenEvent<V,T>(EventsNameConst eventName, Func<V,T> action)
         {
             _eventBasesDic.Add(eventName, new ReturnValueEvent<V,T>(action));
         }
@@ -116,7 +117,7 @@ namespace Tool.Utilities
 
         #region 移除事件
 
-        public static void RemoveReturnValueEventsByName(string eventName)
+        public static void RemoveReturnValueEventsByName(EventsNameConst eventName)
         {
             if (_eventBasesDic.ContainsKey(eventName))
             {
@@ -128,7 +129,7 @@ namespace Tool.Utilities
             }
         } 
 
-        public static void ClearAllEventByEventName(string eventName)
+        public static void ClearAllEventByEventName(EventsNameConst eventName)
         {
             if (_eventBasesDic.ContainsKey(eventName))
             {
@@ -140,7 +141,7 @@ namespace Tool.Utilities
             }
         }
 
-        public static void RemoveOneEventByEventName(string eventName, Action action)
+        public static void RemoveOneEventByEventName(EventsNameConst eventName, Action action)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase value))
             {
@@ -152,7 +153,7 @@ namespace Tool.Utilities
             }
         }
 
-        public static void RemoveOneEventByEventName<T>(string eventName, Action<T> action)
+        public static void RemoveOneEventByEventName<T>(EventsNameConst eventName, Action<T> action)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase value))
             {
@@ -164,7 +165,7 @@ namespace Tool.Utilities
             }
         }
 
-        public static void RemoveOneEventByEventName<T, K>(string eventName, Action<T, K> action)
+        public static void RemoveOneEventByEventName<T, K>(EventsNameConst eventName, Action<T, K> action)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase value))
             {
@@ -176,7 +177,7 @@ namespace Tool.Utilities
             }
         }
 
-        public static void RemoveOneEventByEventName<T, K, Q>(string eventName, Action<T, K, Q> action)
+        public static void RemoveOneEventByEventName<T, K, Q>(EventsNameConst eventName, Action<T, K, Q> action)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase value))
             {
@@ -192,7 +193,7 @@ namespace Tool.Utilities
 
         #region 事件触发
 
-        public static T ReturnValueEventsTrigger<T>(string eventName)
+        public static T ReturnValueEventsTrigger<T>(EventsNameConst eventName)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
             {
@@ -204,7 +205,7 @@ namespace Tool.Utilities
                 return default;
             }
         } 
-        public static T ReturnValueEventsTrigger<V,T>(string eventName,V v)
+        public static T ReturnValueEventsTrigger<V,T>(EventsNameConst eventName,V v)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
             {
@@ -217,11 +218,12 @@ namespace Tool.Utilities
             }
         }
 
-        public static void EventTrigger(string eventName)
+        public static void EventTrigger(EventsNameConst eventName)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
             {
                 (eventBase as Event).Trigger();
+                Debug.Log("派发：" + eventName + "事件");
             }
             else
             {
@@ -229,11 +231,12 @@ namespace Tool.Utilities
             }
         }
 
-        public static void EventTrigger<T>(string eventName, T value)
+        public static void EventTrigger<T>(EventsNameConst eventName, T value)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
             {
                 (eventBase as Event<T>)?.Trigger(value);
+                Debug.Log("派发：" + eventName + "事件");
             }
             else
             {
@@ -241,11 +244,12 @@ namespace Tool.Utilities
             }
         }
 
-        public static void EventTrigger<T, K>(string eventName, T t, K k)
+        public static void EventTrigger<T, K>(EventsNameConst eventName, T t, K k)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
             {
                 (eventBase as Event<T, K>)?.Trigger(t, k);
+                Debug.Log("派发：" + eventName + "事件");
             }
             else
             {
@@ -253,11 +257,12 @@ namespace Tool.Utilities
             }
         }
 
-        public static void EventTrigger<T, K, Q>(string eventName, T t, K k, Q q)
+        public static void EventTrigger<T, K, Q>(EventsNameConst eventName, T t, K k, Q q)
         {
             if (_eventBasesDic.TryGetValue(eventName, out EventBase eventBase))
             {
                 (eventBase as Event<T, K, Q>)?.Trigger(t, k, q);
+                Debug.Log("派发：" + eventName + "事件");
             }
             else
             {

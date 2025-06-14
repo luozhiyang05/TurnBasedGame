@@ -10,7 +10,7 @@ namespace Editor
         private static CreateSecondModuleTools _panel;
         private static string _secondModuleName; //xxx\xxx
 
-        [MenuItem("QUFramework/生成二级模块")]
+        [MenuItem("QUFramework/生成（MVC）二级模块")]
         public static void CreateSecondModule()
         {
             //返回当前屏幕上第一个 t 类型的 EditorWindow，utility参数为是否浮动窗口

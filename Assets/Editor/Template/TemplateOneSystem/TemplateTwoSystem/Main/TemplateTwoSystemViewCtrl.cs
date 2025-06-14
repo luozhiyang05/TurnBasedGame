@@ -1,37 +1,37 @@
 using GameSystem.MVCTemplate;
 using Tool.UI;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
+namespace Assets.GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
 {
     public class TemplateTwoSystemViewCtrl : BaseCtrl
     {
-        public TemplateTwoSystemViewCtrl() : base(new TemplateTwoSystemViewModel(), EuiLayer.Mid)
+        public override string GetPrefabPath() => "TemplateTwoSystemView";
+        public override BaseModel GetModel() => Model ??= new TemplateTwoSystemViewModel();
+        public override BaseView GetView() => View;
+        public TemplateTwoSystemViewCtrl() : base() { }
+        public TemplateTwoSystemViewCtrl(params object[] args) : base(args)
         {
-            
-        }
 
-        /// <summary>
-        /// 处理部分view的业务
-        /// </summary>
+        }
+        protected override void Init(params object[] args)
+        {
+
+        }
         protected override void InitListener()
         {
         }
-
-        /// <summary>
-        /// 展示主要view
-        /// </summary>
-        public void OnShowView() => OnOpen();
-
-        /// <summary>
-        /// view展示完毕回调函数
-        /// </summary>
-        protected override void OnCompleteLoad()
+        protected override void RemoveListener()
         {
-            Debug.Log("加载viewGo完成");
         }
-
-        public TemplateTwoSystemViewModel GetModel() => Model as TemplateTwoSystemViewModel;
-        public TemplateTwoSystemView GetView() => View as TemplateTwoSystemView;
+        public override void OnBeforeShow(params object[] args)
+        {
+            //一般做给View层传递数据
+        }
+        public override void OnShowComplate(params object[] args)
+        {
+            //一般做网络请求
+        }
     }
 }

@@ -1,5 +1,6 @@
 using Framework;
 using Tool.UI;
+using UnityEngine;
 
 namespace GameSystem.MVCTemplate
 {
@@ -13,28 +14,78 @@ namespace GameSystem.MVCTemplate
     {
         protected BaseModel Model;
         protected BaseView View;
-        
-        protected string viewName;
-        protected EuiLayer viewLayer;
-        
-
-        protected BaseCtrl(BaseModel model, EuiLayer viewLayer)
+        protected bool IsLoad;
+        protected BaseCtrl()
         {
-            var modelName = model.ToString(); //XxxSystemModel
-            viewName = modelName[(modelName.LastIndexOf('.') + 1)..].Replace("Model", "");
-            this.viewLayer = viewLayer;
-            View = UIManager.GetInstance().LoadViewGo(viewName, viewLayer);
-            Model = model;
-            View.SetModel(Model);
-            InitListener();
-            OnCompleteLoad();
+            Init();
+        }
+        protected BaseCtrl(params object[] args)
+        {
+            Init(args);
         }
 
         protected abstract void InitListener();
 
-        protected void OnOpen()=>UIManager.GetInstance().OpenView(viewName, viewLayer);
-        
-        protected abstract void OnCompleteLoad();
+        protected abstract void RemoveListener();
+
+        protected abstract void Init(params object[] args);
+
+        public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI,params object[] args)
+        {
+            // 没有加载或者已经加载但是没有激活，则去池子中处理
+            if (!IsLoad || (IsLoad && !View.isOpen))
+            {
+                UIManager.GetInstance().GetFromPool(GetPrefabPath(), euiLayer, (BaseView) =>
+                {
+                    if (!IsLoad)
+                    {
+                        Model = GetModel();
+                        View = BaseView;
+                        View.SetModel(Model);
+                        View.SetClose(OnClose);
+                        View.SetRelease(OnRelease);
+                    }
+
+                    InitListener();
+                    
+                    Model.Init();
+                    Model.BindListener();
+
+                    OnBeforeShow(args);
+                    View.OnShow();
+                    OnShowComplate(args);
+
+                    IsLoad = true;
+                });
+            }
+
+
+        }
+
+        public abstract BaseModel GetModel();
+
+        public abstract BaseView GetView();
+
+        public abstract string GetPrefabPath();
+
+        public abstract void OnBeforeShow(params object[] args);
+
+        public abstract void OnShowComplate(params object[] args);
+
+        private void OnClose()
+        {
+            RemoveListener();
+            Model.RemoveListener();
+
+            UIManager.GetInstance().EnterPool(View);
+        }
+
+        private void OnRelease()
+        {
+            IsLoad = false;
+            Model = null;
+            View = null;
+        }
 
         public IMgr Ins => Global.GetInstance();
     }

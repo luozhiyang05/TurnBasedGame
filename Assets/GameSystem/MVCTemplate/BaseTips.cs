@@ -1,35 +1,77 @@
-using System;
+using System.Collections;
+using Tool.AudioMgr;
+using Tool.ResourceMgr;
 using Tool.UI;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace GameSystem.MVCTemplate
 {
-    public abstract class BaseTips : BasePanel
+    public abstract class BaseTips : BaseView
     {
-        private void Awake()
+        public UIAnimationSo UIAnimationSo => ResMgr.GetInstance().SyncLoad<UIAnimationSo>("UIAnimationSo");
+        public GameObject main;
+
+        public IEnumerator ShowAnimation()
         {
-            OnInit();
-        }
-        protected abstract override void OnInit();
-        
-        private void Open()
-        {
-            UIManager.GetInstance().InitTips(this);
-            gameObject.SetActive(true);
-            
+            main.transform.localScale = Vector3.zero;
+            if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
+            float time = 0;
+            while (time < 1)
+            {
+                time += Time.deltaTime / UIAnimationSo.tipsDisplayTime;
+                main.transform.localScale = new Vector3(UIAnimationSo.tipsAnimCurve.Evaluate(time), UIAnimationSo.tipsAnimCurve.Evaluate(time), UIAnimationSo.tipsAnimCurve.Evaluate(time));
+                yield return null;
+            }
         }
 
-        public virtual void OnOpen()
+        protected IEnumerator HideAnimation()
         {
-            Open();
+            float time = 0;
+            while (time < 1)
+            {
+                time += Time.deltaTime / UIAnimationSo.tipsDisplayTime;
+                main.transform.localScale = new Vector3(UIAnimationSo.tipsAnimCurve.Evaluate(1 - time), UIAnimationSo.tipsAnimCurve.Evaluate(1 - time), UIAnimationSo.tipsAnimCurve.Evaluate(1 - time));
+                yield return null;
+            }
+            gameObject.SetActive(false);
+            UIManager.GetInstance().EnterPool(this);
+            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
+            OnRelease();
         }
 
-
-        protected void CloseTips()
+        protected override void OnInit() => Init();
+        protected abstract void Init();
+        protected abstract void OnOpen(params object[] args);
+        public abstract override void OnRelease();
+        public virtual void Open(params object[] args)
         {
-            Destroy(gameObject);
+            if (useAudio)
+            {
+                PlayAudio(EAudioType.Effect);
+                PlayAudio(EAudioType.Bgm);
+            }
+            OnOpen(args);
+            StartCoroutine(ShowAnimation());
         }
+        public override void OnHide()
+        {
+            if (useAudio)
+            {
+                PlayAudio(EAudioType.Effect, false);
+                CloseBgm();
+            }
+            StartCoroutine(HideAnimation());
+        }
+
+        protected override void BindModelListener(){}
+        public override void OnShow(){}
        
+        /// <summary>
+        /// 点击遮罩事件
+        /// </summary>
+        public override void OnClickMaskPanel()
+        {
+            OnHide();
+        }
     }
 }

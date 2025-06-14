@@ -1,37 +1,34 @@
 using GameSystem.MVCTemplate;
-using Tool.UI;
-using UnityEngine;
 
-namespace GameSystem.TemplateOneSystem.Main
+namespace Assets.GameSystem.TemplateOneSystem.Main
 {
     public class TemplateOneSystemViewCtrl : BaseCtrl
     {
-        public TemplateOneSystemViewCtrl() : base(new TemplateOneSystemViewModel(), EuiLayer.Mid)
+        public override string GetPrefabPath() => "TemplateOneSystemView";
+        public override BaseModel GetModel() => Model ??= new TemplateOneSystemViewModel();
+        public override BaseView GetView() => View;
+        public TemplateOneSystemViewCtrl() : base() { }
+        public TemplateOneSystemViewCtrl(params object[] args) : base(args)
         {
-        }
 
-        /// <summary>
-        /// 处理部分view的业务
-        /// </summary>
+        }
+        protected override void Init(params object[] args)
+        {
+
+        }
         protected override void InitListener()
         {
         }
-
-        /// <summary>
-        /// 展示主要view
-        /// </summary>
-        public void OnShowView() => OnOpen();
-
-        /// <summary>
-        /// view展示完毕回调函数
-        /// </summary>
-        protected override void OnCompleteLoad()
+        protected override void RemoveListener()
         {
-            Debug.Log("加载view完成");
         }
-
-
-        public TemplateOneSystemViewModel GetModel() => Model as TemplateOneSystemViewModel;
-        public TemplateOneSystemView GetView() => View as TemplateOneSystemView;
+        public override void OnBeforeShow(params object[] args)
+        {
+            //一般做给View层传递数据
+        }
+        public override void OnShowComplate(params object[] args)
+        {
+            //一般做网络请求
+        }
     }
 }
