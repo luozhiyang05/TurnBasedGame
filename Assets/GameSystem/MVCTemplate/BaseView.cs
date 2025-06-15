@@ -31,6 +31,7 @@ namespace GameSystem.MVCTemplate
         private void OnEnable() => isOpen = true;
         private void OnDisable() => isOpen = false;
         public void SetModel(BaseModel model) => Model = model;
+        protected void SetName(string viewName) => name = viewName;
 
         protected abstract void BindModelListener();
 

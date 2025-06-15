@@ -1,5 +1,7 @@
 using Framework;
 using Tool.UI;
+using Tool.Utilities;
+using Tool.Utilities.Events;
 using UnityEngine;
 
 namespace GameSystem.MVCTemplate
@@ -84,7 +86,9 @@ namespace GameSystem.MVCTemplate
         {
             IsLoad = false;
             Model = null;
+            var viewName = View.name;
             View = null;
+            EventsHandle.EventTrigger(EventsNameConst.RELEASE_VIEW, viewName);
         }
 
         public IMgr Ins => Global.GetInstance();

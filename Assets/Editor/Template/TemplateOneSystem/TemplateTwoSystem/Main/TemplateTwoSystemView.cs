@@ -9,7 +9,7 @@ namespace Assets.GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         protected override void AutoInitUI()
         {
         }
-		#endregion 自动生成UI组件区域结束！
+        #endregion 自动生成UI组件区域结束！
 
         #region 遮罩相关
         // /// <summary>
@@ -45,6 +45,7 @@ namespace Assets.GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
         /// </summary>
         protected override void OnInit()
         {
+            SetName("TemplateTwoSystemView");
         }
 
         /// <summary>
