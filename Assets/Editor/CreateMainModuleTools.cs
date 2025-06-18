@@ -69,7 +69,7 @@ namespace Editor
                 Directory.CreateDirectory(systemPath); //创建系统根目录
                 Directory.CreateDirectory(systemPath + @"\Main");
                 Directory.CreateDirectory(systemPath + @"\Scripts");
-                Directory.CreateDirectory(systemPath + @"\Resources");
+                Directory.CreateDirectory(systemPath + @"\Images");
             }
             catch (Exception e)
             {
