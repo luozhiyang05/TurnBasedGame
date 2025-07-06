@@ -1,5 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using JetBrains.Annotations;
+using Tool.CustomAttribute;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -7,111 +12,175 @@ namespace Wights.Utilities
 {
     public class LoopScrollList : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        public RectTransform viewPort;
-        public RectTransform content;
+        [CustomPropertyText("滑动速度")]
+        public float moveSpeed = 1;
         public RectTransform cell;
-        //public int visiableCellCnt;
+        public RectTransform viewport;
+        public RectTransform content;
+        private Vector2 _oldMousePos;
+        private List<int> data = new List<int>();
+        private float _cellHeight;
+        private float _moveDis;
+        private int _upIndex, _downIndex;
         private int _initCellCnt;
-        public List<int> data = new List<int>();
-        void Start()
-        {
-            //TODO:重新结算初始化cell个数，个数为ViewPort高度向上取整
-            _initCellCnt = Mathf.CeilToInt(viewPort.rect.height / cell.rect.height) + 1;
-            _cellHeight = cell.rect.height;
-            //补偿高度，为了避免ViewPort长于cell高度×个数时无法滑倒底部，用于滑倒底部时对content高度补偿
-            //如height=100，viewPort高度为大于525，那content滑倒最底部的高度要补偿_payHeigtt
-            //需要有补偿高度时，初始化cell的个数一般比 viewPort.rect.height / cell.rect.height 多 2个
-            _payHeigtt = (viewPort.rect.height % cell.rect.height) == 0 ? 0 : _cellHeight - (viewPort.rect.height % cell.rect.height);
+        private float _peyHeight;
+        private bool _isScrollUp;
+        private bool _needMinPeyHeight;
+        private bool _banScroll;
+        private bool _startRender = false;
 
-            for (int i = 0; i < 25; i++)
+        private UnityAction<GameObject, int> _renderCellAction;
+        public void TestFun()
+        {
+          
+
+        }
+        public LoopScrollList InitDataSize(int dataSize)
+        {
+            //清除缓存cell
+            data.Clear();
+            var cellCnt = content.transform.childCount;
+            for (int i = 0; i < cellCnt; i++)
+            {
+                var cell = content.transform.GetChild(i).gameObject;
+                GameObject.Destroy(cell);
+            }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(content);
+            content.anchoredPosition = Vector2.zero;
+
+            //数据索引列表
+            for (int i = 0; i < dataSize; i++)
             {
                 data.Add(i);
             }
 
-            for (int i = 0; i < _initCellCnt; i++)
-            {
-                GameObject go = Instantiate(cell.gameObject, content);
-                go.transform.localPosition = Vector3.zero;
-                go.SetActive(true);
-            }
+            //cell高度
+            _cellHeight = cell.rect.height;
 
+            //初始化cell的个数，在需要补偿的时候多生成一个cell，防止动画没能显示全
+            _initCellCnt = Mathf.Abs(viewport.rect.height % _cellHeight) > 0
+            ? Mathf.CeilToInt(viewport.rect.height / _cellHeight) + 1
+            : (int)(viewport.rect.height / _cellHeight + 1);
+
+            //初始化cell的个数不能大于数据源的个数
+            var _initCellCntBiger = _initCellCnt > data.Count;
+             //特殊情况特殊处理，原本应该多初始化2个cell用于循环，但是如果数据源数量过少，只会初始化1个cell（不用循环），所以要使用最低高度补偿限制滑动
+            _needMinPeyHeight = _initCellCntBiger;
+            _initCellCnt = _initCellCntBiger ? data.Count : _initCellCnt;
+
+            //补偿高度，当viewport的高度不能取余cell的高度==0时，为了让viewport拉到底部能显示全cell，需要计算补偿高度
+            _peyHeight = Mathf.Abs(viewport.rect.height % cell.rect.height) > 0
+            ? cell.rect.height - viewport.rect.height % cell.rect.height
+            : 0;
+
+            //初始化cell个数没有铺满viewport时禁止滑动
+            _banScroll = _initCellCnt * _cellHeight <= viewport.rect.height;
+
+            //cell索引初始化，_downIndex为视图底部准备渲染的cell索引
+            _upIndex = 0;
+            _downIndex = Mathf.Abs(viewport.rect.height % _cellHeight) > 0
+            ? Mathf.CeilToInt(viewport.rect.height / _cellHeight)
+            : (int)(viewport.rect.height / _cellHeight);
+
+            return this;
+        }
+        public LoopScrollList SetRenderEvent(UnityAction<GameObject, int> renderCellAction)
+        {
+            _renderCellAction = renderCellAction;
+            return this;
+        }
+        public LoopScrollList UpdateList()
+        {
+            //初始化渲染这些cell
+            InitCells();
+            _startRender = true;
+            return this;
+        }
+        private void InitCells()
+        {
             for (int i = 0; i < _initCellCnt; i++)
             {
-                RenderCell(content.GetChild(i).gameObject, i);
+                var cellGo = Instantiate(cell, content).gameObject;
+                cellGo.SetActive(true);
+                UpdateItem(cellGo, i);
             }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(content);
         }
 
-        public float _moveSpeed = 1f;
-        private Vector2 _startPos;
-        private float _moveDistance;
-        private int _currentCellOffset = 0;
-
+        #region 拖拽
         public void OnBeginDrag(PointerEventData eventData)
         {
-            _startPos = eventData.position;
+            _oldMousePos = eventData.position;
         }
-
         public void OnDrag(PointerEventData eventData)
         {
-            _moveDistance = eventData.position.y - _startPos.y;
-            _startPos = eventData.position;
-            MoveList();
-        }
+            if (_banScroll || !_startRender) return;
 
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            _startPos = Vector2.zero;
-        }
+            //content移动
+            _moveDis = (eventData.position.y - _oldMousePos.y) * moveSpeed;
+            _isScrollUp = _moveDis > 0;
+            content.anchoredPosition = new Vector2(content.anchoredPosition.x, content.anchoredPosition.y + _moveDis);
+            _oldMousePos = eventData.position;
 
-
-        private float _cellHeight;
-        private int _nowDataIndex = 0;
-        private float _payHeigtt = 0;
-        public void MoveList()
-        {
-            content.anchoredPosition = new Vector2(content.anchoredPosition.x, content.anchoredPosition.y + _moveDistance * _moveSpeed);
-
+            //判断边界
             JudgeEdge();
 
+            //移动列表
+            MoveList();
+        }
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            _oldMousePos = Vector2.zero;
+        }
+        #endregion
+
+        #region 移动列表
+        public void MoveList()
+        {
             var contentY = content.anchoredPosition.y;
-            //加上补偿高度限制更新cell，防止需要补偿时，无法滑倒最底部
-            if (contentY > _cellHeight + _payHeigtt)
+            //有补偿高度时，为了让viewprot拉到最底部全部完全显示cell，则需要把限制高度加上补偿高度，不然无法限制继续往上滑动渲染
+            if (contentY > _cellHeight + _peyHeight)
             {
                 var firstCell = content.GetChild(0);
                 firstCell.SetAsLastSibling();
-                content.anchoredPosition = new Vector2(content.anchoredPosition.x, content.anchoredPosition.y - _cellHeight);
-                _currentCellOffset++;
-                _nowDataIndex = _currentCellOffset + _initCellCnt - 1;
-                RenderCell(firstCell.gameObject, _nowDataIndex);
+                content.anchoredPosition = new Vector2(0, content.anchoredPosition.y - _cellHeight);
+                _downIndex++;
+                _upIndex++;
+                UpdateItem(firstCell.gameObject, _downIndex);
             }
             else if (contentY < 0)
             {
                 var lastCell = content.GetChild(content.childCount - 1);
                 lastCell.SetAsFirstSibling();
-                content.anchoredPosition = new Vector2(content.anchoredPosition.x, content.anchoredPosition.y + _cellHeight);
-                _currentCellOffset--;
-                _nowDataIndex = _currentCellOffset;
-                RenderCell(lastCell.gameObject, _nowDataIndex);
+                content.anchoredPosition = new Vector2(0, content.anchoredPosition.y + _cellHeight);
+                _downIndex--;
+                _upIndex--;
+                UpdateItem(lastCell.gameObject, _upIndex);
             }
         }
-
-        public void RenderCell(GameObject cell, int index)
+        private void UpdateItem(GameObject cell, int index)
         {
             Debug.Log(index);
-            cell.transform.Find("Text").GetComponent<Text>().text = index.ToString();
+            _renderCellAction?.Invoke(cell, index);
         }
-
+        /// <summary>
+        /// 判断边界对应有三种情况
+        /// </summary>
         public void JudgeEdge()
         {
-            if (_nowDataIndex >= data.Count - 1)
+
+            //正常循环滑倒的判断
+            if (_downIndex >= data.Count - 1 && _isScrollUp)
             {
-                content.anchoredPosition = new Vector2(content.anchoredPosition.x, Mathf.Min(_cellHeight + _payHeigtt, content.anchoredPosition.y));
+                //有补偿高度时，要让viewprot拉到最底部全部完全显示cell，限制滚动
+                content.anchoredPosition = new Vector2(0, Mathf.Min(_needMinPeyHeight ? _peyHeight : (_cellHeight + _peyHeight), content.anchoredPosition.y));
             }
-            else if (_nowDataIndex <= 0)
+            else if (_upIndex <= 0)
             {
-                content.anchoredPosition = new Vector2(content.anchoredPosition.x, Mathf.Max(0, content.anchoredPosition.y));
+                content.anchoredPosition = new Vector2(0, Mathf.Max(0, content.anchoredPosition.y));
             }
         }
+        #endregion
 
     }
 }
