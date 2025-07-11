@@ -36,10 +36,10 @@ RectTransform:
   m_Father: {fileID: 7802748408821599667}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -50, y: 150}
-  m_SizeDelta: {x: 100, y: 400}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &7802748407731511625
 CanvasRenderer:
@@ -151,11 +151,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be2a1441a72e6e4b8d2e615216f70ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewPort: {fileID: 7802748407731511620}
-  content: {fileID: 7802748409394455236}
+  moveSpeed: 1
   cell: {fileID: 7802748409581109110}
-  data: 
-  _moveSpeed: 1
+  viewport: {fileID: 7802748407731511620}
+  content: {fileID: 7802748409394455236}
+  _selectIndex: -1
+  _selectCell: {fileID: 0}
 --- !u!1 &7802748409312075090
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +402,7 @@ GameObject:
   - component: {fileID: 7802748409581109110}
   - component: {fileID: 7802748409581109108}
   - component: {fileID: 7802748409581109109}
+  - component: {fileID: 7802748409411741878}
   m_Layer: 0
   m_Name: cell
   m_TagString: Untagged
@@ -468,3 +470,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7802748409411741878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7802748409581109111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b36e96ccbc207145954ada4331b157d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

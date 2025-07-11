@@ -32,7 +32,7 @@ namespace Wights.Utilities
         private UnityAction<GameObject, int> _renderCellAction;
         public void TestFun()
         {
-          
+
 
         }
         public LoopScrollList InitDataSize(int dataSize)
@@ -64,7 +64,7 @@ namespace Wights.Utilities
 
             //初始化cell的个数不能大于数据源的个数
             var _initCellCntBiger = _initCellCnt > data.Count;
-             //特殊情况特殊处理，原本应该多初始化2个cell用于循环，但是如果数据源数量过少，只会初始化1个cell（不用循环），所以要使用最低高度补偿限制滑动
+            //特殊情况特殊处理，原本应该多初始化2个cell用于循环，但是如果数据源数量过少，只会初始化1个cell（不用循环），所以要使用最低高度补偿限制滑动
             _needMinPeyHeight = _initCellCntBiger;
             _initCellCnt = _initCellCntBiger ? data.Count : _initCellCnt;
 
@@ -101,6 +101,10 @@ namespace Wights.Utilities
             for (int i = 0; i < _initCellCnt; i++)
             {
                 var cellGo = Instantiate(cell, content).gameObject;
+                var listViewCell = cellGo.transform.GetComponent<ListViewCell>();
+                listViewCell.Init(this);
+                listViewCell.CliclkAction = SelectCellCallback;
+                listViewCell.UpdateCell(i);
                 cellGo.SetActive(true);
                 UpdateItem(cellGo, i);
             }
@@ -160,7 +164,8 @@ namespace Wights.Utilities
         }
         private void UpdateItem(GameObject cell, int index)
         {
-            Debug.Log(index);
+            cell.transform.GetComponent<ListViewCell>().UpdateCell(index);
+            if (_selectIndex != -1) _selectChangeStyle?.Invoke(index, cell, index == _selectIndex);
             _renderCellAction?.Invoke(cell, index);
         }
         /// <summary>
@@ -182,5 +187,35 @@ namespace Wights.Utilities
         }
         #endregion
 
+        #region cell点击
+        public int _selectIndex = -1;
+        public GameObject _selectCell = null;
+        public void SelectCellCallback(int index, GameObject cell, bool click)
+        {
+            if (_selectIndex != -1 && _selectCell != null)
+            {
+                _selectChangeStyle?.Invoke(_selectIndex, _selectCell, false);
+                Debug.Log("取消选中:" + _selectIndex);
+            }
+            _selectIndex = index;
+            _selectCell = cell;
+
+            _selectChangeStyle?.Invoke(index, cell, click);
+            _selectCellCallback?.Invoke(index, cell, click);
+        }
+
+        private UnityAction<int, GameObject, bool> _selectChangeStyle;
+        private UnityAction<int, GameObject, bool> _selectCellCallback;
+        public LoopScrollList SetSelectChangeStyle(UnityAction<int, GameObject, bool> callback)
+        {
+            _selectChangeStyle = callback;
+            return this;
+        }
+        public LoopScrollList SetSelectCellCallback(UnityAction<int, GameObject, bool> callback)
+        {
+            _selectCellCallback = callback;
+            return this;
+        }
+        #endregion
     }
 }
