@@ -25,6 +25,7 @@ namespace Wights.Utilities
         private int _initCellCnt;
         private float _peyHeight;
         private bool _isScrollUp;
+        private bool _isScrollDown;
         private bool _needMinPeyHeight;
         private bool _banScroll;
         private bool _startRender = false;
@@ -111,6 +112,12 @@ namespace Wights.Utilities
             LayoutRebuilder.ForceRebuildLayoutImmediate(content);
         }
 
+        private void Update()
+        {
+            //cell定位
+            Moving();
+        }
+
         #region 拖拽
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -123,6 +130,7 @@ namespace Wights.Utilities
             //content移动
             _moveDis = (eventData.position.y - _oldMousePos.y) * moveSpeed;
             _isScrollUp = _moveDis > 0;
+            _isScrollDown = _moveDis < 0;
             content.anchoredPosition = new Vector2(content.anchoredPosition.x, content.anchoredPosition.y + _moveDis);
             _oldMousePos = eventData.position;
 
@@ -174,22 +182,31 @@ namespace Wights.Utilities
         public void JudgeEdge()
         {
 
-            //正常循环滑倒的判断
-            if (_downIndex >= data.Count - 1 && _isScrollUp)
+            //滑到底部的边界限制
+            if (_downIndex >= data.Count - 1 && (_isScrollUp || _isMoving))
             {
                 //有补偿高度时，要让viewprot拉到最底部全部完全显示cell，限制滚动
                 content.anchoredPosition = new Vector2(0, Mathf.Min(_needMinPeyHeight ? _peyHeight : (_cellHeight + _peyHeight), content.anchoredPosition.y));
+                if (_isMoving && content.anchoredPosition.y == (_needMinPeyHeight ? _peyHeight : (_cellHeight + _peyHeight)))
+                {
+                    _isMoving = false;
+                }
             }
-            else if (_upIndex <= 0)
+            //滑倒顶部的边界限制
+            else if (_upIndex <= 0 && (_isScrollDown || _isMoving))
             {
                 content.anchoredPosition = new Vector2(0, Mathf.Max(0, content.anchoredPosition.y));
+                if (_isMoving && content.anchoredPosition.y == 0)
+                {
+                    _isMoving = false;
+                }
             }
         }
         #endregion
 
         #region cell点击
-        public int _selectIndex = -1;
-        public GameObject _selectCell = null;
+        private int _selectIndex = -1;
+        private GameObject _selectCell = null;
         public void SelectCellCallback(int index, GameObject cell, bool click)
         {
             if (_selectIndex != -1 && _selectCell != null)
@@ -215,6 +232,37 @@ namespace Wights.Utilities
         {
             _selectCellCallback = callback;
             return this;
+        }
+        #endregion
+
+        #region cell定位
+        public float moveToSpeed = 1000f;
+        private bool _isMoving = false;
+        private int _moveToIndex = -1;
+        private int _moveDic = 0;
+        public void MoveToIndex(int index)
+        {
+            _moveToIndex = index;
+            _isMoving = true;
+            _moveDic = index > _upIndex ? 1 : -1;
+        }
+
+        private void Moving()
+        {
+            if (!_isMoving) return;
+
+            var targetY = content.anchoredPosition.y + Time.deltaTime * moveToSpeed * _moveDic;
+            content.anchoredPosition = new Vector2(0, targetY);
+
+            if (_upIndex == _moveToIndex)
+            {
+                _isMoving = false;
+                _moveToIndex = -1;
+                content.anchoredPosition = new Vector2(0, 0);
+            }
+
+            JudgeEdge();
+            MoveList();
         }
         #endregion
     }
