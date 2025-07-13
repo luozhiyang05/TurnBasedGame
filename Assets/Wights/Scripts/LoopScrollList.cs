@@ -22,9 +22,9 @@ namespace Wights.Utilities
         private List<int> data = new List<int>();
         private float _cellHeight;
         private float _moveDis;
-        private int _upIndex, _downIndex;
+        public int _upIndex, _downIndex, _diffIndex;
         private int _initCellCnt;
-        private float _peyHeight;
+        private float _payHeight;
         private bool _isScrollUp;
         private bool _isScrollDown;
         private bool _needMinPeyHeight;
@@ -66,7 +66,7 @@ namespace Wights.Utilities
             _initCellCnt = _initCellCntBiger ? data.Count : _initCellCnt;
 
             //补偿高度，当viewport的高度不能取余cell的高度==0时，为了让viewport拉到底部能显示全cell，需要计算补偿高度
-            _peyHeight = Mathf.Abs(viewport.rect.height % cell.rect.height) > 0
+            _payHeight = Mathf.Abs(viewport.rect.height % cell.rect.height) > 0
             ? cell.rect.height - viewport.rect.height % cell.rect.height
             : 0;
 
@@ -78,6 +78,7 @@ namespace Wights.Utilities
             _downIndex = Mathf.Abs(viewport.rect.height % _cellHeight) > 0
             ? Mathf.CeilToInt(viewport.rect.height / _cellHeight)
             : (int)(viewport.rect.height / _cellHeight);
+            _diffIndex = _downIndex - _upIndex;
 
             //滑动缓存速度
             _scrollBufferSpeed = scrollBufferSpeed;
@@ -156,7 +157,7 @@ namespace Wights.Utilities
         {
             var contentY = content.anchoredPosition.y;
             //有补偿高度时，为了让viewprot拉到最底部全部完全显示cell，则需要把限制高度加上补偿高度，不然无法限制继续往上滑动渲染
-            if (contentY > _cellHeight + _peyHeight)
+            if (contentY > _cellHeight + _payHeight)
             {
                 var firstCell = content.GetChild(0);
                 firstCell.SetAsLastSibling();
@@ -195,8 +196,8 @@ namespace Wights.Utilities
             if (_downIndex >= data.Count - 1 && (_isScrollUp || _isMoving))
             {
                 //有补偿高度时，要让viewprot拉到最底部全部完全显示cell，限制滚动
-                content.anchoredPosition = new Vector2(0, Mathf.Min(_needMinPeyHeight ? _peyHeight : (_cellHeight + _peyHeight), content.anchoredPosition.y));
-                if (_isMoving && content.anchoredPosition.y == (_needMinPeyHeight ? _peyHeight : (_cellHeight + _peyHeight)))
+                content.anchoredPosition = new Vector2(0, Mathf.Min(_needMinPeyHeight ? _payHeight : (_cellHeight + _payHeight), content.anchoredPosition.y));
+                if (_isMoving && content.anchoredPosition.y == (_needMinPeyHeight ? _payHeight : (_cellHeight + _payHeight)))
                 {
                     _isMoving = false;
                     if (_moveFinishNeedSelect)
@@ -207,7 +208,7 @@ namespace Wights.Utilities
                     }
                 }
 
-                if (_scrollBuffer && content.anchoredPosition.y == (_needMinPeyHeight ? _peyHeight : (_cellHeight + _peyHeight)))
+                if (_scrollBuffer && content.anchoredPosition.y == (_needMinPeyHeight ? _payHeight : (_cellHeight + _payHeight)))
                 {
                     _scrollBuffer = false;
                     _scrollBufferSpeed = scrollBufferSpeed;
@@ -328,6 +329,56 @@ namespace Wights.Utilities
 
             JudgeEdge();
             ListViewUpdate();
+        }
+        #endregion
+
+        #region cell跳转
+        public void JumpToIndex(int index)
+        {
+            if (index < 0 || index >= data.Count)
+            {
+                throw new Exception("跳转index超出范围");
+            }
+            _scrollBuffer = false;
+
+            //视图可展示的cell的数量比要跳转的index下所有的cell数量都多时，就要滑到底部，避免留空
+            var needJumpToListBottom = (viewport.rect.height / _cellHeight) > data.Count - index;
+            _downIndex = data.Count - 1;
+            _upIndex = _downIndex - _diffIndex;
+            if (needJumpToListBottom)
+            {
+                content.anchoredPosition = new Vector2(0, _cellHeight + _payHeight);
+
+                int cellIndex = 0;
+                for (int i = _upIndex; i <= _downIndex; i++)
+                {
+                    UpdateItem(_cellList[cellIndex++].gameObject, i);
+                }
+            }
+            else
+            {
+                bool needPay = false;
+                var remainCellCnt = data.Count - index;
+                if (remainCellCnt < _initCellCnt)
+                {
+
+                    //特殊情况，需要content往上移补偿，避免向下滑动时渲染到不存在的数据
+                    needPay = true;
+                    _upIndex = --index;
+                    _downIndex = data.Count - 1;
+                }
+                else
+                {
+                    needPay = false;
+                    _upIndex = index;
+                    _downIndex = _upIndex + _initCellCnt - 1;
+                }
+                content.anchoredPosition = new Vector2(0, needPay ? _cellHeight : 0);
+                for (int i = 0; i < _initCellCnt; i++)
+                {
+                    UpdateItem(_cellList[i].gameObject, index++);
+                }
+            }
         }
         #endregion
 
