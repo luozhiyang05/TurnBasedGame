@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using JetBrains.Annotations;
 using Tool.CustomAttribute;
+using Tool.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -29,13 +30,8 @@ namespace Wights.Utilities
         private bool _needMinPeyHeight;
         private bool _banScroll;
         private bool _startRender = false;
-
+        private QArray<ListViewCell> _cellList = new QArray<ListViewCell>();
         private UnityAction<GameObject, int> _renderCellAction;
-        public void TestFun()
-        {
-
-
-        }
         public LoopScrollList InitDataSize(int dataSize)
         {
             //清除缓存cell
@@ -106,6 +102,7 @@ namespace Wights.Utilities
                 listViewCell.Init(this);
                 listViewCell.CliclkAction = SelectCellCallback;
                 listViewCell.UpdateCell(i);
+                _cellList.Add(listViewCell);
                 cellGo.SetActive(true);
                 UpdateItem(cellGo, i);
             }
@@ -159,6 +156,8 @@ namespace Wights.Utilities
                 _downIndex++;
                 _upIndex++;
                 UpdateItem(firstCell.gameObject, _downIndex);
+                var listViewCell = _cellList.RemoveAt(0);
+                _cellList.Add(listViewCell);
             }
             else if (contentY < 0)
             {
@@ -168,6 +167,8 @@ namespace Wights.Utilities
                 _downIndex--;
                 _upIndex--;
                 UpdateItem(lastCell.gameObject, _upIndex);
+                var listViewCell = _cellList.RemoveAt(_cellList.Count - 1);
+                _cellList.Insert(listViewCell, 0);
             }
         }
         private void UpdateItem(GameObject cell, int index)
@@ -190,6 +191,12 @@ namespace Wights.Utilities
                 if (_isMoving && content.anchoredPosition.y == (_needMinPeyHeight ? _peyHeight : (_cellHeight + _peyHeight)))
                 {
                     _isMoving = false;
+                    if (_moveFinishNeedSelect)
+                    {
+                        _moveFinishNeedSelect = false;
+                        SelectCell(_moveToIndex);
+                        _moveToIndex = -1;
+                    }
                 }
             }
             //滑倒顶部的边界限制
@@ -199,6 +206,12 @@ namespace Wights.Utilities
                 if (_isMoving && content.anchoredPosition.y == 0)
                 {
                     _isMoving = false;
+                    if (_moveFinishNeedSelect)
+                    {
+                        _moveFinishNeedSelect = false;
+                        SelectCell(_moveToIndex);
+                        _moveToIndex = -1;
+                    }
                 }
             }
         }
@@ -235,16 +248,43 @@ namespace Wights.Utilities
         }
         #endregion
 
+        #region 选择cell
+        public void SelectCell(int index, bool isExcuteCallback = true)
+        {
+            var cell = _cellList.FindValue(x => x.GetIndex() == index);
+            if (cell == null)
+            {
+                return;
+            }
+
+            if (_selectIndex != -1 && _selectCell != null)
+            {
+                _selectChangeStyle?.Invoke(_selectIndex, _selectCell, false);
+            }
+
+            _selectIndex = index;
+            _selectCell = cell.gameObject;
+            
+            if (isExcuteCallback)
+            {
+                _selectChangeStyle?.Invoke(index, cell.gameObject, true);
+                _selectCellCallback?.Invoke(index, cell.gameObject, true);
+            }
+        }
+        #endregion
+
         #region cell定位
         public float moveToSpeed = 1000f;
         private bool _isMoving = false;
         private int _moveToIndex = -1;
         private int _moveDic = 0;
-        public void MoveToIndex(int index)
+        private bool _moveFinishNeedSelect = false;
+        public void MoveToIndex(int index, bool select = false)
         {
             _moveToIndex = index;
             _isMoving = true;
             _moveDic = index > _upIndex ? 1 : -1;
+            _moveFinishNeedSelect = select;
         }
 
         private void Moving()
@@ -257,8 +297,13 @@ namespace Wights.Utilities
             if (_upIndex == _moveToIndex)
             {
                 _isMoving = false;
-                _moveToIndex = -1;
                 content.anchoredPosition = new Vector2(0, 0);
+                if (_moveFinishNeedSelect)
+                {
+                    _moveFinishNeedSelect = false;
+                    SelectCell(_moveToIndex);
+                }
+                _moveToIndex = -1;
             }
 
             JudgeEdge();

@@ -25,5 +25,10 @@ namespace Wights.Utilities
         {
             _index = index;
         }
+
+        public int GetIndex()
+        {
+            return _index;
+        }
     }
 }
