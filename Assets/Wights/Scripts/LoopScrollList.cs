@@ -246,7 +246,6 @@ namespace Wights.Utilities
             if (_selectIndex != -1 && _selectCell != null)
             {
                 _selectChangeStyle?.Invoke(_selectIndex, _selectCell, false);
-                Debug.Log("取消选中:" + _selectIndex);
             }
             _selectIndex = index;
             _selectCell = cell;
@@ -333,12 +332,13 @@ namespace Wights.Utilities
         #endregion
 
         #region cell跳转
-        public void JumpToIndex(int index)
+        public void JumpToIndex(int index, bool select = false)
         {
             if (index < 0 || index >= data.Count)
             {
                 throw new Exception("跳转index超出范围");
             }
+            var tempIndex = index;
             _scrollBuffer = false;
 
             //视图可展示的cell的数量比要跳转的index下所有的cell数量都多时，就要滑到底部，避免留空
@@ -378,6 +378,11 @@ namespace Wights.Utilities
                 {
                     UpdateItem(_cellList[i].gameObject, index++);
                 }
+            }
+
+            if (select)
+            {
+                SelectCell(tempIndex);
             }
         }
         #endregion
