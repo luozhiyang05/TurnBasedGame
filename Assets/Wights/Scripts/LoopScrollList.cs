@@ -79,6 +79,9 @@ namespace Wights.Utilities
             ? Mathf.CeilToInt(viewport.rect.height / _cellHeight)
             : (int)(viewport.rect.height / _cellHeight);
 
+            //滑动缓存速度
+            _scrollBufferSpeed = scrollBufferSpeed;
+
             return this;
         }
         public LoopScrollList SetRenderEvent(UnityAction<GameObject, int> renderCellAction)
@@ -113,6 +116,9 @@ namespace Wights.Utilities
         {
             //cell定位
             Moving();
+
+            //滑动缓冲
+            ScrollBuffer();
         }
 
         #region 拖拽
@@ -135,16 +141,18 @@ namespace Wights.Utilities
             JudgeEdge();
 
             //移动列表
-            MoveList();
+            ListViewUpdate();
         }
         public void OnEndDrag(PointerEventData eventData)
         {
             _oldMousePos = Vector2.zero;
+            _scrollBufferSpeed = Mathf.Abs(scrollBufferSpeed * _moveDis);
+            _scrollBuffer = true;
         }
         #endregion
 
         #region 移动列表
-        public void MoveList()
+        public void ListViewUpdate()
         {
             var contentY = content.anchoredPosition.y;
             //有补偿高度时，为了让viewprot拉到最底部全部完全显示cell，则需要把限制高度加上补偿高度，不然无法限制继续往上滑动渲染
@@ -198,6 +206,12 @@ namespace Wights.Utilities
                         _moveToIndex = -1;
                     }
                 }
+
+                if (_scrollBuffer && content.anchoredPosition.y == (_needMinPeyHeight ? _peyHeight : (_cellHeight + _peyHeight)))
+                {
+                    _scrollBuffer = false;
+                    _scrollBufferSpeed = scrollBufferSpeed;
+                }
             }
             //滑倒顶部的边界限制
             else if (_upIndex <= 0 && (_isScrollDown || _isMoving))
@@ -212,6 +226,12 @@ namespace Wights.Utilities
                         SelectCell(_moveToIndex);
                         _moveToIndex = -1;
                     }
+                }
+
+                if (_scrollBuffer && content.anchoredPosition.y == 0)
+                {
+                    _scrollBuffer = false;
+                    _scrollBufferSpeed = scrollBufferSpeed;
                 }
             }
         }
@@ -264,7 +284,7 @@ namespace Wights.Utilities
 
             _selectIndex = index;
             _selectCell = cell.gameObject;
-            
+
             if (isExcuteCallback)
             {
                 _selectChangeStyle?.Invoke(index, cell.gameObject, true);
@@ -307,7 +327,34 @@ namespace Wights.Utilities
             }
 
             JudgeEdge();
-            MoveList();
+            ListViewUpdate();
+        }
+        #endregion
+
+        #region 拖动缓冲
+        [CustomPropertyText("缓冲速度")]
+        public float scrollBufferSpeed = 50;
+        [CustomPropertyText("缓冲衰落速度")]
+        public float bufferDeclineSpeed = 30;
+        private float _scrollBufferSpeed;
+        private bool _scrollBuffer = false;
+        public void ScrollBuffer()
+        {
+            if (_scrollBuffer)
+            {
+                var dir = _isScrollUp ? 1 : (_isScrollDown ? -1 : 0);
+                var targetY = content.anchoredPosition.y + dir * _scrollBufferSpeed * Time.deltaTime;
+                content.anchoredPosition = new Vector2(content.anchoredPosition.x, targetY);
+                _scrollBufferSpeed -= scrollBufferSpeed * Time.deltaTime * bufferDeclineSpeed;
+                if (_scrollBufferSpeed < 0.1)
+                {
+                    _scrollBufferSpeed = scrollBufferSpeed;
+                    _scrollBuffer = false;
+                    return;
+                }
+                JudgeEdge();
+                ListViewUpdate();
+            }
         }
         #endregion
     }
