@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace Wights.Utilities
 {
-    public class LoopScrollList : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class LoopScrollList : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IScrollHandler
     {
         [CustomPropertyText("滑动速度")]
         public float moveSpeed = 1;
@@ -332,6 +332,8 @@ namespace Wights.Utilities
         #endregion
 
         #region 拖动缓冲
+        [CustomPropertyText("滚轮速度")]
+        public float scrollSpeed = 30;
         [CustomPropertyText("缓冲速度")]
         public float scrollBufferSpeed = 50;
         [CustomPropertyText("缓冲衰落速度")]
@@ -355,6 +357,15 @@ namespace Wights.Utilities
                 JudgeEdge();
                 ListViewUpdate();
             }
+        }
+
+        public void OnScroll(PointerEventData eventData)
+        {
+            _scrollBuffer = false;
+            _scrollBufferSpeed = scrollBufferSpeed * scrollSpeed;
+            _isScrollUp = eventData.scrollDelta.y > 0;
+            _isScrollDown = eventData.scrollDelta.y < 0;
+            _scrollBuffer = true;
         }
         #endregion
     }
