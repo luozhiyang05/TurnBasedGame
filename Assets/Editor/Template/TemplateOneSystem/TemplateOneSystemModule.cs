@@ -8,9 +8,8 @@ namespace Assets.GameSystem.TemplateOneSystem
         public void ShowView();
     }
 
-    public class TemplateOneSystemModule : AbsModule, ITemplateOneSystemModule
+    public class TemplateOneSystemModule : BaseModule, ITemplateOneSystemModule
     {
-        private TemplateOneSystemViewCtrl _viewCtrl;
 
         protected override void OnInit()
         {
@@ -18,8 +17,14 @@ namespace Assets.GameSystem.TemplateOneSystem
 
         public void ShowView()
         {
-            _viewCtrl ??= new TemplateOneSystemViewCtrl();
-            _viewCtrl.ShowView();
+            var viewName = "TemplateOneSystemView";
+            var ctrl = GetCtrl(viewName);
+            if (ctrl == null)
+            {
+                ctrl = new TemplateOneSystemViewCtrl();
+                SetViewInfo(viewName, ctrl);
+            }
+            ctrl.ShowView();
         }
     }
 }

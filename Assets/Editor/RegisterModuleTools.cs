@@ -21,7 +21,7 @@ namespace Editor
                 int index = value.LastIndexOf('\\');
                 var moduleName = value.Substring(index + 1);
                 if (moduleName.Contains("Template")) continue;
-                globalStr.Append($"using GameSystem.{moduleName};\n");
+                globalStr.Append($"using Assets.GameSystem.{moduleName};\n");
                 moduleStr.Append($"\n\t\t\tthis.RegisterModule<I{moduleName}Module>(new {moduleName}Module());");
             }
 

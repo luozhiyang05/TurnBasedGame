@@ -1,5 +1,4 @@
 using Framework;
-using Tool.UI;
 using UnityEngine;
 
 namespace GameSystem
@@ -8,12 +7,12 @@ namespace GameSystem
     {
         private void Start()
         {
-            
+
         }
 
         private void Update()
         {
-   
+
         }
 
         public IMgr Ins => Global.GetInstance();

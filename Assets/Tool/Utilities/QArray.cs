@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using UnityEngine;
 
 namespace Tool.Utilities
 {
@@ -110,14 +111,38 @@ namespace Tool.Utilities
         }
         #endregion
 
-        #region 在尾部添加元素
-        /// <summary>
-        /// 在尾部添加元素
-        /// </summary>
-        /// <param name="value"></param>
-        public void Add(T value)
+        #region 插入元素
+        public void Insert(T value, int index)
         {
-            //如果尾指针达到数组长度，则判断当前数组中元素个数是否达到数组长度
+            if (index < 0 || index > _array.Count())
+                throw new Exception("插入位置超出范围");
+
+            CheckSize();
+
+            if (index == Count - 1)
+            {
+                Add(value);
+                return;
+            }
+
+            int tempIdx = _tailIdx;
+            while (tempIdx >= index)
+            {
+                _array[tempIdx + 1] = _array[tempIdx];
+                tempIdx--;
+            }
+
+            _array[index] = value;
+            _tailIdx++;
+            Count++;
+        }
+        #endregion
+
+        #region 在尾部添加元素
+
+        public void CheckSize()
+        {
+             //如果尾指针达到数组长度，则判断当前数组中元素个数是否达到数组长度
             if (_tailIdx == _maxSize - 1)
             {
                 if (Count == _maxSize)
@@ -141,6 +166,17 @@ namespace Tool.Utilities
                     _tailIdx = Count - 1;
                 }
             }
+
+        }
+
+        /// <summary>
+        /// 在尾部添加元素
+        /// </summary>
+        /// <param name="value"></param>
+        public void Add(T value)
+        {
+            //检查容量
+            CheckSize();
 
             _tailIdx++;
             _array[_tailIdx] = value;
@@ -350,6 +386,16 @@ namespace Tool.Utilities
             Count = 0;
             _headIdx = 0;
             _tailIdx = -1;
+        }
+        #endregion
+
+        #region 打印数组
+        public void Print(string tag = default)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                Debug.Log(tag + this[i]);
+            }
         }
         #endregion
 

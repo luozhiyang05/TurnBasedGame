@@ -20,7 +20,7 @@ namespace Editor.UI
         public override void OnInspectorGUI()
         {
             //Text
-            _cbutton.Label = (Text)EditorGUILayout.ObjectField("Text", _cbutton.Label, typeof(Text), true);
+            _cbutton.Label = (Text)EditorGUILayout.ObjectField("Label", _cbutton.Label, typeof(Text), true);
             _cbutton.Label = _cbutton.transform.Find("text").GetComponent<Text>();
             
             base.OnInspectorGUI();

@@ -322,7 +322,7 @@ namespace Tool.UI
         /// <returns></returns>
         public void LoadViewPrefab(string path, EuiLayer euiLayer, UnityAction<BaseView> callback = null)
         {
-            ResMgr.GetInstance().AsyncLoad<GameObject>(path, (uiGo) =>
+            ResMgr.GetInstance().LoadView(path, (uiGo) =>
             {
                 if (uiGo == null) throw new Exception($"加载UI失败：{path}");
                 InitUI(uiGo, euiLayer);

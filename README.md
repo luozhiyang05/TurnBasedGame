@@ -1,2 +1,2 @@
-# TurnBasedGame
-基于QUFramework开发的回合制游戏
+# QUFramework
+基于QFramework框架开发的自用小框架

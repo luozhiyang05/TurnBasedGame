@@ -236,10 +236,10 @@ namespace Framework
         void INeedInit.Init(IMgr iMgr)
         {
             _ins = iMgr;
-            OnInit();
+            InitModule();
         }
 
-        protected abstract void OnInit();
+        protected abstract void InitModule();
     }
 
     public abstract class AbsModel : IModel
