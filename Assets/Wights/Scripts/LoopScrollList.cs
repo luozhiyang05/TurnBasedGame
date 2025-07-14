@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using JetBrains.Annotations;
 using Tool.CustomAttribute;
 using Tool.Utilities;
 using UnityEngine;
@@ -13,8 +11,6 @@ namespace Wights.Utilities
 {
     public class LoopScrollList : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IScrollHandler
     {
-        [CustomPropertyText("滑动速度")]
-        public float moveSpeed = 1;
         public RectTransform cell;
         public RectTransform viewport;
         public RectTransform content;
@@ -22,14 +18,21 @@ namespace Wights.Utilities
         private List<int> data = new List<int>();
         private float _cellHeight;
         private float _moveDis;
-        public int _upIndex, _downIndex, _diffIndex;
+        public int UpIndex => _upIndex;
+        public int DownIndex => _downIndex;
+        private int _upIndex, _downIndex;
+        private int _diffIndex;
         private int _initCellCnt;
+        public float PayHeight => _payHeight;
         private float _payHeight;
         private bool _isScrollUp;
         private bool _isScrollDown;
+        public bool NeedMinPeyHeight => _needMinPeyHeight;
         private bool _needMinPeyHeight;
         private bool _banScroll;
         private bool _startRender = false;
+        [CustomPropertyText("滑动速度")]
+        public float moveSpeed = 1;
         private QArray<ListViewCell> _cellList = new QArray<ListViewCell>();
         private UnityAction<GameObject, int> _renderCellAction;
         public LoopScrollList InitDataSize(int dataSize)
@@ -104,6 +107,7 @@ namespace Wights.Utilities
                 var cellGo = Instantiate(cell, content).gameObject;
                 var listViewCell = cellGo.transform.GetComponent<ListViewCell>();
                 listViewCell.Init(this);
+                listViewCell.SetStopBufferCallback(() => _scrollBuffer = false);
                 listViewCell.CliclkAction = SelectCellCallback;
                 listViewCell.UpdateCell(i);
                 _cellList.Add(listViewCell);
@@ -125,6 +129,7 @@ namespace Wights.Utilities
         #region 拖拽
         public void OnBeginDrag(PointerEventData eventData)
         {
+            _scrollBuffer = false;
             _oldMousePos = eventData.position;
         }
         public void OnDrag(PointerEventData eventData)
@@ -294,6 +299,7 @@ namespace Wights.Utilities
         #endregion
 
         #region cell定位
+        [CustomPropertyText("移动定位速度")]
         public float moveToSpeed = 1000f;
         private bool _isMoving = false;
         private int _moveToIndex = -1;
@@ -388,12 +394,13 @@ namespace Wights.Utilities
         #endregion
 
         #region 拖动缓冲
-        [CustomPropertyText("滚轮速度")]
-        public float scrollSpeed = 30;
         [CustomPropertyText("缓冲速度")]
         public float scrollBufferSpeed = 50;
         [CustomPropertyText("缓冲衰落速度")]
         public float bufferDeclineSpeed = 30;
+        [CustomPropertyText("滚轮缓冲速度")]
+        public float scrollSpeed = 30;
+        public float ScrollBufferSpeed => _scrollBufferSpeed;
         private float _scrollBufferSpeed;
         private bool _scrollBuffer = false;
         public void ScrollBuffer()

@@ -7,6 +7,7 @@ namespace Wights.Utilities
     public class ListViewCell : MonoBehaviour, IPointerClickHandler
     {
         private LoopScrollList _LoopScrollList;
+        private UnityAction _stopBufferCallback;
         private int _index;
         public void Init(LoopScrollList loopScrollList)
         {
@@ -18,7 +19,13 @@ namespace Wights.Utilities
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            _stopBufferCallback?.Invoke();
             _cliclkAction?.Invoke(_index, gameObject, true);
+        }
+
+        public void SetStopBufferCallback(UnityAction callback)
+        {
+            _stopBufferCallback = callback;
         }
 
         public void UpdateCell(int index)
