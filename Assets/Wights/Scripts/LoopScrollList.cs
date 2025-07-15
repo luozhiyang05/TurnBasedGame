@@ -119,6 +119,9 @@ namespace Wights.Utilities
 
         private void Update()
         {
+            //防止拖动太快content脱离控制
+            ListViewUpdate();
+
             //cell定位
             Moving();
 
@@ -138,7 +141,12 @@ namespace Wights.Utilities
             if (_banScroll || !_startRender) return;
 
             //content移动
-            _moveDis = (eventData.position.y - _oldMousePos.y) * moveSpeed;
+            _moveDis = isVertical ? (eventData.position.y - _oldMousePos.y) : (eventData.position.x - _oldMousePos.x) * moveSpeed;
+            if (_moveDis != 0)
+            {
+                var signal = _moveDis / Mathf.Abs(_moveDis);
+                _moveDis = Mathf.Min(_viewportHeight, Mathf.Abs(_moveDis)) * signal;
+            }
             _isScrollUp = _moveDis > 0;
             _isScrollDown = _moveDis < 0;
             content.anchoredPosition = new Vector2(content.anchoredPosition.x, content.anchoredPosition.y + _moveDis);
