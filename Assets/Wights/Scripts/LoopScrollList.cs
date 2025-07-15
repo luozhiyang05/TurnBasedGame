@@ -130,6 +130,7 @@ namespace Wights.Utilities
         public void OnBeginDrag(PointerEventData eventData)
         {
             _scrollBuffer = false;
+            _scrollBufferSpeed = scrollBufferSpeed;
             _oldMousePos = eventData.position;
         }
         public void OnDrag(PointerEventData eventData)
@@ -153,6 +154,7 @@ namespace Wights.Utilities
         {
             _oldMousePos = Vector2.zero;
             _scrollBufferSpeed = Mathf.Abs(scrollBufferSpeed * _moveDis);
+            _scrollBufferSpeed = Mathf.Min(_scrollBufferSpeed, 1000);
             _scrollBuffer = true;
         }
         #endregion
@@ -395,11 +397,11 @@ namespace Wights.Utilities
 
         #region 拖动缓冲
         [CustomPropertyText("缓冲速度")]
-        public float scrollBufferSpeed = 50;
+        public float scrollBufferSpeed = 10;
         [CustomPropertyText("缓冲衰落速度")]
-        public float bufferDeclineSpeed = 30;
+        public float bufferDeclineSpeed = 40;
         [CustomPropertyText("滚轮缓冲速度")]
-        public float scrollSpeed = 30;
+        public float scrollSpeed = 50;
         public float ScrollBufferSpeed => _scrollBufferSpeed;
         private float _scrollBufferSpeed;
         private bool _scrollBuffer = false;

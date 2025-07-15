@@ -23,6 +23,7 @@ namespace Editor.Attribute
             }
             if (_inEditor)
             {
+                EditorGUILayout.LabelField("拖拽距离：" + _loopScrollList.MoveDis.ToString());
                 EditorGUILayout.LabelField("是否有最小补偿：" + _loopScrollList.NeedMinPeyHeight.ToString());
                 EditorGUILayout.LabelField("补偿高度：" + _loopScrollList.PayHeight);
                 EditorGUILayout.LabelField("缓冲速度：" + _loopScrollList.ScrollBufferSpeed);
