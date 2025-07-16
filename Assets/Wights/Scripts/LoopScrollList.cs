@@ -16,6 +16,7 @@ namespace Wights.Utilities
         public RectTransform viewport;
         public RectTransform content;
         private Vector2 _oldMousePos;
+        public int DataCnt => data.Count;
         private List<int> data = new List<int>();
         private float _cellHeight;
         private float _viewportHeight;
@@ -335,10 +336,10 @@ namespace Wights.Utilities
 
             _selectIndex = index;
             _selectCell = cell.gameObject;
+            _selectChangeStyle?.Invoke(index, cell.gameObject, true);
 
             if (isExcuteCallback)
             {
-                _selectChangeStyle?.Invoke(index, cell.gameObject, true);
                 _selectCellCallback?.Invoke(index, cell.gameObject, true);
             }
         }
@@ -444,11 +445,17 @@ namespace Wights.Utilities
         public float bufferDeclineSpeed = 40;
         [CustomPropertyText("滚轮缓冲速度")]
         public float scrollSpeed = 50;
+        [CustomPropertyText("是否开启缓冲")]
+        public bool useBuffer = true;
         public float ScrollBufferSpeed => _scrollBufferSpeed;
         private float _scrollBufferSpeed;
         private bool _scrollBuffer = false;
         public void ScrollBuffer()
         {
+            if (useBuffer == false)
+            {
+                return;
+            }
             if (_scrollBuffer)
             {
                 var dir = _isScrollUp ? 1 : (_isScrollDown ? -1 : 0);
