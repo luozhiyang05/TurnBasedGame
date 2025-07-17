@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Editor;
 using Unity.Plastic.Antlr3.Runtime;
 using UnityEditor;
 using UnityEditor.U2D;
@@ -31,8 +32,12 @@ public class SpriteAtlasImpoter
     {
         var atlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(atlasPath);
         var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-        if (atlas == null) TryCreateSpriteAtlas(atlasPath);
-        if (atlas == null) atlas = TryCreateSpriteAtlas(atlasPath);
+        if (atlas == null)
+        {
+            atlas = TryCreateSpriteAtlas(atlasPath);
+            ApplyNormalSetting(atlas);
+            AssetBundleTool.SetOneAssetAbName(atlasPath);
+        }
 
         HashSet<string> spritePaths = new HashSet<string>();
         Object[] objects = atlas.GetPackables();
@@ -73,5 +78,13 @@ public class SpriteAtlasImpoter
     {
         var path = assetPath.Substring(0, assetPath.LastIndexOf('/') + 1) + altasName + SpriteAtlasFileSuffix;
         return path;
+    }
+
+    private static void ApplyNormalSetting(SpriteAtlas atlas)
+    {
+        var packingSettings = atlas.GetPackingSettings();
+        packingSettings.enableRotation = false;
+        packingSettings.enableTightPacking = false;
+        atlas.SetPackingSettings(packingSettings);
     }
 }

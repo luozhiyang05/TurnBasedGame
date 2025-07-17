@@ -130,6 +130,15 @@ namespace Editor
             Close();
         }
 
+        public static void SetOneAssetAbName(string assetPath)
+        {
+            // Assets/GameSystem/TestSystem/Images/测试图片 1.png
+            var assetImporter = AssetImporter.GetAtPath(assetPath);
+            var systemName = assetPath.Split('/')[2];
+            var abName = systemName + "/" + systemName + END_NAME;
+            assetImporter.assetBundleName = abName.ToLower();
+        }
+
         private void OnInspectorUpdate()
         {
             Repaint();
