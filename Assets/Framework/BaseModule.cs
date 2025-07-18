@@ -6,7 +6,8 @@ using Tool.Utilities.Events;
 
 public class BaseModule : AbsModule
 {
-    protected Dictionary<string, BaseCtrl> ctrlDic = new Dictionary<string, BaseCtrl>();  //viewName -> ctrl
+    protected BaseCtrl ctrl;
+
     protected override void InitModule()
     {
         //添加视图回收事件
@@ -20,31 +21,12 @@ public class BaseModule : AbsModule
     {
 
     }
-    protected BaseCtrl GetCtrl(string viewName)
-    {
-        if (ctrlDic.ContainsKey(viewName))
-        {
-            return ctrlDic[viewName];
-        }
-        return null;
-    }
-
-    protected void SetViewInfo(string viewName, BaseCtrl ctrl)
-    {
-        ctrlDic.Add(viewName, ctrl);
-    }
 
     private void BindRelease(string viewName)
     {
-        string releaseViewName = "";
-        foreach (var ctrl in ctrlDic)
+        if (ctrl.MainViewName == viewName)
         {
-            if (ctrl.Key.Equals(viewName))
-            {
-                releaseViewName = ctrl.Key;
-                break;
-            }
+            ctrl = null;
         }
-        ctrlDic.Remove(releaseViewName);
     }
 }

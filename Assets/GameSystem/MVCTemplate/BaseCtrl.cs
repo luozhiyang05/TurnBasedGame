@@ -14,15 +14,21 @@ namespace GameSystem.MVCTemplate
     /// </summary>
     public abstract class BaseCtrl : ICanGetSystem
     {
+        public string MainViewName => _mainViewName;
+        private string _mainViewName;
+        private string _openViewName;
         protected BaseModel Model;
         protected BaseView View;
-        protected bool IsLoad;
+        protected bool isLoad;
+        protected bool isOpenedMainView;
         protected BaseCtrl()
         {
+            _mainViewName = GetPrefabPath();
             Init();
         }
         protected BaseCtrl(params object[] args)
         {
+            _mainViewName = GetPrefabPath();
             Init(args);
         }
 
@@ -32,37 +38,55 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void Init(params object[] args);
 
-        public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI,params object[] args)
+        public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI, params object[] args)
         {
-            // 没有加载或者已经加载但是没有激活，则去池子中处理
-            if (!IsLoad || (IsLoad && !View.isOpen))
+            //只有在主界面打开后，其他界面才可以打开
+            if (!isOpenedMainView && !_openViewName.Equals(MainViewName))
             {
-                UIManager.GetInstance().GetFromPool(GetPrefabPath(), euiLayer, (BaseView) =>
-                {
-                    if (!IsLoad)
-                    {
-                        Model = GetModel();
-                        View = BaseView;
-                        View.SetModel(Model);
-                        View.SetClose(OnClose);
-                        View.SetRelease(OnRelease);
-                    }
-
-                    InitListener();
-                    
-                    Model.Init();
-                    Model.BindListener();
-
-                    OnBeforeShow(args);
-                    View.OnShow();
-                    OnShowComplate(args);
-
-                    IsLoad = true;
-                });
+                return;
             }
 
+            //打开View
+            UIManager.GetInstance().GetFromPool(_openViewName, euiLayer, (BaseView) =>
+                 {
+                     View = BaseView;
 
+                     //记录主界面是否打开
+                     if (_openViewName.Equals(MainViewName))
+                     {
+                         isOpenedMainView = true;
+                     }
+
+                     //ctrl是否第一次加载（在打开主界面时会加载）
+                     if (!isLoad)
+                     {
+                         InitListener();
+                         Model = GetModel();
+                         Model.Init();
+                         Model.BindListener();
+                         isLoad = true;
+                     }
+
+                     //给主界面绑定特殊事件
+                     if (BaseView.name.Equals(MainViewName))
+                     {
+                         View.SetClose(OnClose);
+                         View.SetRelease(OnRelease);
+                     }
+                     else
+                     {
+                         View.SetClose(null);
+                         View.SetRelease(null);
+                     }
+
+                     View.SetModel(Model);
+                     OnBeforeShow(args);
+                     View.OnShow();
+                     OnShowComplate(args);
+                 });
         }
+        protected void SetOpenViewName(string viewName) => _openViewName = viewName;
+        protected string GetOpenView() => _openViewName;
 
         public abstract BaseModel GetModel();
 
@@ -78,17 +102,14 @@ namespace GameSystem.MVCTemplate
         {
             RemoveListener();
             Model.RemoveListener();
-
-            UIManager.GetInstance().EnterPool(View);
+            isOpenedMainView = false;
         }
 
         private void OnRelease()
         {
-            IsLoad = false;
+            isLoad = false;
             Model = null;
-            var viewName = View.name;
             View = null;
-            EventsHandle.EventTrigger(EventsNameConst.RELEASE_VIEW, viewName);
         }
 
         public IMgr Ins => Global.GetInstance();

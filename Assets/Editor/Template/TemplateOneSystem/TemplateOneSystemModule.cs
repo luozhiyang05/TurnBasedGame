@@ -17,14 +17,14 @@ namespace Assets.GameSystem.TemplateOneSystem
 
         public void ShowView()
         {
-            var viewName = "TemplateOneSystemView";
-            var ctrl = GetCtrl(viewName);
-            if (ctrl == null)
-            {
-                ctrl = new TemplateOneSystemViewCtrl();
-                SetViewInfo(viewName, ctrl);
-            }
-            ctrl.ShowView();
+            // var viewName = "TemplateOneSystemView";
+            // var ctrl = GetCtrl(viewName);
+            // if (ctrl == null)
+            // {
+            //     ctrl = new TemplateOneSystemViewCtrl();
+            //     SetViewInfo(viewName, ctrl);
+            // }
+            // ctrl.ShowView();
         }
     }
 }
