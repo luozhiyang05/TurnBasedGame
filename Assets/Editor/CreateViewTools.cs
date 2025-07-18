@@ -1,0 +1,75 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
+using UnityEditor.U2D;
+using UnityEngine;
+using UnityEngine.U2D;
+
+public class CreateViewTools
+{
+    [MenuItem("Assets/生成View", false, -1)]
+    static void OpenWindow()
+    {
+        //将path传递给窗口
+        var window = EditorWindow.GetWindowWithRect<CreateViewToolsWindow>(new Rect(0, 0, 470, 400), true, "生成View");
+    }
+}
+
+public class CreateViewToolsWindow : EditorWindow
+{
+    private const string Tips = "请输入View名称";
+    public string viewName;
+    public string fullPath;
+    public CreateViewToolsWindow()
+    {
+        viewName = Tips;
+        this.titleContent = new GUIContent("生成View");
+    }
+
+    void OnEnable()
+    {
+        var assetPath = AssetDatabase.GetAssetPath(Selection.activeObject);
+        fullPath = Path.GetFullPath(assetPath);
+    }
+
+    void OnGUI()
+    {
+        EditorGUILayout.Space();
+        GUILayout.BeginVertical();
+        viewName = EditorGUILayout.TextField("View名称:", viewName);
+        EditorGUILayout.LabelField("Path：" + fullPath);
+        if (GUILayout.Button("生成"))
+        {
+            CreateView(viewName);
+        }
+        GUILayout.EndVertical();
+
+        EditorGUILayout.HelpBox("注意：视图名字省略View！！！", MessageType.Warning);
+    }
+
+    private void CreateView(string viewName)
+    {
+        if (viewName.Equals(Tips) || "" == viewName)
+        {
+            Debug.LogWarning("请输入正确的View名称");
+            return;
+        }
+        //读取view的配置模板,生成view
+        const string templateViewPath = "Assets/Editor/Template/TemplateSystem/Main/TemplateSystemView.cs";
+        try
+        {
+            var viewContent = File.ReadAllText(templateViewPath);
+            var newViewContent = viewContent.Replace("TemplateSystem", viewName);
+            var viewPath = string.Format("{0}\\{1}View.cs", fullPath, viewName);
+            File.WriteAllText(viewPath, newViewContent);
+            Close();
+            AssetDatabase.Refresh();
+        }
+        catch (Exception e)
+        {
+            throw new Exception("生成View失败：" + e);
+        }
+    }
+}
