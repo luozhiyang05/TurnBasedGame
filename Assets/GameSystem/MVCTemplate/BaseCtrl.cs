@@ -40,8 +40,8 @@ namespace GameSystem.MVCTemplate
         protected abstract void Init(params object[] args);
 
         protected void SetOpenViewName(string viewName) => _openViewName = viewName;
-        
-        //外部调用打开视图
+
+        //ctrl调用打开视图
         public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI, params object[] args)
         {
             //只有在主界面打开后，其他界面才可以打开
@@ -93,12 +93,19 @@ namespace GameSystem.MVCTemplate
         }
 
         //供外部调用关闭视图
-        public void CloseView(BaseView view)
+        public void CloseView(string viewName)
         {
-            if (view == null)
-                return;
-            view.OnHide();
-            _openViews.Remove(view);
+            BaseView targetView = null;
+            foreach (var view in _openViews)
+            {
+                if (view.name == viewName)
+                {
+                    targetView = view;
+                    break;
+                }
+            }
+            targetView.OnHide();
+            _openViews.Remove(targetView);
         }
 
         //获取视图
