@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using Tool.Single;
+using Tool.Utilities;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -68,17 +70,24 @@ namespace Tool.ResourceMgr
         /// <summary>
         /// 加载视图
         /// </summary>
-        /// <param name="viewName"></param>
+        /// <param name="path"></param>
         /// <param name="callback"></param>
         /// <exception cref="Exception"></exception>
-        public void LoadView(string viewName, Action<GameObject> callback)
+        public void LoadView(string path, Action<GameObject> callback)
         {
 #if UNITY_EDITOR
-            var systemName = viewName[..viewName.IndexOf("View")];
-            var realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, viewName);
+            var systemName = path[..path.IndexOf("View")];
+            var realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, path);
             GameObject viewObj = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
             if (viewObj == null) throw new Exception($"加载UI失败：{realPath}");
             callback(GameObject.Instantiate(viewObj));
+#else
+
+            var viewName = PathUtils.GetViewNameFromAbPath(path);
+            AssetBundleMgr.GetInstance().LoadResAsync<GameObject>(path, viewName, (viewObj) =>
+            {
+               callback(GameObject.Instantiate(viewObj));
+            });
 #endif
         }
     }

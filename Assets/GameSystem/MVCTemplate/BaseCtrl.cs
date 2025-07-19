@@ -22,17 +22,18 @@ namespace GameSystem.MVCTemplate
         protected bool isLoad;
         protected bool isOpenedMainView;
         private HashSet<BaseView> _openViews = new HashSet<BaseView>();
+        private string _systemName;
         protected BaseCtrl()
         {
             _mainViewName = GetPrefabPath();
             Init();
         }
-        protected BaseCtrl(params object[] args)
+        protected BaseCtrl(string systemName,params object[] args)
         {
+            _systemName = systemName;
             _mainViewName = GetPrefabPath();
             Init(args);
         }
-
         protected abstract void InitListener();
 
         protected abstract void RemoveListener();
@@ -51,16 +52,17 @@ namespace GameSystem.MVCTemplate
             }
 
             //打开View
+#if UNITY_EDITOR
+#else
+            _openViewName = PathUtils.GetSystemAssetBundlePath(_systemName) + "/" + _openViewName;
+            Debug.Log("打开视图，ab路径为：" + _openViewName);
+#endif
             UIManager.GetInstance().GetFromPool(_openViewName, euiLayer, (BaseView) =>
                  {
+                     isOpenedMainView = true;
+
                      var view = BaseView;
                      _openViews.Add(view);
-
-                     //记录主界面是否打开
-                     if (_openViewName.Equals(MainViewName))
-                     {
-                         isOpenedMainView = true;
-                     }
 
                      //ctrl是否第一次加载（在打开主界面时会加载）
                      if (!isLoad)
