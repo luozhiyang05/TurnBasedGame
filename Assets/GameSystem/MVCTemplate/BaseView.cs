@@ -19,6 +19,7 @@ namespace GameSystem.MVCTemplate
 
         private UnityAction _closeCallback;
         private UnityAction _releaseCallback;
+        private UnityAction<BaseView> _removeFormOpenViewsCallback;
 
         private void Awake()
         {
@@ -61,7 +62,13 @@ namespace GameSystem.MVCTemplate
             }
             _closeCallback?.Invoke();
             gameObject.SetActive(false);
+            _removeFormOpenViewsCallback?.Invoke(this);
             if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
+        }
+
+        public void SetRemoveFromOpenViewsCallback(UnityAction<BaseView> callback)
+        {
+            _removeFormOpenViewsCallback = callback;
         }
 
         public void SetClose(UnityAction callback)

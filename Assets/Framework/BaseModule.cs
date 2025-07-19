@@ -24,7 +24,7 @@ public class BaseModule : AbsModule
 
     private void BindRelease(string viewName)
     {
-        if (ctrl.MainViewName == viewName)
+        if (null != ctrl && ctrl.MainViewName == viewName)
         {
             ctrl = null;
         }

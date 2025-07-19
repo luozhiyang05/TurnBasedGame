@@ -6,7 +6,6 @@ namespace Assets.GameSystem.TemplateSystem.Main
     {
         public override string GetPrefabPath() => "TemplateSystemView";
         public override BaseModel GetModel() => Model ??= new TemplateSystemViewModel();
-        public override BaseView GetView() => View;
         public TemplateSystemViewCtrl() : base() { }
         public TemplateSystemViewCtrl(params object[] args) : base(args)
         {

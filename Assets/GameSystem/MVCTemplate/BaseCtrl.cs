@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Framework;
 using Tool.UI;
 using Tool.Utilities;
@@ -18,9 +19,9 @@ namespace GameSystem.MVCTemplate
         private string _mainViewName;
         private string _openViewName;
         protected BaseModel Model;
-        protected BaseView View;
         protected bool isLoad;
         protected bool isOpenedMainView;
+        private HashSet<BaseView> _openViews = new HashSet<BaseView>();
         protected BaseCtrl()
         {
             _mainViewName = GetPrefabPath();
@@ -38,6 +39,9 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void Init(params object[] args);
 
+        protected void SetOpenViewName(string viewName) => _openViewName = viewName;
+        
+        //外部调用打开视图
         public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI, params object[] args)
         {
             //只有在主界面打开后，其他界面才可以打开
@@ -49,7 +53,8 @@ namespace GameSystem.MVCTemplate
             //打开View
             UIManager.GetInstance().GetFromPool(_openViewName, euiLayer, (BaseView) =>
                  {
-                     View = BaseView;
+                     var view = BaseView;
+                     _openViews.Add(view);
 
                      //记录主界面是否打开
                      if (_openViewName.Equals(MainViewName))
@@ -70,27 +75,44 @@ namespace GameSystem.MVCTemplate
                      //给主界面绑定特殊事件
                      if (BaseView.name.Equals(MainViewName))
                      {
-                         View.SetClose(OnClose);
-                         View.SetRelease(OnRelease);
+                         view.SetClose(OnClose);
+                         view.SetRelease(OnRelease);
                      }
                      else
                      {
-                         View.SetClose(null);
-                         View.SetRelease(null);
+                         view.SetClose(null);
+                         view.SetRelease(null);
                      }
 
-                     View.SetModel(Model);
+                     view.SetModel(Model);
                      OnBeforeShow(args);
-                     View.OnShow();
+                     view.OnShow();
                      OnShowComplate(args);
+                     view.SetRemoveFromOpenViewsCallback(OnRemoveFormOpenViews);
                  });
         }
-        protected void SetOpenViewName(string viewName) => _openViewName = viewName;
-        protected string GetOpenView() => _openViewName;
+
+        //供外部调用关闭视图
+        public void CloseView(BaseView view)
+        {
+            if (view == null)
+                return;
+            view.OnHide();
+            _openViews.Remove(view);
+        }
+
+        //获取视图
+        protected T GetView<T>() where T : BaseView
+        {
+            foreach (var view in _openViews)
+            {
+                if (view is T)
+                    return view as T;
+            }
+            return null;
+        }
 
         public abstract BaseModel GetModel();
-
-        public abstract BaseView GetView();
 
         public abstract string GetPrefabPath();
 
@@ -109,7 +131,13 @@ namespace GameSystem.MVCTemplate
         {
             isLoad = false;
             Model = null;
-            View = null;
+            _openViews.Clear();
+            _openViews = null;
+        }
+
+        private void OnRemoveFormOpenViews(BaseView view)
+        {
+            _openViews.Remove(view);
         }
 
         public IMgr Ins => Global.GetInstance();
