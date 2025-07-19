@@ -46,7 +46,7 @@ public class CreateViewToolsWindow : EditorWindow
         }
         GUILayout.EndVertical();
 
-        EditorGUILayout.HelpBox("注意：视图名字省略View！！！", MessageType.Warning);
+        EditorGUILayout.HelpBox("注意：视图名字省略View！！！（开玩笑）", MessageType.Warning);
     }
 
     private void CreateView(string viewName)
@@ -61,8 +61,8 @@ public class CreateViewToolsWindow : EditorWindow
         try
         {
             var viewContent = File.ReadAllText(templateViewPath);
-            var newViewContent = viewContent.Replace("TemplateSystem", viewName);
-            var viewPath = string.Format("{0}\\{1}View.cs", fullPath, viewName);
+            var newViewContent = viewContent.Replace("TemplateSystemView", viewName);
+            var viewPath = string.Format("{0}\\{1}.cs", fullPath, viewName);
             File.WriteAllText(viewPath, newViewContent);
             Close();
             AssetDatabase.Refresh();

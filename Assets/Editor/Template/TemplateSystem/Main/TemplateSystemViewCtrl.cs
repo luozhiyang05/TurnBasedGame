@@ -2,6 +2,11 @@ using GameSystem.MVCTemplate;
 
 namespace Assets.GameSystem.TemplateSystem.Main
 {
+    //ctrl管理的视图
+    public enum TempSystemViews
+    {
+        TemplateSystemView,
+    }
     public class TemplateSystemViewCtrl : BaseCtrl
     {
         public override string GetPrefabPath() => "TemplateSystemView";
