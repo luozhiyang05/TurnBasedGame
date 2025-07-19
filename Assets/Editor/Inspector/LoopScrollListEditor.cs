@@ -1,9 +1,8 @@
 
-using Tool.CustomAttribute;
+using Assets.Wights.Scripts;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using Wights.Utilities;
 namespace Editor.Attribute
 {
     [CustomEditor(typeof(LoopScrollList))]

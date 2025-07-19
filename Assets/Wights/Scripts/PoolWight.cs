@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Tool.Utilities;
 using UnityEngine;
 
-namespace Wights.Utilities
+namespace Assets.Wights.Scripts
 {
     public enum EWightType
     {

@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Wights.Utilities
+namespace Assets.Wights.Scripts
 {
     public class LoopScrollList : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IScrollHandler
     {

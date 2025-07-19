@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace Wights.Utilities
+namespace Assets.Wights.Scripts
 {
     public class ListViewCell : MonoBehaviour, IPointerClickHandler
     {
