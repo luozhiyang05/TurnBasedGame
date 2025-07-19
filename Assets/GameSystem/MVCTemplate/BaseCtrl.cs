@@ -104,6 +104,10 @@ namespace GameSystem.MVCTemplate
                     break;
                 }
             }
+            if (null == targetView)
+            {
+                return;
+            }
             targetView.OnHide();
             _openViews.Remove(targetView);
         }
@@ -132,6 +136,20 @@ namespace GameSystem.MVCTemplate
             RemoveListener();
             Model.RemoveListener();
             isOpenedMainView = false;
+
+            // 关闭所有子视图，它会先将所有子视图存入idlePool后，主视图才会存入idlePool，不会有顺序报空的问题
+            var baseViews = new List<BaseView>();
+            foreach (var view in _openViews)
+            {
+                if (view.name.Equals(MainViewName)) continue;
+                baseViews.Add(view);
+            }
+            for(var i = 0; i < baseViews.Count; i++)
+            {
+                baseViews[i].OnHide();
+            }
+            baseViews.Clear();
+            _openViews.Clear();
         }
 
         private void OnRelease()
