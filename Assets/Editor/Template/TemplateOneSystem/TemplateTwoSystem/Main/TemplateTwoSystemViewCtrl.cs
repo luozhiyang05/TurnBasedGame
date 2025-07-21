@@ -9,7 +9,6 @@ namespace Assets.GameSystem.TemplateOneSystem.TemplateTwoSystem.Main
     {
         public override string GetPrefabPath() => "TemplateTwoSystemView";
         public override BaseModel GetModel() => Model ??= new TemplateTwoSystemViewModel();
-        public override BaseView GetView() => View;
         public TemplateTwoSystemViewCtrl() : base() { }
         public TemplateTwoSystemViewCtrl(params object[] args) : base(args)
         {

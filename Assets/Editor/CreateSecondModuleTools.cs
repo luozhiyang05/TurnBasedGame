@@ -17,6 +17,11 @@ namespace Editor
             _panel = GetWindowWithRect<CreateSecondModuleTools>(new Rect(0, 0, 360, 90), false, "生成二级系统模块");
             _panel.Show(); //默认打开
         }
+        [MenuItem("QUFramework/生成（MVC）二级模块", true)]
+        public static bool CheckFun()
+        {
+            return false;
+        }
 
 
         private void OnGUI()

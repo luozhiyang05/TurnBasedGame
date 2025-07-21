@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Framework;
 using Tool.UI;
 using Tool.Utilities;
@@ -14,59 +15,117 @@ namespace GameSystem.MVCTemplate
     /// </summary>
     public abstract class BaseCtrl : ICanGetSystem
     {
+        public string MainViewName => _mainViewName;
+        private string _mainViewName;
+        private string _openViewName;
         protected BaseModel Model;
-        protected BaseView View;
-        protected bool IsLoad;
+        protected bool isLoad;
+        protected bool isOpenedMainView;
+        private HashSet<BaseView> _openViews = new HashSet<BaseView>();
+        private string _systemName;
         protected BaseCtrl()
         {
+            _mainViewName = GetPrefabPath();
             Init();
         }
-        protected BaseCtrl(params object[] args)
+        protected BaseCtrl(string systemName,params object[] args)
         {
+            _systemName = systemName;
+            _mainViewName = GetPrefabPath();
             Init(args);
         }
-
         protected abstract void InitListener();
 
         protected abstract void RemoveListener();
 
         protected abstract void Init(params object[] args);
 
-        public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI,params object[] args)
+        protected void SetOpenViewName(string viewName) => _openViewName = viewName;
+
+        //ctrl调用打开视图
+        public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI, params object[] args)
         {
-            // 没有加载或者已经加载但是没有激活，则去池子中处理
-            if (!IsLoad || (IsLoad && !View.isOpen))
+            //只有在主界面打开后，其他界面才可以打开
+            if (!isOpenedMainView && !_openViewName.Equals(MainViewName))
             {
-                UIManager.GetInstance().GetFromPool(GetPrefabPath(), euiLayer, (BaseView) =>
-                {
-                    if (!IsLoad)
-                    {
-                        Model = GetModel();
-                        View = BaseView;
-                        View.SetModel(Model);
-                        View.SetClose(OnClose);
-                        View.SetRelease(OnRelease);
-                    }
-
-                    InitListener();
-                    
-                    Model.Init();
-                    Model.BindListener();
-
-                    OnBeforeShow(args);
-                    View.OnShow();
-                    OnShowComplate(args);
-
-                    IsLoad = true;
-                });
+                return;
             }
 
+            //打开View
+#if UNITY_EDITOR
+#else
+            _openViewName = PathUtils.GetSystemAssetBundlePath(_systemName) + "/" + _openViewName;
+            Debug.Log("打开视图，ab路径为：" + _openViewName);
+#endif
+            UIManager.GetInstance().GetFromPool(_openViewName, euiLayer, (BaseView) =>
+                 {
+                     isOpenedMainView = true;
 
+                     var view = BaseView;
+                     _openViews.Add(view);
+
+                     //ctrl是否第一次加载（在打开主界面时会加载）
+                     if (!isLoad)
+                     {
+                         InitListener();
+                         Model = GetModel();
+                         Model.Init();
+                         Model.BindListener();
+                         isLoad = true;
+                     }
+
+                     //给主界面绑定特殊事件
+                     if (BaseView.name.Equals(MainViewName))
+                     {
+                         view.SetClose(OnClose);
+                         view.SetRelease(OnRelease);
+                     }
+                     else
+                     {
+                         view.SetClose(null);
+                         view.SetRelease(null);
+                     }
+
+                     view.SetModel(Model);
+                     OnBeforeShow(args);
+                     view.OnShow();
+                     OnShowComplate(args);
+                     view.SetRemoveFromOpenViewsCallback(OnRemoveFormOpenViews);
+                 });
+        }
+
+        //供外部调用关闭视图
+        public void CloseView(string viewName)
+        {
+            BaseView targetView = null;
+            foreach (var view in _openViews)
+            {
+                if (view.name == viewName)
+                {
+                    targetView = view;
+                    break;
+                }
+            }
+            if (null == targetView)
+            {
+                return;
+            }
+            targetView.OnHide();
+            _openViews.Remove(targetView);
+        }
+
+        //获取视图
+        protected T GetView<T>() where T : BaseView
+        {
+            foreach (var view in _openViews)
+            {
+                if (view is T)
+                    return view as T;
+            }
+            return null;
         }
 
         public abstract BaseModel GetModel();
-
-        public abstract BaseView GetView();
 
         public abstract string GetPrefabPath();
 
@@ -78,17 +137,34 @@ namespace GameSystem.MVCTemplate
         {
             RemoveListener();
             Model.RemoveListener();
+            isOpenedMainView = false;
 
-            UIManager.GetInstance().EnterPool(View);
+            // 关闭所有子视图，它会先将所有子视图存入idlePool后，主视图才会存入idlePool，不会有顺序报空的问题
+            var baseViews = new List<BaseView>();
+            foreach (var view in _openViews)
+            {
+                if (view.name.Equals(MainViewName)) continue;
+                baseViews.Add(view);
+            }
+            for(var i = 0; i < baseViews.Count; i++)
+            {
+                baseViews[i].OnHide();
+            }
+            baseViews.Clear();
+            _openViews.Clear();
         }
 
         private void OnRelease()
         {
-            IsLoad = false;
+            isLoad = false;
             Model = null;
-            var viewName = View.name;
-            View = null;
-            EventsHandle.EventTrigger(EventsNameConst.RELEASE_VIEW, viewName);
+            _openViews.Clear();
+            _openViews = null;
+        }
+
+        private void OnRemoveFormOpenViews(BaseView view)
+        {
+            _openViews.Remove(view);
         }
 
         public IMgr Ins => Global.GetInstance();

@@ -1,6 +1,8 @@
 using System;
 using Tool.AudioMgr;
+using Tool.ResourceMgr;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GameSystem.MVCTemplate
 {
@@ -12,7 +14,7 @@ namespace GameSystem.MVCTemplate
         private string _bgmAudioPath;
         private string _closeAudioPath;
         protected bool useAudio = false;
-        protected virtual void AutoInitUI(){}
+        protected virtual void AutoInitUI() { }
         protected abstract void OnInit();
         public abstract void OnShow();
         public abstract void OnHide();
@@ -42,12 +44,12 @@ namespace GameSystem.MVCTemplate
                     throw new Exception("没有这个音频类型");
             }
         }
-        protected  void CloseBgm()
+        protected void CloseBgm()
         {
             if (!string.IsNullOrEmpty(_bgmAudioPath))
                 AudioManager.GetInstance().StopAudio(_bgmAudioPath);
         }
-   
+
         public virtual bool MaskPanel()
         {
             return false;
@@ -58,6 +60,18 @@ namespace GameSystem.MVCTemplate
             return false;
         }
 
-        public virtual void OnClickMaskPanel() {}
+        public virtual void OnClickMaskPanel() { }
+
+        protected T LoadAsset<T>(string systemName, string assetPath, int sort, bool isActive = true)
+        {
+            var go = ResMgr.GetInstance().LoadAsset(systemName, assetPath);
+            go = Instantiate(go);
+            var main = transform.Find("Main");
+            var trans = go.transform;
+            trans.SetParent(main);
+            trans.SetSiblingIndex(sort);
+            go.SetActive(isActive);
+            return go.GetComponent<T>();
+        }
     }
 }

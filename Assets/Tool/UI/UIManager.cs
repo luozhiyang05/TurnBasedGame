@@ -39,11 +39,8 @@ namespace Tool.UI
         private RectTransform _canvasRectTrans;
         private CanvasScaler _canvasScaler;
         private Transform _warnUI,_tipsUI, _gameUI, _menuUI;
-        private Dictionary<string, BaseTips> _loadBaseTips = new Dictionary<string, BaseTips>();
-
-        private const float GC_CHECK = 10f; //GC检查间隔
+        // private const float GC_CHECK = 10f; //GC检查间隔
         private const float GC_TIME = 5f;  //GC回收间隔
-
         private bool _lock = false; //GC锁
 
         private QArray<PrefabVo> _idlePool = new QArray<PrefabVo>(10);
@@ -53,11 +50,9 @@ namespace Tool.UI
         private QArray<PrefabVo> _gcQueue = new QArray<PrefabVo>(10);
 
         protected override void OnInit()
-        {
-            _loadBaseTips = new Dictionary<string, BaseTips>();
-            
+        {            
             #region UICanvas初始化
-            ActionKit.GetInstance().AddTimer(GC_Check,GC_CHECK,"GC_Check",true);
+            // ActionKit.GetInstance().AddTimer(GC_Check,GC_CHECK,"GC_Check",true);
             ActionKit.GetInstance().AddTimer(GC_Release,GC_TIME,"GC_Release",true);
 
             //创建画布
@@ -138,7 +133,7 @@ namespace Tool.UI
                 _lock = true;
                 var cache = CheckIdlePool(path);
                 _lock = false;
-                if (cache != null)
+                if (null != cache)
                 {
                     _pool.Add(cache);
                     cache.GetBaseView().transform.SetAsLastSibling();
@@ -146,15 +141,20 @@ namespace Tool.UI
                     callback?.Invoke(cache.GetBaseView());
                     return;
                 }
-            }
 
-            //没有的话，则实例化预制体到pool
-            LoadViewPrefab(path, euiLayer, (baseView) =>
-            {
-                var prefabVp = new PrefabVo(path, baseView);
-                _pool.Add(prefabVp);
-                callback?.Invoke(baseView);
-            });
+                //如果pool中没有prefabVO，则表明没有打开过，需要去加载
+                var prefabVo = _pool.FindValue((value) => value.GetBaseView().name == path);
+                if (null == prefabVo)
+                {
+                    //没有的话，则实例化预制体到pool
+                    LoadViewPrefab(path, euiLayer, (baseView) =>
+                    {
+                        var prefabVp = new PrefabVo(path, baseView);
+                        _pool.Add(prefabVp);
+                        callback?.Invoke(baseView);
+                    });
+                }
+            }
         }
 
         /// <summary>
@@ -175,10 +175,10 @@ namespace Tool.UI
         /// 回收view
         /// </summary>
         /// <param name="baseView"></param>
-        public void EnterPool(BaseView baseView)
+        public void EnterIdlePool(BaseView baseView)
         {
             //将pool中的vo 移入idlePool
-            _pool.FindValue((value) =>
+            var prefavVo = _pool.FindValue((value) =>
             {
                 if (value.GetBaseView() == baseView)
                 {
@@ -190,12 +190,35 @@ namespace Tool.UI
                     return false;
                 }
             });
+            //从pool中移除vo
+            if (null != prefavVo)
+            {
+                _pool.Remove(prefavVo);
+            }
         }
 
         /// <summary>
         /// GC检查
         /// </summary>
-        private void GC_Check()
+        // private void GC_Check()
+        // {
+        //     if (!_lock)
+        //     {
+        //         _lock = true;
+        //         while (_idlePool.Count != 0)
+        //         {
+        //             var vo = _idlePool.GetFromHead();
+        //             _gcQueue.Add(vo);
+        //         }
+        //         _lock = false;
+        //     }
+        //     Debug.Log("GC检查");
+        // }
+
+        /// <summary>
+        /// 回收View
+        /// </summary>
+        private void GC_Release()
         {
             if (!_lock)
             {
@@ -205,19 +228,14 @@ namespace Tool.UI
                     var vo = _idlePool.GetFromHead();
                     _gcQueue.Add(vo);
                 }
-                _lock = false;
-            }
-        }
 
-        /// <summary>
-        /// 回收缓存
-        /// </summary>
-        private void GC_Release()
-        {
-            while (_gcQueue.Count != 0)
-            {
-                var vo = _gcQueue.GetFromHead();
-                vo.Release();
+                while (_gcQueue.Count != 0)
+                {
+                    var vo = _gcQueue.GetFromHead();
+                    vo.Release();
+                }
+
+                _lock = false;
             }
         }
         #endregion

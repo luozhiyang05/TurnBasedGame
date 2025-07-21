@@ -34,7 +34,7 @@ namespace GameSystem.MVCTemplate
                 yield return null;
             }
             gameObject.SetActive(false);
-            UIManager.GetInstance().EnterPool(this);
+            UIManager.GetInstance().EnterIdlePool(this);
             if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
             OnRelease();
         }

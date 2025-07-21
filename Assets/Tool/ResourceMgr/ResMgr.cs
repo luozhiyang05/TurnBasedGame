@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using Tool.Single;
+using Tool.Utilities;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -68,17 +70,47 @@ namespace Tool.ResourceMgr
         /// <summary>
         /// 加载视图
         /// </summary>
-        /// <param name="viewName"></param>
+        /// <param name="path"></param>
         /// <param name="callback"></param>
         /// <exception cref="Exception"></exception>
-        public void LoadView(string viewName, Action<GameObject> callback)
+        public void LoadView(string path, Action<GameObject> callback)
         {
 #if UNITY_EDITOR
-            var systemName = viewName[..viewName.IndexOf("View")];
-            var realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, viewName);
+            var systemName = path[..path.IndexOf("View")];
+            var realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, path);
             GameObject viewObj = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
             if (viewObj == null) throw new Exception($"加载UI失败：{realPath}");
             callback(GameObject.Instantiate(viewObj));
+#else
+
+            var viewName = PathUtils.GetViewNameFromAbPath(path);
+            AssetBundleMgr.GetInstance().LoadResAsync<GameObject>(path, viewName, (viewObj) =>
+            {
+               callback(GameObject.Instantiate(viewObj));
+            });
+#endif
+        }
+
+
+        /// <summary>
+        /// 加载资源
+        /// </summary>
+        /// <param name="systemName"></param>
+        /// <param name="assetName"></param>
+        /// <param name="callback"></param>
+        public GameObject LoadAsset(string systemName, string assetName,bool fromGameSystem = true)
+        {
+#if UNITY_EDITOR
+            string realPath = "";
+            if (fromGameSystem)
+                realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, assetName);
+            else
+                realPath = string.Format("Assets/Wights/{0}.prefab", assetName);
+            GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
+            if (go == null) throw new Exception($"加载资源失败：{realPath}");
+            return go;
+#else
+
 #endif
         }
     }

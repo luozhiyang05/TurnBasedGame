@@ -21,7 +21,14 @@ namespace Editor
             _isMvc = false;
         }
 
-
+        [MenuItem("QUFramework/生成（MVC）模块")]
+        public static void CreateNewMainModule()
+        {
+            //返回当前屏幕上第一个 t 类型的 EditorWindow，utility参数为是否浮动窗口
+            _panel = GetWindowWithRect<CreateMainModuleTools>(new Rect(0, 0, 360, 90), false, "生成系统模块");
+            _panel.Show(); //默认打开
+            _isMvc = true;
+        }
         [MenuItem("QUFramework/生成（MVC）主模块")]
         public static void CreateMainModule()
         {
@@ -31,6 +38,11 @@ namespace Editor
             _isMvc = true;
         }
 
+        [MenuItem("QUFramework/生成（MVC）主模块",true)]
+        public static bool CheckFun()
+        {
+            return false;
+        }
 
         private void OnGUI()
         {
@@ -76,11 +88,11 @@ namespace Editor
             }
             
             //读取view的配置模板,生成view
-            const string templateViewPath = "Assets/Editor/Template/TemplateOneSystem/Main/TemplateOneSystemView.cs";
+            const string templateViewPath = "Assets/Editor/Template/TemplateSystem/Main/TemplateSystemView.cs";
             try
             {
                 var viewContent = File.ReadAllText(templateViewPath);
-                var newViewContent = viewContent.Replace("TemplateOneSystem", _moduleName);
+                var newViewContent = viewContent.Replace("TemplateSystem", _moduleName);
                 File.WriteAllText(systemPath + "Main/" + _moduleName + "View.cs", newViewContent);
             }
             catch (Exception e)
@@ -89,11 +101,11 @@ namespace Editor
             }
 
             //生成Model
-            const string templateModelPath = "Assets/Editor/Template/TemplateOneSystem/Main/TemplateOneSystemViewModel.cs";
+            const string templateModelPath = "Assets/Editor/Template/TemplateSystem/Main/TemplateSystemViewModel.cs";
             try
             {
                 var modelContent = File.ReadAllText(templateModelPath);
-                var newModelContent = modelContent.Replace("TemplateOneSystem", _moduleName);
+                var newModelContent = modelContent.Replace("TemplateSystem", _moduleName);
                 File.WriteAllText(systemPath + "Main/" + _moduleName + "ViewModel.cs", newModelContent);
             }
             catch (Exception e)
@@ -102,11 +114,11 @@ namespace Editor
             }
 
             //生成Ctrl
-            const string templateCtrlPath = "Assets/Editor/Template/TemplateOneSystem/Main/TemplateOneSystemViewCtrl.cs";
+            const string templateCtrlPath = "Assets/Editor/Template/TemplateSystem/Main/TemplateSystemViewCtrl.cs";
             try
             {
                 var ctrlContent = File.ReadAllText(templateCtrlPath);
-                var newCtrlContent = ctrlContent.Replace("TemplateOneSystem", _moduleName);
+                var newCtrlContent = ctrlContent.Replace("TemplateSystem", _moduleName);
                 File.WriteAllText(systemPath + "Main/" + _moduleName + "ViewCtrl.cs", newCtrlContent);
             }
             catch (Exception e)
@@ -115,11 +127,11 @@ namespace Editor
             }
 
             //创建系统cs
-            const string templateModulePath = "Assets/Editor/Template/TemplateOneSystem/TemplateOneSystemModule.cs";
+            const string templateModulePath = "Assets/Editor/Template/TemplateSystem/TemplateSystemModule.cs";
             try
             {
                 var moduleContent = File.ReadAllText(templateModulePath);
-                var newSystemContent = moduleContent.Replace("TemplateOneSystem", _moduleName);
+                var newSystemContent = moduleContent.Replace("TemplateSystem", _moduleName);
                 File.WriteAllText(systemPath + _moduleName + "Module.cs", newSystemContent);
             }
             catch (Exception e)
@@ -131,7 +143,7 @@ namespace Editor
             _panel.Close();
         }
 
-         private static void CreateNoMvcFile()
+        private static void CreateNoMvcFile()
         {
             //D:\UnityProjects\QUFrameWork
             string systemPath = Directory.GetCurrentDirectory() + @"\Assets\GameSystem\" + _moduleName + @"\";
