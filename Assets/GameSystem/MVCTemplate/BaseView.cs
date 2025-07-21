@@ -14,12 +14,13 @@ namespace GameSystem.MVCTemplate
     {
         [NonSerialized] public CanvasGroup CanvasGroup;
         [NonSerialized] public EuiLayer EuiLayer;
-        [NonReorderable] public bool isOpen;
+        [NonSerialized] public bool isOpen;
         protected BaseModel Model;
-
+        private BaseView _fatherView;
         private UnityAction _closeCallback;
         private UnityAction _releaseCallback;
         private UnityAction<BaseView> _removeFormOpenViewsCallback;
+        private bool _isRelease;
 
         private void Awake()
         {
@@ -34,6 +35,8 @@ namespace GameSystem.MVCTemplate
         private void OnEnable() => isOpen = true;
         private void OnDisable() => isOpen = false;
         public void SetModel(BaseModel model) => Model = model;
+        public void SetFatherView(BaseView fatherView) => _fatherView = fatherView;
+        public bool CheckFatherViewIsNull() => _fatherView == null;
         protected void SetName(string viewName) => name = viewName;
 
         protected abstract void BindModelListener();

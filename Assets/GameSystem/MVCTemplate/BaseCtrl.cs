@@ -19,6 +19,7 @@ namespace GameSystem.MVCTemplate
         private string _mainViewName;
         private string _openViewName;
         protected BaseModel Model;
+        protected BaseView fatherView;
         protected bool isLoad;
         protected bool isOpenedMainView;
         private HashSet<BaseView> _openViews = new HashSet<BaseView>();
@@ -59,11 +60,6 @@ namespace GameSystem.MVCTemplate
 #endif
             UIManager.GetInstance().GetFromPool(_openViewName, euiLayer, (BaseView) =>
                  {
-                     isOpenedMainView = true;
-
-                     var view = BaseView;
-                     _openViews.Add(view);
-
                      //ctrl是否第一次加载（在打开主界面时会加载）
                      if (!isLoad)
                      {
@@ -74,18 +70,26 @@ namespace GameSystem.MVCTemplate
                          isLoad = true;
                      }
 
-                     //给主界面绑定特殊事件
-                     if (BaseView.name.Equals(MainViewName))
+                     //第一次打开的视图一定是父视图，其余子视图要添加父视图
+                     var view = BaseView;
+                     if (null == fatherView)
                      {
+                         fatherView = view;
+                         isOpenedMainView = true;
                          view.SetClose(OnClose);
                          view.SetRelease(OnRelease);
                      }
                      else
                      {
+                         view.SetFatherView(fatherView);
                          view.SetClose(null);
                          view.SetRelease(null);
                      }
 
+                     //记录为一打开的视图
+                     _openViews.Add(view);
+
+                     //视图绑定数据和事件，打开
                      view.SetModel(Model);
                      OnBeforeShow(args);
                      view.OnShow();
@@ -146,7 +150,7 @@ namespace GameSystem.MVCTemplate
                 if (view.name.Equals(MainViewName)) continue;
                 baseViews.Add(view);
             }
-            for(var i = 0; i < baseViews.Count; i++)
+            for (var i = 0; i < baseViews.Count; i++)
             {
                 baseViews[i].OnHide();
             }
@@ -158,8 +162,8 @@ namespace GameSystem.MVCTemplate
         {
             isLoad = false;
             Model = null;
+            fatherView = null;
             _openViews.Clear();
-            _openViews = null;
         }
 
         private void OnRemoveFormOpenViews(BaseView view)
