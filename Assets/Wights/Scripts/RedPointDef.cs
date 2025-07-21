@@ -14,13 +14,15 @@ namespace Assets.Wights.Scripts
             redPointCnt = new ValueBindery<int>(0);
             redPointCnt.Value = 0;
         }
-        public void Register(GameObject button)
+        public void Register(GameObject btn)
         {
-            this.button = button;
-            redPointCnt.OnRegisterWithValue((cnt)=>
+            button = btn;
+            redPointCnt.OnRegisterWithValue((cnt) =>
             {
-                var redPointGo = this.button.transform.Find(RedPointDef.REDPOINT_PREFAB_NAME);
-                redPointGo?.gameObject.SetActive(cnt > 0);
+                if (null == button) return;
+                var redPointGo = button.transform.Find(RedPointDef.REDPOINT_PREFAB_NAME);
+                if (null == redPointGo) throw new System.Exception("红点结点go不存在");
+                redPointGo.gameObject.SetActive(cnt > 0);
             });
         }
     }
