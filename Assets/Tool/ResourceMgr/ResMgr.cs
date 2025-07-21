@@ -98,13 +98,17 @@ namespace Tool.ResourceMgr
         /// <param name="systemName"></param>
         /// <param name="assetName"></param>
         /// <param name="callback"></param>
-        public GameObject LoadAsset(string systemName, string assetName)
+        public GameObject LoadAsset(string systemName, string assetName,bool fromGameSystem = true)
         {
 #if UNITY_EDITOR
-            var realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, assetName);
+            string realPath = "";
+            if (fromGameSystem)
+                realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, assetName);
+            else
+                realPath = string.Format("Assets/Wights/{0}.prefab", assetName);
             GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
             if (go == null) throw new Exception($"加载资源失败：{realPath}");
-            return Instantiate(go);
+            return go;
 #else
 
 #endif

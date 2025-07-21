@@ -65,6 +65,7 @@ namespace GameSystem.MVCTemplate
         protected T LoadAsset<T>(string systemName, string assetPath, int sort, bool isActive = true)
         {
             var go = ResMgr.GetInstance().LoadAsset(systemName, assetPath);
+            go = Instantiate(go);
             var main = transform.Find("Main");
             var trans = go.transform;
             trans.SetParent(main);
