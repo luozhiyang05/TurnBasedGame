@@ -11,6 +11,7 @@ namespace Assets.Wights.Scripts
     {
         private List<string> _texts;
         private List<string> _viewNames;
+        private List<string> _redPointPaths;
         private List<UnityAction> _openFuns;
         private BaseCtrl ctrl;
         public ToggleGroupData SetTexts(List<string> texts)
@@ -30,6 +31,15 @@ namespace Assets.Wights.Scripts
         public BaseCtrl GetCtrl()
         {
             return ctrl;
+        }
+        public ToggleGroupData SetRedPointPaths(List<string> redPointPaths)
+        {
+            _redPointPaths = redPointPaths;
+            return this;
+        }
+        public List<string> GetRedPointPaths()
+        {
+            return _redPointPaths;
         }
         public ToggleGroupData Add<T>(T t, UnityAction fun) where T : struct
         {
@@ -68,11 +78,12 @@ namespace Assets.Wights.Scripts
         public GameObject viewPort;
         private List<CToggle> _toggles;
         private List<string> _texts;
+        private List<string> _redPointPaths;
         private BaseCtrl _baseCtrl;
         private ToggleGroupData _data;
         private GameObject _cToggleCell;
         private string _cToggleCellName = default;
-        private Func<int,bool> _cellVisableCallback;
+        private Func<int, bool> _cellVisableCallback;
         private bool _init;
         public bool init;   //是否初始化
         protected override void Awake()
@@ -80,14 +91,15 @@ namespace Assets.Wights.Scripts
             base.Awake();
             _toggles = new List<CToggle>();
             _texts = new List<string>();
+            _redPointPaths = new List<string>();
             //默认cell
             _cToggleCell = ResMgr.GetInstance().LoadAsset("", "ToggleCell", false);
         }
 
-        
-        public void InitCToggleCell(string systemName,string assetName)
+
+        public void InitCToggleCell(string systemName, string assetName)
         {
-           _cToggleCell = ResMgr.GetInstance().LoadAsset(systemName, assetName);
+            _cToggleCell = ResMgr.GetInstance().LoadAsset(systemName, assetName);
         }
         public void SetCToggleName(string name)
         {
@@ -96,6 +108,7 @@ namespace Assets.Wights.Scripts
         public void InitToggleGroup(ToggleGroupData data)
         {
             _texts = data.GetTexts();
+            _redPointPaths = data.GetRedPointPaths();
             _baseCtrl = data.GetCtrl();
             _data = data;
             CreateCToggleCells();
@@ -127,15 +140,36 @@ namespace Assets.Wights.Scripts
                 }
             }
         }
+        public GameObject GetCToggleCell(int index)
+        {
+            var cToggle = _toggles[index];
+            if (null != cToggle)
+            {
+                return cToggle.gameObject;
+            }
+            throw new Exception("GetCToggleCell index error");
+        }
         private void CreateCToggleCells()
         {
             for (int i = 0; i < _texts.Count; i++)
             {
+                //生成CToggleCell
                 var cell = Instantiate(_cToggleCell);
                 cell.name = _cToggleCellName == default ? "ToggleCell" : _cToggleCellName;
                 cell.transform.SetParent(viewPort.transform);
                 cell.GetComponent<Toggle>().group = this;
 
+                //红点绑定
+                if (_redPointPaths.Count > 0 && i < _redPointPaths.Count)
+                {
+                    var redPointPath = _redPointPaths[i];
+                    if ("" != redPointPath)
+                    {
+                        RedPointMgr.GetInstance().Register(cell, redPointPath);
+                    }
+                }
+
+                //CToggleCell事件
                 var viewName = _data.GetViewName(i);
                 var cToggle = cell.GetComponent<CToggle>();
                 cToggle.SetShowViewCallback(_data.GetOpenFun(i));
@@ -144,6 +178,14 @@ namespace Assets.Wights.Scripts
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(viewPort.transform as RectTransform);
         }
-        
+
+        protected override void OnDestroy()
+        {
+            //红点注销
+            for (int i = 0; i < _redPointPaths.Count; i++)
+            {
+                RedPointMgr.GetInstance().UnRegister(_redPointPaths[i]);
+            }
+        }
     }
 }
