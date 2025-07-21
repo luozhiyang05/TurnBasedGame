@@ -160,7 +160,7 @@ namespace Assets.Wights.Scripts
                 cell.GetComponent<Toggle>().group = this;
 
                 //红点绑定
-                if (_redPointPaths.Count > 0 && i < _redPointPaths.Count)
+                if (null != _redPointPaths && _redPointPaths.Count > 0 && i < _redPointPaths.Count)
                 {
                     var redPointPath = _redPointPaths[i];
                     if ("" != redPointPath)
@@ -182,9 +182,12 @@ namespace Assets.Wights.Scripts
         protected override void OnDestroy()
         {
             //红点注销
-            for (int i = 0; i < _redPointPaths.Count; i++)
+            if (null != _redPointPaths)
             {
-                RedPointMgr.GetInstance().UnRegister(_redPointPaths[i]);
+                for (int i = 0; i < _redPointPaths.Count; i++)
+                {
+                    RedPointMgr.GetInstance().UnRegister(_redPointPaths[i]);
+                }
             }
         }
     }
