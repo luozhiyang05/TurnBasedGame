@@ -107,17 +107,10 @@ namespace Assets.Wights.Scripts
             //设置toggle状态
             for (int i = 0; i < m_Toggles.Count; i++)
             {
-                m_Toggles[i].isOn = i == index;
-            }
-
-            //在第一次设置isOn时，可能会因为结点的isOn状态跟这里重合导致没能正确显示样式，因此手动调整样式一次
-            if (!_init)
-            {
-                _init = true;
-                for (int i = 0; i < m_Toggles.Count; i++)
-                {
-                    _toggles[i].InitToggle(i == index, _texts[i]);
-                }
+                var select = i == index;
+                //避免已经触发的toggle不会触发事件
+                if (m_Toggles[i].isOn) _toggles[i].InitToggle(i == index, _texts[i]);
+                m_Toggles[i].isOn = select;
             }
         }
         public void SetVisableCallback(Func<int, bool> callback)
