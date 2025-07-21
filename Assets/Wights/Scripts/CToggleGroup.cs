@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameSystem.MVCTemplate;
+using Tool.ResourceMgr;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -64,35 +65,45 @@ namespace Assets.Wights.Scripts
     }
     public class CToggleGroup : ToggleGroup
     {
+        public GameObject viewPort;
         private List<CToggle> _toggles;
         private List<string> _texts;
         private BaseCtrl _baseCtrl;
         private ToggleGroupData _data;
+        private GameObject _cToggleCell;
+        private string _cToggleCellName = default;
+        private Func<int,bool> _cellVisableCallback;
         private bool _init;
+        public bool init;   //是否初始化
         protected override void Awake()
         {
             base.Awake();
             _toggles = new List<CToggle>();
             _texts = new List<string>();
+            //默认cell
+            _cToggleCell = ResMgr.GetInstance().LoadAsset("", "ToggleCell", false);
         }
 
+        
+        public void InitCToggleCell(string systemName,string assetName)
+        {
+           _cToggleCell = ResMgr.GetInstance().LoadAsset(systemName, assetName);
+        }
+        public void SetCToggleName(string name)
+        {
+            _cToggleCellName = name;
+        }
         public void InitToggleGroup(ToggleGroupData data)
         {
             _texts = data.GetTexts();
             _baseCtrl = data.GetCtrl();
             _data = data;
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                var viewName = data.GetViewName(i);
-                var cToggle = transform.GetChild(i).GetComponent<CToggle>();
-                cToggle.SetShowViewCallback(data.GetOpenFun(i));
-                cToggle.SetHideViewCallback(() => _baseCtrl.CloseView(viewName));
-                _toggles.Add(cToggle);
-            }
+            CreateCToggleCells();
+            init = true;
         }
-
         public void SelectIndex(int index)
         {
+            CheckVisable();
             //设置toggle状态
             for (int i = 0; i < m_Toggles.Count; i++)
             {
@@ -109,5 +120,37 @@ namespace Assets.Wights.Scripts
                 }
             }
         }
+        public void SetVisableCallback(Func<int, bool> callback)
+        {
+            _cellVisableCallback = callback;
+        }
+        public void CheckVisable()
+        {
+            if (null != _cellVisableCallback)
+            {
+                for (int i = 0; i < _toggles.Count; i++)
+                {
+                    _toggles[i].gameObject.SetActive(_cellVisableCallback(i));
+                }
+            }
+        }
+        private void CreateCToggleCells()
+        {
+            for (int i = 0; i < _texts.Count; i++)
+            {
+                var cell = Instantiate(_cToggleCell);
+                cell.name = _cToggleCellName == default ? "ToggleCell" : _cToggleCellName;
+                cell.transform.SetParent(viewPort.transform);
+                cell.GetComponent<Toggle>().group = this;
+
+                var viewName = _data.GetViewName(i);
+                var cToggle = cell.GetComponent<CToggle>();
+                cToggle.SetShowViewCallback(_data.GetOpenFun(i));
+                cToggle.SetHideViewCallback(() => _baseCtrl.CloseView(viewName));
+                _toggles.Add(cToggle);
+            }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(viewPort.transform as RectTransform);
+        }
+        
     }
 }
