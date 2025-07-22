@@ -13,11 +13,11 @@ namespace Assets.GameSystem.TemplateSystem
 
         protected override void OnInit()
         {
+            ctrl = new TemplateSystemViewCtrl(nameof(TemplateSystemModule));
         }
 
         public void ShowView(params object[] args)
         {
-            ctrl ??= new TemplateSystemViewCtrl();
             (ctrl as TemplateSystemViewCtrl).OpenView(args);
         }
     }

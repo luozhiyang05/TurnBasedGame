@@ -13,5 +13,10 @@ namespace Tool.Utilities
         {
             return abPath.Split('/')[2];
         }
+        public static string GetSystemNameFromModuleName(string moduleName)
+        {
+            var systemName = moduleName.Substring(0, moduleName.LastIndexOf("Module"));
+            return systemName;
+        }
     }
 }

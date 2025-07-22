@@ -10,8 +10,6 @@ public class BaseModule : AbsModule
 
     protected override void InitModule()
     {
-        //添加视图回收事件
-        EventsHandle.AddListenEvent<string>(EventsNameConst.RELEASE_VIEW, BindRelease);
         OnInit();
     }
     /// <summary>
@@ -20,13 +18,5 @@ public class BaseModule : AbsModule
     protected virtual void OnInit()
     {
 
-    }
-
-    private void BindRelease(string viewName)
-    {
-        if (null != ctrl && ctrl.MainViewName == viewName)
-        {
-            ctrl = null;
-        }
     }
 }

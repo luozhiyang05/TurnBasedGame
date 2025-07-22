@@ -10,10 +10,8 @@ namespace Assets.GameSystem.TemplateSystem.Main
     }
     public class TemplateSystemViewCtrl : BaseCtrl
     {
-        public override string GetPrefabPath() => "TemplateSystemView";
         public override BaseModel GetModel() => Model ??= new TemplateSystemViewModel();
-        public TemplateSystemViewCtrl() : base() { }
-        public TemplateSystemViewCtrl(string systemName, params object[] args) : base(systemName, args)
+        public TemplateSystemViewCtrl(string moduleName, params object[] args) : base(moduleName, args)
         {
 
         }
@@ -24,14 +22,10 @@ namespace Assets.GameSystem.TemplateSystem.Main
         protected override void InitListener()
         {
         }
-        protected override void RemoveListener()
-        {
-        }
 
         public void OpenView(params object[] args)
         {
-            var viewName = GetPrefabPath();
-            SetOpenViewName(viewName);
+            SetOpenViewName(TempSystemViews.TemplateSystemView.ToString());
             ShowView(EuiLayer.GameUI, args);
         }
     }

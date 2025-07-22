@@ -233,14 +233,9 @@ namespace Tool.UI
                 for (int i = 0; i < _idlePool.Count; i++)
                 {
                     var vo = _idlePool[i];
-                    //父视图加入idlePool，或者子视图的父视图已被释放时(此时父视图为空)，子视图也被加入idlePool
-                    var view = vo.GetBaseView();
-                    if (view.CheckFatherViewIsNull())
-                    {
-                        vo.Release();
-                        _idlePool.RemoveAt(i);
-                        i--;
-                    }
+                    vo.Release();
+                    _idlePool.RemoveAt(i);
+                    i--;
                 }
 
                 _lock = false;

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Framework;
+using Tool.ResourceMgr;
 using Tool.UI;
 using Tool.Utilities;
-using Tool.Utilities.Events;
 using UnityEngine;
 
 namespace GameSystem.MVCTemplate
@@ -15,29 +15,17 @@ namespace GameSystem.MVCTemplate
     /// </summary>
     public abstract class BaseCtrl : ICanGetSystem
     {
-        public string MainViewName => _mainViewName;
-        private string _mainViewName;
         private string _openViewName;
         protected BaseModel Model;
-        protected BaseView fatherView;
         protected bool isLoad;
-        protected bool isOpenedMainView;
-        private HashSet<BaseView> _openViews = new HashSet<BaseView>();
+        private HashSet<SubPanelView> _loadPanels = new HashSet<SubPanelView>();
         private string _systemName;
-        protected BaseCtrl()
+        protected BaseCtrl(string moduleName,params object[] args)
         {
-            _mainViewName = GetPrefabPath();
-            Init();
-        }
-        protected BaseCtrl(string systemName,params object[] args)
-        {
-            _systemName = systemName;
-            _mainViewName = GetPrefabPath();
+            _systemName = PathUtils.GetSystemNameFromModuleName(moduleName);
             Init(args);
         }
         protected abstract void InitListener();
-
-        protected abstract void RemoveListener();
 
         protected abstract void Init(params object[] args);
 
@@ -46,12 +34,6 @@ namespace GameSystem.MVCTemplate
         //ctrl调用打开视图
         public void ShowView(EuiLayer euiLayer = EuiLayer.GameUI, params object[] args)
         {
-            //只有在主界面打开后，其他界面才可以打开
-            if (!isOpenedMainView && !_openViewName.Equals(MainViewName))
-            {
-                return;
-            }
-
             //打开View
 #if UNITY_EDITOR
 #else
@@ -70,99 +52,78 @@ namespace GameSystem.MVCTemplate
                          isLoad = true;
                      }
 
-                     //第一次打开的视图一定是父视图，其余子视图要添加父视图
-                     var view = BaseView;
-                     if (null == fatherView)
-                     {
-                         fatherView = view;
-                         isOpenedMainView = true;
-                         view.SetClose(OnClose);
-                         view.SetRelease(OnRelease);
-                     }
-                     else
-                     {
-                         view.SetFatherView(fatherView);
-                         view.SetClose(null);
-                         view.SetRelease(null);
-                     }
-
-                     //记录为一打开的视图
-                     _openViews.Add(view);
-
                      //视图绑定数据和事件，打开
+                     var view = BaseView;
                      view.SetModel(Model);
+                     view.SetClose(OnClose);
+                     view.SetRelease(OnRelease);
                      view.OnShow(args);
-                     view.SetRemoveFromOpenViewsCallback(OnRemoveFormOpenViews);
                  });
         }
 
-        //供外部调用关闭视图
-        public void CloseView(string viewName)
+        //打开SubPanelView子视图，泛型为父视图
+        public void OpenSubPanelView<T>(string panelName, params object[] args) where T : BaseView
         {
-            BaseView targetView = null;
-            foreach (var view in _openViews)
+            SubPanelView panel = null;
+            foreach (var subPanelView in _loadPanels)
             {
-                if (view.name == viewName)
+                if (subPanelView.name == panelName)
                 {
-                    targetView = view;
+                    panel = subPanelView;
+                    break;
+                } 
+            }
+            if (null == panel)
+            {
+                var fatherView = args[0] as T;
+                var go = ResMgr.GetInstance().LoadAsset(_systemName, panelName);
+                go = GameObject.Instantiate(go,fatherView.transform);
+                go.transform.parent.SetAsLastSibling();
+                panel = go.GetComponent<SubPanelView>();
+                panel.FatherView = fatherView;
+                _loadPanels.Add(panel);
+            }
+            panel.OnShow(args);
+        }
+
+        //供外部调用关闭子视图
+        public void CloseSubPanelView(string panelName)
+        {
+            BasePanel targetPanel = null;
+            foreach (var view in _loadPanels)
+            {
+                if (view.name == panelName)
+                {
+                    targetPanel = view;
                     break;
                 }
             }
-            if (null == targetView)
-            {
-                return;
-            }
-            targetView.OnHide();
-            _openViews.Remove(targetView);
-        }
-
-        //获取视图
-        protected T GetView<T>() where T : BaseView
-        {
-            foreach (var view in _openViews)
-            {
-                if (view is T)
-                    return view as T;
-            }
-            return null;
+            targetPanel?.OnHide();
         }
 
         public abstract BaseModel GetModel();
 
-        public abstract string GetPrefabPath();
-
         private void OnClose()
         {
-            RemoveListener();
-            Model.RemoveListener();
-            isOpenedMainView = false;
-
-            // 关闭所有子视图，它会先将所有子视图存入idlePool后，主视图才会存入idlePool，不会有顺序报空的问题
-            var baseViews = new List<BaseView>();
-            foreach (var view in _openViews)
-            {
-                if (view.name.Equals(MainViewName)) continue;
-                baseViews.Add(view);
-            }
-            for (var i = 0; i < baseViews.Count; i++)
-            {
-                baseViews[i].OnHide();
-            }
-            baseViews.Clear();
-            _openViews.Clear();
+           
         }
 
-        private void OnRelease()
+        private void OnRelease(BaseView baseView)
         {
-            isLoad = false;
-            Model = null;
-            fatherView = null;
-            _openViews.Clear();
-        }
-
-        private void OnRemoveFormOpenViews(BaseView view)
-        {
-            _openViews.Remove(view);
+            var subPanelViews = new List<SubPanelView>();
+            foreach (var subPanelView in _loadPanels)
+            {
+                if (subPanelView.FatherView == baseView)
+                {
+                    subPanelViews.Add(subPanelView);
+                }
+            }
+            for(int i = 0; i < subPanelViews.Count; i++)
+            {
+                var subPanelView = subPanelViews[i];
+                subPanelView.OnRelease();
+                _loadPanels.Remove(subPanelView);
+            }
         }
 
         public IMgr Ins => Global.GetInstance();

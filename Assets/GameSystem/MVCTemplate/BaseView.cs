@@ -12,6 +12,7 @@ namespace GameSystem.MVCTemplate
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class BaseView : BasePanel, IController
     {
+        public Transform Main;
         [NonSerialized] public CanvasGroup CanvasGroup;
         [NonSerialized] public EuiLayer EuiLayer;
         [NonSerialized] public bool isOpen;
@@ -83,11 +84,11 @@ namespace GameSystem.MVCTemplate
             };
         }
 
-        public void SetRelease(UnityAction callback)
+        public void SetRelease(UnityAction<BaseView> callback)
         {
             _releaseCallback = () =>
             {
-                callback?.Invoke();
+                callback?.Invoke(this);
                 EventsHandle.EventTrigger(EventsNameConst.RELEASE_VIEW, name);
             };
         }
