@@ -173,7 +173,7 @@ namespace Assets.Wights.Scripts
                 var viewName = _data.GetViewName(i);
                 var cToggle = cell.GetComponent<CToggle>();
                 cToggle.SetShowViewCallback(_data.GetOpenFun(i));
-                cToggle.SetHideViewCallback(() => _baseCtrl.CloseView(viewName));
+                cToggle.SetHideViewCallback(() => _baseCtrl.CloseSubPanelView(viewName));
                 _toggles.Add(cToggle);
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(viewPort.transform as RectTransform);
