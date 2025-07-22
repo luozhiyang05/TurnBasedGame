@@ -41,7 +41,7 @@ namespace GameSystem.MVCTemplate
 
         protected abstract void BindModelListener();
 
-        public override void OnShow()
+        public override void OnShow(params object[] args)
         {
             if (useAudio)
             {

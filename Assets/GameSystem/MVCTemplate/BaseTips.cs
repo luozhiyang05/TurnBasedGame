@@ -64,7 +64,7 @@ namespace GameSystem.MVCTemplate
         }
 
         protected override void BindModelListener(){}
-        public override void OnShow(){}
+        public override void OnShow(params object[] args){}
        
         /// <summary>
         /// 点击遮罩事件

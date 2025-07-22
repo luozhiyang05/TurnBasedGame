@@ -55,9 +55,9 @@ namespace Assets.GameSystem.TemplateSystem.Main
         }
 
 
-        public override void OnShow()
+        public override void OnShow(params object[] args)
         {
-            base.OnShow();
+            base.OnShow(args);
         }
 
         public override void OnHide()

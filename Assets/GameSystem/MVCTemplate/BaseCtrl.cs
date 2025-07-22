@@ -58,7 +58,7 @@ namespace GameSystem.MVCTemplate
             _openViewName = PathUtils.GetSystemAssetBundlePath(_systemName) + "/" + _openViewName;
             Debug.Log("打开视图，ab路径为：" + _openViewName);
 #endif
-            UIManager.GetInstance().GetFromPool(_openViewName, euiLayer, (BaseView) =>
+            UIManager.GetInstance().GetFromPool(_openViewName, EuiLayer.GameUI, (BaseView) =>
                  {
                      //ctrl是否第一次加载（在打开主界面时会加载）
                      if (!isLoad)
@@ -91,9 +91,7 @@ namespace GameSystem.MVCTemplate
 
                      //视图绑定数据和事件，打开
                      view.SetModel(Model);
-                     OnBeforeShow(args);
-                     view.OnShow();
-                     OnShowComplate(args);
+                     view.OnShow(args);
                      view.SetRemoveFromOpenViewsCallback(OnRemoveFormOpenViews);
                  });
         }
@@ -132,10 +130,6 @@ namespace GameSystem.MVCTemplate
         public abstract BaseModel GetModel();
 
         public abstract string GetPrefabPath();
-
-        public abstract void OnBeforeShow(params object[] args);
-
-        public abstract void OnShowComplate(params object[] args);
 
         private void OnClose()
         {

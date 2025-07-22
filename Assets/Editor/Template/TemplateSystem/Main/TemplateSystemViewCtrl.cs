@@ -1,4 +1,5 @@
 using GameSystem.MVCTemplate;
+using Tool.UI;
 
 namespace Assets.GameSystem.TemplateSystem.Main
 {
@@ -26,20 +27,12 @@ namespace Assets.GameSystem.TemplateSystem.Main
         protected override void RemoveListener()
         {
         }
-        public override void OnBeforeShow(params object[] args)
-        {
-            //一般做给View层传递数据
-        }
-        public override void OnShowComplate(params object[] args)
-        {
-            //一般做网络请求
-        }
 
-        public void OpenView()
+        public void OpenView(params object[] args)
         {
             var viewName = GetPrefabPath();
             SetOpenViewName(viewName);
-            ShowView();
+            ShowView(EuiLayer.GameUI, args);
         }
     }
 }

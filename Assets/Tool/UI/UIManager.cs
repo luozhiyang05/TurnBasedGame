@@ -154,6 +154,12 @@ namespace Tool.UI
                         callback?.Invoke(baseView);
                     });
                 }
+                else
+                {
+                    //重复打开的视图直接执行回调
+                    var baseView = prefabVo.GetBaseView();
+                    callback?.Invoke(baseView);
+                }
             }
         }
 

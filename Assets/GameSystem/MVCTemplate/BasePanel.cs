@@ -16,7 +16,7 @@ namespace GameSystem.MVCTemplate
         protected bool useAudio = false;
         protected virtual void AutoInitUI() { }
         protected abstract void OnInit();
-        public abstract void OnShow();
+        public abstract void OnShow(params object[] args);
         public abstract void OnHide();
         public virtual void OnRelease() { }
         protected virtual void SetAudio(string openAudioPath, string closeAudioPath)
