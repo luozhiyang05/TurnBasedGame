@@ -4,7 +4,7 @@ using Tool.UI;
 namespace Assets.GameSystem.TemplateSystem.Main
 {
     //ctrl管理的视图
-    public enum TempSystemViews
+    public enum ETemplateSystemViews
     {
         TemplateSystemView,
     }
@@ -25,7 +25,7 @@ namespace Assets.GameSystem.TemplateSystem.Main
 
         public void OpenView(params object[] args)
         {
-            SetOpenViewName(TempSystemViews.TemplateSystemView.ToString());
+            SetOpenViewName(ETemplateSystemViews.TemplateSystemView.ToString());
             ShowView(EuiLayer.GameUI, args);
         }
     }
