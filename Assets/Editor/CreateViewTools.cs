@@ -1,18 +1,29 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
-using UnityEditor.U2D;
 using UnityEngine;
-using UnityEngine.U2D;
 
 public class CreateViewTools
 {
-    [MenuItem("Assets/生成View", false, -1)]
-    static void OpenWindow()
+    public enum EViewType
+    {
+        BaseView,
+        SubPanelView,
+    }
+    public static EViewType viewType;
+    [MenuItem("Assets/生成BaseView脚本", false, -1)]
+    static void OpenWindow1()
     {
         //将path传递给窗口
+        viewType = EViewType.BaseView;
+        var window = EditorWindow.GetWindowWithRect<CreateViewToolsWindow>(new Rect(0, 0, 470, 400), true, "生成View");
+    }
+
+    [MenuItem("Assets/生成SubPanelView脚本", false, -1)]
+    static void OpenWindow2()
+    {
+        //将path传递给窗口
+        viewType = EViewType.SubPanelView;
         var window = EditorWindow.GetWindowWithRect<CreateViewToolsWindow>(new Rect(0, 0, 470, 400), true, "生成View");
     }
 }
@@ -56,20 +67,44 @@ public class CreateViewToolsWindow : EditorWindow
             Debug.LogWarning("请输入正确的View名称");
             return;
         }
-        //读取view的配置模板,生成view
-        const string templateViewPath = "Assets/Editor/Template/TemplateSystem/Main/TemplateSystemView.cs";
-        try
+
+        if (CreateViewTools.viewType == CreateViewTools.EViewType.BaseView)
         {
-            var viewContent = File.ReadAllText(templateViewPath);
-            var newViewContent = viewContent.Replace("TemplateSystemView", viewName);
-            var viewPath = string.Format("{0}\\{1}.cs", fullPath, viewName);
-            File.WriteAllText(viewPath, newViewContent);
-            Close();
-            AssetDatabase.Refresh();
+            //读取view的配置模板,生成view
+            const string templateViewPath = "Assets/Editor/Template/TemplateSystem/Main/TemplateSystemView.cs";
+            try
+            {
+                var viewContent = File.ReadAllText(templateViewPath);
+                var newViewContent = viewContent.Replace("TemplateSystemView", viewName);
+                var viewPath = string.Format("{0}\\{1}.cs", fullPath, viewName);
+                File.WriteAllText(viewPath, newViewContent);
+                Close();
+                AssetDatabase.Refresh();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("生成View失败：" + e);
+            }
         }
-        catch (Exception e)
+        else
         {
-            throw new Exception("生成View失败：" + e);
+            //读取view的配置模板,生成view
+            const string templateViewPath = "Assets/Editor/Template/TemplateSystem/Main/TemplateSubPanelView.cs";
+            try
+            {
+                var viewContent = File.ReadAllText(templateViewPath);
+                var newViewContent = viewContent.Replace("TemplateSubPanelView", viewName);
+                var viewPath = string.Format("{0}\\{1}.cs", fullPath, viewName);
+                File.WriteAllText(viewPath, newViewContent);
+                Close();
+                AssetDatabase.Refresh();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("生成View失败：" + e);
+            }
         }
+
+
     }
 }
