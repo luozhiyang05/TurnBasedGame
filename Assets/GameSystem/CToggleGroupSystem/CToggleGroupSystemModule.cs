@@ -7,6 +7,8 @@ namespace Assets.GameSystem.CToggleGroupSystem
     {
         public void ShowView(params object[] args);
         public void ToggleOne(params object[] args);
+        public void ToggleTwo(params object[] args);
+        public void ToggleThree(params object[] args);
         public CToggleGroupSystemViewCtrl GetCtrl();
     }
 
@@ -31,6 +33,16 @@ namespace Assets.GameSystem.CToggleGroupSystem
         public void ToggleOne(params object[] args)
         {
             (ctrl as CToggleGroupSystemViewCtrl).OpenSubPanelView<CToggleGroupSystemView>(ECToggleGroupSystemViews.ToggleOne.ToString(), args);
+        }
+
+        public void ToggleTwo(params object[] args)
+        {
+            (ctrl as CToggleGroupSystemViewCtrl).OpenSubPanelView<CToggleGroupSystemView>(ECToggleGroupSystemViews.ToggleTwo.ToString(), args);
+        }
+
+        public void ToggleThree(params object[] args)
+        {
+            (ctrl as CToggleGroupSystemViewCtrl).OpenSubPanelView<CToggleGroupSystemView>(ECToggleGroupSystemViews.ToggleThree.ToString(), args);
         }
     }
 }

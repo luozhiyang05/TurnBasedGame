@@ -76,8 +76,7 @@ namespace Tool.ResourceMgr
         public void LoadView(string path, Action<GameObject> callback)
         {
 #if UNITY_EDITOR
-            var systemName = path[..path.IndexOf("View")];
-            var realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, path);
+            var realPath = string.Format("{0}/{1}.prefab", "Assets/GameSystem", path);
             GameObject viewObj = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
             if (viewObj == null) throw new Exception($"加载UI失败：{realPath}");
             callback(GameObject.Instantiate(viewObj));

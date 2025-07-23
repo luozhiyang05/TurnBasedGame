@@ -21,7 +21,8 @@ namespace GameSystem.MVCTemplate
         private UnityAction _closeCallback;
         private UnityAction _releaseCallback;
         private UnityAction<BaseView> _removeFormOpenViewsCallback;
-        private bool _isRelease;
+        public string SystemPath => _systemPath;
+        private string _systemPath;
 
         private void Awake()
         {
@@ -38,7 +39,12 @@ namespace GameSystem.MVCTemplate
         public void SetModel(BaseModel model) => Model = model;
         public void SetFatherView(BaseView fatherView) => _fatherView = fatherView;
         public bool CheckFatherViewIsNull() => _fatherView == null;
-        protected void SetName(string viewName) => name = viewName;
+        protected void SetPath(string path)
+        {
+            var viewName = PathUtils.GetViewNameFromSystemPath(path);
+            name = viewName;
+            _systemPath = path;
+        }
 
         protected abstract void BindModelListener();
 
@@ -67,7 +73,7 @@ namespace GameSystem.MVCTemplate
             _closeCallback?.Invoke();
             gameObject.SetActive(false);
             _removeFormOpenViewsCallback?.Invoke(this);
-            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
+            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel(this);
         }
 
         public void SetRemoveFromOpenViewsCallback(UnityAction<BaseView> callback)

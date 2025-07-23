@@ -19,10 +19,10 @@ namespace GameSystem.MVCTemplate
         protected BaseModel Model;
         protected bool isLoad;
         private HashSet<SubPanelView> _loadPanels = new HashSet<SubPanelView>();
-        private string _systemName;
-        protected BaseCtrl(string moduleName,params object[] args)
+        protected string systemName;
+        protected BaseCtrl(string moduleName, params object[] args)
         {
-            _systemName = PathUtils.GetSystemNameFromModuleName(moduleName);
+            systemName = PathUtils.GetSystemNameFromModuleName(moduleName);
             Init(args);
         }
         protected abstract void InitListener();
@@ -37,10 +37,10 @@ namespace GameSystem.MVCTemplate
             //打开View
 #if UNITY_EDITOR
 #else
-            _openViewName = PathUtils.GetSystemAssetBundlePath(_systemName) + "/" + _openViewName;
+            _openViewName = PathUtils.GetSystemAssetBundlePath(systemName) + "/" + _openViewName;
             Debug.Log("打开视图，ab路径为：" + _openViewName);
 #endif
-            UIManager.GetInstance().GetFromPool(_openViewName, EuiLayer.GameUI, (BaseView) =>
+            UIManager.GetInstance().GetFromPool(systemName + "/" + _openViewName, EuiLayer.GameUI, (BaseView) =>
                  {
                      //ctrl是否第一次加载（在打开主界面时会加载）
                      if (!isLoad)
@@ -71,13 +71,13 @@ namespace GameSystem.MVCTemplate
                 {
                     panel = subPanelView;
                     break;
-                } 
+                }
             }
             if (null == panel)
             {
                 var fatherView = args[0] as T;
-                var go = ResMgr.GetInstance().LoadAsset(_systemName, panelName);
-                go = GameObject.Instantiate(go,fatherView.transform);
+                var go = ResMgr.GetInstance().LoadAsset(systemName, panelName);
+                go = GameObject.Instantiate(go, fatherView.transform);
                 go.transform.parent.SetAsLastSibling();
                 panel = go.GetComponent<SubPanelView>();
                 panel.FatherView = fatherView;
@@ -105,7 +105,7 @@ namespace GameSystem.MVCTemplate
 
         private void OnClose()
         {
-           
+
         }
 
         private void OnRelease(BaseView baseView)
@@ -118,7 +118,7 @@ namespace GameSystem.MVCTemplate
                     subPanelViews.Add(subPanelView);
                 }
             }
-            for(int i = 0; i < subPanelViews.Count; i++)
+            for (int i = 0; i < subPanelViews.Count; i++)
             {
                 var subPanelView = subPanelViews[i];
                 subPanelView.OnRelease();

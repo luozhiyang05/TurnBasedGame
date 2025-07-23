@@ -35,7 +35,7 @@ namespace GameSystem.MVCTemplate
             }
             gameObject.SetActive(false);
             UIManager.GetInstance().EnterIdlePool(this);
-            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
+            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel(this);
             OnRelease();
         }
 

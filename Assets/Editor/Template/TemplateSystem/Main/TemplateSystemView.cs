@@ -51,7 +51,7 @@ namespace Assets.GameSystem.TemplateSystem.Main
         /// </summary>
         protected override void OnInit()
         {
-            SetName("TemplateSystemView");
+            SetPath("TemplateSystem/TemplateSystemView");
         }
 
 

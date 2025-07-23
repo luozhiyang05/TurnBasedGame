@@ -56,7 +56,7 @@ namespace Assets.GameSystem.CToggleGroupSystem.Main
         /// </summary>
         protected override void OnInit()
         {
-            SetName("CToggleGroupSystemView");
+            SetPath("CToggleGroupSystem/CToggleGroupSystemView");
             _cToggleGroup = LoadAsset<CToggleGroup>("CToggleGroupSystem", "ToggleGroup", 0);
         }
 
@@ -72,8 +72,8 @@ namespace Assets.GameSystem.CToggleGroupSystem.Main
                 .SetTexts(new List<string>() { "测试1", "测试2", "测试3" })
                 .SetCtrl(module.GetCtrl())
                 .Add(ECToggleGroupSystemViews.ToggleOne, () => module.ToggleOne(this,"测试1"))
-                .Add(ECToggleGroupSystemViews.ToggleTwo, () => module.ToggleOne(this,"测试2"))
-                .Add(ECToggleGroupSystemViews.ToggleOne, () => module.ToggleOne(this, "测试3"));
+                .Add(ECToggleGroupSystemViews.ToggleTwo, () => module.ToggleTwo(this,"测试2"))
+                .Add(ECToggleGroupSystemViews.ToggleThree, () => module.ToggleThree(this, "测试3"));
                 _cToggleGroup.InitToggleGroup(data);
             }
             _cToggleGroup.SelectIndex(0);
