@@ -83,6 +83,7 @@ namespace GameSystem.MVCTemplate
                 panel.FatherView = fatherView;
                 _loadPanels.Add(panel);
             }
+            panel.SetCloseCallback(() => CloseSubPanelView(panelName));
             panel.OnShow(args);
         }
 

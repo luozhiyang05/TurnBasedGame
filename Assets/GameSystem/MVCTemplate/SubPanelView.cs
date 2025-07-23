@@ -15,6 +15,7 @@ namespace GameSystem.MVCTemplate
             get => _fatherView;
         }
         private BaseView _fatherView;
+        private UnityAction _closeCallback;
         private void Awake()
         {
             AutoInitUI();
@@ -29,10 +30,9 @@ namespace GameSystem.MVCTemplate
         private void OnDisable() => isOpen = false;
         public void SetModel(BaseModel model) => Model = model;
         protected void SetName(string viewName) => name = viewName;
-
         protected abstract void BindModelListener();
         protected abstract void RemoveModelListener();
-
+        public void SetCloseCallback(UnityAction callback) => _closeCallback = callback;
         public override void OnShow(params object[] args)
         {
             if (useAudio)
@@ -46,7 +46,6 @@ namespace GameSystem.MVCTemplate
 
             Open(args);
         }
-
         public override void OnHide()
         {
             if (isOpen == false)
@@ -61,7 +60,7 @@ namespace GameSystem.MVCTemplate
             RemoveModelListener();
             gameObject.SetActive(false);
         }
-
+        protected void Close() => _closeCallback?.Invoke();
         public IMgr Ins => Global.GetInstance();
     }
 }
