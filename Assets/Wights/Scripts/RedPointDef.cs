@@ -39,14 +39,20 @@ namespace Assets.Wights.Scripts
         public const string REDPOINT_PREFAB_NAME = "RedPoint";
 
         //红点路径
-        // public const string ONE = "ONE";
+        public const string ONE = "ONE";
+        public const string ONE_TWO = "ONE_TWO";
+        public const string ONE_TWO_TEST1 = "ONE_TWO_TEST1";
+        public const string ONE_TWO_TEST2 = "ONE_TWO_TEST2";
 
         private Dictionary<string, RedPointData> _redPointDic;
         public RedPointDef()
         {
             _redPointDic = new Dictionary<string, RedPointData>()
             {
-                // {ONE,new RedPointData()},
+                 {ONE,new RedPointData()},
+                 {ONE_TWO,new RedPointData()},
+                 {ONE_TWO_TEST1,new RedPointData()},
+                 {ONE_TWO_TEST2,new RedPointData()}
             };
         }
 
