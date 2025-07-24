@@ -1,6 +1,7 @@
 using System;
 using Tool.AudioMgr;
 using Tool.ResourceMgr;
+using Tool.UI;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +11,7 @@ namespace GameSystem.MVCTemplate
     {
         public bool UseMaskPanel => MaskPanel();
         public bool UseClickMaskPanel => ClickMaskPanel();
+        private EuiLayer _euiLayer;
         private string _openAudioPath;
         private string _bgmAudioPath;
         private string _closeAudioPath;
@@ -19,6 +21,14 @@ namespace GameSystem.MVCTemplate
         public abstract void OnShow(params object[] args);
         public abstract void OnHide();
         public virtual void OnRelease() { }
+        public void SetUILayer(EuiLayer euiLayer)
+        {
+            _euiLayer = euiLayer;
+        }
+        public EuiLayer GetUILayer()
+        {
+            return _euiLayer;
+        }
         protected virtual void SetAudio(string openAudioPath, string closeAudioPath)
         {
             useAudio = true;
@@ -65,12 +75,10 @@ namespace GameSystem.MVCTemplate
         protected T LoadAsset<T>(string systemName, string assetPath, int sort, bool isActive = true)
         {
             var go = ResMgr.GetInstance().LoadAsset(systemName, assetPath);
-            go = Instantiate(go);
             var main = transform.Find("Main");
+            go = Instantiate(go,main);
             var trans = go.transform;
-            trans.SetParent(main);
             trans.SetSiblingIndex(sort);
-            go.SetActive(isActive);
             return go.GetComponent<T>();
         }
     }

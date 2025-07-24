@@ -54,6 +54,7 @@ namespace GameSystem.MVCTemplate
 
                      //视图绑定数据和事件，打开
                      var view = BaseView;
+                     view.SetUILayer(euiLayer);
                      view.SetModel(Model);
                      view.SetClose(OnClose);
                      view.SetRelease(OnRelease);
