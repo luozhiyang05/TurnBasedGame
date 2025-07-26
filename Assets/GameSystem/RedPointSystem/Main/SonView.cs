@@ -2,7 +2,7 @@ using Assets.Wights.Scripts;
 using GameSystem.MVCTemplate;
 using UIComponents;
 
-namespace Assets.GameSystem.TemplateSystem.Main
+namespace Assets.GameSystem.RedPointSystem.Main
 {
     public class SonView : SubPanelView
     {

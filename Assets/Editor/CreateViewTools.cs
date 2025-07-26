@@ -33,6 +33,7 @@ public class CreateViewToolsWindow : EditorWindow
     private const string BaseViewPrefabPath = "Assets/Wights/BaseView.prefab";
     private const string Tips = "请输入View名称";
     public string viewName;
+    public string systemName;
     public string fullPath;
     public string prefabPath;
     private bool _isCreatePrefab = true;
@@ -48,6 +49,7 @@ public class CreateViewToolsWindow : EditorWindow
         fullPath = Path.GetFullPath(assetPath);
         prefabPath = fullPath.Substring(0, fullPath.LastIndexOf('\\'));
         prefabPath = prefabPath.Substring(prefabPath.IndexOf("Assets"));
+        systemName = prefabPath.Split('\\')[^1];
     }
 
     void OnGUI()
@@ -86,6 +88,7 @@ public class CreateViewToolsWindow : EditorWindow
                 //读取view的配置模板,生成view
                 var viewContent = File.ReadAllText(templateViewPath);
                 var newViewContent = viewContent.Replace("TemplateSystemView", viewName);
+                newViewContent = newViewContent.Replace("TemplateSystem", systemName);
                 var viewPath = string.Format("{0}\\{1}.cs", fullPath, viewName);
                 File.WriteAllText(viewPath, newViewContent);
 

@@ -276,14 +276,27 @@ namespace Tool.UI
         {
             //设置层级
             viewGo.transform.SetParent(GetFatherLayer(targetLayer));
-
             var canvas = viewGo.GetComponent<Canvas>();
             var canvasScaler = viewGo.GetComponent<CanvasScaler>();
-           
+
             //设置画布
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.overrideSorting = true;
-            canvas.sortingOrder = _gameUISort + canvas.sortingOrder;
+            switch (targetLayer)
+            {
+                case EuiLayer.SystemUI:
+                    canvas.sortingOrder = _systemUISort + canvas.sortingOrder;
+                    break;
+                case EuiLayer.TipsUI:
+                    canvas.sortingOrder = _tipsUISort + canvas.sortingOrder;
+                    break;
+                case EuiLayer.GameUI:
+                    canvas.sortingOrder = _gameUISort + canvas.sortingOrder;
+                    break;
+                case EuiLayer.MenuUI:
+                    canvas.sortingOrder = _menuUISort + canvas.sortingOrder;
+                    break;
+            }
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             canvasScaler.referenceResolution = Resolution;
             canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
