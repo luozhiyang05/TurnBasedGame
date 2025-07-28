@@ -40,7 +40,7 @@ namespace GameSystem.MVCTemplate
             _openViewName = PathUtils.GetSystemAssetBundlePath(systemName) + "/" + _openViewName;
             Debug.Log("打开视图，ab路径为：" + _openViewName);
 #endif
-            UIManager.GetInstance().GetFromPool(systemName + "/" + _openViewName, EuiLayer.GameUI, (BaseView) =>
+            UIManager.GetInstance().GetFromPool(systemName + "/" + _openViewName, euiLayer, (BaseView) =>
                  {
                      //ctrl是否第一次加载（在打开主界面时会加载）
                      if (!isLoad)

@@ -34,7 +34,7 @@ namespace Tool.UI
         private Vector2 _resolution = new Vector2(1920, 1080);
 
         private Transform _uiLayerTrans;
-        private Transform _systemUI,_tipsUI, _gameUI, _menuUI;
+        private Transform _systemUI, _tipsUI, _gameUI, _menuUI;
         private int _systemUISort = 4000;
         private int _tipsUISort = 3000;
         private int _gameUISort = 2000;
@@ -43,17 +43,17 @@ namespace Tool.UI
         private bool _lock = false; //GC锁
         private QArray<PrefabVo> _idlePool = new QArray<PrefabVo>(10);
         private QArray<PrefabVo> _pool = new QArray<PrefabVo>(10);
-        
+
         protected override void OnInit()
-        {            
+        {
             #region UICanvas初始化
-            ActionKit.GetInstance().AddTimer(GC_Release,GC_TIME,"GC_Release",true);
+            ActionKit.GetInstance().AddTimer(GC_Release, GC_TIME, "GC_Release", true);
 
             //创建UILayer
             var canvasObj = new GameObject("UILayer");
             canvasObj.layer = LayerMask.NameToLayer("UI");
             _uiLayerTrans = canvasObj.transform;
-     
+
             //创建事件系统
             var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
 
@@ -171,7 +171,7 @@ namespace Tool.UI
             if (!_lock)
             {
                 _lock = true;
-                
+
                 for (int i = 0; i < _idlePool.Count; i++)
                 {
                     var vo = _idlePool[i];
@@ -242,7 +242,7 @@ namespace Tool.UI
         public void UnloadView<T>(T view) where T : BaseView
         {
             Object.Destroy(view.gameObject);
-            Debug.LogWarning("<size=15><color=#9400D3>回收："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
+            Debug.LogWarning("<size=15><color=#9400D3>回收：" + view + $"({view.GetInstanceID()})" + "</color></size>");
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Tool.UI
         {
             var viewQArray = new QArray<BaseView>();
             var layerTrans = GetFatherLayer(euiLayer);
-            for (int i = layerTrans.childCount-1; i >=0; i--)   //从最顶层View开始关闭
+            for (int i = layerTrans.childCount - 1; i >= 0; i--)   //从最顶层View开始关闭
             {
                 var child = layerTrans.GetChild(i);
                 if (child.TryGetComponent<BaseView>(out BaseView baseView))
@@ -307,7 +307,7 @@ namespace Tool.UI
         /// </summary>
         /// <param name="eUILayer"></param>
         /// <returns></returns>
-        private Transform GetFatherLayer(EuiLayer eUILayer)
+        public Transform GetFatherLayer(EuiLayer eUILayer)
         {
             switch (eUILayer)
             {
@@ -319,6 +319,17 @@ namespace Tool.UI
             }
         }
         #endregion
+
+        /// <summary>
+        /// 获取Pool池子的BaseView
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="viewName"></param>
+        /// <returns></returns>
+        public T GetPoolBaseView<T>(string viewName) where T : BaseView
+        {
+            return _pool.FindValue(x => x.GetBaseView().name == viewName).GetBaseView() as T;
+        }
     }
 
     public class PrefabVo
