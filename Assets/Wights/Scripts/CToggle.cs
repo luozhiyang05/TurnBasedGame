@@ -22,11 +22,10 @@ namespace Assets.Wights.Scripts
             _toggle.onValueChanged.AddListener(NotifyToggle);
         }
 
-        public void InitToggle(bool value,string text)
+        public void InitToggle(string text)
         {
             actText.text = text;
             inactText.text = text;
-            NotifyToggle(value);
         }
 
         public void SetShowViewCallback(UnityAction callback)
@@ -39,7 +38,7 @@ namespace Assets.Wights.Scripts
             _hideViewCallback = callback;
         }
 
-        private void NotifyToggle(bool value)
+        public void NotifyToggle(bool value)
         {
             if (value)
             {

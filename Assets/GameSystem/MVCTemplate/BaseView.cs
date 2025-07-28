@@ -12,14 +12,17 @@ namespace GameSystem.MVCTemplate
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class BaseView : BasePanel, IController
     {
+        public Transform Main;
         [NonSerialized] public CanvasGroup CanvasGroup;
         [NonSerialized] public EuiLayer EuiLayer;
-        [NonReorderable] public bool isOpen;
+        [NonSerialized] public bool isOpen;
         protected BaseModel Model;
-
+        private BaseView _fatherView;
         private UnityAction _closeCallback;
         private UnityAction _releaseCallback;
         private UnityAction<BaseView> _removeFormOpenViewsCallback;
+        public string SystemPath => _systemPath;
+        private string _systemPath;
 
         private void Awake()
         {
@@ -34,11 +37,18 @@ namespace GameSystem.MVCTemplate
         private void OnEnable() => isOpen = true;
         private void OnDisable() => isOpen = false;
         public void SetModel(BaseModel model) => Model = model;
-        protected void SetName(string viewName) => name = viewName;
+        public void SetFatherView(BaseView fatherView) => _fatherView = fatherView;
+        public bool CheckFatherViewIsNull() => _fatherView == null;
+        protected void SetPath(string path)
+        {
+            var viewName = PathUtils.GetViewNameFromSystemPath(path);
+            name = viewName;
+            _systemPath = path;
+        }
 
         protected abstract void BindModelListener();
 
-        public override void OnShow()
+        public override void OnShow(params object[] args)
         {
             if (useAudio)
             {
@@ -63,7 +73,7 @@ namespace GameSystem.MVCTemplate
             _closeCallback?.Invoke();
             gameObject.SetActive(false);
             _removeFormOpenViewsCallback?.Invoke(this);
-            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
+            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel(this);
         }
 
         public void SetRemoveFromOpenViewsCallback(UnityAction<BaseView> callback)
@@ -80,11 +90,11 @@ namespace GameSystem.MVCTemplate
             };
         }
 
-        public void SetRelease(UnityAction callback)
+        public void SetRelease(UnityAction<BaseView> callback)
         {
             _releaseCallback = () =>
             {
-                callback?.Invoke();
+                callback?.Invoke(this);
                 EventsHandle.EventTrigger(EventsNameConst.RELEASE_VIEW, name);
             };
         }

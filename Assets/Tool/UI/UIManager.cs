@@ -28,91 +28,50 @@ namespace Tool.UI
     {
         public Vector2 Resolution
         {
-            get => _canvasScaler.referenceResolution;
-            set => _canvasScaler.referenceResolution = value;
+            get => _resolution;
+            set => _resolution = value;
         }
+        private Vector2 _resolution = new Vector2(1920, 1080);
 
-        private GameObject _maskPanel;
-        private GraphicRaycaster _maskPanelRaycaster;
-        private PointerEventData _eventData;
-        private Canvas _canvas;
-        private RectTransform _canvasRectTrans;
-        private CanvasScaler _canvasScaler;
-        private Transform _warnUI,_tipsUI, _gameUI, _menuUI;
-        // private const float GC_CHECK = 10f; //GC检查间隔
+        private Transform _uiLayerTrans;
+        private Transform _systemUI, _tipsUI, _gameUI, _menuUI;
+        private int _systemUISort = 4000;
+        private int _tipsUISort = 3000;
+        private int _gameUISort = 2000;
+        private int _menuUISort = 1000;
         private const float GC_TIME = 5f;  //GC回收间隔
         private bool _lock = false; //GC锁
-
         private QArray<PrefabVo> _idlePool = new QArray<PrefabVo>(10);
-
         private QArray<PrefabVo> _pool = new QArray<PrefabVo>(10);
-        
-        private QArray<PrefabVo> _gcQueue = new QArray<PrefabVo>(10);
 
         protected override void OnInit()
-        {            
+        {
             #region UICanvas初始化
-            // ActionKit.GetInstance().AddTimer(GC_Check,GC_CHECK,"GC_Check",true);
-            ActionKit.GetInstance().AddTimer(GC_Release,GC_TIME,"GC_Release",true);
+            ActionKit.GetInstance().AddTimer(GC_Release, GC_TIME, "GC_Release", true);
 
-            //创建画布
-            var canvasObj = new GameObject("UICanvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster))
-            {
-                //设置UI
-                layer = LayerMask.NameToLayer("UI")
-            };
+            //创建UILayer
+            var canvasObj = new GameObject("UILayer");
+            canvasObj.layer = LayerMask.NameToLayer("UI");
+            _uiLayerTrans = canvasObj.transform;
 
             //创建事件系统
             var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
 
             //销毁保护
             Object.DontDestroyOnLoad(canvasObj);
-            //销毁保护
             Object.DontDestroyOnLoad(eventSystem);
 
-            //获取UICanvas的组件
-            _canvas = canvasObj.GetComponent<Canvas>();
-            _canvasScaler = canvasObj.GetComponent<CanvasScaler>();
-            _canvasRectTrans = canvasObj.GetComponent<RectTransform>();
-
-            //设置值
-            _canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            _canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            _canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
-            _canvasScaler.referenceResolution = new Vector2(1920, 1080);
-
-            //画布坐标清零
-            _canvasRectTrans.localPosition = Vector3.zero;
-            _canvasRectTrans.localScale = Vector3.one;
-            _canvasRectTrans.offsetMax = Vector2.zero;
-            _canvasRectTrans.offsetMin = Vector2.zero;
-
-            //生成遮罩
-            _maskPanel = ResMgr.GetInstance().SyncLoad<GameObject>("MaskPanel");
-            _maskPanel.transform.SetParent(_canvasRectTrans);
-            _maskPanel.SetActive(false);
-            
-            //监听遮罩点击
-            _maskPanelRaycaster = _canvasRectTrans.GetComponent<GraphicRaycaster>();
-            _eventData = new PointerEventData(EventSystem.current);
-            PublicMonoKit.GetInstance().OnRegisterUpdate(IsClickOnMaskPanel);
-
             //生成UI层
-            _menuUI = new GameObject(EuiLayer.MenuUI.ToString()).transform;
-            _menuUI.SetParent(_canvasRectTrans);
-            _menuUI.localPosition = Vector3.zero;
-
-            _gameUI = new GameObject(EuiLayer.GameUI.ToString()).transform;
-            _gameUI.SetParent(_canvasRectTrans);
-            _gameUI.localPosition = Vector3.zero;
-
-            _tipsUI = new GameObject(EuiLayer.TipsUI.ToString()).transform;
-            _tipsUI.SetParent(_canvasRectTrans);
-            _tipsUI.localPosition = Vector3.zero;
-
-            _warnUI = new GameObject(EuiLayer.SystemUI.ToString()).transform;
-            _warnUI.SetParent(_canvasRectTrans);
-            _warnUI.localPosition = Vector3.zero;
+            Transform CreateUILayer(EuiLayer layer)
+            {
+                var layerTrnas = new GameObject(layer.ToString()).transform;
+                layerTrnas.SetParent(_uiLayerTrans);
+                return layerTrnas;
+            }
+            _menuUI = CreateUILayer(EuiLayer.MenuUI);
+            _gameUI = CreateUILayer(EuiLayer.GameUI);
+            _tipsUI = CreateUILayer(EuiLayer.TipsUI);
+            _systemUI = CreateUILayer(EuiLayer.SystemUI);
             #endregion
         }
 
@@ -139,20 +98,27 @@ namespace Tool.UI
                     cache.GetBaseView().transform.SetAsLastSibling();
                     cache.GetBaseView().gameObject.SetActive(true);
                     callback?.Invoke(cache.GetBaseView());
-                    return;
                 }
-
-                //如果pool中没有prefabVO，则表明没有打开过，需要去加载
-                var prefabVo = _pool.FindValue((value) => value.GetBaseView().name == path);
-                if (null == prefabVo)
+                else
                 {
-                    //没有的话，则实例化预制体到pool
-                    LoadViewPrefab(path, euiLayer, (baseView) =>
+                    //如果pool中没有prefabVO，则表明没有打开过，需要去加载
+                    var prefabVo = _pool.FindValue((value) => value.GetBaseView().SystemPath == path);
+                    if (null == prefabVo)
                     {
-                        var prefabVp = new PrefabVo(path, baseView);
-                        _pool.Add(prefabVp);
+                        //没有的话，则实例化预制体到pool
+                        LoadViewPrefab(path, euiLayer, (baseView) =>
+                        {
+                            var prefabVp = new PrefabVo(path, baseView);
+                            _pool.Add(prefabVp);
+                            callback?.Invoke(baseView);
+                        });
+                    }
+                    else
+                    {
+                        //重复打开的视图直接执行回调
+                        var baseView = prefabVo.GetBaseView();
                         callback?.Invoke(baseView);
-                    });
+                    }
                 }
             }
         }
@@ -198,24 +164,6 @@ namespace Tool.UI
         }
 
         /// <summary>
-        /// GC检查
-        /// </summary>
-        // private void GC_Check()
-        // {
-        //     if (!_lock)
-        //     {
-        //         _lock = true;
-        //         while (_idlePool.Count != 0)
-        //         {
-        //             var vo = _idlePool.GetFromHead();
-        //             _gcQueue.Add(vo);
-        //         }
-        //         _lock = false;
-        //     }
-        //     Debug.Log("GC检查");
-        // }
-
-        /// <summary>
         /// 回收View
         /// </summary>
         private void GC_Release()
@@ -223,16 +171,13 @@ namespace Tool.UI
             if (!_lock)
             {
                 _lock = true;
-                while (_idlePool.Count != 0)
-                {
-                    var vo = _idlePool.GetFromHead();
-                    _gcQueue.Add(vo);
-                }
 
-                while (_gcQueue.Count != 0)
+                for (int i = 0; i < _idlePool.Count; i++)
                 {
-                    var vo = _gcQueue.GetFromHead();
+                    var vo = _idlePool[i];
                     vo.Release();
+                    _idlePool.RemoveAt(i);
+                    i--;
                 }
 
                 _lock = false;
@@ -241,95 +186,35 @@ namespace Tool.UI
         #endregion
 
         #region UI管理
+
+        // public void SetBasePanelSort
+
         /// <summary>
         /// 开启遮罩
         /// </summary>
         /// <param name="baseView"></param>
         public void OpenMaskPanel(BasePanel basePanel)
         {
-            //归位遮罩
-            _maskPanel.transform.SetParent(_canvasRectTrans);
-            //移动遮罩到当前view的上方
-            var panelParent = basePanel.transform.parent;
-            var panelIndex = basePanel.transform.GetSiblingIndex();
-            _maskPanel.transform.SetParent(panelParent);
-            _maskPanel.transform.SetSiblingIndex(panelIndex);
-            _maskPanel.SetActive(true);
+            var maskPanel = basePanel.transform.Find("MaskPanel");
+            if (null == maskPanel) throw new System.Exception("黑幕不存在");
+            var UIBlock = maskPanel.gameObject.GetComponent<UIBlock>();
+            maskPanel.gameObject.SetActive(true);
+            if (basePanel.UseClickMaskPanel)
+            {
+                UIBlock.SetClickCallback(() => basePanel.OnClickMaskPanel());
+            }
         }
 
         /// <summary>
         /// 关闭遮罩
         /// </summary>
-        public void CloseMaskPanel()
+        public void CloseMaskPanel(BasePanel basePanel)
         {
-            //从该遮罩层起往上查找view，如果有view也开启了遮罩，则将该遮罩移动到该view上方
-            if (_maskPanel.activeInHierarchy)
-            {
-                bool hasView = false;
-                bool hasFindUseMaskPanelView = false;
-
-                //从UI层的最顶层开始找起，找到有开启maskPanel的view后，将maskPanel 移动到该view上方
-                for (int i = _canvasRectTrans.childCount - 1; i >= 0; i--)
-                {
-                    var uiLevelTrans = _canvasRectTrans.GetChild(i);
-                    for (int j = uiLevelTrans.childCount - 1; j >= 0; j--)
-                    {
-                        BasePanel basePanel = uiLevelTrans.GetChild(j).GetComponent<BasePanel>();
-                        if (basePanel != null && basePanel.gameObject.activeInHierarchy && basePanel.UseMaskPanel)
-                        {
-                            OpenMaskPanel(basePanel);
-                            hasView = true;
-                            hasFindUseMaskPanelView = true;
-                            break;
-                        }
-                    }
-                    if (hasFindUseMaskPanelView)
-                    {
-                        break;
-                    }
-                }
-
-                if (!hasView)
-                {
-                    _maskPanel.SetActive(false);
-                    _maskPanel.transform.SetParent(_canvasRectTrans);
-                }
-            }
-
-        }
-
-        /// <summary>
-        /// 判断当前是否点击遮罩
-        /// </summary>
-        /// <returns></returns>
-        private void IsClickOnMaskPanel()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                 //设置点击光标和点击位置
-                _eventData.position = Input.mousePosition;
-                _eventData.pressPosition = Input.mousePosition;
-                //发射射线，方向为vector2.one，默认检测该点有无可阻挡射线的UI
-                List<RaycastResult> raycastResults = new List<RaycastResult>();
-                _maskPanelRaycaster.Raycast(_eventData, raycastResults);
-                //判空检测
-                if (raycastResults.Count == 0) return;
-                if (raycastResults[0].gameObject == _maskPanel)
-                {
-                    //触发点击遮罩事件
-                    if (_maskPanel.activeInHierarchy)
-                    {
-                        int index = _maskPanel.transform.GetSiblingIndex();
-                        BasePanel basePanel = _maskPanel.transform.parent.GetChild(index + 1).GetComponent<BasePanel>();
-                        if (basePanel.UseClickMaskPanel)
-                        {
-                            basePanel.OnClickMaskPanel();
-                        }
-                    }
-                }
-                //释放内存
-                raycastResults.Clear();
-            }
+            var maskPanel = basePanel.transform.Find("MaskPanel");
+            if (null == maskPanel) throw new System.Exception("黑幕不存在");
+            var UIBlock = maskPanel.gameObject.GetComponent<UIBlock>();
+            UIBlock.ClearClickCallback();
+            maskPanel.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -357,7 +242,7 @@ namespace Tool.UI
         public void UnloadView<T>(T view) where T : BaseView
         {
             Object.Destroy(view.gameObject);
-            Debug.LogWarning("<size=15><color=#9400D3>回收："  + view +$"({view.GetInstanceID()})"+ "</color></size>");
+            Debug.LogWarning("<size=15><color=#9400D3>回收：" + view + $"({view.GetInstanceID()})" + "</color></size>");
         }
 
         /// <summary>
@@ -368,7 +253,7 @@ namespace Tool.UI
         {
             var viewQArray = new QArray<BaseView>();
             var layerTrans = GetFatherLayer(euiLayer);
-            for (int i = layerTrans.childCount-1; i >=0; i--)   //从最顶层View开始关闭
+            for (int i = layerTrans.childCount - 1; i >= 0; i--)   //从最顶层View开始关闭
             {
                 var child = layerTrans.GetChild(i);
                 if (child.TryGetComponent<BaseView>(out BaseView baseView))
@@ -391,18 +276,30 @@ namespace Tool.UI
         {
             //设置层级
             viewGo.transform.SetParent(GetFatherLayer(targetLayer));
+            var canvas = viewGo.GetComponent<Canvas>();
+            var canvasScaler = viewGo.GetComponent<CanvasScaler>();
 
-            //坐标清零
-            viewGo.transform.localPosition = Vector3.zero;
-            viewGo.transform.localScale = Vector3.one;
-
-            //锚点初始化
-            var uiRectTrans = viewGo.GetComponent<RectTransform>();
-            uiRectTrans.offsetMax = Vector2.zero;
-            uiRectTrans.offsetMin = Vector2.zero;
-
-            //设置UI长宽为分辨率
-            uiRectTrans.sizeDelta = Resolution;
+            //设置画布
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.overrideSorting = true;
+            switch (targetLayer)
+            {
+                case EuiLayer.SystemUI:
+                    canvas.sortingOrder = _systemUISort + canvas.sortingOrder;
+                    break;
+                case EuiLayer.TipsUI:
+                    canvas.sortingOrder = _tipsUISort + canvas.sortingOrder;
+                    break;
+                case EuiLayer.GameUI:
+                    canvas.sortingOrder = _gameUISort + canvas.sortingOrder;
+                    break;
+                case EuiLayer.MenuUI:
+                    canvas.sortingOrder = _menuUISort + canvas.sortingOrder;
+                    break;
+            }
+            canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvasScaler.referenceResolution = Resolution;
+            canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
         }
 
         /// <summary>
@@ -410,18 +307,29 @@ namespace Tool.UI
         /// </summary>
         /// <param name="eUILayer"></param>
         /// <returns></returns>
-        private Transform GetFatherLayer(EuiLayer eUILayer)
+        public Transform GetFatherLayer(EuiLayer eUILayer)
         {
             switch (eUILayer)
             {
                 case EuiLayer.TipsUI: return _tipsUI;
                 case EuiLayer.GameUI: return _gameUI;
                 case EuiLayer.MenuUI: return _menuUI;
-                case EuiLayer.SystemUI: return _warnUI;
+                case EuiLayer.SystemUI: return _systemUI;
                 default: return null;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 获取Pool池子的BaseView
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="viewName"></param>
+        /// <returns></returns>
+        public T GetPoolBaseView<T>(string viewName) where T : BaseView
+        {
+            return _pool.FindValue(x => x.GetBaseView().name == viewName).GetBaseView() as T;
+        }
     }
 
     public class PrefabVo

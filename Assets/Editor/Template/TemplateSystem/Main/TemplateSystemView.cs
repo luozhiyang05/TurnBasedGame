@@ -51,13 +51,13 @@ namespace Assets.GameSystem.TemplateSystem.Main
         /// </summary>
         protected override void OnInit()
         {
-            SetName("TemplateSystemView");
+            SetPath("TemplateSystem/TemplateSystemView");
         }
 
 
-        public override void OnShow()
+        public override void OnShow(params object[] args)
         {
-            base.OnShow();
+            base.OnShow(args);
         }
 
         public override void OnHide()

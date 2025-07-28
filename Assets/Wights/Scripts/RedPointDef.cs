@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Tool.Utilities.Bindery;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace Assets.Wights.Scripts
     public class RedPointData
     {
         public GameObject button;
+        public Func<int> registerFunc;
         public ValueBindery<int> redPointCnt;
 
         public RedPointData()
@@ -25,9 +27,14 @@ namespace Assets.Wights.Scripts
                 redPointGo.gameObject.SetActive(cnt > 0);
             });
         }
+
+        public void RegisterWithFun(Func<int> func)
+        {
+            registerFunc = func;
+        }
     }
     public class RedPointDef
-    {   
+    {
         //红点预制体名称
         public const string REDPOINT_PREFAB_NAME = "RedPoint";
 
@@ -36,15 +43,16 @@ namespace Assets.Wights.Scripts
         public const string ONE_TWO = "ONE_TWO";
         public const string ONE_TWO_TEST1 = "ONE_TWO_TEST1";
         public const string ONE_TWO_TEST2 = "ONE_TWO_TEST2";
+
         private Dictionary<string, RedPointData> _redPointDic;
         public RedPointDef()
         {
             _redPointDic = new Dictionary<string, RedPointData>()
             {
-                {ONE,new RedPointData()},
-                {ONE_TWO,new RedPointData()},
-                {ONE_TWO_TEST1,new RedPointData()},
-                {ONE_TWO_TEST2,new RedPointData()},
+                 {ONE,new RedPointData()},
+                 {ONE_TWO,new RedPointData()},
+                 {ONE_TWO_TEST1,new RedPointData()},
+                 {ONE_TWO_TEST2,new RedPointData()}
             };
         }
 
@@ -54,14 +62,36 @@ namespace Assets.Wights.Scripts
             {
                 return _redPointDic[redPointPath];
             }
-            throw new System.Exception("RedPointDef.GetRedPointData() redPointPath is not exist");
+            throw new System.Exception("红点路径不存在：" + redPointPath);
         }
 
         public void Fire(string redPointPath, int addRedPointCnt = 1)
         {
             var redPointData = GetRedPointData(redPointPath);
             var redPointCnt = redPointData.redPointCnt;
-            if (redPointCnt.Value == 0 && addRedPointCnt < 0) return;
+            if (redPointCnt.Value == 0 && addRedPointCnt < 0)
+                throw new System.Exception("红点计数器小于0,请检查好点注册方法");
+            redPointCnt.Value += addRedPointCnt;
+            redPointCnt.Value = redPointCnt.Value < 0 ? 0 : redPointCnt.Value;
+            while (redPointPath.LastIndexOf('_') != -1)
+            {
+                redPointPath = redPointPath.Substring(0, redPointPath.LastIndexOf('_'));
+                redPointData = GetRedPointData(redPointPath);
+                redPointData.redPointCnt.Value += addRedPointCnt;
+                redPointData.redPointCnt.Value = redPointData.redPointCnt.Value < 0 ? 0 : redPointData.redPointCnt.Value;
+            }
+        }
+
+        public void FireWithFun(string redPointPath)
+        {
+            int addRedPointCnt = 0;
+            var redPointData = GetRedPointData(redPointPath);
+            var redPointCnt = redPointData.redPointCnt;
+            if (null == redPointData.registerFunc)
+                throw new System.Exception("红点注册方法为空");
+            addRedPointCnt = redPointData.registerFunc();
+            if (redPointCnt.Value == 0 && addRedPointCnt < 0)
+                throw new System.Exception("红点计数器小于0,请检查好点注册方法");
             redPointCnt.Value += addRedPointCnt;
             redPointCnt.Value = redPointCnt.Value < 0 ? 0 : redPointCnt.Value;
             while (redPointPath.LastIndexOf('_') != -1)

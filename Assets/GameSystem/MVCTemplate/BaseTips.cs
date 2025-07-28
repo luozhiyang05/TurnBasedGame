@@ -35,7 +35,7 @@ namespace GameSystem.MVCTemplate
             }
             gameObject.SetActive(false);
             UIManager.GetInstance().EnterIdlePool(this);
-            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel();
+            if (UseMaskPanel) UIManager.GetInstance().CloseMaskPanel(this);
             OnRelease();
         }
 
@@ -64,7 +64,7 @@ namespace GameSystem.MVCTemplate
         }
 
         protected override void BindModelListener(){}
-        public override void OnShow(){}
+        public override void OnShow(params object[] args){}
        
         /// <summary>
         /// 点击遮罩事件

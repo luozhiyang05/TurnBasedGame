@@ -84,7 +84,6 @@ namespace Assets.Wights.Scripts
         private GameObject _cToggleCell;
         private string _cToggleCellName = default;
         private Func<int, bool> _cellVisableCallback;
-        private bool _init;
         public bool init;   //是否初始化
         protected override void Awake()
         {
@@ -122,7 +121,10 @@ namespace Assets.Wights.Scripts
             {
                 var select = i == index;
                 //避免已经触发的toggle不会触发事件
-                if (m_Toggles[i].isOn) _toggles[i].InitToggle(i == index, _texts[i]);
+                if (m_Toggles[i].isOn && select)
+                {
+                     _toggles[i].NotifyToggle(true);
+                }
                 m_Toggles[i].isOn = select;
             }
         }
@@ -155,12 +157,17 @@ namespace Assets.Wights.Scripts
             {
                 //生成CToggleCell
                 var cell = Instantiate(_cToggleCell);
+                var cToggle = cell.GetComponent<CToggle>();
+                var toggle = cell.GetComponent<Toggle>();
                 cell.name = _cToggleCellName == default ? "ToggleCell" : _cToggleCellName;
                 cell.transform.SetParent(viewPort.transform);
-                cell.GetComponent<Toggle>().group = this;
+                toggle.group = this;
+
+                //初始化toggle
+                cToggle.InitToggle(_texts[i]);
 
                 //红点绑定
-                if (_redPointPaths.Count > 0 && i < _redPointPaths.Count)
+                if (null != _redPointPaths && _redPointPaths.Count > 0 && i < _redPointPaths.Count)
                 {
                     var redPointPath = _redPointPaths[i];
                     if ("" != redPointPath)
@@ -170,10 +177,13 @@ namespace Assets.Wights.Scripts
                 }
 
                 //CToggleCell事件
-                var viewName = _data.GetViewName(i);
-                var cToggle = cell.GetComponent<CToggle>();
-                cToggle.SetShowViewCallback(_data.GetOpenFun(i));
-                cToggle.SetHideViewCallback(() => _baseCtrl.CloseView(viewName));
+                if (null != _baseCtrl)
+                {
+                    var viewName = _data.GetViewName(i);
+                    cToggle.SetShowViewCallback(_data.GetOpenFun(i));
+                    cToggle.SetHideViewCallback(() => _baseCtrl.CloseSubPanelView(viewName));
+                }
+
                 _toggles.Add(cToggle);
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(viewPort.transform as RectTransform);
@@ -182,9 +192,12 @@ namespace Assets.Wights.Scripts
         protected override void OnDestroy()
         {
             //红点注销
-            for (int i = 0; i < _redPointPaths.Count; i++)
+            if (null != _redPointPaths)
             {
-                RedPointMgr.GetInstance().UnRegister(_redPointPaths[i]);
+                for (int i = 0; i < _redPointPaths.Count; i++)
+                {
+                    RedPointMgr.GetInstance().UnRegister(_redPointPaths[i]);
+                }
             }
         }
     }

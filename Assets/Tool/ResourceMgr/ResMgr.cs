@@ -76,8 +76,7 @@ namespace Tool.ResourceMgr
         public void LoadView(string path, Action<GameObject> callback)
         {
 #if UNITY_EDITOR
-            var systemName = path[..path.IndexOf("View")];
-            var realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, path);
+            var realPath = string.Format("{0}/{1}.prefab", "Assets/GameSystem", path);
             GameObject viewObj = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
             if (viewObj == null) throw new Exception($"加载UI失败：{realPath}");
             callback(GameObject.Instantiate(viewObj));
@@ -98,7 +97,7 @@ namespace Tool.ResourceMgr
         /// <param name="systemName"></param>
         /// <param name="assetName"></param>
         /// <param name="callback"></param>
-        public GameObject LoadAsset(string systemName, string assetName,bool fromGameSystem = true)
+        public GameObject LoadAsset(string systemName, string assetName, bool fromGameSystem = true)
         {
 #if UNITY_EDITOR
             string realPath = "";
@@ -106,6 +105,26 @@ namespace Tool.ResourceMgr
                 realPath = string.Format("{0}/{1}/{2}.prefab", "Assets/GameSystem", systemName, assetName);
             else
                 realPath = string.Format("Assets/Wights/{0}.prefab", assetName);
+            GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
+            if (go == null) throw new Exception($"加载资源失败：{realPath}");
+            return go;
+#else
+
+#endif
+        }
+
+        /// <summary>
+        /// 加载工具资源
+        /// </summary>
+        /// <param name="systemName"></param>
+        /// <param name="assetName"></param>
+        /// <param name="fromGameSystem"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public GameObject LoadToolAsset(string toolAssetPath)
+        {
+#if UNITY_EDITOR
+            string realPath = string.Format("Assets/Tool/{0}", toolAssetPath);
             GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
             if (go == null) throw new Exception($"加载资源失败：{realPath}");
             return go;
