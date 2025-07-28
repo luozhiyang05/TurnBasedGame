@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameSystem.MVCTemplate;
+using Tool.Guide;
 using Tool.ResourceMgr;
 using UnityEngine;
 using UnityEngine.Events;

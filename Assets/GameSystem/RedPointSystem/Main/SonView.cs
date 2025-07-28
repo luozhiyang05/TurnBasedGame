@@ -1,5 +1,5 @@
-using Assets.Wights.Scripts;
 using GameSystem.MVCTemplate;
+using Tool.Guide;
 using UIComponents;
 
 namespace Assets.GameSystem.RedPointSystem.Main
