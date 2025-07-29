@@ -5,13 +5,8 @@ using UnityEngine.UI;
 
 namespace Tips
 {
-    public class ComfirmTips : BaseTips
+    public class TipsTemplate : BaseTips
     {
-        public Text txtTitle;
-        public Text txtContent;
-        public CButton btnComfirm;
-        private UnityAction _comfirm;
-
         #region 遮罩相关
         /// <summary>
         /// 是否启用MaskPanel，启用的话只需要取消注释
@@ -34,22 +29,12 @@ namespace Tips
 
         protected override void Init()
         {
-            SetPath("Common/ComfirmTips");
-            btnComfirm.AddListener(() =>
-            {
-                _comfirm?.Invoke();
-                OnHide();
-            });
+            SetPath("Common/TipsTemplate");
         }
 
         protected override void OnOpen(params object[] args)
         {
-            SetAudio("Test", "Test");
-            _comfirm = args[2] as UnityAction;
-            txtTitle.text = args[0] as string;
-            txtContent.text = args[1] as string;
-            //TODO:多语言
-            btnComfirm.Label.text = "确定";
+            // SetAudio("OpenSound", "CloseSound");
         }
 
         public override void OnRelease()

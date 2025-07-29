@@ -95,9 +95,10 @@ namespace Tool.UI
                 if (null != cache)
                 {
                     _pool.Add(cache);
-                    cache.GetBaseView().transform.SetAsLastSibling();
-                    cache.GetBaseView().gameObject.SetActive(true);
-                    callback?.Invoke(cache.GetBaseView());
+                    var baseView = cache.GetBaseView();
+                    baseView.transform.SetAsLastSibling();
+                    baseView.gameObject.SetActive(true);
+                    callback?.Invoke(baseView);
                 }
                 else
                 {

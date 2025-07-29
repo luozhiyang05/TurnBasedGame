@@ -9,17 +9,16 @@ namespace GameSystem.MVCTemplate
     public abstract class BaseTips : BaseView
     {
         public UIAnimationSo UIAnimationSo => ResMgr.GetInstance().SyncLoad<UIAnimationSo>("UIAnimationSo");
-        public GameObject main;
 
         public IEnumerator ShowAnimation()
         {
-            main.transform.localScale = Vector3.zero;
+            Main.transform.localScale = Vector3.zero;
             if (UseMaskPanel) UIManager.GetInstance().OpenMaskPanel(this);
             float time = 0;
             while (time < 1)
             {
                 time += Time.deltaTime / UIAnimationSo.tipsDisplayTime;
-                main.transform.localScale = new Vector3(UIAnimationSo.tipsAnimCurve.Evaluate(time), UIAnimationSo.tipsAnimCurve.Evaluate(time), UIAnimationSo.tipsAnimCurve.Evaluate(time));
+                Main.transform.localScale = new Vector3(UIAnimationSo.tipsAnimCurve.Evaluate(time), UIAnimationSo.tipsAnimCurve.Evaluate(time), UIAnimationSo.tipsAnimCurve.Evaluate(time));
                 yield return null;
             }
         }
@@ -30,7 +29,7 @@ namespace GameSystem.MVCTemplate
             while (time < 1)
             {
                 time += Time.deltaTime / UIAnimationSo.tipsDisplayTime;
-                main.transform.localScale = new Vector3(UIAnimationSo.tipsAnimCurve.Evaluate(1 - time), UIAnimationSo.tipsAnimCurve.Evaluate(1 - time), UIAnimationSo.tipsAnimCurve.Evaluate(1 - time));
+                Main.transform.localScale = new Vector3(UIAnimationSo.tipsAnimCurve.Evaluate(1 - time), UIAnimationSo.tipsAnimCurve.Evaluate(1 - time), UIAnimationSo.tipsAnimCurve.Evaluate(1 - time));
                 yield return null;
             }
             gameObject.SetActive(false);
@@ -63,9 +62,7 @@ namespace GameSystem.MVCTemplate
             StartCoroutine(HideAnimation());
         }
 
-        protected override void BindModelListener(){}
-        public override void OnShow(params object[] args){}
-       
+        protected override void BindModelListener(){}       
         /// <summary>
         /// 点击遮罩事件
         /// </summary>
