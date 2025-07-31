@@ -50,6 +50,7 @@ namespace GameSystem.MVCTemplate
 
         public override void OnShow(params object[] args)
         {
+            CalculateParticalSort();
             if (useAudio)
             {
                 PlayAudio(EAudioType.Effect);

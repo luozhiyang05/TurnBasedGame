@@ -76,10 +76,21 @@ namespace GameSystem.MVCTemplate
         {
             var go = ResMgr.GetInstance().LoadAsset(systemName, assetPath);
             var main = transform.Find("Main");
-            go = Instantiate(go,main);
+            go = Instantiate(go, main);
             var trans = go.transform;
             trans.SetSiblingIndex(sort);
             return go.GetComponent<T>();
+        }
+
+        protected void CalculateParticalSort()
+        {
+            var canvasSort = GetComponent<Canvas>().sortingOrder;
+            var particals = GetComponentsInChildren<ParticleSystem>();
+            for (int i = 0; i < particals.Length; i++)
+            {
+                var pr = particals[i].GetComponent<ParticleSystemRenderer>();
+                pr.sortingOrder = canvasSort;
+            }
         }
     }
 }
