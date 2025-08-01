@@ -89,7 +89,7 @@ namespace GameSystem.MVCTemplate
             for (int i = 0; i < particals.Length; i++)
             {
                 var pr = particals[i].GetComponent<ParticleSystemRenderer>();
-                pr.sortingOrder = canvasSort;
+                pr.sortingOrder += canvasSort;
             }
         }
     }
