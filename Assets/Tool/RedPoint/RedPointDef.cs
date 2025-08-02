@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Tool.Utilities.Bindery;
 using UnityEngine;
 
-namespace Assets.Wights.Scripts
+namespace Tool.Guide
 {
     public class RedPointData
     {

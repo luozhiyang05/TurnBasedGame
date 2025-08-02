@@ -38,16 +38,17 @@ namespace Tips
 
         protected override void Init()
         {
+            SetPath("Common/ReConfirmTips");
             txtTitle.text = _title;
             txtContent.text = _content;
             btnComfirm.Label.text = "确定";
             btnCancel.Label.text = "取消";
-            btnComfirm.onClick.AddListener(() =>
+            btnComfirm.AddListener(() =>
             {
                 _comfirm?.Invoke();
                 OnHide();
             });
-            btnCancel.onClick.AddListener(() =>
+            btnCancel.AddListener(() =>
             {
                 _cancel?.Invoke();
                 OnHide();

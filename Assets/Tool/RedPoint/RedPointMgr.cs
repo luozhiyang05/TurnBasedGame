@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using Tool.Single;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace Assets.Wights.Scripts
+namespace Tool.Guide
 {
     public class RedPointMgr : Singleton<RedPointMgr>
     {

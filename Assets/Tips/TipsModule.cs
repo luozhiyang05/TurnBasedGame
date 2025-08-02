@@ -1,3 +1,4 @@
+using GameSystem.MVCTemplate;
 using Tool.UI;
 using UnityEngine.Events;
 
@@ -5,23 +6,25 @@ namespace Tips
 {
     public static class TipsModule
     {
+        private static string PATH = "Common/";
         private static UIManager uiMgr => UIManager.GetInstance();
+        private static void OpenTips<T>(string tipsName,params object[] args) where T : BaseTips
+        {
+            uiMgr.GetFromPool(PATH + tipsName, EuiLayer.TipsUI, (view) =>
+            {
+                var tips = view as T;
+                tips.Open(args);
+            });
+        }
+
         public static void ReComfirmTips(string title, string content, UnityAction comfirm, UnityAction cancel)
         {
-            uiMgr.GetFromPool("ReConfirmTips", EuiLayer.TipsUI, (tips) =>
-            {
-                var reConfirmTips = tips as ReConfirmTips;
-                reConfirmTips.Open(title, content, comfirm, cancel);
-            });
+            OpenTips<ReConfirmTips>("ReConfirmTips", title, content, comfirm, cancel);
         }
 
         public static void ComfirmTips(string title, string content, UnityAction comfirm)
         {
-            uiMgr.GetFromPool("ComfirmTips", EuiLayer.TipsUI, (tips) =>
-            {
-                var confirmTips = tips as ComfirmTips;
-                confirmTips.Open(title, content, comfirm);
-            });
+            OpenTips<ComfirmTips>("ComfirmTips", title, content, comfirm);
         }
     }
 }

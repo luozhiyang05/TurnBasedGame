@@ -9,6 +9,14 @@ public class CreateViewTools
     {
         BaseView,
         SubPanelView,
+        Tips,
+    }
+    [MenuItem("Assets/生成Tips脚本", false, -1)]
+    static void OpenWindow3()
+    {
+        //将path传递给窗口
+        viewType = EViewType.Tips;
+        var window = EditorWindow.GetWindowWithRect<CreateViewToolsWindow>(new Rect(0, 0, 600, 400), true, "生成View");
     }
     public static EViewType viewType;
     [MenuItem("Assets/生成BaseView脚本", false, -1)]
@@ -58,9 +66,9 @@ public class CreateViewToolsWindow : EditorWindow
         GUILayout.BeginVertical();
         viewName = EditorGUILayout.TextField("View名称:", viewName);
         EditorGUILayout.LabelField("脚本路径：" + fullPath);
-        EditorGUILayout.LabelField("预制体路径：" + prefabPath);
         if (CreateViewTools.viewType == CreateViewTools.EViewType.BaseView)
         {
+            EditorGUILayout.LabelField("预制体路径：" + prefabPath);
             _isCreatePrefab = GUILayout.Toggle(_isCreatePrefab, "是否生成预制体（需要手动挂载view脚本）");
         }
         if (GUILayout.Button("生成"))
@@ -69,7 +77,22 @@ public class CreateViewToolsWindow : EditorWindow
         }
         GUILayout.EndVertical();
 
-        EditorGUILayout.HelpBox("注意：视图名字省略View！！！（开玩笑）", MessageType.Warning);
+        var tipStr = "";
+        switch (CreateViewTools.viewType)
+        {
+            case CreateViewTools.EViewType.BaseView:
+                tipStr = "记得给BaseView预制体挂载BaseView脚本";
+                break;
+            case CreateViewTools.EViewType.SubPanelView:
+                tipStr = "子视图可以是任何一个UI组件，因此不考虑生成预制体。注意要挂载脚本";
+                break;
+            case CreateViewTools.EViewType.Tips:
+                tipStr = "预制体路径在GameSystem/Common，记得给Tips预制体挂载Tips脚本";
+                break;
+            default:
+                break;
+        }
+        EditorGUILayout.HelpBox(tipStr, MessageType.Warning);
     }
 
     private void CreateView(string viewName)
@@ -109,7 +132,7 @@ public class CreateViewToolsWindow : EditorWindow
                 throw new Exception("生成View失败：" + e);
             }
         }
-        else
+        else if (CreateViewTools.viewType == CreateViewTools.EViewType.SubPanelView)
         {
             //读取view的配置模板,生成view
             const string templateViewPath = "Assets/Editor/Template/TemplateSystem/Main/TemplateSubPanelView.cs";
@@ -117,6 +140,24 @@ public class CreateViewToolsWindow : EditorWindow
             {
                 var viewContent = File.ReadAllText(templateViewPath);
                 var newViewContent = viewContent.Replace("TemplateSubPanelView", viewName);
+                var viewPath = string.Format("{0}\\{1}.cs", fullPath, viewName);
+                File.WriteAllText(viewPath, newViewContent);
+                Close();
+                AssetDatabase.Refresh();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("生成View失败：" + e);
+            }
+        }
+        else
+        {
+            //读取view的配置模板,生成view
+            const string templateViewPath = "Assets/Editor/Template/TipsTemplate.cs";
+            try
+            {
+                var viewContent = File.ReadAllText(templateViewPath);
+                var newViewContent = viewContent.Replace("TipsTemplate", viewName);
                 var viewPath = string.Format("{0}\\{1}.cs", fullPath, viewName);
                 File.WriteAllText(viewPath, newViewContent);
                 Close();

@@ -70,8 +70,28 @@ namespace Tool.UI
             }
             _menuUI = CreateUILayer(EuiLayer.MenuUI);
             _gameUI = CreateUILayer(EuiLayer.GameUI);
-            _tipsUI = CreateUILayer(EuiLayer.TipsUI);
+
+
+            //特殊处理生成Tips层，带canvas
+            Transform CreateTipsLayer(EuiLayer layer)
+            {
+                var layerTrnas = new GameObject(layer.ToString(),typeof(Canvas),typeof(CanvasScaler)).transform;
+                layerTrnas.SetParent(_uiLayerTrans);
+                CanvasScaler canvasScaler = layerTrnas.GetComponent<CanvasScaler>();
+                Canvas canvas = layerTrnas.GetComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.overrideSorting = true;
+                canvas.sortingOrder = _tipsUISort;
+                canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+                canvasScaler.referenceResolution = _resolution;
+                layerTrnas.gameObject.AddComponent<GraphicRaycaster>();
+                return layerTrnas;
+            }
+            
+              _tipsUI = CreateTipsLayer(EuiLayer.TipsUI);
             _systemUI = CreateUILayer(EuiLayer.SystemUI);
+
             #endregion
         }
 
@@ -95,9 +115,10 @@ namespace Tool.UI
                 if (null != cache)
                 {
                     _pool.Add(cache);
-                    cache.GetBaseView().transform.SetAsLastSibling();
-                    cache.GetBaseView().gameObject.SetActive(true);
-                    callback?.Invoke(cache.GetBaseView());
+                    var baseView = cache.GetBaseView();
+                    baseView.transform.SetAsLastSibling();
+                    baseView.gameObject.SetActive(true);
+                    callback?.Invoke(baseView);
                 }
                 else
                 {
@@ -228,8 +249,20 @@ namespace Tool.UI
             ResMgr.GetInstance().LoadView(path, (uiGo) =>
             {
                 if (uiGo == null) throw new Exception($"加载UI失败：{path}");
-                InitUI(uiGo, euiLayer);
                 BaseView baseView = uiGo.GetComponent<BaseView>();
+                if (baseView is not BaseTips)
+                {
+                    InitUI(uiGo, euiLayer);
+                }
+                else
+                {
+                    uiGo.transform.SetParent(_tipsUI);
+                    var rectTrans = uiGo.transform as RectTransform;
+                    rectTrans.anchoredPosition = Vector2.zero;
+                    rectTrans.anchorMin = Vector2.zero;
+                    rectTrans.anchorMax = Vector2.one;
+                    rectTrans.sizeDelta = _resolution;
+                }
                 callback?.Invoke(baseView); // 存入预制体池子
             });
         }
