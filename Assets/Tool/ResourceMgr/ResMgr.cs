@@ -78,6 +78,7 @@ namespace Tool.ResourceMgr
 #if UNITY_EDITOR
             var realPath = string.Format("{0}/{1}.prefab", "Assets/GameSystem", path);
             GameObject viewObj = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
+            Debug.Log(realPath);
             if (viewObj == null) throw new Exception($"加载UI失败：{realPath}");
             callback(GameObject.Instantiate(viewObj));
 #else
@@ -92,7 +93,7 @@ namespace Tool.ResourceMgr
 
 
         /// <summary>
-        /// 加载资源
+        /// 加载游戏系统或者wights资源
         /// </summary>
         /// <param name="systemName"></param>
         /// <param name="assetName"></param>
@@ -128,6 +129,24 @@ namespace Tool.ResourceMgr
             GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(realPath);
             if (go == null) throw new Exception($"加载资源失败：{realPath}");
             return go;
+#else
+
+#endif
+        }
+
+        /// <summary>
+        /// 通过路径加载资源
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <param name="assetName"></param>
+        /// <returns></returns>
+        public T LoadAsset<T>(string path, string assetName) where T : Object
+        {
+#if UNITY_EDITOR
+            T asset = AssetDatabase.LoadAssetAtPath<T>(path + assetName);
+            if (asset == null) throw new Exception($"加载资源失败：{path + assetName}");
+            return asset;
 #else
 
 #endif
