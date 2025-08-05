@@ -7,8 +7,7 @@ namespace Assets.Wights.Scripts
 {
     public enum EWightType
     {
-        card,
-        cell
+        Note
     }
     public class PoolWight : MonoBehaviour
     {

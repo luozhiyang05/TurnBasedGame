@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82ad2f3b529cd1b41bc64b03ee56b2fe, type: 3}
+  m_Name: Test2SO
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 8166f8eb4fcb45b44a4cd08f2f48bb9d, type: 3}
+  reachToBitPosTime: 3
+  musicSpeed: 1
+  upNoteDatas:
+  - notePos: 0
+    noteType: 0
+    judgeTime: 6.0506573
+    createTime: 3.0506575
+  - notePos: 0
+    noteType: 0
+    judgeTime: 6.5506573
+    createTime: 3.5506575
+  - notePos: 0
+    noteType: 0
+    judgeTime: 7.0506573
+    createTime: 4.0506573
+  - notePos: 0
+    noteType: 0
+    judgeTime: 7.5506573
+    createTime: 4.5506573
+  - notePos: 0
+    noteType: 0
+    judgeTime: 8.050657
+    createTime: 5.0506573
+  - notePos: 1
+    noteType: 0
+    judgeTime: 8.550657
+    createTime: 5.5506573
+  - notePos: 1
+    noteType: 0
+    judgeTime: 9.050657
+    createTime: 6.0506573
+  - notePos: 1
+    noteType: 0
+    judgeTime: 9.550657
+    createTime: 6.5506573
+  - notePos: 1
+    noteType: 0
+    judgeTime: 10.050657
+    createTime: 7.0506573
+  - notePos: 1
+    noteType: 0
+    judgeTime: 10.550657
+    createTime: 7.5506573
+  downNoteDatas: []

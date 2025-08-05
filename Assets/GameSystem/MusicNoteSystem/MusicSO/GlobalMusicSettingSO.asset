@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82ad2f3b529cd1b41bc64b03ee56b2fe, type: 3}
-  m_Name: MusicSo
-  m_EditorClassIdentifier: 
-  musicTime: 0
-  perfectTime: 0
-  greatTime: 0
-  noteDatas: []
+  m_Script: {fileID: 11500000, guid: e58d82525acfefe4c96801015a84835b, type: 3}
+  m_Name: GlobalMusicSettingSO
+  m_EditorClassIdentifier: Assembly-CSharp:Assets.GameSystem.MusicNoteSystem.Scripts:GlobalMusicSettingSO
+  perfectTime: 0.15
+  greatTime: 0.3

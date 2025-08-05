@@ -118,14 +118,18 @@ namespace GameInspector
         private void HandleKeyDown()
         {
             //在 EditorApplication.update ，Event会报空。这里用于快速添加音符
-            if (Event.current.keyCode == KeyCode.Space)
+            if (Event.current.type == EventType.KeyDown)
             {
-                _isStartUpdate = !_isStartUpdate;
-                if (_isStartUpdate)
-                    _previewAudioSource.Play();
-                else
-                    _previewAudioSource.Pause();
+                if (Event.current.keyCode == KeyCode.Space)
+                {
+                    _isStartUpdate = !_isStartUpdate;
+                    if (_isStartUpdate)
+                        _previewAudioSource.Play();
+                    else
+                        _previewAudioSource.Pause();
+                }
             }
+
             if (Event.current.type == EventType.KeyDown && _nowMusicTime >= _target.reachToBitPosTime)
             {
                 if (Event.current.keyCode == KeyCode.J || Event.current.keyCode == KeyCode.K && _isStartUpdate)

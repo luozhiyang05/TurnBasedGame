@@ -1,3 +1,5 @@
+using Assets.GameSystem.MusicNoteSystem;
+using Assets.GameSystem.MusicNoteSystem.Main;
 using Framework;
 using UnityEngine;
 
@@ -7,7 +9,10 @@ namespace GameSystem
     {
         private void Start()
         {
-
+            var system = this.GetSystem<IMusicNoteSystemModule>();
+            system.OpenView();
+            system.LoadMusic(EMusicName.Test2);
+            system.StartGame();
         }
 
         private void Update()
