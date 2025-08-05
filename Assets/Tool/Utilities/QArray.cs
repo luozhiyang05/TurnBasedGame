@@ -348,12 +348,25 @@ namespace Tool.Utilities
         }
         #endregion
 
-        #region 获取数组头部元素
+        #region Peek数组元素
         public T Peek()
         {
             if (IsEmpty()) throw new Exception("数组为空");
 
             return _array[_headIdx];
+        }
+        public T[] Peek(int peekCnt)
+        {
+            if (peekCnt > Count) throw new Exception("peek数量 > QArray长度");
+
+            T[] peekArray = new T[peekCnt];
+
+            for (int i = 0; i < peekCnt; i++)
+            {
+                peekArray[i] = _array[_headIdx + i];
+            }
+
+            return peekArray;
         }
         #endregion
 
