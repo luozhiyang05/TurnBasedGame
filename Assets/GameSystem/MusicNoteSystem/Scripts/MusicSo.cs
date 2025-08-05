@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Tool.CustomAttribute;
 using Tool.Mono;
+using Tool.Utilities;
 using UnityEngine;
 
 public enum ENotePos
@@ -39,14 +40,44 @@ public class MusicSo : ScriptableObject
     [CustomPropertyText("播放速度(音响音调)")]
     [Range(0f, 1f)]
     public float musicSpeed = 1;
-    public List<NoteData> noteDatas;
+    public List<NoteData> upNoteDatas, downNoteDatas;
 
-    public void AddNote(float nowMusicTime,ENotePos notePos,ENoteType noteType)
+    public void AddNote(float nowMusicTime, ENotePos notePos, ENoteType noteType)
     {
-        noteDatas.Add(new NoteData() { judgeTime = nowMusicTime, notePos = notePos, noteType = noteType, createTime = nowMusicTime - reachToBitPosTime });
+        if (notePos == ENotePos.Up)
+        {
+            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime + reachToBitPosTime, createTime = nowMusicTime });
+        }
+        else
+        {
+            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime + reachToBitPosTime, createTime = nowMusicTime });
+        }
     }
     public void ClearNote()
     {
-        noteDatas.Clear();
+        upNoteDatas.Clear();
+        downNoteDatas.Clear();
     }
+    public QArray<NoteData> GetUpNoteQArray()
+    {
+        QArray<NoteData> qArray = new QArray<NoteData>();
+        for (int i = 0; i < upNoteDatas.Count; i++)
+        {
+            var value = upNoteDatas[i];
+            qArray.Add(value);
+        }
+        return qArray;
+    }
+    
+    public QArray<NoteData> GetDownNoteQArray()
+    {
+        QArray<NoteData> qArray = new QArray<NoteData>();
+        for (int i = 0; i < downNoteDatas.Count; i++)
+        {
+            var value = downNoteDatas[i];
+            qArray.Add(value);
+        }
+        return qArray;
+    }
+
 }
