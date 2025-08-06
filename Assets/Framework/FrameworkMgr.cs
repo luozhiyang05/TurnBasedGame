@@ -51,7 +51,7 @@ namespace Framework
             _moduleDic[typeof(S)] = system;
             system.Init(this);
         }
-        protected void RegisterModel<M>(M model) where M : class, IModel
+        void IMgr.RegisterModel<M>(M model)
         {
             if (_modelDic.ContainsKey(typeof(M))) return;
             _modelDic[typeof(M)] = model;
@@ -228,7 +228,7 @@ namespace Framework
     }
 
     public abstract class AbsModule : IModule, ICanAddEvent,
-        ICanRemoveEvent, ICanSendEvent, ICanSendCmd, ICanRemCmd, ICanSendQuery
+        ICanRemoveEvent, ICanSendEvent, ICanSendCmd, ICanRemCmd, ICanSendQuery,ICanRegisterModel
     {
         public IMgr Ins => _ins;
         private IMgr _ins;
@@ -291,6 +291,9 @@ namespace Framework
 
         public static S GetSystem<S>(this ICanGetSystem iCanGetSystem) where S : class, IModule =>
             iCanGetSystem.Ins.GetSystem<S>();
+
+        public static void RegisterModel<M>(this ICanRegisterModel iCanRegisterModel, M model) where M : IModel, new() =>
+            iCanRegisterModel.Ins.RegisterModel<M>(model);
     }
 
     public interface IModule : INeedInit, ICanGetSystem
@@ -334,8 +337,12 @@ namespace Framework
         void ReDo();
     }
 
+    public interface ICanRegisterModel : ICanGetMgr
+    {
 
-    public interface ICanGetSystem : ICanGetMgr,ICanGetModel
+    }
+
+    public interface ICanGetSystem : ICanGetMgr, ICanGetModel
     {
     }
 
@@ -400,5 +407,6 @@ namespace Framework
         public R SendQuery<Q, R>() where Q : IQuery<R>, new();
         public R SendQuery<Q, R, V>(V v) where Q : IQuery<R, V>, new();
         public R SendQuery<Q, R, V, K>(V v, K k) where Q : IQuery<R, V, K>, new();
+        public void RegisterModel<M>(M model) where M : IModel, new();
     }
 }

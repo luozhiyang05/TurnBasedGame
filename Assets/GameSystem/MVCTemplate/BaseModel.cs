@@ -6,7 +6,7 @@ namespace GameSystem.MVCTemplate
     /// 功能：
     /// 处理属于该系统临时的数据业务
     /// </summary>
-    public abstract class BaseModel : ICanGetSystem
+    public abstract class BaseModel : ICanGetSystem,IModel
     {
         protected BaseModel() { }
 
@@ -15,6 +15,9 @@ namespace GameSystem.MVCTemplate
         public abstract void BindListener();
 
         public abstract void RemoveListener();
+
+        //暂时废弃
+        public void Init(IMgr iMgr) { }
 
         public IMgr Ins => Global.GetInstance();
     }
