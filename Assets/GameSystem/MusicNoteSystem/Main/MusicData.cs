@@ -22,7 +22,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         private const string ASSET_SUFFIX = ".asset";
         private GlobalMusicSettingSO _globalMusicSettingSO;
         private MusicSo _musicSo;
-        private QArray<NoteData> _upNoteDatas,_downNoteDatas;
+        private QArray<NoteData> _upRemainderNoteDatas,_downRemainderNoteDatas;
         private QArray<NoteData> _upReady2ClickDatas,_downReady2ClickDatas;
         private bool _playStatus;
         private float _nowMusicTime;
@@ -41,8 +41,8 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         {
             _musicSo = ResMgr.GetInstance().LoadAsset<MusicSo>(SYSTEM_PATH + MUSIC_ASSET_PREFIX, eMusicName + MUSIC_ASSET_SUFFIX + ASSET_SUFFIX);
             _globalMusicSettingSO = ResMgr.GetInstance().LoadAsset<GlobalMusicSettingSO>(SYSTEM_PATH + MUSIC_ASSET_PREFIX, GLOBAL_SETTING_NAME + ASSET_SUFFIX);
-            _upNoteDatas = _musicSo.GetUpNoteQArray();
-            _downNoteDatas = _musicSo.GetDownNoteQArray();
+            _upRemainderNoteDatas = _musicSo.GetUpNoteQArray();
+            _downRemainderNoteDatas = _musicSo.GetDownNoteQArray();
             _upReady2ClickDatas = new QArray<NoteData>();
             _downReady2ClickDatas = new QArray<NoteData>();
         }
@@ -59,18 +59,26 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         {
             return _nowMusicTime;
         }
-        public int GetNoteDataCnt(bool isUp)
+        public int GetRemainderNoteDataCnt(bool isUp)
         {
-            return isUp ? _upNoteDatas.Count : _downNoteDatas.Count;
+            return isUp ? _upRemainderNoteDatas.Count : _downRemainderNoteDatas.Count;
         }
-        public NoteData PeekOneNote(bool isUp)
+        public NoteData PeekOneNoteData(bool isUp)
         {
-            return isUp?_upNoteDatas.Peek():_downNoteDatas.Peek();
+            return isUp ? _upRemainderNoteDatas.Peek() : _downRemainderNoteDatas.Peek();
         }
-        public NoteData GetHeadNote(bool isUp)
+        public NoteData GetHeadNoteData(bool isUp,NoteMove noteMove)
         {
-            var noteData = isUp ? _upNoteDatas.GetFromHead() : _downNoteDatas.GetFromHead();
-            if (isUp) _upReady2ClickDatas.Add(noteData); else _downReady2ClickDatas.Add(noteData);
+            var noteData = isUp ? _upRemainderNoteDatas.GetFromHead() : _downRemainderNoteDatas.GetFromHead();
+            noteData.SetNoteMove(noteMove);
+            if (isUp)
+            {
+                _upReady2ClickDatas.Add(noteData);
+            }
+            else
+            {
+                _downReady2ClickDatas.Add(noteData);
+            }
             return noteData;
         }
         public NoteData PeekReady2ClickNote(bool isUp)
@@ -79,7 +87,11 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         }
         public void RemoveReady2ClickNote(bool isUp)
         {
-            if (isUp) _upReady2ClickDatas.RemoveAt(0);
+            if (isUp)
+            {
+                var tempNote = _upReady2ClickDatas.RemoveAt(0);
+                Debug.LogWarning("移除上音符数据：" + tempNote.id);
+            }
             else _downReady2ClickDatas.RemoveAt(0);
         }
         public float GetPerfectTime()

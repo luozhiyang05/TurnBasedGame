@@ -12,7 +12,7 @@ namespace Assets.GameSystem.MusicNoteSystem
         void OpenView(params object[] args);
         void LoadMusic(EMusicName eMusicName);
         void StartGame();
-        void PressNote(NoteMove noteMove, float nowTime, bool isUp);
+        void PressNote(float nowTime, bool isUp);
     }
 
     public class MusicNoteSystemModule : BaseModule, IMusicNoteSystemModule
@@ -22,6 +22,7 @@ namespace Assets.GameSystem.MusicNoteSystem
         {
             ctrl = new MusicNoteFloatViewCtrl(nameof(MusicNoteSystemModule));
             _musicData = ctrl.GetModel() as MusicData;
+            this.RegisterModel(_musicData);
         }
 
         public void LoadMusic(EMusicName eMusicName)
@@ -39,9 +40,8 @@ namespace Assets.GameSystem.MusicNoteSystem
             _musicData.SetPlayState(true);
         }
 
-        public void PressNote(NoteMove noteMove, float nowTime, bool isUp)
+        public void PressNote(float nowTime, bool isUp)
         {
-            Debug.Log("点击DF");
             NoteData noteData = _musicData.PeekReady2ClickNote(isUp);
 
             var time = Mathf.Abs(noteData.judgeTime - nowTime);
@@ -52,24 +52,15 @@ namespace Assets.GameSystem.MusicNoteSystem
 
             if (perfect || great)
             {
-                //移除音符数据
-                _musicData.RemoveReady2ClickNote(isUp);
-                //移除音符实体
-                noteMove.PressNote();
+                //设置音符为已经点击
+                noteData.GetNoteMove().PressNote();
+
                 if (perfect)
                 {
-                    //得分
-                    // _score += 10;
-                    //播放音效
-                    // _audioSource.PlayOneShot(_perfectAudioClip);
                     Debug.LogWarning("Perfect!");
                 }
                 else
                 {
-                    //得分
-                    // _score += 5;
-                    //播放音效
-                    // _audioSource.PlayOneShot(_greatAudioClip);
                     Debug.LogWarning("Great!");
                 }
             }

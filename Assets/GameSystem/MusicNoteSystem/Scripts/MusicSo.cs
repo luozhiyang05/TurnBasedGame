@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.GameSystem.MusicNoteSystem.Main;
 using Tool.CustomAttribute;
 using Tool.Mono;
 using Tool.Utilities;
@@ -19,6 +20,7 @@ public enum ENoteType
 [Serializable]
 public struct NoteData
 {
+    public int id;
     [CustomPropertyText("音符位置")]
     public ENotePos notePos;
     [CustomPropertyText("音符类型")]
@@ -27,6 +29,15 @@ public struct NoteData
     public float judgeTime;
     [CustomPropertyText("创建时间")]
     public float createTime;
+    private NoteMove _noteMove;
+    public void SetNoteMove(NoteMove noteMove)
+    {
+        _noteMove = noteMove;
+    }
+    public NoteMove GetNoteMove()
+    {
+        return _noteMove;
+    }
 }
 
 [CreateAssetMenu(fileName = "MusicSo", menuName = "音乐资源/MusicSo")]
@@ -64,6 +75,7 @@ public class MusicSo : ScriptableObject
         for (int i = 0; i < upNoteDatas.Count; i++)
         {
             var value = upNoteDatas[i];
+            value.id = i + 1;
             qArray.Add(value);
         }
         return qArray;

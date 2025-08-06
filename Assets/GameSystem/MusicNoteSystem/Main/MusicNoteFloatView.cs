@@ -85,14 +85,14 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
             {
                 if (_upNoteMoveQArray.Count > 0)
                 {
-                    this.GetSystem<IMusicNoteSystemModule>().PressNote(_upNoteMoveQArray.Peek(), _musicData.GetNowMusicTime(), true);
+                    this.GetSystem<IMusicNoteSystemModule>().PressNote(_musicData.GetNowMusicTime(), true);
                 }
             }
             if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.K))
             {
                 if (_downNoteMoveQArray.Count > 0)
                 {
-                    this.GetSystem<IMusicNoteSystemModule>().PressNote(_downNoteMoveQArray.Peek(), _musicData.GetNowMusicTime(), true);
+                    this.GetSystem<IMusicNoteSystemModule>().PressNote(_musicData.GetNowMusicTime(), true);
                 }
             }
         }
@@ -104,45 +104,48 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
                 var _nowTime = _musicData.GetNowMusicTime();
 
                 //上阶音符
-                if (_musicData.GetNoteDataCnt(true) > 0)
+                if (_musicData.GetRemainderNoteDataCnt(true) > 0)
                 {
-                    var tempNoteData = _musicData.PeekOneNote(true);
+                    var tempNoteData = _musicData.PeekOneNoteData(true);
                     if (_nowTime >= tempNoteData.createTime)
                     {
-                        var noteData = _musicData.GetHeadNote(true);
-                        CreateNote(noteData);
+                        CreateNote(true);
                     }
                 }
 
                 //下阶音符
-                if (_musicData.GetNoteDataCnt(false) > 0)
+                if (_musicData.GetRemainderNoteDataCnt(false) > 0)
                 {
-                    var tempNoteData = _musicData.PeekOneNote(false);
+                    var tempNoteData = _musicData.PeekOneNoteData(false);
                     if (_nowTime >= tempNoteData.createTime)
                     {
-                        var noteData = _musicData.GetHeadNote(false);
-                        CreateNote(noteData);
+                        CreateNote(false);
                     }
                 }
             }
         }
 
-        private void CreateNote(NoteData noteData)
+        private void CreateNote(bool isUp)
         {
+       
+
             var note = poolWight.GetFromPool(EWightType.Note);
+            var noteMove = note.GetComponent<NoteMove>();
+            var noteData = _musicData.GetHeadNoteData(isUp,noteMove);
+
             note.transform.SetParent(noteData.notePos == ENotePos.Up ? upCreatNotePoint : downCreateNotePoint);
             note.transform.localPosition = Vector3.zero;
             note.transform.localScale = Vector3.one;
-            note.GetComponent<NoteMove>().SetNoteData(noteData.createTime, () =>
+            note.GetComponent<NoteMove>().SetNoteData(noteData, (noteData) =>
             {
-                //过了屏幕左边，自动从移动音符列表中移除
+                //过了屏幕左边，自动从音符实体列表中移除（音符进入池子）
                 if (noteData.notePos == ENotePos.Up)
                 {
-                    _upNoteMoveQArray.RemoveAt(0);
-                     Debug.Log("从上阶列表移除");
+                    var temp = _upNoteMoveQArray.FindValue(value => noteData.id == value.GetId());
+                    _upNoteMoveQArray.Remove(temp);
                 }
                 else
-                    _downNoteMoveQArray.RemoveAt(0);
+                    _downNoteMoveQArray.FindValue(value => noteData.id == value.GetId());
 
                 //回收
                 poolWight.EnterPool(note);
@@ -150,10 +153,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
 
             //添加到移动列表
             if (noteData.notePos == ENotePos.Up)
-            {
                 _upNoteMoveQArray.Add(note.GetComponent<NoteMove>());
-                Debug.Log("添加到上阶列表");
-            }
             else
                 _downNoteMoveQArray.Add(note.GetComponent<NoteMove>());
         }
