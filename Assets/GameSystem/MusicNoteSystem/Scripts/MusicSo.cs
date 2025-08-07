@@ -29,14 +29,10 @@ public struct NoteData
     public float judgeTime;
     [CustomPropertyText("创建时间")]
     public float createTime;
-    private NoteMove _noteMove;
-    public void SetNoteMove(NoteMove noteMove)
+    public int noteMoveId;
+    public void SetNoteMoveId(int noteMoveId)
     {
-        _noteMove = noteMove;
-    }
-    public NoteMove GetNoteMove()
-    {
-        return _noteMove;
+        this.noteMoveId = noteMoveId;
     }
 }
 
@@ -75,7 +71,7 @@ public class MusicSo : ScriptableObject
         for (int i = 0; i < upNoteDatas.Count; i++)
         {
             var value = upNoteDatas[i];
-            value.id = i + 1;
+            value.id = i;
             qArray.Add(value);
         }
         return qArray;
@@ -87,6 +83,7 @@ public class MusicSo : ScriptableObject
         for (int i = 0; i < downNoteDatas.Count; i++)
         {
             var value = downNoteDatas[i];
+            value.id = i;
             qArray.Add(value);
         }
         return qArray;

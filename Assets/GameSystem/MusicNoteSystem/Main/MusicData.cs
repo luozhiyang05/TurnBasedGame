@@ -5,7 +5,9 @@ using GameSystem.MVCTemplate;
 using Tool.Mono;
 using Tool.ResourceMgr;
 using Tool.Utilities;
+using Tool.Utilities.Events;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.GameSystem.MusicNoteSystem.Main
 {
@@ -22,8 +24,8 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         private const string ASSET_SUFFIX = ".asset";
         private GlobalMusicSettingSO _globalMusicSettingSO;
         private MusicSo _musicSo;
-        private QArray<NoteData> _upRemainderNoteDatas,_downRemainderNoteDatas;
-        private QArray<NoteData> _upReady2ClickDatas,_downReady2ClickDatas;
+        private QArray<NoteData> _upRemainderNoteDatas, _downRemainderNoteDatas;
+        private QArray<NoteData> _upReady2ClickDatas, _downReady2ClickDatas;
         private bool _playStatus;
         private float _nowMusicTime;
         public override void Init()
@@ -53,7 +55,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         public bool GetPlayState()
         {
             return _playStatus;
-        } 
+        }
 
         public float GetNowMusicTime()
         {
@@ -67,18 +69,11 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         {
             return isUp ? _upRemainderNoteDatas.Peek() : _downRemainderNoteDatas.Peek();
         }
-        public NoteData GetHeadNoteData(bool isUp,NoteMove noteMove)
+        public NoteData GetHeadNoteData(bool isUp)
         {
             var noteData = isUp ? _upRemainderNoteDatas.GetFromHead() : _downRemainderNoteDatas.GetFromHead();
-            noteData.SetNoteMove(noteMove);
-            if (isUp)
-            {
-                _upReady2ClickDatas.Add(noteData);
-            }
-            else
-            {
-                _downReady2ClickDatas.Add(noteData);
-            }
+            if (isUp) _upReady2ClickDatas.Add(noteData);
+            else _downReady2ClickDatas.Add(noteData);
             return noteData;
         }
         public NoteData PeekReady2ClickNote(bool isUp)
@@ -87,11 +82,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         }
         public void RemoveReady2ClickNote(bool isUp)
         {
-            if (isUp)
-            {
-                var tempNote = _upReady2ClickDatas.RemoveAt(0);
-                Debug.LogWarning("移除上音符数据：" + tempNote.id);
-            }
+            if (isUp) _upReady2ClickDatas.RemoveAt(0);
             else _downReady2ClickDatas.RemoveAt(0);
         }
         public float GetPerfectTime()
@@ -100,13 +91,22 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         }
         public float GetGreatTime()
         {
-            return _globalMusicSettingSO.greatTime; 
+            return _globalMusicSettingSO.greatTime;
         }
+        public bool CheckCanPressKey(bool isUp)
+        {
+            if (isUp)
+                return _upReady2ClickDatas.Count > 0;
+            else
+                return _downReady2ClickDatas.Count > 0;
+        }
+
         /// <summary>
         /// 监听某些数据更改事件,可以通知view更新
         /// </summary>
         public override void BindListener()
         {
+            EventsHandle.AddListenEvent<int>(EventsNameConst.BIT_NOTE, BitNote);
         }
 
         /// <summary>
@@ -114,6 +114,19 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         /// </summary>
         public override void RemoveListener()
         {
+            EventsHandle.RemoveOneEventByEventName<int>(EventsNameConst.BIT_NOTE, BitNote);
         }
+
+        //------------------------------------------视图的回调方法
+        private UnityAction<int> _bitNoteCallback;
+        public void SetBitNoteCallback(UnityAction<int> callback)
+        {
+            _bitNoteCallback = callback;
+        }
+        private void BitNote(int noteId)
+        {
+            _bitNoteCallback?.Invoke(noteId);
+        }
+
     }
 }

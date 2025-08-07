@@ -3,6 +3,8 @@ using Assets.GameSystem.MusicNoteSystem.Main;
 using Framework;
 using Tool.Mono;
 using Tool.ResourceMgr;
+using Tool.Utilities;
+using Tool.Utilities.Events;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 namespace Assets.GameSystem.MusicNoteSystem
@@ -52,8 +54,8 @@ namespace Assets.GameSystem.MusicNoteSystem
 
             if (perfect || great)
             {
-                //设置音符为已经点击
-                noteData.GetNoteMove().PressNote();
+                //发布音符打击事件，通知视图回收音符
+                EventsHandle.EventTrigger(EventsNameConst.BIT_NOTE, noteData.id);
 
                 if (perfect)
                 {

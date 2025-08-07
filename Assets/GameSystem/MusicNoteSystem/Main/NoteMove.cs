@@ -8,11 +8,12 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
 {
     public class NoteMove : MonoBehaviour,ICanGetModel
     {
+        public int id;
         private bool _isMove;
         private bool _isPass;
         private bool _isPress;
         private NoteData noteData;
-        private UnityAction<NoteData> _realeaseCallback;
+        private UnityAction<ENotePos,int> _realeaseCallback;
         private MusicData _musicData;
 
         public IMgr Ins => Global.GetInstance();
@@ -20,15 +21,17 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         void OnEnable()
         {
             _isMove = false;
-            _isPass = false;
             _isPress = false;
         }
-        public void SetNoteData(NoteData noteData, UnityAction<NoteData> releaseCallback)
+        public void SetNoteData(NoteData noteData)
         {
             _isMove = true;
-            this.noteData = noteData;
-            _realeaseCallback = releaseCallback;
             _musicData = this.GetModel<MusicData>();
+            this.noteData = noteData;
+        }
+        public void SetReleaseCallback(UnityAction<ENotePos,int> releaseCallback)
+        {
+            _realeaseCallback = releaseCallback; 
         }
         public int GetId()
         {
@@ -37,7 +40,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         public void PressNote()
         {
             _isPress = true;
-            _realeaseCallback?.Invoke(noteData);
+            _realeaseCallback?.Invoke(noteData.notePos, noteData.id);
             if (noteData.notePos == ENotePos.Up)
             {
                 _musicData.RemoveReady2ClickNote(true);
@@ -58,11 +61,12 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
                 //超过屏幕界限，则从准备点击的实体音符列表中移除，（音符进入池子）
                 if (transform.localPosition.x <= -2040)
                 {
-                    _realeaseCallback?.Invoke(noteData);
+                    _realeaseCallback?.Invoke(noteData.notePos, noteData.id);
+                    _isMove = false;
                 }
 
                 //超过击打界限，则从准备点击的音符数据列表中移除
-                if (!_isPass && !_isPress)
+                if (!_isPress)
                 {
                     if (_musicData.GetNowMusicTime() > noteData.judgeTime + _musicData.GetGreatTime() / 2)
                     {
@@ -74,7 +78,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
                         {
                             _musicData.RemoveReady2ClickNote(false);
                         }
-                        _isPass = true;
+                        _isPress = true;
                     }
                 }
             }

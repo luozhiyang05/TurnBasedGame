@@ -3,6 +3,7 @@ using Assets.Wights.Scripts;
 using Framework;
 using GameSystem.MVCTemplate;
 using Tool.Utilities;
+using Tool.Utilities.Events;
 using UnityEngine;
 
 namespace Assets.GameSystem.MusicNoteSystem.Main
@@ -49,30 +50,29 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         /// </summary>
         protected override void BindModelListener()
         {
+            _musicData = Model as MusicData;
+            _musicData.SetBitNoteCallback(BitNote);
         }
 
         public PoolWight poolWight;
         public Transform upCreatNotePoint, downCreateNotePoint;
+        private IMusicNoteSystemModule _musicNoteSystemModule;
         private MusicData _musicData;
         private QArray<NoteMove> _upNoteMoveQArray,_downNoteMoveQArray; //存储实体音符
-
+        private int _nowNoteMoveId = 0;
         /// <summary>
         /// 初始化,时机在Awake中
         /// </summary>
         protected override void OnInit()
         {
             SetPath("GameSystem/MusicNoteFloatView");
+            _musicNoteSystemModule = this.GetSystem<IMusicNoteSystemModule>();
             _upNoteMoveQArray = new QArray<NoteMove>();
             _downNoteMoveQArray = new QArray<NoteMove>();
         }
 
         void Update()
         {
-            if (null == _musicData)
-            {
-                _musicData = Model as MusicData;
-            }
-
             //每此peek2个
             CheckCanCreateNote();
 
@@ -83,16 +83,16 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         {
             if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.F))
             {
-                if (_upNoteMoveQArray.Count > 0)
+                if (_musicData.CheckCanPressKey(true))
                 {
-                    this.GetSystem<IMusicNoteSystemModule>().PressNote(_musicData.GetNowMusicTime(), true);
+                    _musicNoteSystemModule.PressNote(_musicData.GetNowMusicTime(), true);
                 }
             }
             if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.K))
             {
-                if (_downNoteMoveQArray.Count > 0)
+                if (_musicData.CheckCanPressKey(false))
                 {
-                    this.GetSystem<IMusicNoteSystemModule>().PressNote(_musicData.GetNowMusicTime(), true);
+                    _musicNoteSystemModule.PressNote(_musicData.GetNowMusicTime(), false);
                 }
             }
         }
@@ -127,35 +127,51 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
 
         private void CreateNote(bool isUp)
         {
-       
-
             var note = poolWight.GetFromPool(EWightType.Note);
             var noteMove = note.GetComponent<NoteMove>();
-            var noteData = _musicData.GetHeadNoteData(isUp,noteMove);
+            noteMove.id = ++_nowNoteMoveId;
+            var noteData = _musicData.GetHeadNoteData(isUp);
 
             note.transform.SetParent(noteData.notePos == ENotePos.Up ? upCreatNotePoint : downCreateNotePoint);
             note.transform.localPosition = Vector3.zero;
             note.transform.localScale = Vector3.one;
-            note.GetComponent<NoteMove>().SetNoteData(noteData, (noteData) =>
-            {
-                //过了屏幕左边，自动从音符实体列表中移除（音符进入池子）
-                if (noteData.notePos == ENotePos.Up)
-                {
-                    var temp = _upNoteMoveQArray.FindValue(value => noteData.id == value.GetId());
-                    _upNoteMoveQArray.Remove(temp);
-                }
-                else
-                    _downNoteMoveQArray.FindValue(value => noteData.id == value.GetId());
 
-                //回收
-                poolWight.EnterPool(note);
-            });
-
+            noteMove.SetNoteData(noteData);
+            noteMove.SetReleaseCallback(OnNoteRealeseCallback);
+            
             //添加到移动列表
             if (noteData.notePos == ENotePos.Up)
-                _upNoteMoveQArray.Add(note.GetComponent<NoteMove>());
+                _upNoteMoveQArray.Add(noteMove);
             else
-                _downNoteMoveQArray.Add(note.GetComponent<NoteMove>());
+                _downNoteMoveQArray.Add(noteMove);
+        }
+
+        private void OnNoteRealeseCallback(ENotePos notePos, int id)
+        {
+            GameObject go = null;
+            //过了屏幕左边，自动从音符实体列表中移除（音符进入池子）
+            if (notePos == ENotePos.Up)
+            {
+                var noteMove = _upNoteMoveQArray.FindValue(value => id == value.GetId());
+                go = noteMove.gameObject;
+                _upNoteMoveQArray.Remove(noteMove);
+            }
+            else
+            {
+                var noteMove = _downNoteMoveQArray.FindValue(value => id == value.GetId());
+                go = noteMove.gameObject;
+                _downNoteMoveQArray.Remove(noteMove);
+            }
+
+            //回收
+            poolWight.EnterPool(go);
+        }
+
+        private void BitNote(int id)
+        {
+            var noteMove = _upNoteMoveQArray.FindValue(value => id == value.GetId());
+            if (null == noteMove) noteMove = _downNoteMoveQArray.FindValue(value => id == value.GetId());
+            noteMove.PressNote();
         }
 
         public override void OnShow(params object[] args)
