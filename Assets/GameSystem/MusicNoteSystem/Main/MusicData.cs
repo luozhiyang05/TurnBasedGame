@@ -29,6 +29,8 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         private bool _playStatus;
         private float _nowMusicTime;
         private int _nowNoteDataId = 0;
+        private NoteData _doubleClickNoteData;
+        private Timer _doubleClickTimer;
         public override void Init()
         {
             PublicMonoKit.GetInstance().OnRegisterUpdate(() =>
@@ -101,6 +103,59 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
                 return _upReady2ClickDatas.Count > 0;
             else
                 return _downReady2ClickDatas.Count > 0;
+        }
+
+        private bool _isWatingDoubleClick = false;
+        public void CheckDoubleClick(NoteData noteData)
+        {
+            if (_doubleClickNoteData == null)
+            {
+                _doubleClickNoteData = noteData;
+                _isWatingDoubleClick = true;
+                _doubleClickTimer = ActionKit.GetInstance().AddTimer(() =>
+                {
+                    _doubleClickNoteData = null;
+                    _isWatingDoubleClick = false;
+                    ActionKit.GetInstance().RemoveTimer(_doubleClickTimer.GetName());
+                }, _globalMusicSettingSO.greatTime, "DoubleClick" + noteData.id);
+            }
+            else
+            {
+                //连续击打同一音符的容错
+                if (noteData.id == _doubleClickNoteData.id)
+                {
+                    return;
+                }
+                
+                if (_isWatingDoubleClick)
+                {
+                    //判断后进入的notedata是否是属于一组双击音符，属于则取判断是否有击打中
+                    if (noteData.createTime == _doubleClickNoteData.createTime)
+                    {
+                        //发布音符打击事件
+                        EventsHandle.EventTrigger(EventsNameConst.BIT_NOTE, _doubleClickNoteData);
+                        EventsHandle.EventTrigger(EventsNameConst.BIT_NOTE, noteData);
+
+                        ActionKit.GetInstance().RemoveTimer(_doubleClickTimer.GetName());
+                        _doubleClickNoteData = null;
+                        _isWatingDoubleClick = false;
+                    }
+                    else
+                    {
+                        //不属于则表明上一组双击音符pass
+                        ActionKit.GetInstance().RemoveTimer(_doubleClickTimer.GetName());
+                        _doubleClickNoteData = null;
+                        _isWatingDoubleClick = true;
+
+                        //建立新的一组双击
+                        CheckDoubleClick(noteData);
+                    }
+                }
+                else
+                {
+                    _doubleClickNoteData = null;
+                }
+            }
         }
 
         /// <summary>

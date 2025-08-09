@@ -19,12 +19,10 @@ public enum ENoteType
     DoubleClick,
 }
 [Serializable]
-public struct NoteData
+public class NoteData
 {
     [NonSerialized]
-    public int id;
-    [NonSerialized]
-    public int noteMoveId;
+    public int id;  //NoteMove 在QArray的下标，用于击打音符后，消除数据的同时消除对应的NoteMove
     [CustomPropertyText("音符位置")]
     public ENotePos notePos;
     [CustomPropertyText("音符类型")]
@@ -33,10 +31,6 @@ public struct NoteData
     public float judgeTime;
     [CustomPropertyText("创建时间")]
     public float createTime;
-    public void SetNoteMoveId(int noteMoveId)
-    {
-        this.noteMoveId = noteMoveId;
-    }
 }
 
 [CreateAssetMenu(fileName = "MusicSo", menuName = "音乐资源/MusicSo")]
@@ -74,7 +68,6 @@ public class MusicSo : ScriptableObject
         for (int i = 0; i < upNoteDatas.Count; i++)
         {
             var value = upNoteDatas[i];
-            value.id = i;
             qArray.Add(value);
         }
         return qArray;
@@ -86,7 +79,6 @@ public class MusicSo : ScriptableObject
         for (int i = 0; i < downNoteDatas.Count; i++)
         {
             var value = downNoteDatas[i];
-            value.id = i;
             qArray.Add(value);
         }
         return qArray;

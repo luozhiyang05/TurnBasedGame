@@ -56,22 +56,20 @@ namespace Assets.GameSystem.MusicNoteSystem
             {
                 if (noteData.noteType == ENoteType.DoubleClick)
                 {
-                    
+                    _musicData.CheckDoubleClick(noteData);
                 }
                 else
                 {
                     //发布音符打击事件
                     EventsHandle.EventTrigger(EventsNameConst.BIT_NOTE, noteData);
-                }
-
-
-                if (perfect)
-                {
-                    Debug.LogWarning("Perfect!");
-                }
-                else
-                {
-                    Debug.LogWarning("Great!");
+                    if (perfect)
+                    {
+                        Debug.LogWarning("Perfect!");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Great!");
+                    }
                 }
             }
         }
