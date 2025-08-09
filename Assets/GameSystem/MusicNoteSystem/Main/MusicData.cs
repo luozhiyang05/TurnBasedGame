@@ -15,6 +15,12 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
     {
         Test2
     }
+    public enum EHitLevel
+    {
+        Perfect,
+        Great,
+        None,
+    }
     public class MusicData : BaseModel
     {
         private const string SYSTEM_PATH = "Assets/GameSystem/MusicNoteSystem/";
@@ -24,13 +30,15 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         private const string ASSET_SUFFIX = ".asset";
         private GlobalMusicSettingSO _globalMusicSettingSO;
         private MusicSo _musicSo;
+        private int _nowScore;
         private QArray<NoteData> _upRemainderNoteDatas, _downRemainderNoteDatas;
         private QArray<NoteData> _upReady2ClickDatas, _downReady2ClickDatas;
         private bool _playStatus;
         private float _nowMusicTime;
         private int _nowNoteDataId = 0;
         private NoteData _doubleClickNoteData;
-        private Timer _doubleClickTimer;
+        private bool _isWatingDoubleClick = false;
+
         public override void Init()
         {
             PublicMonoKit.GetInstance().OnRegisterUpdate(() =>
@@ -50,6 +58,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
             _downRemainderNoteDatas = _musicSo.GetDownNoteQArray();
             _upReady2ClickDatas = new QArray<NoteData>();
             _downReady2ClickDatas = new QArray<NoteData>();
+            _nowScore = 0;
         }
         public void SetPlayState(bool playStatus)
         {
@@ -97,6 +106,14 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         {
             return _globalMusicSettingSO.greatTime;
         }
+        public float GetDoublePerfectTime()
+        {
+            return _globalMusicSettingSO.doublePerfectTime;
+        }
+        public float GetDoubleGreatTime()
+        {
+            return _globalMusicSettingSO.doubleGreatTime;
+        }
         public bool CheckCanPressKey(bool isUp)
         {
             if (isUp)
@@ -105,57 +122,34 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
                 return _downReady2ClickDatas.Count > 0;
         }
 
-        private bool _isWatingDoubleClick = false;
-        public void CheckDoubleClick(NoteData noteData)
+        public void SetDoubleClickNoteData(NoteData noteData)
         {
-            if (_doubleClickNoteData == null)
-            {
-                _doubleClickNoteData = noteData;
-                _isWatingDoubleClick = true;
-                _doubleClickTimer = ActionKit.GetInstance().AddTimer(() =>
-                {
-                    _doubleClickNoteData = null;
-                    _isWatingDoubleClick = false;
-                    ActionKit.GetInstance().RemoveTimer(_doubleClickTimer.GetName());
-                }, _globalMusicSettingSO.greatTime, "DoubleClick" + noteData.id);
-            }
-            else
-            {
-                //连续击打同一音符的容错
-                if (noteData.id == _doubleClickNoteData.id)
-                {
-                    return;
-                }
-                
-                if (_isWatingDoubleClick)
-                {
-                    //判断后进入的notedata是否是属于一组双击音符，属于则取判断是否有击打中
-                    if (noteData.createTime == _doubleClickNoteData.createTime)
-                    {
-                        //发布音符打击事件
-                        EventsHandle.EventTrigger(EventsNameConst.BIT_NOTE, _doubleClickNoteData);
-                        EventsHandle.EventTrigger(EventsNameConst.BIT_NOTE, noteData);
+            _doubleClickNoteData = noteData;
+        }
 
-                        ActionKit.GetInstance().RemoveTimer(_doubleClickTimer.GetName());
-                        _doubleClickNoteData = null;
-                        _isWatingDoubleClick = false;
-                    }
-                    else
-                    {
-                        //不属于则表明上一组双击音符pass
-                        ActionKit.GetInstance().RemoveTimer(_doubleClickTimer.GetName());
-                        _doubleClickNoteData = null;
-                        _isWatingDoubleClick = true;
+        public NoteData GetDoubleClickNoteData()
+        {
+            return _doubleClickNoteData;
+        }
 
-                        //建立新的一组双击
-                        CheckDoubleClick(noteData);
-                    }
-                }
-                else
-                {
-                    _doubleClickNoteData = null;
-                }
-            }
+        public bool GetIsWaitingDoubleClick()
+        {
+            return _isWatingDoubleClick;
+        }
+
+        public void SetIsWaitingDoubleClick(bool isWaitingDoubleClick)
+        {
+            _isWatingDoubleClick = isWaitingDoubleClick;
+        }
+
+        public EHitLevel CalculateHitLevel(NoteData noteData)
+        {
+            var time = Mathf.Abs(noteData.judgeTime - _nowMusicTime);
+            var perfectTime = noteData.noteType != ENoteType.DoubleClick ? GetPerfectTime() : GetDoublePerfectTime();
+            var greatTime = noteData.noteType != ENoteType.DoubleClick ? GetGreatTime() : GetDoubleGreatTime();
+            var perfect = time <= perfectTime;
+            var great = time <= greatTime;
+            return perfect ? EHitLevel.Perfect : (great ? EHitLevel.Great : EHitLevel.None);
         }
 
         /// <summary>
@@ -163,7 +157,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         /// </summary>
         public override void BindListener()
         {
-            EventsHandle.AddListenEvent<NoteData>(EventsNameConst.BIT_NOTE, BitNote);
+            EventsHandle.AddListenEvent<NoteData, EHitLevel>(EventsNameConst.BIT_NOTE, BitNote);
         }
 
         /// <summary>
@@ -171,7 +165,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         /// </summary>
         public override void RemoveListener()
         {
-            EventsHandle.RemoveOneEventByEventName<NoteData>(EventsNameConst.BIT_NOTE, BitNote);
+            EventsHandle.RemoveOneEventByEventName<NoteData,EHitLevel>(EventsNameConst.BIT_NOTE, BitNote);
         }
 
         //------------------------------------------视图的回调方法
@@ -180,7 +174,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         {
             _bitNoteCallback = callback;
         }
-        private void BitNote(NoteData noteData)
+        private void BitNote(NoteData noteData, EHitLevel eHitLevel)
         {
             if (noteData.notePos == ENotePos.Up)
             {
@@ -191,6 +185,8 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
                 RemoveReady2ClickNote(false);
             }
             _bitNoteCallback?.Invoke(noteData);
+
+            Debug.LogWarning(eHitLevel.ToString());
         }
 
     }

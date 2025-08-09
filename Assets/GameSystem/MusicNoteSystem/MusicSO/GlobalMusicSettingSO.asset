@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:Assets.GameSystem.MusicNoteSystem.Scripts:GlobalMusicSettingSO
   perfectTime: 0.1
   greatTime: 0.2
-  doublePerfectTime: 0.1
-  doubleGreatTime: 0.15
+  doublePerfectTime: 0.05
+  doubleGreatTime: 0.1
