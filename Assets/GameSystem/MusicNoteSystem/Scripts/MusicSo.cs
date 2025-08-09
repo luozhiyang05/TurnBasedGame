@@ -16,11 +16,15 @@ public enum ENoteType
 {
     Click,
     LongClick,
+    DoubleClick,
 }
 [Serializable]
 public struct NoteData
 {
+    [NonSerialized]
     public int id;
+    [NonSerialized]
+    public int noteMoveId;
     [CustomPropertyText("音符位置")]
     public ENotePos notePos;
     [CustomPropertyText("音符类型")]
@@ -29,7 +33,6 @@ public struct NoteData
     public float judgeTime;
     [CustomPropertyText("创建时间")]
     public float createTime;
-    public int noteMoveId;
     public void SetNoteMoveId(int noteMoveId)
     {
         this.noteMoveId = noteMoveId;

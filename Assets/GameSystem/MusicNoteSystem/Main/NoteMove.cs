@@ -15,8 +15,15 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         private NoteData noteData;
         private UnityAction<ENotePos,int> _realeaseCallback;
         private MusicData _musicData;
+        private GameObject _lineDown, _lineUp;
 
         public IMgr Ins => Global.GetInstance();
+
+        void Awake()
+        {
+            _lineDown = transform.Find("line_up").gameObject;
+            _lineUp = transform.Find("line_down").gameObject;
+        }
 
         void OnEnable()
         {
@@ -28,6 +35,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
             _isMove = true;
             _musicData = this.GetModel<MusicData>();
             this.noteData = noteData;
+            SetNoteDisplay();
         }
         public void SetReleaseCallback(UnityAction<ENotePos,int> releaseCallback)
         {
@@ -41,13 +49,14 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         {
             _isPress = true;
             _realeaseCallback?.Invoke(noteData.notePos, noteData.id);
-            if (noteData.notePos == ENotePos.Up)
+        }
+        private void SetNoteDisplay()
+        {
+            if (noteData.noteType == ENoteType.DoubleClick)
             {
-                _musicData.RemoveReady2ClickNote(true);
-            }
-            else if (noteData.notePos == ENotePos.Down)
-            {
-                _musicData.RemoveReady2ClickNote(false);
+                var isUpPos = noteData.notePos == ENotePos.Up;
+                _lineUp.SetActive(isUpPos);
+                _lineDown.SetActive(!isUpPos);
             }
         }
         void Update()

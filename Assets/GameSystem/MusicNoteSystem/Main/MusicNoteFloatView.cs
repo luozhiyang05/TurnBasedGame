@@ -167,10 +167,10 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
             poolWight.EnterPool(go);
         }
 
-        private void BitNote(int id)
+        private void BitNote(NoteData noteData)
         {
-            var noteMove = _upNoteMoveQArray.FindValue(value => id == value.GetId());
-            if (null == noteMove) noteMove = _downNoteMoveQArray.FindValue(value => id == value.GetId());
+            var noteMove = _upNoteMoveQArray.FindValue(value => noteData.id == value.GetId());
+            if (null == noteMove) noteMove = _downNoteMoveQArray.FindValue(value => noteData.id == value.GetId());
             noteMove.PressNote();
         }
 

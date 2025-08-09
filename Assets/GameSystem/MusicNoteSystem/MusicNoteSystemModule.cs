@@ -54,8 +54,16 @@ namespace Assets.GameSystem.MusicNoteSystem
 
             if (perfect || great)
             {
-                //发布音符打击事件，通知视图回收音符
-                EventsHandle.EventTrigger(EventsNameConst.BIT_NOTE, noteData.id);
+                if (noteData.noteType == ENoteType.DoubleClick)
+                {
+                    
+                }
+                else
+                {
+                    //发布音符打击事件
+                    EventsHandle.EventTrigger(EventsNameConst.BIT_NOTE, noteData);
+                }
+
 
                 if (perfect)
                 {

@@ -14,7 +14,7 @@ namespace GameInspector
         private bool _isStartUpdate;
         private float _intervalNoteTime;
         private int _createIntervalNoteCnt;
-        private bool _createNoteUpType = true;
+        private int _createNoteType = 0;    //生成音符类型，0上阶单击音符，1下阶单击音符，2双击音符
 
         void OnEnable()
         {
@@ -67,8 +67,7 @@ namespace GameInspector
             _intervalNoteTime = EditorGUILayout.FloatField(_intervalNoteTime, GUILayout.MaxWidth(50));
             EditorGUILayout.LabelField("添加个数：", GUILayout.MaxWidth(60));
             _createIntervalNoteCnt = EditorGUILayout.IntField(_createIntervalNoteCnt, GUILayout.MaxWidth(30));
-            EditorGUILayout.LabelField("上轨迹音符：", GUILayout.MaxWidth(70));
-            _createNoteUpType = EditorGUILayout.Toggle(_createNoteUpType);
+            _createNoteType = EditorGUILayout.Popup(_createNoteType, new string[] { "上阶单击音符", "下阶单击音符", "双击音符" },GUILayout.MaxWidth(160));
             if (GUILayout.Button("连续添加音符"))
             {
                 AddIntervalNote();
@@ -83,7 +82,7 @@ namespace GameInspector
             EditorGUILayout.LabelField("当前播放时间：", GUILayout.MaxWidth(80));
             _nowMusicTime = EditorGUILayout.Slider(_nowMusicTime, 0, _target.musicTime);
             EditorGUILayout.EndHorizontal();
-            EditorGUILayout.HelpBox("在音频播放时，D/F快速添加上轨迹音符，J/K快速添加下轨迹音符（时间小于音符到达打击点时间时无响应），空格暂停", MessageType.Info);
+            EditorGUILayout.HelpBox("在音频播放时，D/F快速添加上轨迹音符，J/K快速添加下轨迹音符（时间小于音符到达打击点时间时无响应），H生成双击音符，空格暂停", MessageType.Info);
 
             //删除所有音符
             if (GUILayout.Button("删除所有音符"))
@@ -139,6 +138,10 @@ namespace GameInspector
                 else if (Event.current.keyCode == KeyCode.D || Event.current.keyCode == KeyCode.F && _isStartUpdate)
                 {
                     _target.AddNote(_nowMusicTime, ENotePos.Down, ENoteType.Click);
+                }else if (Event.current.keyCode == KeyCode.H && _isStartUpdate)
+                {
+                    _target.AddNote(_nowMusicTime, ENotePos.Up, ENoteType.DoubleClick);
+                    _target.AddNote(_nowMusicTime, ENotePos.Down, ENoteType.DoubleClick);
                 }
             }
         }
@@ -149,7 +152,15 @@ namespace GameInspector
             {
                 for (int i = 0; i < _createIntervalNoteCnt; i++)
                 {
-                    _target.AddNote(_nowMusicTime + i * _intervalNoteTime, _createNoteUpType ? ENotePos.Up : ENotePos.Down, ENoteType.Click);
+                    if (_createNoteType == 2)
+                    {
+                        _target.AddNote(_nowMusicTime + i * _intervalNoteTime, ENotePos.Up, ENoteType.DoubleClick);
+                        _target.AddNote(_nowMusicTime + i * _intervalNoteTime, ENotePos.Down, ENoteType.DoubleClick);
+                    }
+                    else
+                    {
+                        _target.AddNote(_nowMusicTime + i * _intervalNoteTime, _createNoteType == 0 ? ENotePos.Up : ENotePos.Down, ENoteType.Click);
+                    }
                 }
             }
         }

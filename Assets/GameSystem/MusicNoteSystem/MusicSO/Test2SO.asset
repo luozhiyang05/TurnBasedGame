@@ -18,42 +18,74 @@ MonoBehaviour:
   upNoteDatas:
   - notePos: 0
     noteType: 0
-    judgeTime: 6.0506573
-    createTime: 3.0506575
+    judgeTime: 7.0959864
+    createTime: 4.0959864
   - notePos: 0
     noteType: 0
-    judgeTime: 6.5506573
-    createTime: 3.5506575
+    judgeTime: 7.5959864
+    createTime: 4.5959864
   - notePos: 0
     noteType: 0
-    judgeTime: 7.0506573
-    createTime: 4.0506573
+    judgeTime: 8.095986
+    createTime: 5.0959864
   - notePos: 0
     noteType: 0
-    judgeTime: 7.5506573
-    createTime: 4.5506573
+    judgeTime: 8.595986
+    createTime: 5.5959864
   - notePos: 0
     noteType: 0
-    judgeTime: 8.050657
-    createTime: 5.0506573
+    judgeTime: 9.095986
+    createTime: 6.0959864
+  - notePos: 0
+    noteType: 2
+    judgeTime: 10.497324
+    createTime: 7.4973245
+  - notePos: 0
+    noteType: 2
+    judgeTime: 10.997324
+    createTime: 7.9973245
+  - notePos: 0
+    noteType: 2
+    judgeTime: 11.497324
+    createTime: 8.497324
+  - notePos: 0
+    noteType: 2
+    judgeTime: 11.997324
+    createTime: 8.997324
+  downNoteDatas:
   - notePos: 1
     noteType: 0
-    judgeTime: 8.550657
-    createTime: 5.5506573
+    judgeTime: 7.906644
+    createTime: 4.906644
   - notePos: 1
     noteType: 0
-    judgeTime: 9.050657
-    createTime: 6.0506573
+    judgeTime: 8.406644
+    createTime: 5.406644
   - notePos: 1
     noteType: 0
-    judgeTime: 9.550657
-    createTime: 6.5506573
+    judgeTime: 8.906644
+    createTime: 5.906644
   - notePos: 1
     noteType: 0
-    judgeTime: 10.050657
-    createTime: 7.0506573
+    judgeTime: 9.406644
+    createTime: 6.406644
   - notePos: 1
     noteType: 0
-    judgeTime: 10.550657
-    createTime: 7.5506573
-  downNoteDatas: []
+    judgeTime: 9.906644
+    createTime: 6.906644
+  - notePos: 1
+    noteType: 2
+    judgeTime: 10.497324
+    createTime: 7.4973245
+  - notePos: 1
+    noteType: 2
+    judgeTime: 10.997324
+    createTime: 7.9973245
+  - notePos: 1
+    noteType: 2
+    judgeTime: 11.497324
+    createTime: 8.497324
+  - notePos: 1
+    noteType: 2
+    judgeTime: 11.997324
+    createTime: 8.997324

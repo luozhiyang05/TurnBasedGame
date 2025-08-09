@@ -28,6 +28,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         private QArray<NoteData> _upReady2ClickDatas, _downReady2ClickDatas;
         private bool _playStatus;
         private float _nowMusicTime;
+        private int _nowNoteDataId = 0;
         public override void Init()
         {
             PublicMonoKit.GetInstance().OnRegisterUpdate(() =>
@@ -72,6 +73,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         public NoteData GetHeadNoteData(bool isUp)
         {
             var noteData = isUp ? _upRemainderNoteDatas.GetFromHead() : _downRemainderNoteDatas.GetFromHead();
+            noteData.id = _nowNoteDataId++;
             if (isUp) _upReady2ClickDatas.Add(noteData);
             else _downReady2ClickDatas.Add(noteData);
             return noteData;
@@ -106,7 +108,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         /// </summary>
         public override void BindListener()
         {
-            EventsHandle.AddListenEvent<int>(EventsNameConst.BIT_NOTE, BitNote);
+            EventsHandle.AddListenEvent<NoteData>(EventsNameConst.BIT_NOTE, BitNote);
         }
 
         /// <summary>
@@ -114,18 +116,26 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         /// </summary>
         public override void RemoveListener()
         {
-            EventsHandle.RemoveOneEventByEventName<int>(EventsNameConst.BIT_NOTE, BitNote);
+            EventsHandle.RemoveOneEventByEventName<NoteData>(EventsNameConst.BIT_NOTE, BitNote);
         }
 
         //------------------------------------------视图的回调方法
-        private UnityAction<int> _bitNoteCallback;
-        public void SetBitNoteCallback(UnityAction<int> callback)
+        private UnityAction<NoteData> _bitNoteCallback;
+        public void SetBitNoteCallback(UnityAction<NoteData> callback)
         {
             _bitNoteCallback = callback;
         }
-        private void BitNote(int noteId)
+        private void BitNote(NoteData noteData)
         {
-            _bitNoteCallback?.Invoke(noteId);
+            if (noteData.notePos == ENotePos.Up)
+            {
+                RemoveReady2ClickNote(true);
+            }
+            else if (noteData.notePos == ENotePos.Down)
+            {
+                RemoveReady2ClickNote(false);
+            }
+            _bitNoteCallback?.Invoke(noteData);
         }
 
     }

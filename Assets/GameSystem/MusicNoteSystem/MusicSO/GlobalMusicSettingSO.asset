@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e58d82525acfefe4c96801015a84835b, type: 3}
   m_Name: GlobalMusicSettingSO
   m_EditorClassIdentifier: Assembly-CSharp:Assets.GameSystem.MusicNoteSystem.Scripts:GlobalMusicSettingSO
-  perfectTime: 0.15
-  greatTime: 0.3
+  perfectTime: 0.1
+  greatTime: 0.2
+  doublePerfectTime: 0.1
+  doubleGreatTime: 0.15
