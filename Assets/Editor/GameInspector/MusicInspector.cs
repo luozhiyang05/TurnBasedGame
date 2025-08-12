@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Editor;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -15,7 +17,9 @@ namespace GameInspector
         private float _intervalNoteTime;
         private int _createIntervalNoteCnt;
         private int _createNoteType = 0;    //生成音符类型，0上阶单击音符，1下阶单击音符，2双击音符
-
+        private Dictionary<KeyCode, bool> _keyCodeDict = new Dictionary<KeyCode, bool>();
+        private float _nowNoteCreateTime;
+        private bool _isLongPress;
         void OnEnable()
         {
             _target = target as MusicSo;
@@ -67,7 +71,7 @@ namespace GameInspector
             _intervalNoteTime = EditorGUILayout.FloatField(_intervalNoteTime, GUILayout.MaxWidth(50));
             EditorGUILayout.LabelField("添加个数：", GUILayout.MaxWidth(60));
             _createIntervalNoteCnt = EditorGUILayout.IntField(_createIntervalNoteCnt, GUILayout.MaxWidth(30));
-            _createNoteType = EditorGUILayout.Popup(_createNoteType, new string[] { "上阶单击音符", "下阶单击音符", "双击音符" },GUILayout.MaxWidth(160));
+            _createNoteType = EditorGUILayout.Popup(_createNoteType, new string[] { "上阶单击音符", "下阶单击音符", "双击音符" }, GUILayout.MaxWidth(160));
             if (GUILayout.Button("连续添加音符"))
             {
                 AddIntervalNote();
@@ -129,19 +133,90 @@ namespace GameInspector
                 }
             }
 
-            if (Event.current.type == EventType.KeyDown && _nowMusicTime >= _target.reachToBitPosTime)
+            HandleKeyDown(KeyCode.D, true);
+            HandleKeyDown(KeyCode.F, true);
+            HandleKeyDown(KeyCode.J, false);
+            HandleKeyDown(KeyCode.K, false);
+
+            HandleKeyUp();
+
+            // if (Event.current.type == EventType.KeyDown && _nowMusicTime >= _target.reachToBitPosTime)
+            // {
+            //     //检测长按，用于生成长按音符
+            //     if (_keyCodeDict.ContainsKey(Event.current.keyCode))
+            //     {
+            //         _isLongPress = true;
+            //         return;
+            //     }
+
+            //     //检测短按，用于生成点击音符
+            //     if (Event.current.keyCode == KeyCode.J || Event.current.keyCode == KeyCode.K && _isStartUpdate)
+            //     {
+            //         _target.AddSingleClickNote(_nowMusicTime, ENotePos.Up, ENoteType.Click);
+            //         _nowNoteCreateTime = _nowMusicTime;
+            //         _keyCodeDict[Event.current.keyCode] = true;
+            //     }
+            //     else if (Event.current.keyCode == KeyCode.D || Event.current.keyCode == KeyCode.F && _isStartUpdate)
+            //     {
+            //         _target.AddSingleClickNote(_nowMusicTime, ENotePos.Down, ENoteType.Click);
+            //         _nowNoteCreateTime = _nowMusicTime;
+            //         _keyCodeDict[Event.current.keyCode] = true;
+            //     }
+            //     else if (Event.current.keyCode == KeyCode.H && _isStartUpdate)
+            //     {
+            //         _target.AddSingleClickNote(_nowMusicTime, ENotePos.Up, ENoteType.DoubleClick);
+            //         _target.AddSingleClickNote(_nowMusicTime, ENotePos.Down, ENoteType.DoubleClick);
+            //     }
+            // }
+
+            // //按键抬起
+            // if (Event.current.type == EventType.KeyUp)
+            // {
+            //     if (_keyCodeDict.ContainsKey(Event.current.keyCode))
+            //     {
+            //         _keyCodeDict[Event.current.keyCode] = false;
+
+            //         //添加长按音符
+            //         if (_isLongPress)
+            //         {
+            //             _isLongPress = false;
+            //             if (Event.current.keyCode == KeyCode.J || Event.current.keyCode == KeyCode.K)
+            //             {
+            //                 _target.AddLongNote(_nowMusicTime, _nowMusicTime - _nowNoteCreateTime, ENotePos.Down);
+
+            //             }
+            //             else if (Event.current.keyCode == KeyCode.D || Event.current.keyCode == KeyCode.F)
+            //             {
+            //                 _target.AddLongNote(_nowMusicTime, _nowMusicTime - _nowNoteCreateTime, ENotePos.Up);
+            //             }
+            //         }
+            //     }
+            // }
+        }
+
+        private void HandleKeyDown(KeyCode keyCode,bool isUp)
+        { 
+               if (Event.current.keyCode == keyCode)
             {
-                if (Event.current.keyCode == KeyCode.J || Event.current.keyCode == KeyCode.K && _isStartUpdate)
+                if (!_keyCodeDict.ContainsKey(keyCode))
                 {
-                    _target.AddNote(_nowMusicTime, ENotePos.Up, ENoteType.Click);
+                    _keyCodeDict.Add(keyCode, false);
                 }
-                else if (Event.current.keyCode == KeyCode.D || Event.current.keyCode == KeyCode.F && _isStartUpdate)
+                if (!_keyCodeDict[keyCode])
                 {
-                    _target.AddNote(_nowMusicTime, ENotePos.Down, ENoteType.Click);
-                }else if (Event.current.keyCode == KeyCode.H && _isStartUpdate)
+                    _keyCodeDict[keyCode] = true;
+                    _target.AddSingleClickNote(_nowMusicTime, isUp ? ENotePos.Up : ENotePos.Down, ENoteType.Click);
+                }
+            }
+        }
+
+        private void HandleKeyUp()
+        {
+            if (Event.current.type == EventType.KeyUp)
+            {
+                if (_keyCodeDict.ContainsKey(Event.current.keyCode))
                 {
-                    _target.AddNote(_nowMusicTime, ENotePos.Up, ENoteType.DoubleClick);
-                    _target.AddNote(_nowMusicTime, ENotePos.Down, ENoteType.DoubleClick);
+                    _keyCodeDict[Event.current.keyCode] = false;
                 }
             }
         }
@@ -154,12 +229,12 @@ namespace GameInspector
                 {
                     if (_createNoteType == 2)
                     {
-                        _target.AddNote(_nowMusicTime + i * _intervalNoteTime, ENotePos.Up, ENoteType.DoubleClick);
-                        _target.AddNote(_nowMusicTime + i * _intervalNoteTime, ENotePos.Down, ENoteType.DoubleClick);
+                        _target.AddSingleClickNote(_nowMusicTime + i * _intervalNoteTime, ENotePos.Up, ENoteType.DoubleClick);
+                        _target.AddSingleClickNote(_nowMusicTime + i * _intervalNoteTime, ENotePos.Down, ENoteType.DoubleClick);
                     }
                     else
                     {
-                        _target.AddNote(_nowMusicTime + i * _intervalNoteTime, _createNoteType == 0 ? ENotePos.Up : ENotePos.Down, ENoteType.Click);
+                        _target.AddSingleClickNote(_nowMusicTime + i * _intervalNoteTime, _createNoteType == 0 ? ENotePos.Up : ENotePos.Down, ENoteType.Click);
                     }
                 }
             }
