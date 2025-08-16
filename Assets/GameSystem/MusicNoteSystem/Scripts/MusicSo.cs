@@ -31,6 +31,8 @@ public class NoteData
     public float judgeTime;
     [CustomPropertyText("创建时间")]
     public float createTime;
+    [CustomPropertyText("长按时间(非长按音符忽略)")]
+    public float longPressTime;
 }
 
 [CreateAssetMenu(fileName = "MusicSo", menuName = "音乐资源/MusicSo")]
@@ -46,7 +48,7 @@ public class MusicSo : ScriptableObject
     public float musicSpeed = 1;
     public List<NoteData> upNoteDatas, downNoteDatas;
 
-    public void AddNote(float nowMusicTime, ENotePos notePos, ENoteType noteType)
+    public void AddSingleClickNote(float nowMusicTime, ENotePos notePos, ENoteType noteType)
     {
         if (notePos == ENotePos.Up)
         {
@@ -57,6 +59,19 @@ public class MusicSo : ScriptableObject
             downNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime + reachToBitPosTime, createTime = nowMusicTime });
         }
     }
+
+    public void AddLongNote(float nowMusicTime, float longPressTime, ENotePos notePos)
+    {
+        if (notePos == ENotePos.Up)
+        {
+            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime + reachToBitPosTime, createTime = nowMusicTime, longPressTime = longPressTime });
+        }
+        else
+        {
+            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime + reachToBitPosTime, createTime = nowMusicTime, longPressTime = longPressTime });
+        }
+    }
+
     public void ClearNote()
     {
         upNoteDatas.Clear();
