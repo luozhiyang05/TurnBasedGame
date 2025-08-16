@@ -24,8 +24,7 @@ namespace GameInspector
         private int _createIntervalNoteCnt;
         private int _createNoteType = 0;    //生成音符类型，0上阶单击音符，1下阶单击音符，2双击音符
         private Dictionary<KeyCode, KeyCodeState> _keyCodeDict = new Dictionary<KeyCode, KeyCodeState>();
-        private float _nowNoteCreateTime;
-        private bool _isLongPress;
+        private Dictionary<KeyCode,ENotePos> _notePosDict = new Dictionary<KeyCode,ENotePos>();
         void OnEnable()
         {
             _target = target as MusicSo;
@@ -34,6 +33,11 @@ namespace GameInspector
             "PreviewAudioSource",
             HideFlags.HideAndDontSave,
             typeof(AudioSource)).GetComponent<AudioSource>();
+            _notePosDict = new Dictionary<KeyCode, ENotePos>();
+            _notePosDict.Add(KeyCode.F,ENotePos.Up);
+            _notePosDict.Add(KeyCode.D,ENotePos.Up);
+            _notePosDict.Add(KeyCode.J,ENotePos.Down);
+            _notePosDict.Add(KeyCode.K,ENotePos.Down);
         }
 
         void OnDisable()
@@ -54,7 +58,7 @@ namespace GameInspector
         public override void OnInspectorGUI()
         {
             //处理输入
-            HandleKeyDown();
+            HandleKeyInput();
 
             //容错
             if (null == _target.audioClip) EditorGUILayout.HelpBox("请先设置预览音频源！", MessageType.Error);
@@ -124,7 +128,7 @@ namespace GameInspector
             _previewAudioSource.Stop();
         }
 
-        private void HandleKeyDown()
+        private void HandleKeyInput()
         {
             //在 EditorApplication.update ，Event会报空。这里用于快速添加音符
             if (Event.current.type == EventType.KeyDown)
@@ -147,72 +151,18 @@ namespace GameInspector
             HandleKeyLongPressUp(KeyCode.J);
             HandleKeyLongPressUp(KeyCode.K);
 
-            HandleKeyDown(KeyCode.D, true);
-            HandleKeyDown(KeyCode.F, true);
-            HandleKeyDown(KeyCode.J, false);
-            HandleKeyDown(KeyCode.K, false);
+            HandleKeyDown(KeyCode.D);
+            HandleKeyDown(KeyCode.F);
+            HandleKeyDown(KeyCode.J);
+            HandleKeyDown(KeyCode.K);
 
             HandleKeyUp(KeyCode.D);
             HandleKeyUp(KeyCode.F);
             HandleKeyUp(KeyCode.J);
             HandleKeyUp(KeyCode.K);
-
-
-            // if (Event.current.type == EventType.KeyDown && _nowMusicTime >= _target.reachToBitPosTime)
-            // {
-            //     //检测长按，用于生成长按音符
-            //     if (_keyCodeDict.ContainsKey(Event.current.keyCode))
-            //     {
-            //         _isLongPress = true;
-            //         return;
-            //     }
-
-            //     //检测短按，用于生成点击音符
-            //     if (Event.current.keyCode == KeyCode.J || Event.current.keyCode == KeyCode.K && _isStartUpdate)
-            //     {
-            //         _target.AddSingleClickNote(_nowMusicTime, ENotePos.Up, ENoteType.Click);
-            //         _nowNoteCreateTime = _nowMusicTime;
-            //         _keyCodeDict[Event.current.keyCode] = true;
-            //     }
-            //     else if (Event.current.keyCode == KeyCode.D || Event.current.keyCode == KeyCode.F && _isStartUpdate)
-            //     {
-            //         _target.AddSingleClickNote(_nowMusicTime, ENotePos.Down, ENoteType.Click);
-            //         _nowNoteCreateTime = _nowMusicTime;
-            //         _keyCodeDict[Event.current.keyCode] = true;
-            //     }
-            //     else if (Event.current.keyCode == KeyCode.H && _isStartUpdate)
-            //     {
-            //         _target.AddSingleClickNote(_nowMusicTime, ENotePos.Up, ENoteType.DoubleClick);
-            //         _target.AddSingleClickNote(_nowMusicTime, ENotePos.Down, ENoteType.DoubleClick);
-            //     }
-            // }
-
-            // //按键抬起
-            // if (Event.current.type == EventType.KeyUp)
-            // {
-            //     if (_keyCodeDict.ContainsKey(Event.current.keyCode))
-            //     {
-            //         _keyCodeDict[Event.current.keyCode] = false;
-
-            //         //添加长按音符
-            //         if (_isLongPress)
-            //         {
-            //             _isLongPress = false;
-            //             if (Event.current.keyCode == KeyCode.J || Event.current.keyCode == KeyCode.K)
-            //             {
-            //                 _target.AddLongNote(_nowMusicTime, _nowMusicTime - _nowNoteCreateTime, ENotePos.Down);
-
-            //             }
-            //             else if (Event.current.keyCode == KeyCode.D || Event.current.keyCode == KeyCode.F)
-            //             {
-            //                 _target.AddLongNote(_nowMusicTime, _nowMusicTime - _nowNoteCreateTime, ENotePos.Up);
-            //             }
-            //         }
-            //     }
-            // }
         }
 
-        private void HandleKeyDown(KeyCode keyCode, bool isUp)
+        private void HandleKeyDown(KeyCode keyCode)
         {
             if (Event.current.keyCode == keyCode && Event.current.type == EventType.KeyDown)
             {
@@ -222,10 +172,11 @@ namespace GameInspector
                 }
                 if (!_keyCodeDict[keyCode].isPress)
                 {
+                    var notePos = _notePosDict[keyCode];
                     _keyCodeDict[keyCode].isPress = true;
                     _keyCodeDict[keyCode].pressTime = _nowMusicTime;
                     Debug.LogWarning(_nowMusicTime);
-                    _target.AddSingleClickNote(_nowMusicTime, isUp ? ENotePos.Up : ENotePos.Down, ENoteType.Click);
+                    _target.AddSingleClickNote(_nowMusicTime, notePos, ENoteType.Click);
                 }
             }
         }
@@ -252,7 +203,9 @@ namespace GameInspector
                 var keyCodeState = _keyCodeDict[keyCode];
                 if (keyCodeState.pressing)
                 {
-                    _target.AddLongNote(keyCodeState.pressTime, _nowMusicTime - keyCodeState.pressTime + 0.2f, ENotePos.Down);
+                    var notePos = _notePosDict[keyCode];
+                    _target.RemoveClickNote(notePos);
+                    _target.AddLongNote(keyCodeState.pressTime, _nowMusicTime - keyCodeState.pressTime + 0.2f, notePos);
                     keyCodeState.pressing = false;
                     keyCodeState.pressTime = 0;
                 }
@@ -270,8 +223,6 @@ namespace GameInspector
                 }
             }
         }
-
-
 
         private void AddIntervalNote()
         {
