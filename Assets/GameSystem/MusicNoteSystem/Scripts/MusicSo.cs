@@ -52,11 +52,11 @@ public class MusicSo : ScriptableObject
     {
         if (notePos == ENotePos.Up)
         {
-            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime + reachToBitPosTime, createTime = nowMusicTime });
+            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime });
         }
         else
         {
-            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime + reachToBitPosTime, createTime = nowMusicTime });
+            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime });
         }
     }
 
@@ -64,11 +64,11 @@ public class MusicSo : ScriptableObject
     {
         if (notePos == ENotePos.Up)
         {
-            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime + reachToBitPosTime, createTime = nowMusicTime, longPressTime = longPressTime });
+            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime });
         }
         else
         {
-            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime + reachToBitPosTime, createTime = nowMusicTime, longPressTime = longPressTime });
+            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime });
         }
     }
 
@@ -87,7 +87,7 @@ public class MusicSo : ScriptableObject
         }
         return qArray;
     }
-    
+
     public QArray<NoteData> GetDownNoteQArray()
     {
         QArray<NoteData> qArray = new QArray<NoteData>();
@@ -97,6 +97,18 @@ public class MusicSo : ScriptableObject
             qArray.Add(value);
         }
         return qArray;
+    }
+    public void RemoveClickNote(ENotePos eNotePos)
+    {
+        switch (eNotePos)
+        {
+            case ENotePos.Up:
+                upNoteDatas.RemoveAt(upNoteDatas.Count - 1);
+                break;
+            case ENotePos.Down:
+                downNoteDatas.RemoveAt(downNoteDatas.Count - 1);
+                break;
+        }
     }
 
 }

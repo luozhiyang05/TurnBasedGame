@@ -164,62 +164,74 @@ namespace GameInspector
 
         private void HandleKeyDown(KeyCode keyCode)
         {
-            if (Event.current.keyCode == keyCode && Event.current.type == EventType.KeyDown)
+            if (_nowMusicTime >= _target.reachToBitPosTime)
             {
-                if (!_keyCodeDict.ContainsKey(keyCode))
+                if (Event.current.keyCode == keyCode && Event.current.type == EventType.KeyDown)
                 {
-                    _keyCodeDict.Add(keyCode, new KeyCodeState() { isPress = false, pressTime = _nowMusicTime });
-                }
-                if (!_keyCodeDict[keyCode].isPress)
-                {
-                    var notePos = _notePosDict[keyCode];
-                    _keyCodeDict[keyCode].isPress = true;
-                    _keyCodeDict[keyCode].pressTime = _nowMusicTime;
-                    Debug.LogWarning(_nowMusicTime);
-                    _target.AddSingleClickNote(_nowMusicTime, notePos, ENoteType.Click);
+                    if (!_keyCodeDict.ContainsKey(keyCode))
+                    {
+                        _keyCodeDict.Add(keyCode, new KeyCodeState() { isPress = false, pressTime = _nowMusicTime });
+                    }
+                    if (!_keyCodeDict[keyCode].isPress)
+                    {
+                        var notePos = _notePosDict[keyCode];
+                        _keyCodeDict[keyCode].isPress = true;
+                        _keyCodeDict[keyCode].pressTime = _nowMusicTime;
+                        Debug.LogWarning(_nowMusicTime);
+                        _target.AddSingleClickNote(_nowMusicTime, notePos, ENoteType.Click);
+                    }
                 }
             }
         }
 
         private void HandleKeyLongPressDown()
         {
-            foreach (var key in _keyCodeDict.Keys)
+            if (_nowMusicTime >= _target.reachToBitPosTime)
             {
-                var keyCodeState = _keyCodeDict[key];
-                if (keyCodeState.isPress)
+                foreach (var key in _keyCodeDict.Keys)
                 {
-                    if (_nowMusicTime - keyCodeState.pressTime > 0.2f)
+                    var keyCodeState = _keyCodeDict[key];
+                    if (keyCodeState.isPress)
                     {
-                        _keyCodeDict[key].pressing = true;
-                        Debug.LogWarning("按压中："+_nowMusicTime+"----"+keyCodeState.pressTime);
+                        if (_nowMusicTime - keyCodeState.pressTime > 0.2f)
+                        {
+                            _keyCodeDict[key].pressing = true;
+                            Debug.LogWarning("按压中：" + _nowMusicTime + "----" + keyCodeState.pressTime);
+                        }
                     }
                 }
             }
         }
         private void HandleKeyLongPressUp(KeyCode keyCode)
         {
-            if (Event.current.keyCode == keyCode && Event.current.type == EventType.KeyUp)
+            if (_nowMusicTime >= _target.reachToBitPosTime)
             {
-                var keyCodeState = _keyCodeDict[keyCode];
-                if (keyCodeState.pressing)
+                if (Event.current.keyCode == keyCode && Event.current.type == EventType.KeyUp)
                 {
-                    var notePos = _notePosDict[keyCode];
-                    _target.RemoveClickNote(notePos);
-                    _target.AddLongNote(keyCodeState.pressTime, _nowMusicTime - keyCodeState.pressTime + 0.2f, notePos);
-                    keyCodeState.pressing = false;
-                    keyCodeState.pressTime = 0;
+                    var keyCodeState = _keyCodeDict[keyCode];
+                    if (keyCodeState.pressing)
+                    {
+                        var notePos = _notePosDict[keyCode];
+                        _target.RemoveClickNote(notePos);
+                        _target.AddLongNote(keyCodeState.pressTime, _nowMusicTime - keyCodeState.pressTime + 0.2f, notePos);
+                        keyCodeState.pressing = false;
+                        keyCodeState.pressTime = 0;
+                    }
                 }
             }
         }
 
         private void HandleKeyUp(KeyCode keyCode)
         {
-            if (Event.current.type == EventType.KeyUp)
+            if (_nowMusicTime >= _target.reachToBitPosTime)
             {
-                if (_keyCodeDict.ContainsKey(keyCode))
+                if (Event.current.type == EventType.KeyUp)
                 {
-                    var keyCodeState = _keyCodeDict[keyCode];
-                    keyCodeState.isPress = false;
+                    if (_keyCodeDict.ContainsKey(keyCode))
+                    {
+                        var keyCodeState = _keyCodeDict[keyCode];
+                        keyCodeState.isPress = false;
+                    }
                 }
             }
         }
