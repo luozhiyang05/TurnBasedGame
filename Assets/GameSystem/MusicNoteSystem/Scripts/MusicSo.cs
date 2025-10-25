@@ -33,6 +33,7 @@ public class NoteData
     public float createTime;
     [CustomPropertyText("长按时间(非长按音符忽略)")]
     public float longPressTime;
+    public float moveTime;
 }
 
 [CreateAssetMenu(fileName = "MusicSo", menuName = "音乐资源/MusicSo")]
@@ -52,11 +53,11 @@ public class MusicSo : ScriptableObject
     {
         if (notePos == ENotePos.Up)
         {
-            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime });
+            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime, moveTime = reachToBitPosTime});
         }
         else
         {
-            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime });
+            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = noteType, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime, moveTime = reachToBitPosTime });
         }
     }
 
@@ -64,11 +65,11 @@ public class MusicSo : ScriptableObject
     {
         if (notePos == ENotePos.Up)
         {
-            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime });
+            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime, moveTime = reachToBitPosTime });
         }
         else
         {
-            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime });
+            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime, moveTime = reachToBitPosTime });
         }
     }
 

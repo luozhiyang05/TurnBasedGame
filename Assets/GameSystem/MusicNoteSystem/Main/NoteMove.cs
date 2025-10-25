@@ -63,7 +63,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         {
             if (_isMove)
             {
-                float speed = 1596 / 3;
+                float speed = _musicData.GetNoteMoveToHitPointDistance() / noteData.moveTime;
                 var targetPos = transform.localPosition;
                 transform.localPosition = new Vector2(targetPos.x - speed * Time.deltaTime, targetPos.y);
 

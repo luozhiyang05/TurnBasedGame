@@ -114,6 +114,10 @@ namespace Assets.GameSystem.MusicNoteSystem.Main
         {
             return _globalMusicSettingSO.doubleGreatTime;
         }
+        public float GetNoteMoveToHitPointDistance()
+        {
+            return _globalMusicSettingSO.distance;
+        }
         public bool CheckCanPressKey(bool isUp)
         {
             if (isUp)

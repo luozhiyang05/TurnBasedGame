@@ -14,5 +14,7 @@ namespace Assets.GameSystem.MusicNoteSystem.Scripts
         public float doublePerfectTime;
         [CustomPropertyText("双击Great时间")]
         public float doubleGreatTime;
+        [CustomPropertyText("音符到达打击点距离")]
+        public float distance;
     }
 }
