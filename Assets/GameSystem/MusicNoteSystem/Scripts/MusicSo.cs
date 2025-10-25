@@ -65,11 +65,11 @@ public class MusicSo : ScriptableObject
     {
         if (notePos == ENotePos.Up)
         {
-            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime, moveTime = reachToBitPosTime });
+            upNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick,longPressTime = longPressTime, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime, moveTime = reachToBitPosTime });
         }
         else
         {
-            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime, moveTime = reachToBitPosTime });
+            downNoteDatas.Add(new NoteData { notePos = notePos, noteType = ENoteType.LongClick,longPressTime = longPressTime, judgeTime = nowMusicTime, createTime = nowMusicTime - reachToBitPosTime, moveTime = reachToBitPosTime });
         }
     }
 
